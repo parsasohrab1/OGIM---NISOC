@@ -1,0 +1,68 @@
+name: Backend CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black flake8 alembic pytest pytest-cov
+          pip install -r requirements.txt
+          pip install -r backend/shared/requirements.txt
+          pip install -r backend/alert-service/requirements.txt
+          pip install -r backend/command-control-service/requirements.txt
+          pip install -r backend/data-ingestion-service/requirements.txt
+          pip install -r backend/tag-catalog-service/requirements.txt
+          pip install -r backend/api-gateway/requirements.txt
+          pip install -r backend/ml-inference-service/requirements.txt
+          pip install -r backend/auth-service/requirements.txt
+          pip install -r backend/digital-twin-service/requirements.txt
+          pip install -r backend/reporting-service/requirements.txt
+          pip install -r backend/remote-operations-service/requirements.txt
+
+      - name: Run black
+        run: black --check backend
+
+      - name: Run flake8
+        run: flake8 --config=backend/.flake8 backend
+
+      - name: Run pytest
+        env:
+          SQLALCHEMY_DATABASE_URL: sqlite:///./ci.db
+          MODEL_STORAGE_PATH: ${{ github.workspace }}/backend/ml-inference-service/models
+        run: |
+          cd backend
+          pytest
+
+      - name: Generate Alembic SQL
+        env:
+          SQLALCHEMY_DATABASE_URL: sqlite:///./ci.db
+        run: |
+          cd backend
+          alembic upgrade head --sql > /tmp/migration.sql

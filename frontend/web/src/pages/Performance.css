@@ -1,0 +1,143 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  border-left: 3px solid #666;
+}
+
+.kpi-card.kpi-ok { border-left-color: #4caf50; }
+.kpi-card.kpi-warn { border-left-color: #ff9800; }
+
+.kpi-card strong {
+  display: block;
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.kpi-value {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+
+.kpi-card small {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.perf-page {
+  padding: 1.25rem;
+}
+
+.perf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.perf-grafana-link {
+  padding: 0.5rem 1rem;
+  background: #f46800;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.perf-stack {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.perf-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.perf-card.full {
+  grid-column: 1 / -1;
+}
+
+.perf-card h3 {
+  margin: 0 0 0.75rem;
+  color: #555555;
+  font-size: 1rem;
+}
+
+.perf-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.perf-transport {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.perf-transport.websocket { color: #2e7d32; }
+.perf-transport.sse { color: #f57f17; }
+.perf-transport.simulation { color: #1565c0; }
+.perf-transport.disconnected { color: #555555; }
+
+.perf-hint {
+  font-size: 0.8rem;
+  color: #555555;
+  margin-top: 0.5rem;
+}
+
+.perf-panels-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.perf-panel-item {
+  background: #f5f5f5;
+  padding: 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.perf-panel-item span {
+  color: #555555;
+}
+
+.perf-sla-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.perf-sla-table th,
+.perf-sla-table td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+@media (max-width: 900px) {
+  .perf-stack { grid-template-columns: 1fr; }
+  .perf-panels-grid { grid-template-columns: repeat(2, 1fr); }
+}

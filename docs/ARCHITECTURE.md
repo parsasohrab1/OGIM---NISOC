@@ -1,0 +1,601 @@
+# 🏗️ معماری سیستم OGIM
+
+## 📋 فهرست مطالب
+
+1. [نمای کلی](#overview)
+2. [معماری کلی](#overall-architecture)
+3. [لایه‌های سیستم](#system-layers)
+4. [میکروسرویس‌ها](#microservices)
+5. [جریان داده](#data-flow)
+6. [مدیریت داده](#data-management)
+7. [امنیت](#security)
+8. [مقیاس‌پذیری](#scalability)
+
+---
+
+## <a name="overview"></a>🎯 نمای کلی
+
+OGIM یک سیستم نظارت و تحلیل هوشمند با معماری میکروسرویس است که به صورت بلادرنگ داده‌های میدان نفت و گاز را پردازش، تحلیل و نمایش می‌دهد.
+
+### ویژگی‌های کلیدی معماری:
+- ✅ **Microservices**: سرویس‌های مستقل و جداگانه
+- ✅ **Event-Driven**: مبتنی بر رویداد با Kafka
+- ✅ **Stream Processing**: پردازش جریانی با Apache Flink
+- ✅ **Cloud-Native**: آماده برای استقرار در Kubernetes
+- ✅ **Horizontally Scalable**: مقیاس‌پذیری افقی
+- ✅ **Resilient**: مقاوم در برابر خطا
+
+---
+
+## <a name="overall-architecture"></a>🏛️ معماری کلی
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                     OGIM System Architecture                        │
+│                        (Oil & Gas Intelligent Monitoring)           │
+└────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                        🌐 Presentation Layer                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│    │ Web Portal   │    │ Mobile App   │    │  Dashboard   │      │
+│    │ React + TS   │    │  (Future)    │    │  (Grafana)   │      │
+│    └──────────────┘    └──────────────┘    └──────────────┘      │
+│                                │                                     │
+└────────────────────────────────┼─────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                        🚪 API Gateway Layer                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│                     ┌──────────────────────┐                       │
+│                     │   API Gateway        │                       │
+│                     │   (NGINX/FastAPI)    │                       │
+│                     │   - Routing          │                       │
+│                     │   - Load Balancing   │                       │
+│                     │   - Rate Limiting    │                       │
+│                     └──────────────────────┘                       │
+│                                │                                     │
+└────────────────────────────────┼─────────────────────────────────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                     🔧 Microservices Layer                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
+│  │ Auth Service │  │ Data Ingestion│ │ ML Inference │             │
+│  │   (JWT)      │  │  (OPC UA)     │ │  (MLflow)    │             │
+│  └──────────────┘  └──────────────┘  └──────────────┘             │
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
+│  │Alert Service │  │Tag Catalog   │  │ Command &    │             │
+│  │              │  │  Service     │  │  Control     │             │
+│  └──────────────┘  └──────────────┘  └──────────────┘             │
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐                                │
+│  │  Reporting   │  │ Digital Twin │                                │
+│  │   Service    │  │   Service    │                                │
+│  └──────────────┘  └──────────────┘                                │
+│                                │                                     │
+└────────────────────────────────┼─────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                    📨 Message Bus Layer                              │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│                     ┌──────────────────────┐                       │
+│                     │   Apache Kafka       │                       │
+│                     │   Message Broker     │                       │
+│                     │   - Topics           │                       │
+│                     │   - Partitions       │                       │
+│                     │   - Replication      │                       │
+│                     └──────────────────────┘                       │
+│                                │                                     │
+└────────────────────────────────┼─────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                   ⚡ Stream Processing Layer                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│                    ┌──────────────────────┐                        │
+│                    │  Apache Flink Jobs   │                        │
+│                    │  - Data Cleansing    │                        │
+│                    │  - Enrichment        │                        │
+│                    │  - CEP               │                        │
+│                    │  - Anomaly Detection │                        │
+│                    └──────────────────────┘                        │
+│                                │                                     │
+└────────────────────────────────┼─────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                      💾 Data Storage Layer                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
+│  │ PostgreSQL   │  │ TimescaleDB  │  │    Redis     │             │
+│  │ (Relational) │  │ (Time-Series)│  │   (Cache)    │             │
+│  └──────────────┘  └──────────────┘  └──────────────┘             │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+                                 ▲
+                                 │
+┌─────────────────────────────────────────────────────────────────────┐
+│                   🏭 Data Source Layer                               │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
+│  │  SCADA/PLC   │  │    Sensors   │  │   Modbus     │             │
+│  │   (OPC UA)   │  │              │  │     TCP      │             │
+│  └──────────────┘  └──────────────┘  └──────────────┘             │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## <a name="system-layers"></a>📚 لایه‌های سیستم
+
+### 1️⃣ Data Source Layer (لایه منابع داده)
+
+**مسئولیت:** جمع‌آوری داده از منابع فیزیکی
+
+**اجزا:**
+- SCADA Systems
+- PLC Controllers
+- Field Sensors
+- Edge Devices
+
+**پروتکل‌ها:**
+- OPC UA
+- Modbus TCP
+- REST API
+- MQTT (آینده)
+
+### 2️⃣ Data Storage Layer (لایه ذخیره‌سازی)
+
+**مسئولیت:** ذخیره داده‌های مختلف
+
+**اجزا:**
+
+| Database | نوع | کاربرد |
+|----------|-----|--------|
+| PostgreSQL | Relational | داده‌های ساختاری (کاربران، تگ‌ها، هشدارها) |
+| TimescaleDB | Time-Series | داده‌های سری زمانی (سنسورها) |
+| Redis | Cache/KV | Cache، Session، Rate Limiting |
+| Kafka | Stream | Message Bus، Event Sourcing |
+
+### 3️⃣ Stream Processing Layer (لایه پردازش جریانی)
+
+**مسئولیت:** پردازش real-time داده‌ها
+
+**Apache Flink Jobs:**
+- **Data Cleansing**: پاکسازی و اعتبارسنجی
+- **Data Enrichment**: غنی‌سازی با متادیتا
+- **CEP (Complex Event Processing)**: تشخیص الگوهای پیچیده
+- **Anomaly Detection**: شناسایی ناهنجاری
+- **Aggregation**: محاسبات آماری
+
+**ویژگی‌ها:**
+- Stateful processing
+- Checkpointing
+- Exactly-once semantics
+- Window operations (Tumbling, Sliding, Session)
+
+### 4️⃣ Message Bus Layer (لایه صف پیام)
+
+**مسئولیت:** انتقال پیام بین سرویس‌ها
+
+**Apache Kafka:**
+
+| Topic | Producer | Consumer | توضیحات |
+|-------|----------|----------|---------|
+| raw-sensor-data | Data Ingestion | Flink Jobs | داده خام سنسورها |
+| processed-data | Flink Jobs | ML Inference, Alert | داده پردازش شده |
+| alerts | Flink, Alert Service | Web Portal, Email | هشدارها |
+| commands | Command Service | SCADA Connector | فرمان‌های کنترلی |
+| audit-logs | All Services | Audit Service | لاگ‌های audit |
+
+### 5️⃣ Microservices Layer (لایه میکروسرویس‌ها)
+
+**مسئولیت:** منطق کسب‌وکار
+
+[جزئیات در بخش بعدی](#microservices)
+
+### 6️⃣ API Gateway Layer (لایه دروازه API)
+
+**مسئولیت:** مدیریت ترافیک و امنیت
+
+**ویژگی‌ها:**
+- Routing
+- Load Balancing
+- Authentication/Authorization
+- Rate Limiting
+- Request/Response transformation
+- Logging & Monitoring
+
+### 7️⃣ Presentation Layer (لایه نمایش)
+
+**مسئولیت:** رابط کاربری
+
+**اجزا:**
+- React Web Portal
+- Mobile App (آینده)
+- Grafana Dashboards
+- Jupyter Notebooks (تحلیل)
+
+---
+
+## <a name="microservices"></a>🔧 میکروسرویس‌ها
+
+### 1. Auth Service (سرویس احراز هویت)
+
+**مسئولیت:** مدیریت کاربران و احراز هویت
+
+**قابلیت‌ها:**
+- User registration & login
+- JWT token generation & validation
+- Password hashing (bcrypt)
+- Role-based access control (RBAC)
+- Session management
+- Audit logging
+
+**API Endpoints:**
+- `POST /token` - دریافت token
+- `GET /users/me` - اطلاعات کاربر
+- `POST /users` - ایجاد کاربر
+- `PUT /users/{id}` - ویرایش کاربر
+- `DELETE /users/{id}` - حذف کاربر
+
+**Database Tables:**
+- users
+- roles
+- permissions
+- audit_logs
+
+### 2. Data Ingestion Service (سرویس دریافت داده)
+
+**مسئولیت:** جمع‌آوری داده از منابع مختلف
+
+**قابلیت‌ها:**
+- OPC UA client
+- Modbus TCP client
+- REST API endpoint
+- Kafka producer
+- Data validation
+- Connector management
+
+**API Endpoints:**
+- `POST /ingest` - دریافت داده (bulk)
+- `GET /connectors` - لیست connectorها
+- `POST /connectors` - ایجاد connector
+- `POST /opcua/start_polling` - شروع polling از OPC UA
+
+**Kafka Topics:**
+- Producer: `raw-sensor-data`
+
+### 3. ML Inference Service (سرویس استنتاج ML)
+
+**مسئولیت:** اعمال مدل‌های ML
+
+**قابلیت‌ها:**
+- Model loading (MLflow)
+- Anomaly detection (Isolation Forest)
+- Failure prediction (Random Forest)
+- Model versioning
+- A/B testing
+- Feature engineering
+
+**API Endpoints:**
+- `POST /infer` - درخواست inference
+- `POST /train` - آموزش مدل جدید
+- `GET /models` - لیست مدل‌ها
+- `GET /models/{id}/metrics` - متریک‌های مدل
+
+**ML Models:**
+- Isolation Forest (anomaly detection)
+- Random Forest (failure prediction)
+- ✅ LSTM (time series forecasting) - پیاده‌سازی شده
+
+### 4. Alert Service (سرویس هشدار)
+
+**مسئولیت:** مدیریت هشدارها
+
+**قابلیت‌ها:**
+- Alert creation
+- Rule engine
+- Alert routing
+- Notification (Email, SMS)
+- Alert deduplication
+- Escalation
+- Alert history
+
+**API Endpoints:**
+- `GET /alerts` - لیست هشدارها
+- `POST /alerts` - ایجاد هشدار
+- `POST /alerts/{id}/acknowledge` - تایید هشدار
+- `POST /alerts/{id}/resolve` - حل هشدار
+- `GET /rules` - قوانین هشدار
+- `POST /rules` - ایجاد قانون
+
+**Kafka Topics:**
+- Consumer: `processed-data`, `alerts`
+- Producer: `alerts`
+
+### 5. Command & Control Service (سرویس فرمان و کنترل)
+
+**مسئولیت:** ارسال فرمان به تجهیزات
+
+**قابلیت‌ها:**
+- Command queuing
+- 2FA validation
+- Approval workflow
+- Command execution
+- Rollback capability
+- Audit logging
+
+**API Endpoints:**
+- `POST /commands` - ارسال فرمان
+- `POST /commands/{id}/approve` - تایید فرمان
+- `POST /commands/{id}/execute` - اجرای فرمان
+- `POST /commands/{id}/rollback` - بازگشت فرمان
+- `GET /commands/history` - تاریخچه فرمان‌ها
+
+**Security:**
+- 2FA required for critical commands
+- Role-based permissions
+- Command approval workflow
+- Full audit trail
+
+### 6. Tag Catalog Service (سرویس کاتالوگ تگ)
+
+**مسئولیت:** مدیریت متادیتای تگ‌ها
+
+**قابلیت‌ها:**
+- Tag CRUD operations
+- Tag metadata management
+- Tag search & filter
+- Tag validation
+- Tag versioning
+
+**API Endpoints:**
+- `GET /tags` - لیست تگ‌ها
+- `GET /tags/{id}` - جزئیات تگ
+- `POST /tags` - ایجاد تگ
+- `PUT /tags/{id}` - ویرایش تگ
+- `DELETE /tags/{id}` - حذف تگ
+
+### 7. Reporting Service (سرویس گزارش‌دهی)
+
+**مسئولیت:** تولید گزارش‌ها
+
+**قابلیت‌ها:**
+- Report generation (PDF, Excel, CSV)
+- Scheduled reports
+- Custom queries
+- Data aggregation
+- Historical analysis
+
+### 8. Digital Twin Service (سرویس دوقلوی دیجیتال)
+
+**مسئولیت:** شبیه‌سازی و مدل‌سازی
+
+**قابلیت‌ها:**
+- Well modeling
+- Production optimization
+- What-if analysis
+- Predictive maintenance
+
+---
+
+## <a name="data-flow"></a>🔄 جریان داده
+
+### 1️⃣ Data Ingestion Flow
+
+```
+SCADA/PLC
+    │
+    │ (OPC UA/Modbus)
+    ▼
+Data Ingestion Service
+    │
+    │ (validate & enrich)
+    ▼
+Kafka Topic: raw-sensor-data
+    │
+    ▼
+Apache Flink
+    │
+    │ (process & analyze)
+    ▼
+Kafka Topic: processed-data
+    │
+    ├─────────────┬─────────────┐
+    ▼             ▼             ▼
+TimescaleDB  ML Inference  Alert Service
+```
+
+### 2️⃣ Alert Flow
+
+```
+Flink (anomaly detected)
+    │
+    ▼
+Kafka Topic: alerts
+    │
+    ▼
+Alert Service
+    │
+    ├───────────┬───────────┐
+    ▼           ▼           ▼
+Database   Web Portal   Email/SMS
+```
+
+### 3️⃣ Command Flow
+
+```
+Web Portal
+    │
+    ▼
+API Gateway
+    │
+    ▼
+Command & Control Service
+    │
+    │ (2FA validation)
+    ▼
+Approval Workflow
+    │
+    ▼
+Kafka Topic: commands
+    │
+    ▼
+SCADA Connector
+    │
+    ▼
+PLC/SCADA
+```
+
+---
+
+## <a name="data-management"></a>💾 مدیریت داده
+
+### Data Retention Policy
+
+| Type | Retention | Storage |
+|------|-----------|---------|
+| Raw sensor data | 90 days | TimescaleDB (compressed) |
+| Aggregated data (1 min) | 1 year | TimescaleDB |
+| Aggregated data (1 hour) | 5 years | TimescaleDB |
+| Alerts | Permanent | PostgreSQL |
+| Audit logs | Permanent | PostgreSQL |
+| Commands | Permanent | PostgreSQL |
+
+### Data Compression
+
+TimescaleDB compression:
+- Raw data: 10x compression ratio
+- Storage savings: ~90%
+- Query performance: Similar to uncompressed
+
+### Backup Strategy
+
+- **Daily**: Full backup (02:00 AM)
+- **Hourly**: Incremental backup
+- **Retention**: 30 days
+- **Off-site**: Weekly backup to S3/Minio
+
+---
+
+## <a name="security"></a>🔐 امنیت
+
+### Authentication & Authorization
+
+- **JWT tokens**: Short-lived (30 min)
+- **Refresh tokens**: Long-lived (7 days)
+- **RBAC**: Role-based access control
+- **2FA**: For critical operations
+
+### Network Security
+
+- **TLS/SSL**: All communications encrypted
+- **Firewall**: Whitelist-based
+- **VPN**: For remote access
+- **Network segmentation**: DMZ, Internal, Database
+
+### Data Security
+
+- **Encryption at rest**: Database encryption
+- **Encryption in transit**: TLS 1.3
+- **Key management**: Vault or AWS KMS
+- **PII protection**: Data masking
+
+### Audit & Compliance
+
+- **Audit logging**: All operations logged
+- **Retention**: Permanent storage
+- **Compliance**: GDPR, ISO 27001
+- **Regular audits**: Quarterly
+
+---
+
+## <a name="scalability"></a>📈 مقیاس‌پذیری
+
+### Horizontal Scaling
+
+**Stateless Services:**
+- Auth Service: 3+ instances
+- Data Ingestion: 5+ instances
+- ML Inference: 3+ instances
+- Alert Service: 3+ instances
+
+**Stateful Services:**
+- Kafka: 3+ brokers
+- Flink: 5+ task managers
+- PostgreSQL: Master-replica setup
+- TimescaleDB: Multi-node cluster
+
+### Load Balancing
+
+```
+                  ┌─────────────┐
+                  │ Load Balancer│
+                  └──────┬──────┘
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+   ┌────▼────┐     ┌────▼────┐     ┌────▼────┐
+   │Instance 1│     │Instance 2│     │Instance 3│
+   └─────────┘     └─────────┘     └─────────┘
+```
+
+### Auto-Scaling (Kubernetes HPA)
+
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ogim-backend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ogim-backend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### Performance Targets
+
+| Metric | Target | Current | Critical Controls |
+|--------|--------|---------|-------------------|
+| API Response Time | < 100ms | ~50ms | < 10ms |
+| Throughput | 10K req/sec | 8K req/sec | 5K req/sec |
+| Kafka Latency | < 50ms | ~30ms | < 5ms |
+| Flink Processing | < 1 sec | ~500ms | < 10ms |
+| Database Queries | < 10ms | ~5ms | < 5ms |
+| End-to-End Latency | < 1 sec | ~500ms | < 10ms |
+| Uptime | 99.9% | 99.95% | 99.9% |
+
+**نکته**: برای کنترل‌های بحرانی، Low-Latency Mode فعال می‌شود که تاخیر را به زیر 10ms می‌رساند. برای جزئیات بیشتر به [`docs/LATENCY_OPTIMIZATION.md`](LATENCY_OPTIMIZATION.md) مراجعه کنید.
+
+---
+
+**نسخه:** 1.0.0  
+**به‌روزرسانی:** نوامبر 2025
+

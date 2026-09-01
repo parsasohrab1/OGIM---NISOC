@@ -1,0 +1,20 @@
+groups:
+  - name: data-quality
+    rules:
+      - alert: IngestionFailureRateHigh
+        expr: rate(ingest_validation_failure_total[5m]) / (rate(ingest_validation_success_total[5m]) + rate(ingest_validation_failure_total[5m])) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Data ingestion failure ratio > 10%"
+          description: "Source {{ $labels.source }} has failure ratio {{ $value }}"
+
+      - alert: IngestionFailuresSpike
+        expr: increase(ingest_validation_failure_total[15m]) > 100
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High number of ingestion failures"
+          description: "Source {{ $labels.source }} had more than 100 failures in 15 minutes."

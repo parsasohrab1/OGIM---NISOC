@@ -1,0 +1,129 @@
+.rb-page {
+  padding: 1.25rem;
+}
+
+.rb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rb-panel {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.rb-panel.full {
+  margin-top: 0;
+}
+
+.rb-panel h3 {
+  margin: 0 0 0.75rem;
+  color: #555555;
+  font-size: 1rem;
+}
+
+.rb-panel label {
+  display: block;
+  margin: 0.5rem 0 0.25rem;
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.rb-panel input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  background: #f5f5f5;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.rb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.rb-chips button {
+  padding: 0.3rem 0.6rem;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  background: #f5f5f5;
+  color: #111111;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.rb-chips button.active {
+  background: #4a6cf7;
+  color: #fff;
+  border-color: #4a6cf7;
+}
+
+.rb-run, .rb-export {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #4a6cf7;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.rb-muted { color: #555555; }
+.rb-meta { font-size: 0.85rem; color: #555555; margin-bottom: 0.5rem; }
+
+.rb-table-wrap {
+  max-height: 220px;
+  overflow: auto;
+  margin: 0.5rem 0;
+}
+
+.rb-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.rb-table-wrap th, .rb-table-wrap td {
+  padding: 0.35rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.rb-connectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.rb-connector-card {
+  background: #f5f5f5;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.rb-connector-card code {
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.rb-panel pre {
+  background: #ffffff;
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow: auto;
+  max-height: 200px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .rb-grid, .rb-connectors { grid-template-columns: 1fr; }
+}

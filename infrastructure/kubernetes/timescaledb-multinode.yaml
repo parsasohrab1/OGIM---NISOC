@@ -1,0 +1,513 @@
+---
+# TimescaleDB Multi-node Cluster Configuration
+# Access Node (Coordinator)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: timescaledb-access-config
+  labels:
+    app: timescaledb
+    role: access-node
+data:
+  postgresql.conf: |
+    # TimescaleDB Multi-node Configuration
+    shared_preload_libraries = 'timescaledb'
+    timescaledb.license_key = 'timescale'
+    
+    # Connection settings
+    max_connections = 200
+    shared_buffers = 2GB
+    effective_cache_size = 6GB
+    maintenance_work_mem = 1GB
+    checkpoint_completion_target = 0.9
+    wal_buffers = 16MB
+    default_statistics_target = 100
+    random_page_cost = 1.1
+    effective_io_concurrency = 200
+    work_mem = 10MB
+    min_wal_size = 1GB
+    max_wal_size = 4GB
+    
+    # Logging
+    log_destination = 'stderr'
+    logging_collector = on
+    log_directory = 'log'
+    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+    log_rotation_age = 1d
+    log_rotation_size = 100MB
+    log_min_duration_statement = 1000
+    log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '
+    
+    # Performance for high-volume writes
+    synchronous_commit = off
+    commit_delay = 10000
+    commit_siblings = 5
+    
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-access-pvc
+  labels:
+    app: timescaledb
+    role: access-node
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescaledb-access
+  labels:
+    app: timescaledb
+    role: access-node
+spec:
+  serviceName: timescaledb-access
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+      role: access-node
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+        role: access-node
+    spec:
+      containers:
+      - name: timescaledb
+        image: timescale/timescaledb:latest-pg15
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        env:
+        - name: POSTGRES_DB
+          value: "ogim_tsdb"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: timescale-storage
+          mountPath: /var/lib/postgresql/data
+        - name: config
+          mountPath: /etc/postgresql/postgresql.conf
+          subPath: postgresql.conf
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2000m"
+          limits:
+            memory: "8Gi"
+            cpu: "4000m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+      volumes:
+      - name: timescale-storage
+        persistentVolumeClaim:
+          claimName: timescaledb-access-pvc
+      - name: config
+        configMap:
+          name: timescaledb-access-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb-access
+  labels:
+    app: timescaledb
+    role: access-node
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: timescaledb
+    role: access-node
+---
+# Data Node 1
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-data1-pvc
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast-ssd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescaledb-data1
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data1
+spec:
+  serviceName: timescaledb-data1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+      role: data-node
+      node: data1
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+        role: data-node
+        node: data1
+    spec:
+      containers:
+      - name: timescaledb
+        image: timescale/timescaledb:latest-pg15
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        env:
+        - name: POSTGRES_DB
+          value: "ogim_tsdb"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: timescale-storage
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "2000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: timescale-storage
+        persistentVolumeClaim:
+          claimName: timescaledb-data1-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb-data1
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data1
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: timescaledb
+    role: data-node
+    node: data1
+---
+# Data Node 2
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-data2-pvc
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast-ssd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescaledb-data2
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data2
+spec:
+  serviceName: timescaledb-data2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+      role: data-node
+      node: data2
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+        role: data-node
+        node: data2
+    spec:
+      containers:
+      - name: timescaledb
+        image: timescale/timescaledb:latest-pg15
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        env:
+        - name: POSTGRES_DB
+          value: "ogim_tsdb"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: timescale-storage
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "2000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: timescale-storage
+        persistentVolumeClaim:
+          claimName: timescaledb-data2-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb-data2
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data2
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: timescaledb
+    role: data-node
+    node: data2
+---
+# Data Node 3
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-data3-pvc
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast-ssd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescaledb-data3
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data3
+spec:
+  serviceName: timescaledb-data3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+      role: data-node
+      node: data3
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+        role: data-node
+        node: data3
+    spec:
+      containers:
+      - name: timescaledb
+        image: timescale/timescaledb:latest-pg15
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        env:
+        - name: POSTGRES_DB
+          value: "ogim_tsdb"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: timescale-secret
+              key: password
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: timescale-storage
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "2000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: timescale-storage
+        persistentVolumeClaim:
+          claimName: timescaledb-data3-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb-data3
+  labels:
+    app: timescaledb
+    role: data-node
+    node: data3
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: timescaledb
+    role: data-node
+    node: data3
+---
+# Load Balancer Service (for access nodes)
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb
+  labels:
+    app: timescaledb
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: timescaledb
+    role: access-node
+

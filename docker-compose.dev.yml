@@ -1,0 +1,402 @@
+version: '3.8'
+
+services:
+  # Databases
+  postgres:
+    image: postgres:15
+    container_name: ogim-postgres
+    environment:
+      POSTGRES_DB: ogim
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ogim-timescaledb
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim_tsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: ogim-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Kafka Stack
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: ogim-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: ogim-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Backend Services
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: api-gateway/Dockerfile
+    container_name: ogim-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - REDIS_URL=redis://redis:6379/0
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+    restart: unless-stopped
+
+  auth-service:
+    build:
+      context: ./backend
+      dockerfile: auth-service/Dockerfile
+    container_name: ogim-auth-service
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - SECRET_KEY=dev-secret-key-change-in-production-32-chars-minimum
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  data-ingestion-service:
+    build:
+      context: ./backend
+      dockerfile: data-ingestion-service/Dockerfile
+    container_name: ogim-data-ingestion
+    ports:
+      - "8002:8002"
+    environment:
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ml-inference-service:
+    build:
+      context: ./backend
+      dockerfile: ml-inference-service/Dockerfile
+    container_name: ogim-ml-inference
+    ports:
+      - "8003:8003"
+    environment:
+      - LOG_LEVEL=DEBUG
+      - MODEL_STORAGE_PATH=/app/models
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    volumes:
+      - ml_models:/app/models
+    restart: unless-stopped
+
+  alert-service:
+    build:
+      context: ./backend
+      dockerfile: alert-service/Dockerfile
+    container_name: ogim-alert-service
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  reporting-service:
+    build:
+      context: ./backend
+      dockerfile: reporting-service/Dockerfile
+    container_name: ogim-reporting
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  command-control-service:
+    build:
+      context: ./backend
+      dockerfile: command-control-service/Dockerfile
+    container_name: ogim-command-control
+    ports:
+      - "8006:8006"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  tag-catalog-service:
+    build:
+      context: ./backend
+      dockerfile: tag-catalog-service/Dockerfile
+    container_name: ogim-tag-catalog
+    ports:
+      - "8007:8007"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  digital-twin-service:
+    build:
+      context: ./backend
+      dockerfile: digital-twin-service/Dockerfile
+    container_name: ogim-digital-twin
+    ports:
+      - "8008:8008"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  dvr-service:
+    build:
+      context: ./backend
+      dockerfile: dvr-service/Dockerfile
+    container_name: ogim-dvr
+    ports:
+      - "8011:8011"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  remote-operations-service:
+    build:
+      context: ./backend
+      dockerfile: remote-operations-service/Dockerfile
+    container_name: ogim-remote-operations
+    ports:
+      - "8012:8012"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  data-variables-service:
+    build:
+      context: ./backend
+      dockerfile: data-variables-service/Dockerfile
+    container_name: ogim-data-variables
+    ports:
+      - "8013:8013"
+    environment:
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  storage-optimization-service:
+    build:
+      context: ./backend
+      dockerfile: storage-optimization-service/Dockerfile
+    container_name: ogim-storage-optimization
+    ports:
+      - "8014:8014"
+    environment:
+      - TIMESCALE_URL=postgresql://ogim_user:ogim_password@timescaledb:5432/ogim_tsdb
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  edge-computing-service:
+    build:
+      context: ./backend
+      dockerfile: edge-computing-service/Dockerfile
+    container_name: ogim-edge-computing
+    ports:
+      - "8009:8009"
+    environment:
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+
+  erp-integration-service:
+    build:
+      context: ./backend
+      dockerfile: erp-integration-service/Dockerfile
+    container_name: ogim-erp-integration
+    ports:
+      - "8010:8010"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---------- Observability Stack ----------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.110.0
+    container_name: ogim-otel-collector
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./infrastructure/otel/otel-collector-config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    restart: unless-stopped
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: ogim-tempo
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./infrastructure/tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+    ports:
+      - "3200:3200"
+    depends_on:
+      - otel-collector
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ogim-prometheus
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infrastructure/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ogim-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./infrastructure/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      - prometheus
+      - tempo
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  timescaledb_data:
+  ml_models:
+  prometheus_data:
+  grafana_data:
+

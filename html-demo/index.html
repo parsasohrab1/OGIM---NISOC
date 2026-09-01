@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OGIM - Oil & Gas Intelligent Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-oil-well"></i>
+            <h2>OGIM</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="wells.html" class="nav-item">
+                <i class="fas fa-oil-well"></i>
+                <span>چاه‌ها</span>
+            </a>
+            <a href="alerts.html" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>هشدارها</span>
+                <span class="badge" id="alertBadge">0</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>تحلیل‌ها</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <span>تنظیمات</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="username">مدیر سیستم</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>داشبورد مانیتورینگ</h1>
+                <p>نظارت لحظه‌ای بر میدان نفت و گاز</p>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>در حال اتصال...</span>
+                </div>
+                <div class="datetime" id="datetime"></div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-oil-well"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalWells">-</h3>
+                    <p>چاه‌های فعال</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="activeAlerts">-</h3>
+                    <p>هشدارهای فعال</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-droplet"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="productionRate">-</h3>
+                    <p>نرخ تولید (bbl/day)</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-gauge-high"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="systemHealth">-</h3>
+                    <p>سلامت سیستم</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>تولید لحظه‌ای چاه‌ها</h3>
+                    <select id="chartTimeRange" onchange="updateCharts()">
+                        <option value="1h">1 ساعت اخیر</option>
+                        <option value="6h">6 ساعت اخیر</option>
+                        <option value="24h" selected>24 ساعت اخیر</option>
+                        <option value="7d">7 روز اخیر</option>
+                    </select>
+                </div>
+                <canvas id="productionChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>فشار و دمای چاه‌ها</h3>
+                </div>
+                <canvas id="pressureTempChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Wells Status Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3>وضعیت چاه‌ها</h3>
+                <button class="btn btn-primary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> بروزرسانی
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="wellsTable">
+                    <thead>
+                        <tr>
+                            <th>نام چاه</th>
+                            <th>نوع</th>
+                            <th>وضعیت</th>
+                            <th>تولید (bbl/day)</th>
+                            <th>فشار (psi)</th>
+                            <th>دما (°C)</th>
+                            <th>آخرین بروزرسانی</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wellsTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">در حال بارگذاری...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="alerts-card">
+            <div class="alerts-header">
+                <h3>هشدارهای اخیر</h3>
+                <a href="alerts.html" class="view-all">مشاهده همه</a>
+            </div>
+            <div class="alerts-list" id="recentAlerts">
+                <div class="alert-item">
+                    <div class="loading">در حال بارگذاری هشدارها...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تنظیمات</h2>
+                <span class="close" onclick="closeSettings()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>آدرس API Gateway:</label>
+                    <input type="text" id="apiUrl" value="http://localhost:8000" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>فاصله بروزرسانی (ثانیه):</label>
+                    <input type="number" id="refreshInterval" value="10" min="5" max="60" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>نمایش نمودارها:</label>
+                    <input type="checkbox" id="showCharts" checked>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveSettings()">ذخیره</button>
+                <button class="btn btn-secondary" onclick="closeSettings()">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

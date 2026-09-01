@@ -1,0 +1,34 @@
+name: Smoke Tests
+
+on:
+  push:
+    branches: ["main", "master"]
+  schedule:
+    - cron: "0 6 * * *"  # روزانه ساعت ۶ UTC
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r backend/shared/requirements.txt
+          pip install -r backend/alert-service/requirements.txt
+          pip install -r backend/command-control-service/requirements.txt
+          pip install -r backend/data-ingestion-service/requirements.txt
+          pip install -r backend/api-gateway/requirements.txt
+
+      - name: Run smoke tests
+        env:
+          SQLALCHEMY_DATABASE_URL: sqlite:///./ci_smoke.db
+        run: |
+          cd backend
+          pytest tests/test_command_control_service.py tests/test_data_ingestion_service.py -m "not slow" --maxfail=1

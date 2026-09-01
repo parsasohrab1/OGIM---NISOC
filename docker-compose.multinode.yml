@@ -1,0 +1,136 @@
+version: '3.8'
+
+# TimescaleDB Multi-node Cluster for Development/Testing
+# Note: For production, use Kubernetes deployment
+
+services:
+  # Access Node (Coordinator)
+  timescaledb-access:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ogim-timescaledb-access
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescaledb_access_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=timescaledb"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=2GB"
+      - "-c"
+      - "effective_cache_size=6GB"
+      - "-c"
+      - "synchronous_commit=off"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim_tsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - timescale-cluster
+
+  # Data Node 1
+  timescaledb-data1:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ogim-timescaledb-data1
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+    volumes:
+      - timescaledb_data1_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=timescaledb"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=2GB"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim_tsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - timescale-cluster
+
+  # Data Node 2
+  timescaledb-data2:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ogim-timescaledb-data2
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5435:5432"
+    volumes:
+      - timescaledb_data2_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=timescaledb"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=2GB"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim_tsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - timescale-cluster
+
+  # Data Node 3
+  timescaledb-data3:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ogim-timescaledb-data3
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5436:5432"
+    volumes:
+      - timescaledb_data3_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=timescaledb"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=2GB"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogim_user -d ogim_tsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - timescale-cluster
+
+volumes:
+  timescaledb_access_data:
+  timescaledb_data1_data:
+  timescaledb_data2_data:
+  timescaledb_data3_data:
+
+networks:
+  timescale-cluster:
+    driver: bridge
+

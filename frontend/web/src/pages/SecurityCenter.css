@@ -1,0 +1,155 @@
+.sec-page {
+  padding: 1.25rem;
+}
+
+.sec-subtitle {
+  color: #555555;
+  margin: -0.5rem 0 1rem;
+}
+
+.sec-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sec-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sec-card strong {
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.sec-card span {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sec-card span.on { color: #4caf50; }
+.sec-card span.off { color: #ff9800; }
+
+.sec-card small {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.sec-panel {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sec-panel h3 {
+  margin: 0 0 0.75rem;
+  color: #555555;
+}
+
+.sec-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.sec-event {
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 0.75rem;
+  border-left: 3px solid #666;
+}
+
+.sec-event.sev-critical { border-left-color: #f44336; }
+.sec-event.sev-high { border-left-color: #ff9800; }
+.sec-event.sev-medium { border-left-color: #ffc107; }
+
+.sec-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sec-sev {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #555555;
+}
+
+.sec-event-time {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.sec-event pre {
+  font-size: 0.7rem;
+  margin: 0;
+  overflow: auto;
+  max-height: 80px;
+}
+
+.sec-rules {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.sec-muted { color: #555555; }
+
+.sec-sev-badges {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sec-sev-badge {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.sec-sev-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.sec-sev-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #555555;
+}
+
+.sec-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sec-chart-panel {
+  min-height: 280px;
+}
+
+@media (max-width: 900px) {
+  .sec-cards { grid-template-columns: repeat(2, 1fr); }
+  .sec-charts { grid-template-columns: 1fr; }
+  .sec-sev-badges { flex-wrap: wrap; }
+}

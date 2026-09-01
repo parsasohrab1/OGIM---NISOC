@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هشدارها - OGIM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-oil-well"></i>
+            <h2>OGIM</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="wells.html" class="nav-item">
+                <i class="fas fa-oil-well"></i>
+                <span>چاه‌ها</span>
+            </a>
+            <a href="alerts.html" class="nav-item active">
+                <i class="fas fa-bell"></i>
+                <span>هشدارها</span>
+                <span class="badge" id="alertBadge">0</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>تحلیل‌ها</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <span>تنظیمات</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="username">مدیر سیستم</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-bell"></i> مدیریت هشدارها</h1>
+                <p>مشاهده و مدیریت هشدارهای سیستم</p>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>در حال اتصال...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="filters-card">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label>سطح:</label>
+                    <select id="severityFilter" onchange="filterAlerts()">
+                        <option value="all">همه</option>
+                        <option value="critical">بحرانی</option>
+                        <option value="warning">هشدار</option>
+                        <option value="info">اطلاع</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>وضعیت:</label>
+                    <select id="statusFilter" onchange="filterAlerts()">
+                        <option value="all">همه</option>
+                        <option value="open">باز</option>
+                        <option value="acknowledged">تایید شده</option>
+                        <option value="resolved">حل شده</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>چاه:</label>
+                    <select id="wellFilter" onchange="filterAlerts()">
+                        <option value="all">همه</option>
+                        <option value="PROD-001">PROD-001</option>
+                        <option value="PROD-002">PROD-002</option>
+                        <option value="DEV-001">DEV-001</option>
+                        <option value="OBS-001">OBS-001</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="loadAllAlerts()">
+                    <i class="fas fa-sync-alt"></i> بروزرسانی
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="criticalCount">-</h3>
+                    <p>بحرانی</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="warningCount">-</h3>
+                    <p>هشدار</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="infoCount">-</h3>
+                    <p>اطلاع</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="resolvedCount">-</h3>
+                    <p>حل شده</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts List -->
+        <div class="alerts-container" id="alertsContainer">
+            <div class="loading">در حال بارگذاری هشدارها...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api.js"></script>
+    <script>
+        let allAlerts = [];
+        let isConnected = false;
+        let useMockData = false;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkConnection();
+            await loadAllAlerts();
+            
+            // Auto refresh every 30 seconds
+            setInterval(loadAllAlerts, 30000);
+        });
+
+        async function checkConnection() {
+            const statusEl = document.getElementById('connectionStatus');
+            
+            try {
+                isConnected = await api.healthCheck();
+                
+                if (isConnected) {
+                    statusEl.className = 'connection-status connected';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>متصل به سرور</span>';
+                    useMockData = false;
+                } else {
+                    throw new Error('Backend not available');
+                }
+            } catch (error) {
+                isConnected = false;
+                useMockData = true;
+                statusEl.className = 'connection-status disconnected';
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>حالت آفلاین (داده نمونه)</span>';
+            }
+        }
+
+        async function loadAllAlerts() {
+            try {
+                if (useMockData) {
+                    allAlerts = mockData.generateAlerts(20);
+                } else {
+                    const response = await api.getAlerts();
+                    allAlerts = response.alerts || [];
+                }
+                
+                updateStats();
+                filterAlerts();
+            } catch (error) {
+                console.error('Error loading alerts:', error);
+                allAlerts = mockData.generateAlerts(20);
+                updateStats();
+                filterAlerts();
+            }
+        }
+
+        function updateStats() {
+            const critical = allAlerts.filter(a => a.severity === 'critical').length;
+            const warning = allAlerts.filter(a => a.severity === 'warning').length;
+            const info = allAlerts.filter(a => a.severity === 'info').length;
+            const resolved = allAlerts.filter(a => a.status === 'resolved').length;
+            
+            document.getElementById('criticalCount').textContent = critical;
+            document.getElementById('warningCount').textContent = warning;
+            document.getElementById('infoCount').textContent = info;
+            document.getElementById('resolvedCount').textContent = resolved;
+            document.getElementById('alertBadge').textContent = critical + warning + info;
+        }
+
+        function filterAlerts() {
+            const severityFilter = document.getElementById('severityFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const wellFilter = document.getElementById('wellFilter').value;
+            
+            let filtered = allAlerts;
+            
+            if (severityFilter !== 'all') {
+                filtered = filtered.filter(a => a.severity === severityFilter);
+            }
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(a => a.status === statusFilter);
+            }
+            
+            if (wellFilter !== 'all') {
+                filtered = filtered.filter(a => a.well_name === wellFilter);
+            }
+            
+            displayAlerts(filtered);
+        }
+
+        function displayAlerts(alerts) {
+            const container = document.getElementById('alertsContainer');
+            
+            if (alerts.length === 0) {
+                container.innerHTML = '<div class="alert-item"><div class="loading">هشداری یافت نشد</div></div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertEl = document.createElement('div');
+                alertEl.className = `alert-item ${alert.severity}`;
+                alertEl.innerHTML = `
+                    <div class="alert-header-row">
+                        <span class="alert-severity">
+                            ${getSeverityIcon(alert.severity)} ${translateSeverity(alert.severity)}
+                        </span>
+                        <span class="alert-time">${formatTime(alert.timestamp)}</span>
+                    </div>
+                    <div class="alert-details">
+                        <p><strong>چاه:</strong> ${alert.well_name}</p>
+                        <p><strong>پیام:</strong> ${alert.message}</p>
+                        <p><strong>وضعیت:</strong> ${translateStatus(alert.status)}</p>
+                    </div>
+                    <div class="alert-actions">
+                        ${alert.status === 'open' ? `
+                            <button class="btn btn-small btn-primary" onclick="acknowledgeAlert('${alert.alert_id}')">
+                                <i class="fas fa-check"></i> تایید
+                            </button>
+                            <button class="btn btn-small btn-secondary" onclick="resolveAlert('${alert.alert_id}')">
+                                <i class="fas fa-times"></i> حل شده
+                            </button>
+                        ` : ''}
+                        ${alert.status === 'acknowledged' ? `
+                            <button class="btn btn-small btn-secondary" onclick="resolveAlert('${alert.alert_id}')">
+                                <i class="fas fa-times"></i> حل شده
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(alertEl);
+            });
+        }
+
+        async function acknowledgeAlert(alertId) {
+            try {
+                if (!useMockData) {
+                    await api.acknowledgeAlert(alertId, 'admin');
+                }
+                
+                const alert = allAlerts.find(a => a.alert_id === alertId);
+                if (alert) {
+                    alert.status = 'acknowledged';
+                }
+                
+                filterAlerts();
+                alert('هشدار تایید شد');
+            } catch (error) {
+                console.error('Error acknowledging alert:', error);
+                alert('خطا در تایید هشدار');
+            }
+        }
+
+        async function resolveAlert(alertId) {
+            try {
+                if (!useMockData) {
+                    await api.resolveAlert(alertId);
+                }
+                
+                const alert = allAlerts.find(a => a.alert_id === alertId);
+                if (alert) {
+                    alert.status = 'resolved';
+                }
+                
+                updateStats();
+                filterAlerts();
+                alert('هشدار حل شد');
+            } catch (error) {
+                console.error('Error resolving alert:', error);
+                alert('خطا در حل هشدار');
+            }
+        }
+
+        function getSeverityIcon(severity) {
+            const icons = {
+                'critical': '<i class="fas fa-exclamation-circle"></i>',
+                'warning': '<i class="fas fa-exclamation-triangle"></i>',
+                'info': '<i class="fas fa-info-circle"></i>'
+            };
+            return icons[severity] || '';
+        }
+
+        function translateSeverity(severity) {
+            const translations = {
+                'critical': 'بحرانی',
+                'warning': 'هشدار',
+                'info': 'اطلاع'
+            };
+            return translations[severity] || severity;
+        }
+
+        function translateStatus(status) {
+            const translations = {
+                'open': 'باز',
+                'acknowledged': 'تایید شده',
+                'resolved': 'حل شده'
+            };
+            return translations[status] || status;
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('fa-IR', { 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+    </script>
+    
+    <style>
+        .filters-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .filter-group select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+        
+        .alerts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .alert-details {
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .alert-details p {
+            margin: 0.5rem 0;
+        }
+        
+        .alert-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</body>
+</html>
+

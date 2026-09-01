@@ -1,0 +1,67 @@
+Category,Variable_Name,Unit,Min_Range,Max_Range,Description,Arabic_Name
+Pressure,Wellhead Pressure,psi,0,5000,Pressure at wellhead,فشار سرچاه
+Pressure,Tubing Pressure,psi,0,4000,Pressure inside tubing,فشار درون تیوبینگ
+Pressure,Casing Pressure,psi,0,3000,Pressure in casing,فشار کیسینگ
+Pressure,Separator Pressure,psi,50,500,Separator pressure,فشار جداکننده
+Pressure,Line Pressure,psi,100,2000,Pipeline pressure,فشار خط لوله
+Pressure,Bottom Hole Pressure,psi,1000,15000,Pressure at bottom of well,فشار ته چاه
+Temperature,Wellhead Temperature,°C,20,150,Temperature at wellhead,دمای سرچاه
+Temperature,Separator Temperature,°C,30,120,Separator temperature,دمای جداکننده
+Temperature,Line Temperature,°C,15,100,Pipeline temperature,دمای خط لوله
+Temperature,Motor Temperature,°C,40,120,Pump motor temperature,دمای موتور پمپ
+Temperature,Bearing Temperature,°C,30,100,Bearing temperature,دمای بلبرینگ
+Flow,Oil Flow Rate,bbl/day,0,10000,Oil production rate,نرخ تولید نفت
+Flow,Gas Flow Rate,MMSCFD,0,50,Gas production rate,نرخ تولید گاز
+Flow,Water Flow Rate,bbl/day,0,5000,Water production rate,نرخ تولید آب
+Flow,Total Liquid Rate,bbl/day,0,12000,Total liquid production,نرخ کل مایعات
+Flow,Injection Rate,bbl/day,0,8000,Injection rate for injection wells,نرخ تزریق
+Composition,Oil Cut,%,0,100,Percentage of oil in production,درصد نفت
+Composition,Water Cut,%,0,100,Percentage of water in production,درصد آب
+Composition,Gas Oil Ratio (GOR),SCF/STB,0,5000,Gas to oil ratio,نسبت گاز به نفت
+Composition,BS&W,%,0,100,Basic sediment and water content,رسوبات و آب
+Composition,API Gravity,°API,10,50,API gravity of oil,وزن مخصوص نفت
+Pump,Pump Speed,rpm,0,3600,Pump motor speed,دور موتور پمپ
+Pump,Pump Frequency,Hz,0,60,VFD frequency,فرکانس VFD
+Pump,Motor Current,A,0,500,Motor electrical current,جریان موتور
+Pump,Motor Voltage,V,0,600,Motor voltage,ولتاژ موتور
+Pump,Power Consumption,kW,0,1000,Power consumption,توان مصرفی
+Pump,Pump Efficiency,%,0,100,Pump efficiency,بازده پمپ
+Vibration,Vibration X-axis,mm/s,0,20,Vibration in X direction,لرزش محور X
+Vibration,Vibration Y-axis,mm/s,0,20,Vibration in Y direction,لرزش محور Y
+Vibration,Vibration Z-axis,mm/s,0,20,Vibration in Z direction,لرزش محور Z
+Vibration,Overall Vibration,mm/s,0,25,Overall vibration magnitude,لرزش کلی
+Valve,Choke Valve Position,%,0,100,Choke valve opening percentage,باز شدن شیر چوک
+Valve,Wing Valve Position,%,0,100,Wing valve opening percentage,باز شدن شیر وینگ
+Valve,Master Valve Position,%,0,100,Master valve position,شیر اصلی
+Valve,Safety Valve Status,0/1,0,1,Safety valve status (0=closed 1=open),وضعیت شیر ایمنی
+Level,Separator Oil Level,%,0,100,Oil level in separator,سطح نفت در جداکننده
+Level,Separator Water Level,%,0,100,Water level in separator,سطح آب در جداکننده
+Level,Tank Level,%,0,100,Storage tank level,سطح مخزن
+Level,Fluid Level,ft,0,10000,Fluid level in well,سطح سیال در چاه
+Quality,H2S Content,ppm,0,1000,Hydrogen sulfide content,محتوای گاز سمی
+Quality,CO2 Content,%,0,50,Carbon dioxide content,محتوای دی اکسید کربن
+Quality,Salt Content,PTB,0,500,Salt content in oil,محتوای نمک
+Quality,Viscosity,cP,1,1000,Oil viscosity,ویسکوزیته
+Quality,Density,kg/m³,600,1000,Oil density,چگالی
+Environmental,Ambient Temperature,°C,-20,60,Environmental temperature,دمای محیط
+Environmental,Ambient Pressure,bar,0.8,1.2,Atmospheric pressure,فشار محیط
+Environmental,Humidity,%,0,100,Relative humidity,رطوبت
+Environmental,Wind Speed,m/s,0,30,Wind speed,سرعت باد
+Electrical,Phase A Voltage,V,0,600,Phase A voltage,ولتاژ فاز A
+Electrical,Phase B Voltage,V,0,600,Phase B voltage,ولتاژ فاز B
+Electrical,Phase C Voltage,V,0,600,Phase C voltage,ولتاژ فاز C
+Electrical,Phase A Current,A,0,500,Phase A current,جریان فاز A
+Electrical,Phase B Current,A,0,500,Phase B current,جریان فاز B
+Electrical,Phase C Current,A,0,500,Phase C current,جریان فاز C
+Electrical,Power Factor,-,0,1,Electrical power factor,ضریب قدرت
+Electrical,Frequency,Hz,48,52,Electrical frequency,فرکانس
+Performance,Production Rate,bbl/day,0,10000,Current production rate,نرخ تولید
+Performance,Cumulative Production,bbl,0,999999999,Total production since start,تولید تجمعی
+Performance,Uptime,%,0,100,System uptime percentage,زمان کارکرد
+Performance,Efficiency,%,0,100,Overall efficiency,راندمان
+Performance,Run Time,hours,0,999999,Total operating hours,ساعت کارکرد
+Status,Well Status,text,,,Well operational status (running/stopped/maintenance),وضعیت چاه
+Status,Pump Status,text,,,Pump status (ON/OFF/FAULT),وضعیت پمپ
+Status,Alarm Status,text,,,Alarm level (normal/warning/critical),وضعیت هشدار
+Status,Production Mode,text,,,Production mode (oil/gas/water/injection),حالت تولید
+

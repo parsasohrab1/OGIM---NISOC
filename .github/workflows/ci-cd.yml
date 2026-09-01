@@ -1,0 +1,212 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: {}
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ogim
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov pytest-asyncio
+        pip install -r requirements.txt
+        pip install -r backend/shared/requirements.txt
+        pip install -r backend/alert-service/requirements.txt
+        pip install -r backend/command-control-service/requirements.txt
+        pip install -r backend/data-ingestion-service/requirements.txt
+        pip install -r backend/tag-catalog-service/requirements.txt
+        pip install -r backend/api-gateway/requirements.txt
+        pip install -r backend/ml-inference-service/requirements.txt
+        pip install -r backend/auth-service/requirements.txt
+        pip install -r backend/digital-twin-service/requirements.txt
+        pip install -r backend/reporting-service/requirements.txt
+        pip install -r backend/remote-operations-service/requirements.txt
+
+    - name: Run tests
+      run: |
+        cd backend
+        pytest --cov-report=xml
+      env:
+        SQLALCHEMY_DATABASE_URL: sqlite:///./ci.db
+        MODEL_STORAGE_PATH: ${{ github.workspace }}/backend/ml-inference-service/models
+    
+    - name: Upload coverage
+      if: always()
+      uses: codecov/codecov-action@v3
+      continue-on-error: true
+      with:
+        file: ./backend/coverage.xml
+        flags: unittests
+        fail_ci_if_error: false
+
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install linters
+      run: |
+        pip install flake8 black mypy
+    
+    - name: Run black (check only)
+      run: |
+        cd backend
+        black --check . --exclude="/(\.git|\.venv|venv|__pycache__|node_modules)/"
+
+    - name: Run flake8
+      run: |
+        cd backend
+        flake8 . --max-line-length=120 --extend-ignore=E203,W503,E501,F401,F403,F405 --exclude=venv,__pycache__,.venv
+
+  build-backend:
+    name: Build Backend Images
+    needs: [test, lint]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - auth-service
+          - data-ingestion-service
+          - ml-inference-service
+          - alert-service
+          - reporting-service
+          - command-control-service
+          - tag-catalog-service
+          - digital-twin-service
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.service }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=semver,pattern={{version}}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend/${{ matrix.service }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+  build-frontend:
+    name: Build Frontend
+    needs: lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/web/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd frontend/web
+        npm ci
+    
+    - name: Build
+      run: |
+        cd frontend/web
+        npm run build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build
+        path: frontend/web/dist
+
+  deploy:
+    name: Deploy to Staging
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f infrastructure/kubernetes/
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+

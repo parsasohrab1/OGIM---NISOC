@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چاه‌ها - OGIM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-oil-well"></i>
+            <h2>OGIM</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="wells.html" class="nav-item active">
+                <i class="fas fa-oil-well"></i>
+                <span>چاه‌ها</span>
+            </a>
+            <a href="alerts.html" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>هشدارها</span>
+                <span class="badge" id="alertBadge">0</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>تحلیل‌ها</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <span>تنظیمات</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="username">مدیر سیستم</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-oil-well"></i> مدیریت چاه‌ها</h1>
+                <p>نظارت و مدیریت چاه‌های تولیدی</p>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>در حال اتصال...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Wells Grid -->
+        <div class="wells-grid" id="wellsGrid">
+            <div class="loading">در حال بارگذاری...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api.js"></script>
+    <script>
+        let isConnected = false;
+        let useMockData = false;
+        let wellsData = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkConnection();
+            await loadWells();
+            
+            // Auto refresh every 10 seconds
+            setInterval(loadWells, 10000);
+        });
+
+        async function checkConnection() {
+            const statusEl = document.getElementById('connectionStatus');
+            
+            try {
+                isConnected = await api.healthCheck();
+                
+                if (isConnected) {
+                    statusEl.className = 'connection-status connected';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>متصل به سرور</span>';
+                    useMockData = false;
+                } else {
+                    throw new Error('Backend not available');
+                }
+            } catch (error) {
+                isConnected = false;
+                useMockData = true;
+                statusEl.className = 'connection-status disconnected';
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>حالت آفلاین (داده نمونه)</span>';
+            }
+        }
+
+        async function loadWells() {
+            try {
+                if (useMockData) {
+                    wellsData = mockData.wells.map(well => {
+                        const data = mockData.generateSensorData(well, 1)[0];
+                        return {
+                            well_name: well,
+                            well_type: mockData.wellTypes[well],
+                            well_status: data.well_status,
+                            oil_flow_rate: data.oil_flow_rate,
+                            gas_flow_rate: data.gas_flow_rate,
+                            water_flow_rate: data.water_flow_rate,
+                            wellhead_pressure: data.wellhead_pressure,
+                            wellhead_temperature: data.wellhead_temperature,
+                            pump_speed: data.pump_speed,
+                            vibration_overall: data.vibration_overall,
+                            timestamp: data.timestamp
+                        };
+                    });
+                } else {
+                    const response = await api.getSensorData({ limit: 4 });
+                    wellsData = response.records || [];
+                }
+                
+                displayWells();
+            } catch (error) {
+                console.error('Error loading wells:', error);
+                const grid = document.getElementById('wellsGrid');
+                grid.innerHTML = '<div class="loading">خطا در بارگذاری داده‌ها</div>';
+            }
+        }
+
+        function displayWells() {
+            const grid = document.getElementById('wellsGrid');
+            grid.innerHTML = '';
+            
+            wellsData.forEach(well => {
+                const wellCard = createWellCard(well);
+                grid.appendChild(wellCard);
+            });
+        }
+
+        function createWellCard(well) {
+            const card = document.createElement('div');
+            card.className = 'well-card';
+            
+            const statusClass = well.well_status === 'running' ? 'running' : 
+                               well.well_status === 'stopped' ? 'stopped' : 'maintenance';
+            
+            card.innerHTML = `
+                <div class="well-header">
+                    <div class="well-title">
+                        <i class="fas fa-oil-well"></i>
+                        <h3>${well.well_name}</h3>
+                    </div>
+                    <span class="status-badge ${statusClass}">${translateStatus(well.well_status)}</span>
+                </div>
+                
+                <div class="well-type">
+                    نوع: ${translateWellType(well.well_type)}
+                </div>
+                
+                <div class="well-metrics">
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-droplet"></i> تولید نفت
+                        </div>
+                        <div class="metric-value">${formatNumber(well.oil_flow_rate)} bbl/day</div>
+                    </div>
+                    
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-fire"></i> تولید گاز
+                        </div>
+                        <div class="metric-value">${formatNumber(well.gas_flow_rate)} MMSCFD</div>
+                    </div>
+                    
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-gauge-high"></i> فشار
+                        </div>
+                        <div class="metric-value">${formatNumber(well.wellhead_pressure)} psi</div>
+                    </div>
+                    
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-temperature-high"></i> دما
+                        </div>
+                        <div class="metric-value">${formatNumber(well.wellhead_temperature)} °C</div>
+                    </div>
+                    
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-cog"></i> دور پمپ
+                        </div>
+                        <div class="metric-value">${formatNumber(well.pump_speed)} rpm</div>
+                    </div>
+                    
+                    <div class="metric">
+                        <div class="metric-label">
+                            <i class="fas fa-wave-square"></i> لرزش
+                        </div>
+                        <div class="metric-value ${well.vibration_overall > 5 ? 'danger' : ''}">${formatNumber(well.vibration_overall)} mm/s</div>
+                    </div>
+                </div>
+                
+                <div class="well-footer">
+                    <div class="last-update">
+                        آخرین بروزرسانی: ${formatTime(well.timestamp)}
+                    </div>
+                    <button class="btn btn-small btn-primary" onclick="viewWellDetails('${well.well_name}')">
+                        <i class="fas fa-eye"></i> جزئیات
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function viewWellDetails(wellName) {
+            alert(`نمایش جزئیات چاه ${wellName}\n(این قابلیت در نسخه کامل موجود است)`);
+        }
+
+        function translateStatus(status) {
+            const translations = {
+                'running': 'در حال کار',
+                'stopped': 'متوقف',
+                'maintenance': 'تعمیرات'
+            };
+            return translations[status] || status;
+        }
+
+        function translateWellType(type) {
+            const translations = {
+                'production': 'تولیدی',
+                'development': 'توسعه‌ای',
+                'observation': 'مشاهده‌ای',
+                'injection': 'تزریقی'
+            };
+            return translations[type] || type;
+        }
+
+        function formatNumber(num) {
+            if (typeof num !== 'number') return '-';
+            return num.toFixed(1);
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('fa-IR', { 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+    </script>
+    
+    <style>
+        .wells-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .well-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .well-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .well-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .well-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .well-title i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .well-title h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        
+        .well-type {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .well-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric {
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .metric-value.danger {
+            color: var(--danger-color);
+        }
+        
+        .well-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .last-update {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .wells-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .well-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
+

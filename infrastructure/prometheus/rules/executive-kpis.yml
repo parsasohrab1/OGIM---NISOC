@@ -1,0 +1,28 @@
+groups:
+  - name: executive-kpis
+    rules:
+      - alert: KPILatencyP95High
+        expr: histogram_quantile(0.95, sum(rate(ogim_kpi_api_latency_seconds_bucket[5m])) by (le)) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Executive KPI: API P95 latency above 100ms"
+          description: "P95 latency is {{ $value }}s (target < 0.1s)"
+
+      - alert: KPIUptimeLow
+        expr: ogim_kpi_system_uptime_ratio < 0.999
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Executive KPI: uptime below 99.9%"
+          description: "Uptime ratio is {{ $value }}"
+
+      - alert: KPIFalsePositiveRateHigh
+        expr: sum(rate(ogim_kpi_alert_false_positive_total[1h])) / sum(rate(ogim_kpi_alert_total[1h])) > 0.3
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Executive KPI: alert false-positive rate above 30%"

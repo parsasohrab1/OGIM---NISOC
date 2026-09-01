@@ -1,0 +1,207 @@
+version: '3.8'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.110.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ../otel/otel-collector-config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ../tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+    ports:
+      - "3200:3200"
+    depends_on:
+      - otel-collector
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ../grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      - prometheus
+      - tempo
+
+  # Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ogim
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # TimescaleDB (Time-Series Database)
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    environment:
+      POSTGRES_DB: ogim_tsdb
+      POSTGRES_USER: ogim_user
+      POSTGRES_PASSWORD: ogim_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ../../backend
+      dockerfile: api-gateway/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ../../backend
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Data Ingestion Service
+  data-ingestion-service:
+    build:
+      context: ../../backend
+      dockerfile: data-ingestion-service/Dockerfile
+    ports:
+      - "8002:8002"
+    depends_on:
+      - kafka
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # ML Inference Service
+  ml-inference-service:
+    build:
+      context: ../../backend
+      dockerfile: ml-inference-service/Dockerfile
+    ports:
+      - "8003:8003"
+    depends_on:
+      - postgres
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Alert Service
+  alert-service:
+    build:
+      context: ../../backend
+      dockerfile: alert-service/Dockerfile
+    ports:
+      - "8004:8004"
+    depends_on:
+      - postgres
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Reporting Service
+  reporting-service:
+    build:
+      context: ../../backend
+      dockerfile: reporting-service/Dockerfile
+    ports:
+      - "8005:8005"
+    depends_on:
+      - postgres
+      - timescaledb
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Command & Control Service
+  command-control-service:
+    build:
+      context: ../../backend
+      dockerfile: command-control-service/Dockerfile
+    ports:
+      - "8006:8006"
+    depends_on:
+      - postgres
+      - kafka
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Tag Catalog Service
+  tag-catalog-service:
+    build:
+      context: ../../backend
+      dockerfile: tag-catalog-service/Dockerfile
+    ports:
+      - "8007:8007"
+    depends_on:
+      - postgres
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+  # Digital Twin Service
+  digital-twin-service:
+    build:
+      context: ../../backend
+      dockerfile: digital-twin-service/Dockerfile
+    ports:
+      - "8008:8008"
+    depends_on:
+      - postgres
+      - timescaledb
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+
+volumes:
+  postgres_data:
+  timescaledb_data:
+  prometheus_data:
+  grafana_data:
+
