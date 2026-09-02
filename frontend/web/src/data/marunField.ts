@@ -16,16 +16,23 @@ export const FIELD = {
   reservoirFa: 'آسماری–بنگستان',
 } as const
 
-/** ۲۴ حلقه چاه نمایشی مارون (شمار سنتتیک برای اهداف نمایشی، نه رقم واقعی میدان) */
-export const MARUN_WELLS = Array.from({ length: 24 }, (_, i) => {
+/** تعداد چاه‌های نمایش داده‌شده در نقشه/فهرست میدان مارون، برابر با FIELD.wellCount */
+export const MAP_COLUMNS = 20
+export const MAP_ROWS = Math.ceil(FIELD.wellCount / MAP_COLUMNS)
+
+/** فهرست چاه‌های مارون؛ مختصات x/y درصدی (۰ تا ۱۰۰) نسبت به یک شبکهٔ MAP_COLUMNS×MAP_ROWS هستند */
+export const MARUN_WELLS = Array.from({ length: FIELD.wellCount }, (_, i) => {
+  // padStart(2, '0') keeps well #1 as "MN-01" (matching hardcoded references
+  // elsewhere) while still allowing 3-digit IDs past well #99 unclipped
   const n = String(i + 1).padStart(2, '0')
+  const col = i % MAP_COLUMNS
+  const row = Math.floor(i / MAP_COLUMNS)
   return {
     id: `MN-${n}`,
     nameFa: `چاه مارون ${n}`,
     nameEn: `Marun Well ${n}`,
-    // approximate relative map positions (0–100), 6 columns to fit 24 wells
-    x: 8 + (i % 6) * 16 + (i % 3) * 2,
-    y: 12 + Math.floor(i / 6) * 20 + (i % 2) * 3,
+    x: ((col + 0.5) / MAP_COLUMNS) * 100,
+    y: ((row + 0.5) / MAP_ROWS) * 100,
   }
 })
 

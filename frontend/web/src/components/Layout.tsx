@@ -77,18 +77,6 @@ export default function Layout({ children }: LayoutProps) {
           {link('/well3d', 'نمایش سه‌بعدی')}
           {link('/ar-integration', 'واقعیت افزوده')}
           {link('/report-builder', 'گزارش‌ساز')}
-          {link('/reports', 'گزارش‌ها')}
-          {link('/workflow-automation', 'اتوماسیون گردش‌کار')}
-          {link('/ml-models', 'مدل‌های یادگیری ماشین')}
-          {link('/lstm-forecast', 'پیش‌بینی سری‌زمانی LSTM')}
-          {link('/federated-learning', 'یادگیری فدرال')}
-          {link('/performance', 'عملکرد و KPI')}
-          {link('/soc', 'مرکز امنیت')}
-          {link('/remote-operations', 'عملیات از راه دور')}
-          {link('/storage-optimization', 'بهینه‌سازی ذخیره‌سازی')}
-          {link('/edge-computing', 'پردازش لبه (Edge)')}
-          {link('/data-variables', 'متغیرهای داده')}
-          {link('/blockchain-audit', 'ثبت بلاکچین')}
           {link('/subsidiaries', 'شرکت‌های تابعه')}
           {link('/subsidiary-production', 'وضعیت تولید شرکت‌های تابعه')}
           {link('/equipment', 'تجهیزات')}

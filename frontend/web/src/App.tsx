@@ -13,18 +13,6 @@ import Well3D from './pages/Well3D'
 import ARIntegration from './pages/ARIntegration'
 import ReportBuilder from './pages/ReportBuilder'
 import SystemArchitecture from './pages/SystemArchitecture'
-import MLModels from './pages/MLModels'
-import LSTMForecast from './pages/LSTMForecast'
-import FederatedLearning from './pages/FederatedLearning'
-import Performance from './pages/Performance'
-import SecurityCenter from './pages/SecurityCenter'
-import RemoteOperations from './pages/RemoteOperations'
-import Reports from './pages/Reports'
-import WorkflowAutomation from './pages/WorkflowAutomation'
-import StorageOptimization from './pages/StorageOptimization'
-import EdgeComputing from './pages/EdgeComputing'
-import DataVariables from './pages/DataVariables'
-import BlockchainAudit from './pages/BlockchainAudit'
 import AccessControl from './pages/AccessControl'
 import Equipment from './pages/Equipment'
 import ManualDataEntry from './pages/ManualDataEntry'
@@ -59,18 +47,6 @@ function App() {
               <Route path="/ar-integration" element={<ARIntegration />} />
               <Route path="/report-builder" element={<ReportBuilder />} />
               <Route path="/system" element={<SystemArchitecture />} />
-              <Route path="/ml-models" element={<MLModels />} />
-              <Route path="/lstm-forecast" element={<LSTMForecast />} />
-              <Route path="/federated-learning" element={<FederatedLearning />} />
-              <Route path="/performance" element={<Performance />} />
-              <Route path="/soc" element={<SecurityCenter />} />
-              <Route path="/remote-operations" element={<RemoteOperations />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/workflow-automation" element={<WorkflowAutomation />} />
-              <Route path="/storage-optimization" element={<StorageOptimization />} />
-              <Route path="/edge-computing" element={<EdgeComputing />} />
-              <Route path="/data-variables" element={<DataVariables />} />
-              <Route path="/blockchain-audit" element={<BlockchainAudit />} />
               <Route path="/access-control" element={<AccessControl />} />
               <Route path="/equipment" element={<Equipment />} />
               <Route path="/manual-data-entry" element={<ManualDataEntry />} />

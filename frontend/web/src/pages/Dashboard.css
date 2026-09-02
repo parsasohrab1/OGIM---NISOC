@@ -181,7 +181,6 @@
 }
 
 .deh-map {
-  position: relative;
   height: 320px;
   border-radius: 8px;
   background:
@@ -189,15 +188,24 @@
     radial-gradient(ellipse at 70% 60%, rgba(33, 150, 243, 0.08), transparent 45%),
     linear-gradient(180deg, #f3f7f5 0%, #101410 100%);
   border: 1px dashed #2e3d30;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* تعداد چاه‌های میدان مارون (۵۰۰) در یک ارتفاع بلندتر از دیدگاه ثابت رسم و
+   قابل اسکرول می‌شود؛ ارتفاع دقیق این لایه بر مبنای MAP_ROWS در Dashboard.tsx
+   محاسبه و به‌صورت inline تنظیم می‌شود. */
+.deh-map-inner {
+  position: relative;
+  width: 100%;
 }
 
 .deh-well-dot {
   position: absolute;
-  width: 34px;
-  height: 34px;
-  margin-left: -17px;
-  margin-top: -17px;
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+  margin-top: -13px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.35);
   color: #fff;
