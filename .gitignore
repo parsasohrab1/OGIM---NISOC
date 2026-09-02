@@ -107,6 +107,7 @@ env/
 # Local dev runtime (scripts/run_local_dev.sh)
 .local-dev/
 backend/.venv/
+dump.rdb
 
 # Database
 *.db
