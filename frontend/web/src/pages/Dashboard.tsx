@@ -369,7 +369,7 @@ export default function Dashboard() {
                     title={`${pos.nameFa} — ${STATUS_LABEL_FA[live.status]}`}
                     onClick={() => setSelectedWell(pos.id)}
                   >
-                    {pos.id.replace('MRN-', '')}
+                    {pos.id.replace('MN-', '')}
                   </button>
                 )
               })}

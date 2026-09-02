@@ -59,7 +59,7 @@ export type DvrReconciliationRow = {
   status: 'balanced' | 'minor' | 'material'
 }
 
-/** کلید سنسور: MRN-01.thp */
+/** کلید سنسور: MN-01.thp */
 export function dvrSensorId(wellId: string, varKey: string) {
   return `${wellId}.${varKey}`
 }

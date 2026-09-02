@@ -99,7 +99,7 @@ export default function ManualDataEntry() {
             <div className="ops-form-grid">
               <div className="ops-field">
                 <label>نام چاه</label>
-                <input name="well_name" required disabled={!canEnter} placeholder="مثال: MRN-05" />
+                <input name="well_name" required disabled={!canEnter} placeholder="مثال: MN-05" />
               </div>
               <div className="ops-field">
                 <label>شرکت تابعه</label>

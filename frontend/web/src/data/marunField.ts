@@ -3,10 +3,12 @@
 export const FIELD = {
   nameFa: 'میدان مارون',
   nameEn: 'Marun Field',
-  code: 'MRN',
+  code: 'MN',
   clientFa: 'شرکت ملی مناطق نفت‌خیز جنوب',
   clientEn: 'National Iranian South Oil Company (NISOC)',
-  wellCount: 24,
+  // تعداد چاه کل میدان مارون: ۵۰۰ حلقه؛ نمایش سه‌بعدی/اسکادا در همین فایل همچنان
+  // فقط زیرمجموعه‌ای نمونه (۲۴ چاه) را به‌صورت مصور نشان می‌دهد.
+  wellCount: 500,
   oilTypeFa: 'نفت سبک-میانه ترش',
   oilTypeEn: 'Light-Medium Sour Crude',
   apiGravity: 34.5,
@@ -18,7 +20,7 @@ export const FIELD = {
 export const MARUN_WELLS = Array.from({ length: 24 }, (_, i) => {
   const n = String(i + 1).padStart(2, '0')
   return {
-    id: `MRN-${n}`,
+    id: `MN-${n}`,
     nameFa: `چاه مارون ${n}`,
     nameEn: `Marun Well ${n}`,
     // approximate relative map positions (0–100), 6 columns to fit 24 wells
@@ -47,7 +49,7 @@ export const STATUS_COLOR: Record<WellHealthStatus, string> = {
 export const SENSOR_VARIABLES = [
   { key: 'thp', nameFa: 'فشار سرچاهی', unit: 'psi', category: 'wellhead' },
   { key: 'tht', nameFa: 'دمای سرچاهی', unit: '°C', category: 'wellhead' },
-  { key: 'chp', nameFa: 'فشار غلاف', unit: 'psi', category: 'wellhead' },
+  { key: 'chp', nameFa: 'فشار دالیز', unit: 'psi', category: 'wellhead' },
   { key: 'oil_rate', nameFa: 'دبی نفت', unit: 'bbl/d', category: 'production' },
   { key: 'gas_rate', nameFa: 'دبی گاز', unit: 'Mscf/d', category: 'production' },
   { key: 'water_rate', nameFa: 'دبی آب', unit: 'bbl/d', category: 'production' },
@@ -345,7 +347,7 @@ export function buildMarunWell3DData(wellId: string, tick = Date.now()): MarunWe
       pressureGauges: [
         { name: 'فشار سرچاهی', value: thp, unit: 'psi' },
         { name: 'فشار لوله مغزی', value: Math.round(thp * 0.92), unit: 'psi' },
-        { name: 'فشار غلاف', value: Math.round(thp * 0.35), unit: 'psi' },
+        { name: 'فشار دالیز', value: Math.round(thp * 0.35), unit: 'psi' },
       ],
       flowMeter: {
         flowRate: live?.vfmOilRate ?? oil,

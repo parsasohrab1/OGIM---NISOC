@@ -27,7 +27,7 @@ import './ARIntegration.css'
 
 export default function ARIntegration() {
   const [tick, setTick] = useState(Date.now())
-  const [selectedDevice, setSelectedDevice] = useState('AR-MRN-01')
+  const [selectedDevice, setSelectedDevice] = useState('AR-MN-01')
   const [selectedWell, setSelectedWell] = useState(MARUN_WELLS[0].id)
   const [focusAnchor, setFocusAnchor] = useState<string | null>(null)
   const [hudLocked, setHudLocked] = useState(true)
@@ -157,7 +157,7 @@ export default function ARIntegration() {
               }}
               onClick={() => {
                 setFocusAnchor(a.id)
-                if (a.wellId.startsWith('MRN-')) setSelectedWell(a.wellId)
+                if (a.wellId.startsWith('MN-')) setSelectedWell(a.wellId)
               }}
               title={a.labelFa}
             >

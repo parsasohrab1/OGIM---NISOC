@@ -100,7 +100,7 @@ export function buildMarunArDevices(tick = Date.now()): ArDevice[] {
     const connected = i !== 4 || r > 0.3
     const tech = TECHNICIANS[i]
     return {
-      deviceId: `AR-MRN-${String(i + 1).padStart(2, '0')}`,
+      deviceId: `AR-MN-${String(i + 1).padStart(2, '0')}`,
       deviceType: types[i % 3],
       userFa: tech.name,
       roleFa: tech.role,
@@ -128,7 +128,7 @@ export function buildMarunArSessions(devices: ArDevice[], tick = Date.now()): Ar
         `منیفولد جریان`,
       ].slice(0, 3 + Math.floor(r * 2))
       return {
-        sessionId: `SES-MRN-${String(i + 1).padStart(3, '0')}`,
+        sessionId: `SES-MN-${String(i + 1).padStart(3, '0')}`,
         deviceId: d.deviceId,
         userFa: d.userFa,
         wellId: d.wellId,

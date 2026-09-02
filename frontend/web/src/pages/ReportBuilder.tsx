@@ -92,7 +92,7 @@ export default function ReportBuilder() {
           <input value={name} onChange={(e) => setName(e.target.value)} />
 
           <label>چاه (اختیاری)</label>
-          <input value={wellName} onChange={(e) => setWellName(e.target.value)} placeholder="MRN-01" />
+          <input value={wellName} onChange={(e) => setWellName(e.target.value)} placeholder="MN-01" />
 
           <label>ابعاد</label>
           <div className="rb-chips">

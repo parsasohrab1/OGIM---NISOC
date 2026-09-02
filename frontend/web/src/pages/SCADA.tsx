@@ -64,8 +64,8 @@ export default function SCADA() {
   const [tick, setTick] = useState(Date.now())
   const [tab, setTab] = useState<Tab>('overview')
   const [selectedConn, setSelectedConn] = useState('OPC-RTU-PAD-A')
-  const [selectedWell, setSelectedWell] = useState('MRN-01')
-  const [selectedTagId, setSelectedTagId] = useState('MRN-01.THP')
+  const [selectedWell, setSelectedWell] = useState('MN-01')
+  const [selectedTagId, setSelectedTagId] = useState('MN-01.THP')
   const [connOverride, setConnOverride] = useState<Record<string, ConnStatus>>({})
   const [writeLog, setWriteLog] = useState<string[]>([])
   const [setpoints, setSetpoints] = useState<ControlSetpoint[]>([])
@@ -273,7 +273,7 @@ export default function SCADA() {
                       const w = wells.find((x) => x.id === id)!
                       return (
                         <span key={id} style={{ background: STATUS_COLOR[w.status] }}>
-                          {id.replace('MRN-', '')}
+                          {id.replace('MN-', '')}
                         </span>
                       )
                     })}
@@ -375,7 +375,7 @@ export default function SCADA() {
                     style={{ borderColor: STATUS_COLOR[live.status] }}
                     onClick={() => setSelectedWell(w.id)}
                   >
-                    {w.id.replace('MRN-', '')}
+                    {w.id.replace('MN-', '')}
                   </button>
                 )
               })}
@@ -564,7 +564,7 @@ export default function SCADA() {
                     setSelectedTagId(`${w.id}.THP`)
                   }}
                 >
-                  {w.id.replace('MRN-', '')}
+                  {w.id.replace('MN-', '')}
                 </button>
               ))}
             </div>
