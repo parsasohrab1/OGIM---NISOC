@@ -20,14 +20,20 @@ def upgrade() -> None:
     op.create_table(
         "subsidiaries",
         sa.Column("id", sa.Integer(), primary_key=True, index=True),
-        sa.Column("code", sa.String(length=20), nullable=False, unique=True, index=True),
+        sa.Column(
+            "code", sa.String(length=20), nullable=False, unique=True, index=True
+        ),
         sa.Column("name_fa", sa.String(length=150), nullable=False),
         sa.Column("name_en", sa.String(length=150), nullable=False),
-        sa.Column("active_well_count", sa.Integer(), nullable=False, server_default="0"),
+        sa.Column(
+            "active_well_count", sa.Integer(), nullable=False, server_default="0"
+        ),
         sa.Column("target_production_bopd", sa.Float(), nullable=True),
         sa.Column("is_active", sa.Boolean(), server_default=sa.true()),
         sa.Column("notes", sa.Text(), nullable=True),
-        sa.Column("updated_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True),
+        sa.Column(
+            "updated_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True
+        ),
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
     )
@@ -53,7 +59,11 @@ def upgrade() -> None:
         "equipment",
         sa.Column("id", sa.Integer(), primary_key=True, index=True),
         sa.Column(
-            "equipment_id", sa.String(length=100), nullable=False, unique=True, index=True
+            "equipment_id",
+            sa.String(length=100),
+            nullable=False,
+            unique=True,
+            index=True,
         ),
         sa.Column("equipment_type", sa.String(length=30), nullable=False, index=True),
         sa.Column("name", sa.String(length=150), nullable=False),
@@ -65,7 +75,9 @@ def upgrade() -> None:
             index=True,
         ),
         sa.Column("well_name", sa.String(length=50), nullable=True, index=True),
-        sa.Column("status", sa.String(length=20), nullable=False, server_default="active"),
+        sa.Column(
+            "status", sa.String(length=20), nullable=False, server_default="active"
+        ),
         sa.Column("phase", sa.Integer(), nullable=False, server_default="1"),
         sa.Column("attributes", sa.JSON(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=True),
@@ -90,7 +102,9 @@ def upgrade() -> None:
         sa.Column("gas_rate_mscfd", sa.Float(), nullable=True),
         sa.Column("choke_size_64th", sa.Float(), nullable=True),
         sa.Column("notes", sa.Text(), nullable=True),
-        sa.Column("entered_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True),
+        sa.Column(
+            "entered_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True
+        ),
         sa.Column("created_at", sa.DateTime(), nullable=True),
     )
     op.create_index(
@@ -141,7 +155,9 @@ def upgrade() -> None:
         sa.Column("period_start", sa.DateTime(), nullable=False),
         sa.Column("period_end", sa.DateTime(), nullable=False),
         sa.Column("target_bopd", sa.Float(), nullable=False),
-        sa.Column("created_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True),
+        sa.Column(
+            "created_by_id", sa.Integer(), sa.ForeignKey("users.id"), nullable=True
+        ),
         sa.Column("created_at", sa.DateTime(), nullable=True),
     )
     op.create_index(
@@ -152,7 +168,9 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("idx_production_target_subsidiary_period", table_name="production_targets")
+    op.drop_index(
+        "idx_production_target_subsidiary_period", table_name="production_targets"
+    )
     op.drop_table("production_targets")
     op.drop_index("idx_vfm_decline_well_timestamp", table_name="vfm_decline_records")
     op.drop_table("vfm_decline_records")

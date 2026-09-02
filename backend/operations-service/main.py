@@ -315,7 +315,11 @@ async def create_equipment(
         raise HTTPException(
             status_code=400, detail=f"Invalid equipment_type: {payload.equipment_type}"
         )
-    if db.query(Equipment).filter(Equipment.equipment_id == payload.equipment_id).first():
+    if (
+        db.query(Equipment)
+        .filter(Equipment.equipment_id == payload.equipment_id)
+        .first()
+    ):
         raise HTTPException(status_code=400, detail="equipment_id already exists")
 
     item = Equipment(**payload.dict())
@@ -589,7 +593,9 @@ async def production_status(
 async def access_levels(_: dict = Depends(require_authentication)):
     return {
         "roles": ROLE_DEFINITIONS,
-        "permissions": {role: sorted(perms) for role, perms in ROLE_PERMISSIONS.items()},
+        "permissions": {
+            role: sorted(perms) for role, perms in ROLE_PERMISSIONS.items()
+        },
         "hq_expected_reports": HQ_EXPECTED_REPORTS,
     }
 

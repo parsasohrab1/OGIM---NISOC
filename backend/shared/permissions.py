@@ -9,7 +9,6 @@ frontend, which reports each role is expected to receive.
 
 from typing import Dict, List, Set
 
-
 # --- Roles -----------------------------------------------------------------
 # Ordered from broadest technical/system access down to the narrowest,
 # field-level manual data-entry access. `level` is a coarse seniority rank

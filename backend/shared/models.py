@@ -295,7 +295,9 @@ class Equipment(Base):
         Integer, ForeignKey("subsidiaries.id"), nullable=True, index=True
     )
     well_name = Column(String(50), nullable=True, index=True)
-    status = Column(String(20), nullable=False, default="active")  # active, idle, maintenance, retired
+    status = Column(
+        String(20), nullable=False, default="active"
+    )  # active, idle, maintenance, retired
     phase = Column(Integer, nullable=False, default=1)  # 1=manual, 2=sensor-integrated
     attributes = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -381,7 +383,9 @@ class ProductionTarget(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
-        Index("idx_production_target_subsidiary_period", "subsidiary_id", "period_start"),
+        Index(
+            "idx_production_target_subsidiary_period", "subsidiary_id", "period_start"
+        ),
     )
 
 
