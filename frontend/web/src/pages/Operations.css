@@ -1,0 +1,289 @@
+.ops-page {
+  padding: 20px;
+  direction: rtl;
+  text-align: right;
+}
+
+.ops-page h2 {
+  margin-bottom: 6px;
+  color: #111111;
+}
+
+.ops-subtitle {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.ops-banner {
+  background: #fff8e1;
+  border: 1px solid #f9d774;
+  color: #7a5b00;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.ops-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ops-stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.ops-stat-card h3 {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ops-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.ops-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ops-card.full {
+  grid-column: 1 / -1;
+}
+
+.ops-card h3 {
+  margin-top: 0;
+  color: #444;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.ops-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.ops-tab {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #d0d7de;
+  background: #f5f7fa;
+  color: #333;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ops-tab.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.ops-table-wrap {
+  overflow-x: auto;
+}
+
+.ops-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ops-page table th,
+.ops-page table td {
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 1px solid #e5e5e5;
+  white-space: nowrap;
+}
+
+.ops-page table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.ops-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ops-field label {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.ops-field input,
+.ops-field select,
+.ops-field textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.ops-btn {
+  padding: 9px 18px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ops-btn:hover {
+  background: #0056b3;
+}
+
+.ops-btn.secondary {
+  background: #6c757d;
+}
+
+.ops-btn.secondary:hover {
+  background: #545b62;
+}
+
+.ops-btn.danger {
+  background: #dc3545;
+}
+
+.ops-btn.danger:hover {
+  background: #a71d2a;
+}
+
+.ops-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ops-badge.ahead {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.ops-badge.behind {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.ops-badge.on_target,
+.ops-badge.unknown {
+  background: #eef1f4;
+  color: #555;
+}
+
+.ops-badge.phase1 {
+  background: #fff3e0;
+  color: #b25e00;
+}
+
+.ops-badge.phase2 {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.ops-badge.alert {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.ops-role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ops-role-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.ops-role-item.hq {
+  border-color: #007bff;
+  background: #f4f9ff;
+}
+
+.ops-role-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.ops-role-item p {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.ops-perm-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  margin: 2px;
+  border-radius: 10px;
+  background: #eef1f4;
+  color: #333;
+  font-size: 11px;
+}
+
+.ops-combo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ops-report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ops-report-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.ops-report-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: #222;
+}
+
+.ops-report-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}

@@ -617,6 +617,75 @@ export const kpiAPI = {
   },
 }
 
+// Operations API (subsidiaries, equipment, manual data entry, VFM/decline, access levels)
+export const operationsAPI = {
+  getSubsidiaries: async () => {
+    const response = await apiClient.get('/api/operations/subsidiaries')
+    return response.data
+  },
+  upsertSubsidiary: async (subsidiaryId: number, payload: any) => {
+    const response = await apiClient.put(`/api/operations/subsidiaries/${subsidiaryId}`, payload)
+    return response.data
+  },
+  replaceReservoirs: async (subsidiaryId: number, reservoirs: any[]) => {
+    const response = await apiClient.put(`/api/operations/subsidiaries/${subsidiaryId}/reservoirs`, reservoirs)
+    return response.data
+  },
+
+  getEquipment: async (params?: { equipment_type?: string; subsidiary_id?: number }) => {
+    const response = await apiClient.get('/api/operations/equipment', { params })
+    return response.data
+  },
+  createEquipment: async (payload: any) => {
+    const response = await apiClient.post('/api/operations/equipment', payload)
+    return response.data
+  },
+  updateEquipment: async (equipmentId: number, payload: any) => {
+    const response = await apiClient.put(`/api/operations/equipment/${equipmentId}`, payload)
+    return response.data
+  },
+  deleteEquipment: async (equipmentId: number) => {
+    const response = await apiClient.delete(`/api/operations/equipment/${equipmentId}`)
+    return response.data
+  },
+
+  getManualReadings: async (params?: { well_name?: string; subsidiary_id?: number; limit?: number }) => {
+    const response = await apiClient.get('/api/operations/manual-readings', { params })
+    return response.data
+  },
+  submitManualReading: async (payload: any) => {
+    const response = await apiClient.post('/api/operations/manual-readings', payload)
+    return response.data
+  },
+
+  getVfmDecline: async (wellName: string, limit: number = 100) => {
+    const response = await apiClient.get(`/api/operations/vfm-decline/${wellName}`, { params: { limit } })
+    return response.data
+  },
+  recordVfmDecline: async (payload: any) => {
+    const response = await apiClient.post('/api/operations/vfm-decline', payload)
+    return response.data
+  },
+
+  getProductionStatus: async () => {
+    const response = await apiClient.get('/api/operations/production-status')
+    return response.data
+  },
+  createProductionTarget: async (payload: any) => {
+    const response = await apiClient.post('/api/operations/production-targets', payload)
+    return response.data
+  },
+
+  getAccessLevels: async () => {
+    const response = await apiClient.get('/api/operations/access-levels')
+    return response.data
+  },
+  getHqSummaryReport: async () => {
+    const response = await apiClient.get('/api/operations/reports/hq-summary')
+    return response.data
+  },
+}
+
 export default {
   auth: authAPI,
   dataIngestion: dataIngestionAPI,
@@ -633,5 +702,6 @@ export default {
   maintenance: maintenanceAPI,
   scada: scadaAPI,
   storage: storageAPI,
+  operations: operationsAPI,
 }
 

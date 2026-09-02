@@ -112,6 +112,7 @@ SERVICES = {
     "remote-operations": settings.REMOTE_OPERATIONS_SERVICE_URL,
     "data-variables": settings.DATA_VARIABLES_SERVICE_URL,
     "storage-optimization": settings.STORAGE_OPTIMIZATION_SERVICE_URL,
+    "operations": settings.OPERATIONS_SERVICE_URL,
 }
 
 SERVICE_ROLE_REQUIREMENTS = {
@@ -128,6 +129,16 @@ SERVICE_ROLE_REQUIREMENTS = {
     "remote-operations": {"system_admin", "field_operator"},
     "data-variables": {"system_admin", "data_engineer", "field_operator"},
     "storage-optimization": {"system_admin", "data_engineer"},
+    "operations": {
+        "system_admin",
+        "hq_operations_chief",
+        "subsidiary_ops_manager",
+        "field_supervisor",
+        "data_engineer",
+        "field_operator",
+        "data_entry_operator",
+        "viewer",
+    },
 }
 upstream_client: Optional[httpx.AsyncClient] = None
 response_cache = TTLResponseCache(

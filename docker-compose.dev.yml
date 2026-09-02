@@ -297,6 +297,22 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  operations-service:
+    build:
+      context: ./backend
+      dockerfile: operations-service/Dockerfile
+    container_name: ogim-operations
+    ports:
+      - "8016:8016"
+    environment:
+      - DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
+      - LOG_LEVEL=DEBUG
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
   storage-optimization-service:
     build:
       context: ./backend

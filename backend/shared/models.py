@@ -228,6 +228,167 @@ class Simulation(Base):
     status = Column(String(20), default="completed")
 
 
+class Subsidiary(Base):
+    """
+    یکی از ۵ شرکت بهره‌برداری تابعه شرکت ملی مناطق نفت‌خیز جنوب (NISOC).
+    Reservoir/well counts here are the manually-entered rollups shown on the
+    subsidiaries combo page; per-reservoir detail lives in `Reservoir`.
+    """
+
+    __tablename__ = "subsidiaries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(20), unique=True, nullable=False, index=True)
+    name_fa = Column(String(150), nullable=False)
+    name_en = Column(String(150), nullable=False)
+    active_well_count = Column(Integer, nullable=False, default=0)
+    target_production_bopd = Column(Float, nullable=True)
+    is_active = Column(Boolean, default=True)
+    notes = Column(Text, nullable=True)
+    updated_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    reservoirs = relationship(
+        "Reservoir", back_populates="subsidiary", cascade="all, delete-orphan"
+    )
+    equipment = relationship("Equipment", back_populates="subsidiary")
+
+
+class Reservoir(Base):
+    """Reservoir under a subsidiary, tagged by fluid nature (oil/gas/water/...)."""
+
+    __tablename__ = "reservoirs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    subsidiary_id = Column(
+        Integer, ForeignKey("subsidiaries.id"), nullable=False, index=True
+    )
+    name = Column(String(150), nullable=False)
+    fluid_type = Column(
+        String(30), nullable=False, index=True
+    )  # oil, gas, gas_cap, water, associated_gas
+    well_count = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    subsidiary = relationship("Subsidiary", back_populates="reservoirs")
+
+
+class Equipment(Base):
+    """
+    Field equipment inventory: MOT equipment, rigs, pipelines, trucks,
+    virtual flow meters, coiled tubing units. `phase` marks whether the
+    record is phase-1 (manual data) or phase-2 (sensor-integrated, pending
+    sensor procurement/installation).
+    """
+
+    __tablename__ = "equipment"
+
+    id = Column(Integer, primary_key=True, index=True)
+    equipment_id = Column(String(100), unique=True, nullable=False, index=True)
+    equipment_type = Column(
+        String(30), nullable=False, index=True
+    )  # mot, rig, pipeline, truck, vfm, coiled_tubing
+    name = Column(String(150), nullable=False)
+    subsidiary_id = Column(
+        Integer, ForeignKey("subsidiaries.id"), nullable=True, index=True
+    )
+    well_name = Column(String(50), nullable=True, index=True)
+    status = Column(
+        String(20), nullable=False, default="active"
+    )  # active, idle, maintenance, retired
+    phase = Column(Integer, nullable=False, default=1)  # 1=manual, 2=sensor-integrated
+    attributes = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    subsidiary = relationship("Subsidiary", back_populates="equipment")
+
+
+class WellManualReading(Base):
+    """
+    Daily well readings entered manually by operating-company personnel in
+    the absence of installed sensors (production pressure, production flow
+    rate, water cut, and other PLC-sourced values normally recorded
+    automatically once sensors are procured/installed - phase 2).
+    """
+
+    __tablename__ = "well_manual_readings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    well_name = Column(String(50), nullable=False, index=True)
+    subsidiary_id = Column(
+        Integer, ForeignKey("subsidiaries.id"), nullable=False, index=True
+    )
+    reading_date = Column(DateTime, nullable=False, index=True)
+    production_pressure_psi = Column(Float, nullable=True)
+    production_flow_rate_bopd = Column(Float, nullable=True)
+    water_cut_pct = Column(Float, nullable=True)
+    gas_rate_mscfd = Column(Float, nullable=True)
+    choke_size_64th = Column(Float, nullable=True)
+    notes = Column(Text, nullable=True)
+    entered_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_manual_reading_well_date", "well_name", "reading_date"),
+    )
+
+
+class VfmDeclineRecord(Base):
+    """
+    Combined virtual flow meter (VFM) reading + Arps decline-curve fit for a
+    well, used to watch the rate of change of production via the virtual
+    flow meter against the expected decline trend.
+    """
+
+    __tablename__ = "vfm_decline_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    well_name = Column(String(50), nullable=False, index=True)
+    subsidiary_id = Column(
+        Integer, ForeignKey("subsidiaries.id"), nullable=True, index=True
+    )
+    timestamp = Column(DateTime, nullable=False, index=True)
+    vfm_oil_rate_bopd = Column(Float, nullable=False)
+    vfm_water_rate_bwpd = Column(Float, nullable=True)
+    vfm_gas_rate_mscfd = Column(Float, nullable=True)
+    decline_qi = Column(Float, nullable=True)  # initial rate (Arps qi)
+    decline_di = Column(Float, nullable=True)  # nominal decline rate (Arps Di)
+    decline_b = Column(Float, nullable=True)  # hyperbolic exponent (Arps b)
+    decline_predicted_rate_bopd = Column(Float, nullable=True)
+    rate_change_pct = Column(Float, nullable=True)  # vfm vs decline-predicted
+    alert_flag = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_vfm_decline_well_timestamp", "well_name", "timestamp"),
+    )
+
+
+class ProductionTarget(Base):
+    """Defined production target per subsidiary for a reporting period."""
+
+    __tablename__ = "production_targets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    subsidiary_id = Column(
+        Integer, ForeignKey("subsidiaries.id"), nullable=False, index=True
+    )
+    period_start = Column(DateTime, nullable=False)
+    period_end = Column(DateTime, nullable=False)
+    target_bopd = Column(Float, nullable=False)
+    created_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index(
+            "idx_production_target_subsidiary_period", "subsidiary_id", "period_start"
+        ),
+    )
+
+
 class AuditLog(Base):
     """Audit log for all critical operations"""
 
