@@ -22,23 +22,74 @@ from shared.security import get_password_hash
 USERS = [
     ("admin", "admin@ogim.local", "Admin@123", "system_admin"),
     ("hq_chief", "hq_chief@nisoc.local", "HqChief@123", "hq_operations_chief"),
-    ("subsidiary_mgr", "subsidiary_mgr@nisoc.local", "Subsidiary@123", "subsidiary_ops_manager"),
+    (
+        "subsidiary_mgr",
+        "subsidiary_mgr@nisoc.local",
+        "Subsidiary@123",
+        "subsidiary_ops_manager",
+    ),
     ("field_super", "field_super@nisoc.local", "FieldSuper@123", "field_supervisor"),
     ("data_entry1", "data_entry1@nisoc.local", "DataEntry@123", "data_entry_operator"),
     ("viewer1", "viewer1@ogim.local", "Viewer@123", "viewer"),
 ]
 
 SUBSIDIARIES = [
-    ("MIS", "شرکت بهره‌برداری نفت و گاز مسجدسلیمان", "Masjed Soleyman Oil & Gas Producing Company", 210, 95000,
-     [("مسجدسلیمان", "oil", 120), ("هفت‌شهیدان", "gas", 40), ("نفت سفید", "associated_gas", 50)]),
-    ("AGJ", "شرکت بهره‌برداری نفت و گاز آغاجاری", "Aghajari Oil & Gas Producing Company", 340, 210000,
-     [("آغاجاری", "oil", 260), ("کلاهک گازی آغاجاری", "gas_cap", 30), ("رگ سفید", "oil", 50)]),
-    ("KRN", "شرکت بهره‌برداری نفت و گاز کارون", "Karoun Oil & Gas Producing Company", 180, 130000,
-     [("اهواز", "oil", 90), ("منصوری", "oil", 60), ("اهواز - آب همراه", "water", 30)]),
-    ("MRN", "شرکت بهره‌برداری نفت و گاز مارون", "Marun Oil & Gas Producing Company", 24, 520000,
-     [("آسماری–بنگستان مارون", "oil", 20), ("گاز همراه مارون", "associated_gas", 4)]),
-    ("GCH", "شرکت بهره‌برداری نفت و گاز گچساران", "Gachsaran Oil & Gas Producing Company", 260, 250000,
-     [("گچساران", "oil", 190), ("بی‌بی حکیمه", "oil", 40), ("کلاهک گازی گچساران", "gas_cap", 30)]),
+    (
+        "MIS",
+        "شرکت بهره‌برداری نفت و گاز مسجدسلیمان",
+        "Masjed Soleyman Oil & Gas Producing Company",
+        210,
+        95000,
+        [
+            ("مسجدسلیمان", "oil", 120),
+            ("هفت‌شهیدان", "gas", 40),
+            ("نفت سفید", "associated_gas", 50),
+        ],
+    ),
+    (
+        "AGJ",
+        "شرکت بهره‌برداری نفت و گاز آغاجاری",
+        "Aghajari Oil & Gas Producing Company",
+        340,
+        210000,
+        [
+            ("آغاجاری", "oil", 260),
+            ("کلاهک گازی آغاجاری", "gas_cap", 30),
+            ("رگ سفید", "oil", 50),
+        ],
+    ),
+    (
+        "KRN",
+        "شرکت بهره‌برداری نفت و گاز کارون",
+        "Karoun Oil & Gas Producing Company",
+        180,
+        130000,
+        [
+            ("اهواز", "oil", 90),
+            ("منصوری", "oil", 60),
+            ("اهواز - آب همراه", "water", 30),
+        ],
+    ),
+    (
+        "MRN",
+        "شرکت بهره‌برداری نفت و گاز مارون",
+        "Marun Oil & Gas Producing Company",
+        24,
+        520000,
+        [("آسماری–بنگستان مارون", "oil", 20), ("گاز همراه مارون", "associated_gas", 4)],
+    ),
+    (
+        "GCH",
+        "شرکت بهره‌برداری نفت و گاز گچساران",
+        "Gachsaran Oil & Gas Producing Company",
+        260,
+        250000,
+        [
+            ("گچساران", "oil", 190),
+            ("بی‌بی حکیمه", "oil", 40),
+            ("کلاهک گازی گچساران", "gas_cap", 30),
+        ],
+    ),
 ]
 
 
