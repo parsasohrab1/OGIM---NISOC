@@ -197,6 +197,9 @@ class Settings(BaseSettings):
     DATA_VARIABLES_SERVICE_URL: str = Field(
         default="http://data-variables-service:8013", env="DATA_VARIABLES_SERVICE_URL"
     )
+    OPERATIONS_SERVICE_URL: str = Field(
+        default="http://operations-service:8016", env="OPERATIONS_SERVICE_URL"
+    )
     STORAGE_OPTIMIZATION_SERVICE_URL: str = Field(
         default="http://storage-optimization-service:8014",
         env="STORAGE_OPTIMIZATION_SERVICE_URL",

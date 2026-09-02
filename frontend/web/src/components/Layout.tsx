@@ -89,6 +89,12 @@ export default function Layout({ children }: LayoutProps) {
           {link('/edge-computing', 'پردازش لبه (Edge)')}
           {link('/data-variables', 'متغیرهای داده')}
           {link('/blockchain-audit', 'ثبت بلاکچین')}
+          {link('/subsidiaries', 'شرکت‌های تابعه')}
+          {link('/subsidiary-production', 'وضعیت تولید شرکت‌های تابعه')}
+          {link('/equipment', 'تجهیزات')}
+          {link('/manual-data-entry', 'ثبت دستی اطلاعات چاه')}
+          {link('/vfm-decline', 'دبی‌سنج مجازی و منحنی افت')}
+          {link('/access-control', 'سطوح دسترسی')}
           {link('/system', 'سیستم')}
         </div>
       </nav>
@@ -100,8 +106,12 @@ export default function Layout({ children }: LayoutProps) {
 function roleFa(role: string) {
   const map: Record<string, string> = {
     system_admin: 'مدیر سیستم',
+    hq_operations_chief: 'رئیس مهندسی بهره‌برداری ستاد',
+    subsidiary_ops_manager: 'مدیر بهره‌برداری شرکت تابعه',
+    field_supervisor: 'سرپرست عملیات میدان',
     field_operator: 'اپراتور میدان',
     data_engineer: 'مهندس داده',
+    data_entry_operator: 'متصدی ثبت اطلاعات چاه',
     viewer: 'بازدیدکننده',
     admin: 'مدیر',
     offline_operator: 'اپراتور آفلاین',

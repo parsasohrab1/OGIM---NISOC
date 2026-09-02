@@ -25,6 +25,12 @@ import StorageOptimization from './pages/StorageOptimization'
 import EdgeComputing from './pages/EdgeComputing'
 import DataVariables from './pages/DataVariables'
 import BlockchainAudit from './pages/BlockchainAudit'
+import AccessControl from './pages/AccessControl'
+import Equipment from './pages/Equipment'
+import ManualDataEntry from './pages/ManualDataEntry'
+import VfmDeclineCurve from './pages/VfmDeclineCurve'
+import Subsidiaries from './pages/Subsidiaries'
+import SubsidiaryProduction from './pages/SubsidiaryProduction'
 import './App.css'
 
 const queryClient = new QueryClient()
@@ -65,6 +71,12 @@ function App() {
               <Route path="/edge-computing" element={<EdgeComputing />} />
               <Route path="/data-variables" element={<DataVariables />} />
               <Route path="/blockchain-audit" element={<BlockchainAudit />} />
+              <Route path="/access-control" element={<AccessControl />} />
+              <Route path="/equipment" element={<Equipment />} />
+              <Route path="/manual-data-entry" element={<ManualDataEntry />} />
+              <Route path="/vfm-decline" element={<VfmDeclineCurve />} />
+              <Route path="/subsidiaries" element={<Subsidiaries />} />
+              <Route path="/subsidiary-production" element={<SubsidiaryProduction />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>
