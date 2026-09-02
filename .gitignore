@@ -104,6 +104,10 @@ env/
 # pyenv
 .python-version
 
+# Local dev runtime (scripts/run_local_dev.sh)
+.local-dev/
+backend/.venv/
+
 # Database
 *.db
 *.sqlite
