@@ -113,7 +113,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
 function facilityAlerts(): MarunAlert[] {
   return [
     {
-      alert_id: 'ALT-SEP-MRN-01-LEVEL',
+      alert_id: 'ALT-SEP-MN-01-LEVEL',
       well_name: 'تسهیلات / جداکننده',
       severity: 'warning',
       message: 'سطح مایع جداکننده سه‌فازی نزدیک حد بالا — کنترل شیر خروجی',
@@ -122,7 +122,7 @@ function facilityAlerts(): MarunAlert[] {
       metadata_json: { sensor: 'separator_l', category: 'facility' },
     },
     {
-      alert_id: 'ALT-COMP-MRN-02-VIB',
+      alert_id: 'ALT-COMP-MN-02-VIB',
       well_name: 'تسهیلات / کمپرسور',
       severity: 'critical',
       message: 'لرزش غیرعادی کمپرسور گاز — احتمال خرابی یاتاقان',
@@ -131,7 +131,7 @@ function facilityAlerts(): MarunAlert[] {
       metadata_json: { sensor: 'comp_vibration', category: 'facility', sms_priority: 1 },
     },
     {
-      alert_id: 'ALT-PIPE-MRN-MAIN-P',
+      alert_id: 'ALT-PIPE-MN-MAIN-P',
       well_name: 'تسهیلات / خط لوله',
       severity: 'warning',
       message: 'افت فشار خط لوله صادرات نسبت به ست‌پوینت — بررسی نشتی/شیر',
@@ -140,7 +140,7 @@ function facilityAlerts(): MarunAlert[] {
       metadata_json: { sensor: 'pipeline_p', category: 'facility' },
     },
     {
-      alert_id: 'ALT-GL-MRN-COMP',
+      alert_id: 'ALT-GL-MN-COMP',
       well_name: 'تسهیلات / گازرانی',
       severity: 'info',
       message: 'کاهش ظرفیت کمپرسور گازرانی — برنامه‌ریزی سرویس پیشگیرانه',

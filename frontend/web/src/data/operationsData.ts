@@ -3,6 +3,11 @@
  * سطوح دسترسی و اهداف تولید. این فایل صرفاً به‌عنوان دادهٔ محلی/پشتیبان
  * (fallback) برای زمانی که سرویس operations-service در دسترس نیست استفاده
  * می‌شود؛ در حالت متصل، همین شکل داده از API دریافت خواهد شد.
+ *
+ * تعداد چاه و دبی تولید هر شرکت تابعه، و تعداد کل دکل‌های ۵ شرکت (۴۶ دستگاه)،
+ * بر مبنای منابع عمومی (ویکی‌پدیای فارسی، شانا، ایرنا) در شهریور ۱۴۰۵ تخمین زده
+ * شده — نه رقم رسمی لحظه‌ای شرکت. تعداد تراک، کویل تیوبینگ و سایر خدمات میدانی
+ * چون آماری عمومی/منتشرشده‌ای برایشان یافت نشد، به‌صورت نمایشی/تخمینی باقی مانده‌اند.
  */
 
 export type FluidType = 'oil' | 'gas' | 'gas_cap' | 'associated_gas' | 'water'
@@ -39,12 +44,14 @@ export const SUBSIDIARIES: SubsidiaryRow[] = [
     code: 'MIS',
     name_fa: 'شرکت بهره‌برداری نفت و گاز مسجدسلیمان',
     name_en: 'Masjed Soleyman Oil & Gas Producing Company',
-    active_well_count: 210,
-    target_production_bopd: 95000,
+    // منبع: ویکی‌پدیای فارسی (شرکت بهره‌برداری نفت و گاز مسجدسلیمان) — ۴۹۲ حلقه چاه نفت،
+    // ۱۶ مجتمع بهره‌برداری، تولید حدود ۱۴۲ هزار بشکه در روز.
+    active_well_count: 492,
+    target_production_bopd: 142000,
     reservoirs: [
-      { id: 'MIS-R1', name: 'مسجدسلیمان', fluid_type: 'oil', well_count: 120 },
-      { id: 'MIS-R2', name: 'هفت‌شهیدان', fluid_type: 'gas', well_count: 40 },
-      { id: 'MIS-R3', name: 'نفت سفید', fluid_type: 'associated_gas', well_count: 50 },
+      { id: 'MIS-R1', name: 'مسجدسلیمان', fluid_type: 'oil', well_count: 300 },
+      { id: 'MIS-R2', name: 'هفت‌شهیدان', fluid_type: 'gas', well_count: 92 },
+      { id: 'MIS-R3', name: 'نفت سفید', fluid_type: 'associated_gas', well_count: 100 },
     ],
   },
   {
@@ -52,12 +59,15 @@ export const SUBSIDIARIES: SubsidiaryRow[] = [
     code: 'AGJ',
     name_fa: 'شرکت بهره‌برداری نفت و گاز آغاجاری',
     name_en: 'Aghajari Oil & Gas Producing Company',
-    active_well_count: 340,
-    target_production_bopd: 210000,
+    // منبع: ویکی‌پدیای فارسی (میدان نفتی آغاجاری) — ۲۱۸ حلقه چاه فعال/غیرفعال
+    // (۷۳ چاه نفت، ۳ چاه گاز، ۳۶ چاه مشاهده‌ای/تزریقی/توصیفی و باقی معلق/متروکه).
+    // دبی هدف رسمی منتشرشده‌ای یافت نشد؛ رقم زیر تخمینی است.
+    active_well_count: 218,
+    target_production_bopd: 180000,
     reservoirs: [
-      { id: 'AGJ-R1', name: 'آغاجاری', fluid_type: 'oil', well_count: 260 },
-      { id: 'AGJ-R2', name: 'کلاهک گازی آغاجاری', fluid_type: 'gas_cap', well_count: 30 },
-      { id: 'AGJ-R3', name: 'رگ سفید', fluid_type: 'oil', well_count: 50 },
+      { id: 'AGJ-R1', name: 'آغاجاری', fluid_type: 'oil', well_count: 150 },
+      { id: 'AGJ-R2', name: 'کلاهک گازی آغاجاری (خامی)', fluid_type: 'gas_cap', well_count: 33 },
+      { id: 'AGJ-R3', name: 'رگ سفید', fluid_type: 'oil', well_count: 35 },
     ],
   },
   {
@@ -65,24 +75,30 @@ export const SUBSIDIARIES: SubsidiaryRow[] = [
     code: 'KRN',
     name_fa: 'شرکت بهره‌برداری نفت و گاز کارون',
     name_en: 'Karoun Oil & Gas Producing Company',
-    active_well_count: 180,
-    target_production_bopd: 130000,
+    // منبع رسمی منتشرشده‌ای برای تعداد کل چاه‌ها/دبی هدف کارون یافت نشد؛
+    // مقادیر زیر تخمینی (بر مبنای مقیاس میدان‌های اهواز و منصوری) هستند.
+    active_well_count: 220,
+    target_production_bopd: 150000,
     reservoirs: [
-      { id: 'KRN-R1', name: 'اهواز', fluid_type: 'oil', well_count: 90 },
-      { id: 'KRN-R2', name: 'منصوری', fluid_type: 'oil', well_count: 60 },
+      { id: 'KRN-R1', name: 'اهواز', fluid_type: 'oil', well_count: 110 },
+      { id: 'KRN-R2', name: 'منصوری', fluid_type: 'oil', well_count: 80 },
       { id: 'KRN-R3', name: 'اهواز - آب همراه', fluid_type: 'water', well_count: 30 },
     ],
   },
   {
     id: 4,
-    code: 'MRN',
+    code: 'MN',
     name_fa: 'شرکت بهره‌برداری نفت و گاز مارون',
     name_en: 'Marun Oil & Gas Producing Company',
-    active_well_count: 24,
+    // تعداد چاه: ۵۰۰ حلقه (طبق تأیید کاربر). دبی ~۵۲۰ هزار بشکه/روز مطابق منابع
+    // عمومی (ویکی‌پدیای انگلیسی/Wood Mackenzie) با داده موجود همخوان است.
+    // سه مخزن میدان مارون طبق ویکی‌پدیای فارسی: آسماری، بنگستان، خامی.
+    active_well_count: 500,
     target_production_bopd: 520000,
     reservoirs: [
-      { id: 'MRN-R1', name: 'آسماری–بنگستان مارون', fluid_type: 'oil', well_count: 20 },
-      { id: 'MRN-R2', name: 'گاز همراه مارون', fluid_type: 'associated_gas', well_count: 4 },
+      { id: 'MN-R1', name: 'آسماری مارون', fluid_type: 'oil', well_count: 460 },
+      { id: 'MN-R2', name: 'بنگستان مارون', fluid_type: 'oil', well_count: 30 },
+      { id: 'MN-R3', name: 'خامی مارون', fluid_type: 'associated_gas', well_count: 10 },
     ],
   },
   {
@@ -90,12 +106,14 @@ export const SUBSIDIARIES: SubsidiaryRow[] = [
     code: 'GCH',
     name_fa: 'شرکت بهره‌برداری نفت و گاز گچساران',
     name_en: 'Gachsaran Oil & Gas Producing Company',
-    active_well_count: 260,
-    target_production_bopd: 250000,
+    // منبع: ویکی‌پدیای فارسی / ایرنا — ۸۵۳ حلقه چاه نفت در ۲۳ میدان (۱۶ میدان فعال)،
+    // تولید حدود ۵۸۰ هزار بشکه در روز.
+    active_well_count: 853,
+    target_production_bopd: 580000,
     reservoirs: [
-      { id: 'GCH-R1', name: 'گچساران', fluid_type: 'oil', well_count: 190 },
-      { id: 'GCH-R2', name: 'بی‌بی حکیمه', fluid_type: 'oil', well_count: 40 },
-      { id: 'GCH-R3', name: 'کلاهک گازی گچساران', fluid_type: 'gas_cap', well_count: 30 },
+      { id: 'GCH-R1', name: 'گچساران', fluid_type: 'oil', well_count: 650 },
+      { id: 'GCH-R2', name: 'بی‌بی حکیمه', fluid_type: 'oil', well_count: 150 },
+      { id: 'GCH-R3', name: 'کلاهک گازی گچساران', fluid_type: 'gas_cap', well_count: 53 },
     ],
   },
 ]
@@ -158,9 +176,19 @@ export interface EquipmentRow {
 function buildEquipment(): EquipmentRow[] {
   const rows: EquipmentRow[] = []
   let id = 1
+  // تعداد کل دکل‌های حفاری/تعمیر شرکت‌های تابعه: ۴۶ دستگاه (از مجموع ۵۱ دکل
+  // مناطق نفت‌خیز جنوب)، طبق منابع عمومی؛ توزیع بین ۵ شرکت متناسب با تعداد
+  // چاه هر شرکت تخمین زده شده چون آمار رسمی تفکیکی یافت نشد.
+  const RIG_COUNT_BY_CODE: Record<string, number> = {
+    MIS: 10,
+    AGJ: 4,
+    KRN: 4,
+    MN: 10,
+    GCH: 18,
+  }
   const perSubsidiaryCounts: Record<EquipmentType, number> = {
     mot: 2,
-    rig: 3,
+    rig: 0, // جایگزین می‌شود؛ نگاه کنید به RIG_COUNT_BY_CODE
     pipeline: 4,
     truck: 5,
     vfm: 4,
@@ -191,7 +219,7 @@ function buildEquipment(): EquipmentRow[] {
   ])
   SUBSIDIARIES.forEach((sub, subIdx) => {
     ;(Object.keys(perSubsidiaryCounts) as EquipmentType[]).forEach((type) => {
-      const count = perSubsidiaryCounts[type]
+      const count = type === 'rig' ? RIG_COUNT_BY_CODE[sub.code] ?? 0 : perSubsidiaryCounts[type]
       for (let i = 1; i <= count; i++) {
         rows.push({
           id: id++,

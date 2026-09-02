@@ -81,7 +81,7 @@ export default function Wells() {
   const compareOil = useMemo(
     () =>
       wells.map((w) => ({
-        well: w.id.replace('MRN-', ''),
+        well: w.id.replace('MN-', ''),
         id: w.id,
         oil: w.oilRate,
         vfm: w.vfmOilRate,
@@ -93,7 +93,7 @@ export default function Wells() {
   const compareWc = useMemo(
     () =>
       wells.map((w) => ({
-        well: w.id.replace('MRN-', ''),
+        well: w.id.replace('MN-', ''),
         waterCut: w.waterCut,
         status: w.status,
       })),
@@ -103,7 +103,7 @@ export default function Wells() {
   const compareHealth = useMemo(
     () =>
       wells.map((w) => ({
-        well: w.id.replace('MRN-', ''),
+        well: w.id.replace('MN-', ''),
         health: w.healthScore,
         risk: w.equipmentRisk,
         status: w.status,
@@ -359,7 +359,7 @@ export default function Wells() {
                 style={{ borderColor: STATUS_COLOR[w.status] }}
                 onClick={() => setSelectedId(w.id)}
               >
-                {w.id.replace('MRN-', '')}
+                {w.id.replace('MN-', '')}
               </button>
             ))}
           </div>

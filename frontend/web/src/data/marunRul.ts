@@ -71,13 +71,13 @@ function facilityRul(tick: number): MarunRulPrediction[] {
     days: number
     conf: number
   }> = [
-    { id: 'SEP-MRN-01', type: 'separator', typeFa: 'جداکننده سه‌فازی', days: 210 + (tick % 17), conf: 0.88 },
-    { id: 'COMP-MRN-02', type: 'compressor', typeFa: 'کمپرسور گاز', days: 78 + (tick % 9), conf: 0.91 },
-    { id: 'MANF-MRN-01', type: 'manifold', typeFa: 'منیفولد تولید', days: 260 + (tick % 11), conf: 0.86 },
-    { id: 'PIPE-MRN-MAIN', type: 'pipeline', typeFa: 'خط لوله صادرات', days: 340 + (tick % 13), conf: 0.84 },
-    { id: 'GL-MRN-COMP', type: 'gas_lift', typeFa: 'کمپرسور گازرانی', days: 95 + (tick % 7), conf: 0.89 },
-    { id: 'GEN-MRN-01', type: 'generator', typeFa: 'ژنراتور برق میدان', days: 155 + (tick % 15), conf: 0.87 },
-    { id: 'CHOKE-MRN-HDR', type: 'choke', typeFa: 'شیر کنترل جریان هدر', days: 185 + (tick % 5), conf: 0.9 },
+    { id: 'SEP-MN-01', type: 'separator', typeFa: 'جداکننده سه‌فازی', days: 210 + (tick % 17), conf: 0.88 },
+    { id: 'COMP-MN-02', type: 'compressor', typeFa: 'کمپرسور گاز', days: 78 + (tick % 9), conf: 0.91 },
+    { id: 'MANF-MN-01', type: 'manifold', typeFa: 'منیفولد تولید', days: 260 + (tick % 11), conf: 0.86 },
+    { id: 'PIPE-MN-MAIN', type: 'pipeline', typeFa: 'خط لوله صادرات', days: 340 + (tick % 13), conf: 0.84 },
+    { id: 'GL-MN-COMP', type: 'gas_lift', typeFa: 'کمپرسور گازرانی', days: 95 + (tick % 7), conf: 0.89 },
+    { id: 'GEN-MN-01', type: 'generator', typeFa: 'ژنراتور برق میدان', days: 155 + (tick % 15), conf: 0.87 },
+    { id: 'CHOKE-MN-HDR', type: 'choke', typeFa: 'شیر کنترل جریان هدر', days: 185 + (tick % 5), conf: 0.9 },
   ]
 
   return items.map((it) => {

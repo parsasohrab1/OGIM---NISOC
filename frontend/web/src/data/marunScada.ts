@@ -86,8 +86,8 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       host: '10.40.10.11',
       port: 4840,
       scanMs: 1000,
-      purpose: 'خواندن فشار سرچاهی، دمای سرچاهی، فشار غلاف و وضعیت شیرهای سرچاهی پد A',
-      asset: 'MRN-01…04',
+      purpose: 'خواندن فشار سرچاهی، دمای سرچاهی، فشار دالیز و وضعیت شیرهای سرچاهی پد A',
+      asset: 'MN-01…04',
     },
     {
       id: 'OPC-RTU-PAD-B',
@@ -99,7 +99,7 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       port: 4840,
       scanMs: 1000,
       purpose: 'تله‌متری سرچاهی و اینترلاک ایمنی پد B',
-      asset: 'MRN-05…08',
+      asset: 'MN-05…08',
     },
     {
       id: 'OPC-RTU-PAD-C',
@@ -111,7 +111,7 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       port: 4840,
       scanMs: 1000,
       purpose: 'فشار/دما و وضعیت شیر کنترل جریان پد C',
-      asset: 'MRN-09…12',
+      asset: 'MN-09…12',
     },
     {
       id: 'OPC-RTU-PAD-D',
@@ -123,7 +123,7 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       port: 4840,
       scanMs: 1000,
       purpose: 'تله‌متری پد D و سیگنال توقف اضطراری محلی',
-      asset: 'MRN-13…16',
+      asset: 'MN-13…16',
     },
     {
       id: 'OPC-RTU-PAD-E',
@@ -135,7 +135,7 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       port: 4840,
       scanMs: 1000,
       purpose: 'تله‌متری سرچاهی و اینترلاک ایمنی پد E',
-      asset: 'MRN-17…20',
+      asset: 'MN-17…20',
     },
     {
       id: 'OPC-RTU-PAD-F',
@@ -147,7 +147,7 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       port: 4840,
       scanMs: 1000,
       purpose: 'فشار/دما و وضعیت شیر کنترل جریان پد F',
-      asset: 'MRN-21…24',
+      asset: 'MN-21…24',
     },
     {
       id: 'OPC-FACILITY',
@@ -246,7 +246,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
     if (wellFilter && w.id !== wellFilter) return
     const conn = padOf(i)
     const q = qualityFromWell(w)
-    const n = w.id.replace('MRN-', '')
+    const n = w.id.replace('MN-', '')
 
     tags.push(
       {
@@ -286,7 +286,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         connectionId: conn,
         protocol: 'OPC-UA',
         address: `ns=2;s=Wells.${w.id}.CHP`,
-        nameFa: `فشار غلاف ${n}`,
+        nameFa: `فشار دالیز ${n}`,
         nameEn: `${w.id} CHP`,
         unit: 'psi',
         dataType: 'Float',
@@ -295,7 +295,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: q,
         wellId: w.id,
         category: 'wellhead',
-        purpose: 'تشخیص نشتی غلاف و یکپارچگی چاه',
+        purpose: 'تشخیص نشتی دالیز و یکپارچگی چاه',
       },
       {
         id: `${w.id}.CHOKE_POS`,

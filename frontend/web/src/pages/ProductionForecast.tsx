@@ -25,7 +25,7 @@ type TabKey = 'decline' | 'watercut' | 'table'
 export default function ProductionForecast() {
   const [tick, setTick] = useState(Date.now())
   const [tab, setTab] = useState<TabKey>('decline')
-  const [selectedWell, setSelectedWell] = useState('MRN-01')
+  const [selectedWell, setSelectedWell] = useState('MN-01')
 
   useEffect(() => {
     const id = window.setInterval(() => setTick(Date.now()), 20000)
@@ -51,14 +51,14 @@ export default function ProductionForecast() {
   }, [forecasts])
 
   const compareOil = forecasts.map((f) => ({
-    well: f.wellId.replace('MRN-', ''),
+    well: f.wellId.replace('MN-', ''),
     now: f.currentOil,
     m3: f.oilIn90d,
     m12: f.series[12]?.oil ?? f.oilIn90d,
   }))
 
   const compareWc = forecasts.map((f) => ({
-    well: f.wellId.replace('MRN-', ''),
+    well: f.wellId.replace('MN-', ''),
     now: f.currentWaterCut,
     m3: f.waterCutIn90d,
     m12: f.series[12]?.waterCut ?? f.waterCutIn90d,
@@ -130,7 +130,7 @@ export default function ProductionForecast() {
               style={{ borderColor: STATUS_COLOR[f.status] }}
               onClick={() => setSelectedWell(f.wellId)}
             >
-              {f.wellId.replace('MRN-', '')}
+              {f.wellId.replace('MN-', '')}
             </button>
           ))}
         </div>

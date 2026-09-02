@@ -466,7 +466,7 @@ function Casing({ casing }: { casing: CasingData }) {
       {hovered && (
         <Html distanceFactor={10}>
           <div className="sensor-tooltip" dir="rtl">
-            <h4>غلاف: {casingTypeFa(casing.type)}</h4>
+            <h4>دالیز: {casingTypeFa(casing.type)}</h4>
             <p>عمق: ۰ – {casing.depth.toFixed(1)} m</p>
             <p>قطر خارجی: {casing.outerDiameter}" ({casing.outerDiameter * 25.4}mm)</p>
             <p>قطر داخلی: {casing.innerDiameter}" ({casing.innerDiameter * 25.4}mm)</p>
@@ -1079,7 +1079,7 @@ export default function Well3D() {
 
         {displayData.casings && displayData.casings.length > 0 && (
           <div className="legend-section">
-            <h3>غلاف‌ها</h3>
+            <h3>دالیز‌ها</h3>
             {displayData.casings.map((casing, index) => {
               const getCasingColor = () => {
                 switch (casing.type) {
