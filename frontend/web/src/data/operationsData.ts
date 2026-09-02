@@ -107,6 +107,16 @@ export type EquipmentType =
   | 'truck'
   | 'vfm'
   | 'coiled_tubing'
+  | 'massive_acidizing'
+  | 'injectivity'
+  | 'fluid_injection'
+  | 'logging'
+  | 'perforating'
+  | 'shutoff_isolation'
+  | 'mobile_processing_unit'
+  | 'slickline'
+  | 'workover_rig'
+  | 'development_rig'
 
 export const EQUIPMENT_TYPE_LABEL_FA: Record<EquipmentType, string> = {
   mot: 'تجهیزات MOT (اندازه‌گیری چند فازی سیار)',
@@ -115,6 +125,16 @@ export const EQUIPMENT_TYPE_LABEL_FA: Record<EquipmentType, string> = {
   truck: 'تراک (خودروی سرویس)',
   vfm: 'دبی‌سنج مجازی (VFM)',
   coiled_tubing: 'واحد کویل تیوبینگ (Coiled Tubing)',
+  massive_acidizing: 'عملیات اسیدکاری حجیم (Massive Acidizing)',
+  injectivity: 'آزمون تزریق‌پذیری (Injectivity Test)',
+  fluid_injection: 'تزریق سیال (Fluid Injection)',
+  logging: 'لاگ‌گیری چاه (Logging)',
+  perforating: 'عملیات پرفراسیون (Perforating)',
+  shutoff_isolation: 'مسدودسازی و ایزوله‌سازی (Shut-off / Isolation)',
+  mobile_processing_unit: 'واحد فرآورش سیار (Mobile Processing Unit)',
+  slickline: 'عملیات اسلیک‌لاین (Slickline)',
+  workover_rig: 'دکل تعمیر چاه (Workover Rig)',
+  development_rig: 'دکل حفاری توسعه‌ای (Development Rig)',
 }
 
 export const EQUIPMENT_STATUS_LABEL_FA: Record<string, string> = {
@@ -145,7 +165,30 @@ function buildEquipment(): EquipmentRow[] {
     truck: 5,
     vfm: 4,
     coiled_tubing: 2,
+    massive_acidizing: 1,
+    injectivity: 2,
+    fluid_injection: 2,
+    logging: 2,
+    perforating: 2,
+    shutoff_isolation: 1,
+    mobile_processing_unit: 1,
+    slickline: 2,
+    workover_rig: 2,
+    development_rig: 2,
   }
+  // انواعی که معمولاً روی یک چاه مشخص انجام می‌شوند (برخلاف تجهیزات ثابت/ناوگان عمومی)
+  const wellLinkedTypes = new Set<EquipmentType>([
+    'vfm',
+    'massive_acidizing',
+    'injectivity',
+    'fluid_injection',
+    'logging',
+    'perforating',
+    'shutoff_isolation',
+    'slickline',
+    'workover_rig',
+    'development_rig',
+  ])
   SUBSIDIARIES.forEach((sub, subIdx) => {
     ;(Object.keys(perSubsidiaryCounts) as EquipmentType[]).forEach((type) => {
       const count = perSubsidiaryCounts[type]
@@ -156,7 +199,7 @@ function buildEquipment(): EquipmentRow[] {
           equipment_type: type,
           name: `${EQUIPMENT_TYPE_LABEL_FA[type]} ${i}`,
           subsidiary_id: sub.id,
-          well_name: type === 'vfm' ? `${sub.code}-${String(i).padStart(2, '0')}` : undefined,
+          well_name: wellLinkedTypes.has(type) ? `${sub.code}-${String(i).padStart(2, '0')}` : undefined,
           status: i % 7 === 0 ? 'maintenance' : i % 5 === 0 ? 'idle' : 'active',
           phase: type === 'vfm' ? 2 : 1,
         })

@@ -74,7 +74,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-EQUIPMENT_TYPES = ["mot", "rig", "pipeline", "truck", "vfm", "coiled_tubing"]
+EQUIPMENT_TYPES = [
+    "mot",
+    "rig",
+    "pipeline",
+    "truck",
+    "vfm",
+    "coiled_tubing",
+    "massive_acidizing",
+    "injectivity",
+    "fluid_injection",
+    "logging",
+    "perforating",
+    "shutoff_isolation",
+    "mobile_processing_unit",
+    "slickline",
+    "workover_rig",
+    "development_rig",
+]
 FLUID_TYPES = ["oil", "gas", "gas_cap", "associated_gas", "water"]
 
 

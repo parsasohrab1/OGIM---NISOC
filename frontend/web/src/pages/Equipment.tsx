@@ -22,6 +22,16 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'truck', label: EQUIPMENT_TYPE_LABEL_FA.truck },
   { key: 'vfm', label: EQUIPMENT_TYPE_LABEL_FA.vfm },
   { key: 'coiled_tubing', label: EQUIPMENT_TYPE_LABEL_FA.coiled_tubing },
+  { key: 'massive_acidizing', label: EQUIPMENT_TYPE_LABEL_FA.massive_acidizing },
+  { key: 'injectivity', label: EQUIPMENT_TYPE_LABEL_FA.injectivity },
+  { key: 'fluid_injection', label: EQUIPMENT_TYPE_LABEL_FA.fluid_injection },
+  { key: 'logging', label: EQUIPMENT_TYPE_LABEL_FA.logging },
+  { key: 'perforating', label: EQUIPMENT_TYPE_LABEL_FA.perforating },
+  { key: 'shutoff_isolation', label: EQUIPMENT_TYPE_LABEL_FA.shutoff_isolation },
+  { key: 'mobile_processing_unit', label: EQUIPMENT_TYPE_LABEL_FA.mobile_processing_unit },
+  { key: 'slickline', label: EQUIPMENT_TYPE_LABEL_FA.slickline },
+  { key: 'workover_rig', label: EQUIPMENT_TYPE_LABEL_FA.workover_rig },
+  { key: 'development_rig', label: EQUIPMENT_TYPE_LABEL_FA.development_rig },
 ]
 
 function subsidiaryName(id: number) {
