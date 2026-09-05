@@ -19,6 +19,7 @@ import { useWebSocket } from '../hooks/useWebSocket'
 import {
   FIELD,
   MARUN_WELLS,
+  MAP_ROWS,
   SENSOR_VARIABLES,
   STATUS_COLOR,
   STATUS_LABEL_FA,
@@ -354,25 +355,27 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="deh-map">
-              {MARUN_WELLS.map((pos) => {
-                const live = wells.find((w) => w.id === pos.id)!
-                return (
-                  <button
-                    key={pos.id}
-                    type="button"
-                    className={`deh-well-dot ${live.status} ${selectedWell === pos.id ? 'selected' : ''}`}
-                    style={{
-                      left: `${pos.x}%`,
-                      top: `${pos.y}%`,
-                      background: STATUS_COLOR[live.status],
-                    }}
-                    title={`${pos.nameFa} — ${STATUS_LABEL_FA[live.status]}`}
-                    onClick={() => setSelectedWell(pos.id)}
-                  >
-                    {pos.id.replace('MN-', '')}
-                  </button>
-                )
-              })}
+              <div className="deh-map-inner" style={{ height: `${MAP_ROWS * 30}px` }}>
+                {MARUN_WELLS.map((pos) => {
+                  const live = wells.find((w) => w.id === pos.id)!
+                  return (
+                    <button
+                      key={pos.id}
+                      type="button"
+                      className={`deh-well-dot ${live.status} ${selectedWell === pos.id ? 'selected' : ''}`}
+                      style={{
+                        left: `${pos.x}%`,
+                        top: `${pos.y}%`,
+                        background: STATUS_COLOR[live.status],
+                      }}
+                      title={`${pos.nameFa} — ${STATUS_LABEL_FA[live.status]}`}
+                      onClick={() => setSelectedWell(pos.id)}
+                    >
+                      {pos.id.replace('MN-', '')}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
