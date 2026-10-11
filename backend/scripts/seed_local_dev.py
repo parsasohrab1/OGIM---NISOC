@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from shared.database import engine, SessionLocal, Base
-from shared.models import User, Subsidiary, Reservoir
+from shared.models import User, Subsidiary, Reservoir, Equipment
 from shared.security import get_password_hash
 
 USERS = [
@@ -100,6 +100,65 @@ SUBSIDIARIES = [
 ]
 
 
+# Equipment catalog, counts and labels mirrored from
+# frontend/web/src/data/operationsData.ts (EQUIPMENT_TYPE_LABEL_FA /
+# buildEquipment) so the live backend carries the same inventory the
+# dashboard displays, instead of the frontend's mock fallback being the
+# only place this data exists.
+EQUIPMENT_TYPE_LABEL_FA = {
+    "mot": "تجهیزات MOT (اندازه‌گیری چند فازی سیار)",
+    "rig": "دکل حفاری/تعمیر (Rig)",
+    "pipeline": "خطوط لوله",
+    "truck": "تراک (خودروی سرویس)",
+    "vfm": "دبی‌سنج مجازی (VFM)",
+    "coiled_tubing": "واحد کویل تیوبینگ (Coiled Tubing)",
+    "massive_acidizing": "عملیات اسیدکاری حجیم (Massive Acidizing)",
+    "injectivity": "آزمون تزریق‌پذیری (Injectivity Test)",
+    "fluid_injection": "تزریق سیال (Fluid Injection)",
+    "logging": "لاگ‌گیری چاه (Logging)",
+    "perforating": "عملیات پرفراسیون (Perforating)",
+    "shutoff_isolation": "مسدودسازی و ایزوله‌سازی (Shut-off / Isolation)",
+    "mobile_processing_unit": "واحد فرآورش سیار (Mobile Processing Unit)",
+    "slickline": "عملیات اسلیک‌لاین (Slickline)",
+    "workover_rig": "دکل تعمیر چاه (Workover Rig)",
+    "development_rig": "دکل حفاری توسعه‌ای (Development Rig)",
+}
+
+RIG_COUNT_BY_CODE = {"MIS": 10, "AGJ": 4, "KRN": 4, "MN": 10, "GCH": 18}
+
+PER_SUBSIDIARY_COUNTS = {
+    "mot": 2,
+    "rig": 0,  # overridden per-subsidiary via RIG_COUNT_BY_CODE
+    "pipeline": 4,
+    "truck": 5,
+    "vfm": 4,
+    "coiled_tubing": 2,
+    "massive_acidizing": 1,
+    "injectivity": 2,
+    "fluid_injection": 2,
+    "logging": 2,
+    "perforating": 2,
+    "shutoff_isolation": 1,
+    "mobile_processing_unit": 1,
+    "slickline": 2,
+    "workover_rig": 2,
+    "development_rig": 2,
+}
+
+WELL_LINKED_TYPES = {
+    "vfm",
+    "massive_acidizing",
+    "injectivity",
+    "fluid_injection",
+    "logging",
+    "perforating",
+    "shutoff_isolation",
+    "slickline",
+    "workover_rig",
+    "development_rig",
+}
+
+
 def main() -> None:
     if os.getenv("ENVIRONMENT", "development") != "development":
         print("Refusing to seed outside ENVIRONMENT=development.", file=sys.stderr)
@@ -142,6 +201,39 @@ def main() -> None:
             print(f"subsidiaries seeded ({len(SUBSIDIARIES)} companies)")
         else:
             print("subsidiaries already present, skipped")
+
+        if not db.query(Equipment).first():
+            subs = {sub.code: sub for sub in db.query(Subsidiary).all()}
+            created = 0
+            for code, sub in subs.items():
+                for eq_type, label in EQUIPMENT_TYPE_LABEL_FA.items():
+                    count = (
+                        RIG_COUNT_BY_CODE.get(code, 0)
+                        if eq_type == "rig"
+                        else PER_SUBSIDIARY_COUNTS[eq_type]
+                    )
+                    for i in range(1, count + 1):
+                        suffix = str(i).zfill(2)
+                        db.add(
+                            Equipment(
+                                equipment_id=f"{code}-{eq_type.upper()}-{suffix}",
+                                equipment_type=eq_type,
+                                name=f"{label} {i}",
+                                subsidiary_id=sub.id,
+                                well_name=(
+                                    f"{code}-{suffix}"
+                                    if eq_type in WELL_LINKED_TYPES
+                                    else None
+                                ),
+                                status="active",
+                                phase=1,
+                            )
+                        )
+                        created += 1
+            db.commit()
+            print(f"equipment seeded ({created} records)")
+        else:
+            print("equipment already present, skipped")
     finally:
         db.close()
 
