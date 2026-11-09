@@ -1,10 +1,22 @@
 # Real Field Data Validation Report
 
+**⚠️ STATUS: RETRACTED - RESULTS INVALID ⚠️**
+
+**CRITICAL ERROR**: The validation reported in PR #7 (commit ad8b07e) used **SYNTHETIC PLACEHOLDER DATA**, not actual Petrobras 3W data. All metrics are INVALID.
+
+**Reason**: The 3W dataset downloads failed (404 errors), and the loader silently fell back to generating synthetic data. This data was then incorrectly reported as "Petrobras 3W (REAL instances only)".
+
+**Action**: Complete revalidation with actual 3W REAL instances in progress.
+
+---
+
+# ~~Real Field Data Validation Report~~ [RETRACTED]
+
 **System**: OGIM — Oil & Gas Intelligent Monitoring (Marun Field Deployment - NISOC)  
 **Component**: ML Inference Service - Anomaly & Event Detection  
-**Validation Dataset**: Petrobras 3W (REAL instances only)  
+**Validation Dataset**: ~~Petrobras 3W (REAL instances only)~~ **SYNTHETIC PLACEHOLDERS (INVALID)**  
 **Evaluation Date**: 2026-11-09  
-**TRL Verdict**: **TRL4 (Criteria Not Met)**
+**TRL Verdict**: ~~**TRL4 (Criteria Not Met)**~~ **INVALID - RETRACTED**
 
 ---
 
