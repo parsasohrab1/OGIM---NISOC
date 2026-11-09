@@ -178,13 +178,17 @@ def load_parquet_instance(file_path: Path) -> pd.DataFrame:
 def load_all_real_instances(
     max_instances: Optional[int] = None,
     event_classes: Optional[List[int]] = None,
+    max_per_class: Optional[int] = None,
+    random_seed: int = 42,
 ) -> Dict[str, List[pd.DataFrame]]:
     """
-    Load all REAL instances from the 3W dataset.
+    Load REAL instances from 3W dataset with stratified selection.
 
     Args:
         max_instances: Maximum instances to load (None = all)
         event_classes: Filter by event classes (None = all)
+        max_per_class: Max instances per class for stratification (None = unlimited)
+        random_seed: Random seed for deterministic sampling
 
     Returns:
         Dictionary mapping well_id to list of DataFrames
@@ -192,6 +196,8 @@ def load_all_real_instances(
     Raises:
         RuntimeError: If dataset cannot be loaded
     """
+    import random
+
     # Clone dataset
     dataset_path = clone_3w_dataset()
 
@@ -207,13 +213,34 @@ def load_all_real_instances(
             f"Filtered to {len(all_instances)} instances for classes {event_classes}"
         )
 
+    # STRATIFIED SELECTION: sample evenly from each class
+    if max_per_class is not None:
+        random.seed(random_seed)
+        by_class = {}
+        for inst in all_instances:
+            cls = inst["event_class"]
+            if cls not in by_class:
+                by_class[cls] = []
+            by_class[cls].append(inst)
+
+        # Sample up to max_per_class from each class
+        sampled = []
+        for cls, insts in sorted(by_class.items()):
+            sample_size = min(max_per_class, len(insts))
+            sampled.extend(random.sample(insts, sample_size))
+            logger.info(f"Class {cls}: sampled {sample_size}/{len(insts)} instances")
+
+        all_instances = sampled
+
     # Limit number of instances
-    if max_instances is not None:
+    if max_instances is not None and len(all_instances) > max_instances:
         all_instances = all_instances[:max_instances]
         logger.info(f"Limited to {max_instances} instances")
 
     # Load instances
     well_data = {}
+    manifest_entries = []
+
     for inst in all_instances:
         df = load_parquet_instance(inst["path"])
 
@@ -223,13 +250,38 @@ def load_all_real_instances(
         df["instance_file"] = inst["file"]
 
         # Compute SHA256 of file
-        inst["sha256"] = compute_sha256(inst["path"])
+        sha256 = compute_sha256(inst["path"])
+
+        manifest_entries.append(
+            {
+                "file": inst["file"],
+                "well_id": inst["well"],
+                "class": inst["event_class"],
+                "sha256": sha256,
+            }
+        )
 
         # Group by well
         well_id = inst["well"]
         if well_id not in well_data:
             well_data[well_id] = []
         well_data[well_id].append(df)
+
+    # Write manifest with SHA256 checksums
+    import json
+
+    manifest_path = CACHE_DIR / "selected_instances_manifest.json"
+    with open(manifest_path, "w") as f:
+        json.dump(
+            {
+                "seed": random_seed,
+                "instances": manifest_entries,
+                "count": len(manifest_entries),
+            },
+            f,
+            indent=2,
+        )
+    logger.info(f"Wrote manifest with {len(manifest_entries)} instances")
 
     logger.info(
         f"Loaded {len(well_data)} wells with {len(all_instances)} instances total"

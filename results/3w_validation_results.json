@@ -1,7 +1,189 @@
 {
-  "status": "RETRACTED",
-  "reason": "INVALID - Used synthetic placeholder data, not real Petrobras 3W data",
-  "details": "The previous validation (merged in PR #7, commit ad8b07e) used synthetic placeholder data because the actual 3W dataset downloads failed (404 errors). All reported metrics (recall=1.0, F1=0.947, lead_time=-153.5s) are INVALID and must be disregarded.",
-  "action_required": "Re-run validation with actual Petrobras 3W REAL instances",
-  "retracted_date": "2026-11-09T09:02:00Z"
+  "evaluation_date": "2026-11-09T09:57:35.312302",
+  "dataset": "Petrobras 3W (REAL instances only)",
+  "test_wells": [
+    "WELL-00042",
+    "WELL-00029",
+    "WELL-00010",
+    "WELL-00014",
+    "WELL-00020",
+    "WELL-00027",
+    "WELL-00009"
+  ],
+  "test_samples": 148313,
+  "models": {
+    "isolation_forest": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -300.0,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 1.0,
+      "sample_f1": 1.0,
+      "trl5_passed": false,
+      "trl5_failures": [
+        "Macro-F1 0.000 < 0.65",
+        "Lead time -300.0s < 60s"
+      ],
+      "model_name": "Isolation Forest"
+    },
+    "random_forest": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -300.0,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 1.0,
+      "sample_f1": 1.0,
+      "trl5_passed": false,
+      "trl5_failures": [
+        "Macro-F1 0.000 < 0.65",
+        "Lead time -300.0s < 60s"
+      ],
+      "model_name": "Random Forest Classifier"
+    }
+  },
+  "baselines": {
+    "zscore": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -2152.5,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 0.005273961596361746,
+      "sample_f1": 0.010492585698702005,
+      "model_name": "Z-Score Baseline"
+    },
+    "threshold": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -300.0,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 0.6945956685472467,
+      "sample_f1": 0.8197774624819075,
+      "model_name": "Threshold Baseline"
+    }
+  },
+  "best_ogim_model": {
+    "name": "Random Forest Classifier",
+    "metrics": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -300.0,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 1.0,
+      "sample_f1": 1.0,
+      "trl5_passed": false,
+      "trl5_failures": [
+        "Macro-F1 0.000 < 0.65",
+        "Lead time -300.0s < 60s"
+      ],
+      "model_name": "Random Forest Classifier"
+    }
+  },
+  "better_baseline": {
+    "name": "Z-Score Baseline",
+    "metrics": {
+      "event_detection_recall": 1.0,
+      "false_alarms_per_day": 0.0,
+      "detection_lead_time_median": -2152.5,
+      "macro_f1": 0.0,
+      "total_events": 8,
+      "detected_events": 8,
+      "missed_events": 0,
+      "false_positive_events": 0,
+      "events_by_class": {
+        "9": 2,
+        "8": 2,
+        "4": 1,
+        "3": 1,
+        "5": 1,
+        "2": 1
+      },
+      "sample_precision": 1.0,
+      "sample_recall": 0.005273961596361746,
+      "sample_f1": 0.010492585698702005,
+      "model_name": "Z-Score Baseline"
+    }
+  },
+  "comparison": {
+    "model_better": true,
+    "details": {
+      "recall_improvement": 0.0,
+      "fp_reduction": 0.0
+    },
+    "reason": "Equal recall with 20%+ fewer false alarms"
+  },
+  "trl5_criteria": {
+    "event_recall_threshold": 0.75,
+    "false_alarms_per_day_threshold": 3.0,
+    "macro_f1_threshold": 0.65,
+    "lead_time_threshold": 60.0,
+    "all_criteria_met": false,
+    "beats_baseline": true
+  },
+  "final_trl_verdict": 4,
+  "verdict_reasoning": "TRL4 MAINTAINED: Criteria not met"
 }
