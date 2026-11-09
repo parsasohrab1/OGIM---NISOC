@@ -183,24 +183,14 @@ def main():
 
     try:
         # [1] Load data
-        max_per_class = 40
+        max_per_class = 10  # Use 10 for fast evaluation
         logger.info(f"\n[1/8] Loading data ({max_per_class} instances per class)...")
 
-        try:
-            data_raw = load_all_real_instances(
-                max_per_class=max_per_class,
-                event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
-                random_seed=42,
-            )
-        except Exception as e:
-            logger.warning(f"Failed to load {max_per_class}/class: {e}")
-            logger.info("Falling back to 10/class...")
-            max_per_class = 10
-            data_raw = load_all_real_instances(
-                max_per_class=max_per_class,
-                event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
-                random_seed=42,
-            )
+        data_raw = load_all_real_instances(
+            max_per_class=max_per_class,
+            event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
+            random_seed=42,
+        )
 
         data = {}
         for well_id, dfs in data_raw.items():
@@ -284,7 +274,7 @@ def main():
         logger.info(f"  Binary Macro-F1: {f1:.3f}")
         logger.info(f"  Recall: {recall:.3f}")
         logger.info(f"  Precision: {precision:.3f}")
-        logger.info(f"  False Alarms/Day: {false_alarm_rate:.1f}")
+        logger.info(f"  False Alarms/Day: {false_alarm_rate:.1f if false_alarm_rate is not None else 'N/A'}")
         logger.info(f"  Lead Time: {lead_time if lead_time else 'N/A'}")
 
         # [6] Baselines
