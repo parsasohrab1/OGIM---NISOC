@@ -103,7 +103,7 @@ jobs:
     - name: Run black (check only)
       run: |
         cd backend
-        black --check . --exclude="/(\.git|\.venv|venv|__pycache__|node_modules)/"
+        black --check . --exclude="/(\.git|\.venv|venv|__pycache__|node_modules|validation\/petrobras_3w\/data)/"
 
     - name: Run flake8
       run: |
