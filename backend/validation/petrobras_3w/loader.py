@@ -82,7 +82,7 @@ def clone_3w_dataset(force_reclone: bool = False) -> Path:
 
         try:
             # Clone with depth=1 to save space/time
-            result = subprocess.run(
+            subprocess.run(
                 ["git", "clone", "--depth", "1", THREE_W_REPO, str(CACHE_DIR)],
                 capture_output=True,
                 text=True,
@@ -203,7 +203,9 @@ def load_all_real_instances(
         all_instances = [
             inst for inst in all_instances if inst["event_class"] in event_classes
         ]
-        logger.info(f"Filtered to {len(all_instances)} instances for classes {event_classes}")
+        logger.info(
+            f"Filtered to {len(all_instances)} instances for classes {event_classes}"
+        )
 
     # Limit number of instances
     if max_instances is not None:
@@ -229,7 +231,9 @@ def load_all_real_instances(
             well_data[well_id] = []
         well_data[well_id].append(df)
 
-    logger.info(f"Loaded {len(well_data)} wells with {len(all_instances)} instances total")
+    logger.info(
+        f"Loaded {len(well_data)} wells with {len(all_instances)} instances total"
+    )
     return well_data
 
 
@@ -255,7 +259,9 @@ def get_dataset_summary(well_data: Dict[str, List[pd.DataFrame]]) -> pd.DataFram
     return pd.DataFrame(summaries)
 
 
-def create_manifest(well_data: Dict[str, List[pd.DataFrame]], output_path: Path) -> None:
+def create_manifest(
+    well_data: Dict[str, List[pd.DataFrame]], output_path: Path
+) -> None:
     """
     Create a manifest file documenting all loaded instances.
 

@@ -2,6 +2,7 @@
 """
 Convenience script to run the data generator
 """
+
 import sys
 from pathlib import Path
 
@@ -12,4 +13,3 @@ from data_generator import main
 
 if __name__ == "__main__":
     main()
-

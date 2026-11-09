@@ -1,6 +1,7 @@
 """
 Direct Work Order creation script (without alert)
 """
+
 import sys
 import os
 import requests
@@ -21,11 +22,8 @@ def get_auth_token():
     try:
         response = requests.post(
             f"{API_GATEWAY_URL}/api/auth/token",
-            data={
-                "username": TEST_USERNAME,
-                "password": TEST_PASSWORD
-            },
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+            data={"username": TEST_USERNAME, "password": TEST_PASSWORD},
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
         if response.status_code == 200:
             return response.json().get("access_token")
@@ -47,9 +45,9 @@ def create_work_order_direct(token: str, erp_type: str = "sap"):
         "work_type": "repair",
         "estimated_duration": 120,
         "required_skills": ["mechanical", "electrical"],
-        "parts_required": ["seal-kit", "bearing-set"]
+        "parts_required": ["seal-kit", "bearing-set"],
     }
-    
+
     try:
         response = requests.post(
             f"{API_GATEWAY_URL}/api/erp-integration/work-orders",
@@ -57,17 +55,19 @@ def create_work_order_direct(token: str, erp_type: str = "sap"):
             json=work_order_data,
             headers={
                 "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         )
-        
+
         if response.status_code == 200:
             data = response.json()
             print("✅ Work Order created successfully!")
             print(json.dumps(data, indent=2, default=str))
             return data
         else:
-            print(f"❌ Failed to create work order: {response.status_code} - {response.text}")
+            print(
+                f"❌ Failed to create work order: {response.status_code} - {response.text}"
+            )
             return None
     except Exception as e:
         print(f"❌ Error creating work order: {e}")
@@ -80,7 +80,7 @@ def main():
     print("OGIM - Direct Work Order Creation Script")
     print("=" * 60)
     print()
-    
+
     # Get authentication token
     print("Authenticating...")
     token = get_auth_token()
@@ -89,11 +89,11 @@ def main():
         return
     print("✅ Authentication successful")
     print()
-    
+
     # Create work order
     print("Creating Work Order...")
     work_order = create_work_order_direct(token, "sap")
-    
+
     if work_order:
         print()
         print("=" * 60)
@@ -108,4 +108,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
