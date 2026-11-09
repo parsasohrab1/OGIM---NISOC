@@ -4,12 +4,12 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4** (validated on REAL field data with corrected methodology; criteria partially met)
+**Current TRL**: **4** (validated on REAL field data; model found DEGENERATE)
 
-✅ **Validation Complete**: Evaluated on **REAL Petrobras 3W field data** (80 instances, 28 wells, 60s downsample)  
-📊 **Results**: Event Recall 1.0 ✅, Lead Time 4620s ✅, Binary Macro-F1 0.50 ❌ (threshold: 0.65)  
-⚠️ **Limitations**: Class imbalance (F1_normal=0.00); geographic mismatch (Brazil offshore vs. Iran onshore)  
-📖 **Verdict**: TRL4 maintained — class imbalance handling needs improvement for TRL5
+⚠️ **CRITICAL**: Model from commit c11410d is **DEGENERATE** (always predicts event) and **UNUSABLE**  
+📊 **Corrected Metrics**: Precision 0.154 (not 1.0), Binary Macro-F1 0.133, False Alarms 1440/day  
+🔧 **Action Required**: Retrain with `class_weight='balanced'` and proper threshold tuning  
+📖 **Verdict**: TRL4 maintained — model requires retraining before production use
 
 **Documents**:
 - [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, commit bcea1d4, unchanged)

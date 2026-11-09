@@ -13,12 +13,13 @@ The OGIM anomaly detection system was evaluated on REAL field data from the Petr
 
 ### Key Findings
 
-✅ **Leakage Audit: PASSED**  
-✅ **Event Recall: 1.00** (perfect detection of all anomalies)  
-✅ **Lead Time: 4620s** (77 minutes early warning)  
-❌ **Binary Macro-F1: 0.50** (below 0.65 threshold)
+⚠️ **MODEL IS DEGENERATE** (always predicts event) and **UNUSABLE IN PRODUCTION**  
+❌ **Corrected Precision: 0.154** (not 1.0 as initially reported)  
+❌ **Corrected Binary Macro-F1: 0.133** (not 0.50 as initially reported)  
+❌ **False Alarms: 1,440/day** (every normal sample triggers alarm)  
+⚠️ **Lead Time: ARTIFACT** (alarms from first sample, not genuine early warning)
 
-**Verdict Reasoning:** While the system achieves perfect event detection with excellent lead time, the Binary Macro-F1 metric (0.50) does not meet the predeclared threshold of 0.65, indicating class imbalance issues. The system over-predicts "event" status, resulting in F1_normal=0.00.
+**Verdict Reasoning:** The model is degenerate (always predicts "event"), resulting in 100% false alarm rate on normal data. All reported metrics (Recall=1.0, Lead Time=77min) are artifacts of the degenerate behavior and not meaningful performance indicators. The model requires retraining with `class_weight='balanced'` before any production use.
 
 ---
 
@@ -116,13 +117,23 @@ Checks performed:
 
 ## Results
 
-### OGIM Model (Random Forest)
+### OGIM Model (Random Forest) - **CORRECTED ANALYSIS**
+
+**Confusion Matrix:**
+| | Predicted Normal | Predicted Event |
+|---|---|---|
+| **Actual Normal** | TN = 0 | FP = 20,629 |
+| **Actual Event** | FN = 0 | TP = 3,743 |
+
+**Corrected Metrics:**
 | Metric | Value | Threshold | Status |
 |--------|-------|-----------|--------|
-| Event Recall | 1.00 | ≥0.75 | ✅ PASS |
-| Binary Macro-F1 | 0.50 | ≥0.65 | ❌ FAIL |
-| Lead Time | 4620s | ≥60s | ✅ PASS |
-| Leakage Audit | PASSED | PASSED | ✅ PASS |
+| Precision | 0.154 | — | ⚠️ DEGENERATE |
+| Event Recall | 1.00 | ≥0.75 | ⚠️ ARTIFACT |
+| Binary Macro-F1 | 0.133 | ≥0.65 | ❌ FAIL |
+| False Alarms/Day | 1,440 | ≤3.0 | ❌ FAIL |
+| Lead Time | artifact | ≥60s | ⚠️ ARTIFACT |
+| Leakage Audit | SUSPICIOUS | PASSED | ❌ FAIL |
 
 ### TRL5 Criteria Assessment
 
@@ -136,7 +147,7 @@ From `TRL5_ACCEPTANCE_CRITERIA.md` (bcea1d4, unchanged):
 
 **Verdict:** TRL4 maintained
 
-**Reasoning:** Binary Macro-F1 (0.50) does not meet the predeclared threshold of 0.65. While the system exhibits excellent event detection capability (Recall=1.0) and early warning (Lead Time=77 min), the class imbalance handling needs improvement to achieve TRL5.
+**Reasoning:** Model is degenerate (always predicts event) and unusable in production. Corrected Binary Macro-F1 (0.133) far below threshold (0.65). False alarm rate (1,440/day) far exceeds threshold (3.0/day). Reported "Recall=1.0" and "Lead Time=77min" are artifacts of degenerate behavior and not meaningful metrics. Model requires retraining with `class_weight='balanced'` before any production consideration.
 
 ---
 
