@@ -151,14 +151,15 @@ def main():
 
     # Load data - use diverse event classes for proper validation
     logger.info("\n[1/6] Loading Petrobras 3W dataset (REAL instances)...")
-    # Load from multiple event classes for diversity
-    # Class 0: Normal, 1-9: Various faults
-    # Limit instances to manageable size while maintaining diversity
+    # Load from FAULT classes only (1-9) to have actual events to detect
+    # Class 0 is normal operation - we need faults for anomaly detection
     from validation.petrobras_3w.loader import load_all_real_instances
     
+    # Load instances from fault classes (exclude class 0 normal operation)
+    # Use manageable subset for training time
     well_data_raw = load_all_real_instances(
-        max_instances=100,  # Use 100 instances for reasonable training time
-        event_classes=None,  # Include all classes
+        max_instances=15,  # Small manageable subset
+        event_classes=[1, 2, 3, 4],  # Four diverse fault classes
     )
     
     # Concatenate instances by well
@@ -166,12 +167,13 @@ def main():
     for well_id, dfs in well_data_raw.items():
         data[well_id] = pd.concat(dfs, ignore_index=True)
     
-    logger.info(f"Loaded {len(data)} wells from REAL 3W data")
+    logger.info(f"Loaded {len(data)} wells from REAL 3W data (fault classes only)")
     
     # Log event distribution
     all_events = pd.concat([df["event_type"] for df in data.values()])
     event_counts = all_events.value_counts().sort_index()
     logger.info(f"Event distribution: {event_counts.to_dict()}")
+    logger.info(f"Total events (non-normal): {(all_events > 0).sum()} / {len(all_events)}")
 
     # Split data
     logger.info("\n[2/6] Splitting data by wells...")
@@ -198,7 +200,7 @@ def main():
 
     # Isolation Forest (unsupervised)
     contamination = np.sum(y_train > 0) / len(y_train)
-    contamination = min(contamination, 0.45)  # Cap at 0.45 (sklearn limit is 0.5)
+    contamination = min(max(contamination, 0.01), 0.45)  # Clamp to [0.01, 0.45]
     logger.info(f"Contamination rate: {contamination:.3%}")
     iso_forest = train_isolation_forest(X_train_scaled, contamination=contamination)
 

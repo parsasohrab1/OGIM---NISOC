@@ -197,8 +197,8 @@ def main():
     from validation.petrobras_3w.loader import load_all_real_instances
     
     well_data_raw = load_all_real_instances(
-        max_instances=100,
-        event_classes=None,
+        max_instances=15,
+        event_classes=[1, 2, 3, 4],
     )
     
     # Concatenate instances by well
