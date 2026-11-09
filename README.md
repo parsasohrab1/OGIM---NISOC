@@ -2,9 +2,20 @@
 
 این ریپازیتوری یک **کپی کامل و مستقل (fork)** از محصول [OGIM — هوشمندسازی میادین نفت و گاز](https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring) است که برای استقرار نمایشی روی **میدان مارون**، یکی از میادین **شرکت ملی مناطق نفت‌خیز جنوب (NISOC)**، بومی‌سازی شده است.
 
+## 🎯 Technology Readiness Level (TRL) Status
+
+**Current TRL**: **4→5 (Validation in Progress)**
+
+The anomaly/event-detection component is being validated on **real field data** from the Petrobras 3W dataset to advance from TRL4 (laboratory/simulated data) to TRL5 (relevant environment validation). See:
+- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md)
+- [Real Data Validation Report](docs/validation-real-data.md)
+- [Validation Results](results/3w_validation_results.json) *(after evaluation)*
+
 ## وضعیت داده — مهم
 
 داده‌های این ریپو **سنتتیک/نمایشی** هستند، نه دادهٔ واقعی و محرمانهٔ میدان مارون. معماری، منطق سرویس‌ها و مدل داده کاملاً واقعی و کاربردی است، اما مقادیر سنسورها (فشار، دما، دبی، لرزش و ...) با یک مولد قطعی (seeded pseudo-random) تولید می‌شوند — دقیقاً همان الگویی که برای میدان دهلران در محصول اصلی استفاده شده، اینجا با پارامترها و برندینگ میدان مارون بازتولید شده است. اتصال به داده و سنسورهای واقعی میدان مارون نیازمند یکپارچه‌سازی جداگانه با SCADA/Historian واقعی NISOC است که خارج از دامنهٔ این fork می‌باشد.
+
+**🆕 Real Field Data Validation**: برای اعتبارسنجی با داده‌های واقعی، از دیتاست [Petrobras 3W](https://github.com/petrobras/3W) استفاده شده است. جزئیات در [گزارش اعتبارسنجی](docs/validation-real-data.md).
 
 ## چرا یک ریپوی جدا و جدا از میدان دهلران؟
 
