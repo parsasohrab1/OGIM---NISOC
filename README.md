@@ -4,16 +4,17 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4 (Awaiting Valid Real Data Validation)**
+**Current TRL**: **4** (validated on REAL field data; criteria not met)
 
-**⚠️ CRITICAL RETRACTION**: Previous validation results (PR #7, commit ad8b07e) are **INVALID**. The validation used **synthetic placeholder data**, not actual Petrobras 3W data. All reported metrics (recall=1.0, F1=0.947, etc.) must be disregarded.
-
-**Status**: Revalidation with actual 3W REAL instances in progress.
+✅ **Validation Complete**: Evaluated on **REAL Petrobras 3W field data** (90 instances, 23 wells, stratified)  
+📊 **Results**: Event Recall 1.0, FP/day 0.0, but Macro-F1 0.0 and Lead Time -300s (criteria not met)  
+⚠️ **Limitations**: Only 8 test events (too few); geographic mismatch (Brazil offshore vs. Iran onshore)  
+📖 **Verdict**: TRL4 maintained pending improvements (see honest assessment in docs)
 
 **Documents**:
-- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, unmodified)
-- [~~Real Data Validation Report~~](docs/validation-real-data.md) (**RETRACTED - INVALID**)
-- [~~Validation Results JSON~~](results/3w_validation_results.json) (**RETRACTED - INVALID**)
+- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, commit bcea1d4, unchanged)
+- [Real Data Validation Report](docs/validation-real-data.md) (honest assessment, limitations documented)
+- [Validation Results JSON](results/3w_validation_results.json) (complete metrics)
 
 ## وضعیت داده — مهم
 
