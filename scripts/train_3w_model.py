@@ -173,6 +173,7 @@ def main():
 
     # Isolation Forest (unsupervised)
     contamination = np.sum(y_train > 0) / len(y_train)
+    contamination = min(contamination, 0.45)  # Cap at 0.45 (sklearn limit is 0.5)
     logger.info(f"Contamination rate: {contamination:.3%}")
     iso_forest = train_isolation_forest(X_train_scaled, contamination=contamination)
 
