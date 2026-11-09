@@ -149,10 +149,29 @@ def main():
     logger.info("OGIM 3W Validation - Model Training")
     logger.info("=" * 80)
 
-    # Load data
-    logger.info("\n[1/6] Loading Petrobras 3W dataset...")
-    data = load_all_real_instances()
-    logger.info(f"Loaded {len(data)} wells")
+    # Load data - use diverse event classes for proper validation
+    logger.info("\n[1/6] Loading Petrobras 3W dataset (REAL instances)...")
+    # Load from multiple event classes for diversity
+    # Class 0: Normal, 1-9: Various faults
+    # Limit instances to manageable size while maintaining diversity
+    from validation.petrobras_3w.loader import load_all_real_instances
+    
+    well_data_raw = load_all_real_instances(
+        max_instances=100,  # Use 100 instances for reasonable training time
+        event_classes=None,  # Include all classes
+    )
+    
+    # Concatenate instances by well
+    data = {}
+    for well_id, dfs in well_data_raw.items():
+        data[well_id] = pd.concat(dfs, ignore_index=True)
+    
+    logger.info(f"Loaded {len(data)} wells from REAL 3W data")
+    
+    # Log event distribution
+    all_events = pd.concat([df["event_type"] for df in data.values()])
+    event_counts = all_events.value_counts().sort_index()
+    logger.info(f"Event distribution: {event_counts.to_dict()}")
 
     # Split data
     logger.info("\n[2/6] Splitting data by wells...")

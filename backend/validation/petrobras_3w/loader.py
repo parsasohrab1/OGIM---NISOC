@@ -2,7 +2,7 @@
 Petrobras 3W Dataset Loader
 
 Downloads and loads REAL instances from the 3W dataset for validation.
-Handles checksums, caching, and extraction.
+NO SYNTHETIC FALLBACK - fails if real data unavailable.
 
 Dataset: https://github.com/petrobras/3W
 License: CC BY 4.0
@@ -10,88 +10,18 @@ License: CC BY 4.0
 
 import hashlib
 import logging
-import os
+import shutil
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-from urllib.request import urlretrieve
+from typing import Dict, List, Optional
 
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# Dataset metadata
-DATASET_BASE_URL = "https://github.com/petrobras/3W/raw/main/dataset/"
+# 3W Dataset location
+THREE_W_REPO = "https://github.com/petrobras/3W"
 DATA_DIR = Path(__file__).parent / "data"
-CACHE_DIR = DATA_DIR / "cache"
-
-# Known REAL instances from 3W dataset (subset for validation)
-# Format: (file_id, well_id, event_type, is_real, expected_sha256)
-REAL_INSTANCES_MANIFEST = [
-    # Well 1 - REAL instances
-    {
-        "file": "1_WELL-00001_20170101000000.parquet",
-        "well": "WELL-00001",
-        "event": "1",  # Spurious Closure of DHSV
-        "real": True,
-        "url_path": "WELL-00001/1_WELL-00001_20170101000000.parquet",
-    },
-    {
-        "file": "2_WELL-00001_20170201000000.parquet",
-        "well": "WELL-00001",
-        "event": "2",  # Severe Slugging
-        "real": True,
-        "url_path": "WELL-00001/2_WELL-00001_20170201000000.parquet",
-    },
-    # Well 2 - REAL instances
-    {
-        "file": "1_WELL-00002_20170101000000.parquet",
-        "well": "WELL-00002",
-        "event": "3",  # Flow Instability
-        "real": True,
-        "url_path": "WELL-00002/1_WELL-00002_20170101000000.parquet",
-    },
-    # Well 3 - REAL instances
-    {
-        "file": "1_WELL-00003_20170101000000.parquet",
-        "well": "WELL-00003",
-        "event": "0",  # Normal Operation
-        "real": True,
-        "url_path": "WELL-00003/1_WELL-00003_20170101000000.parquet",
-    },
-    # Well 4 - REAL instances
-    {
-        "file": "1_WELL-00004_20170101000000.parquet",
-        "well": "WELL-00004",
-        "event": "4",  # Rapid Productivity Loss
-        "real": True,
-        "url_path": "WELL-00004/1_WELL-00004_20170101000000.parquet",
-    },
-    # Well 5 - REAL instances
-    {
-        "file": "1_WELL-00005_20170101000000.parquet",
-        "well": "WELL-00005",
-        "event": "5",  # Quick Restriction in PCK
-        "real": True,
-        "url_path": "WELL-00005/1_WELL-00005_20170101000000.parquet",
-    },
-    # Well 6 - REAL instances
-    {
-        "file": "1_WELL-00006_20170101000000.parquet",
-        "well": "WELL-00006",
-        "event": "6",  # Scaling in PCK
-        "real": True,
-        "url_path": "WELL-00006/1_WELL-00006_20170101000000.parquet",
-    },
-    # Well 7 - REAL instances
-    {
-        "file": "1_WELL-00007_20170101000000.parquet",
-        "well": "WELL-00007",
-        "event": "7",  # Hydrate in Production Line
-        "real": True,
-        "url_path": "WELL-00007/1_WELL-00007_20170101000000.parquet",
-    },
-]
+CACHE_DIR = DATA_DIR / "3W_dataset"
 
 # 3W Variable names (from dataset documentation)
 SENSOR_COLUMNS = [
@@ -108,19 +38,15 @@ SENSOR_COLUMNS = [
 # Event labels from 3W dataset
 EVENT_LABELS = {
     0: "Normal Operation",
-    1: "Spurious Closure of DHSV",
-    2: "Severe Slugging",
-    3: "Flow Instability",
-    4: "Rapid Productivity Loss",
-    5: "Quick Restriction in PCK",
-    6: "Scaling in PCK",
-    7: "Hydrate in Production Line",
-    8: "Hydrate in Service Line",
-    100: "Abrupt Increase of BSW",  # Extended labels
-    101: "Flow Rate Dropping",
-    102: "Tubing Leak",
-    103: "Gassy Oil",
-    104: "Unrestricted Production",
+    1: "Abrupt Increase of BSW",
+    2: "Spurious Closure of DHSV",
+    3: "Severe Slugging",
+    4: "Flow Instability",
+    5: "Rapid Productivity Loss",
+    6: "Quick Restriction in PCK",
+    7: "Scaling in PCK",
+    8: "Hydrate in Production Line",
+    9: "Hydrate in Service Line",
 }
 
 
@@ -133,203 +59,259 @@ def compute_sha256(file_path: Path) -> str:
     return sha256_hash.hexdigest()
 
 
-def download_file(
-    url: str, dest_path: Path, expected_sha256: Optional[str] = None
-) -> None:
-    """Download a file with optional checksum verification."""
-    dest_path.parent.mkdir(parents=True, exist_ok=True)
+def clone_3w_dataset(force_reclone: bool = False) -> Path:
+    """
+    Clone the 3W dataset repository.
 
-    if dest_path.exists():
-        logger.info(f"File already exists: {dest_path}")
-        if expected_sha256:
-            actual_sha256 = compute_sha256(dest_path)
-            if actual_sha256 == expected_sha256:
-                logger.info(f"Checksum verified: {dest_path}")
-                return
-            else:
-                logger.warning(f"Checksum mismatch, re-downloading: {dest_path}")
-                dest_path.unlink()
+    Args:
+        force_reclone: If True, remove existing clone and re-clone
 
-    logger.info(f"Downloading {url} -> {dest_path}")
-    try:
-        urlretrieve(url, dest_path)
-        logger.info(f"Downloaded: {dest_path}")
+    Returns:
+        Path to cloned repository
 
-        if expected_sha256:
-            actual_sha256 = compute_sha256(dest_path)
-            if actual_sha256 != expected_sha256:
-                raise ValueError(
-                    f"Checksum verification failed for {dest_path}\n"
-                    f"Expected: {expected_sha256}\n"
-                    f"Got: {actual_sha256}"
-                )
-            logger.info(f"Checksum verified: {dest_path}")
-    except Exception as e:
-        if dest_path.exists():
-            dest_path.unlink()
-        raise RuntimeError(f"Failed to download {url}: {e}")
+    Raises:
+        RuntimeError: If cloning fails
+    """
+    if force_reclone and CACHE_DIR.exists():
+        logger.info(f"Removing existing 3W clone: {CACHE_DIR}")
+        shutil.rmtree(CACHE_DIR)
+
+    if not CACHE_DIR.exists():
+        logger.info(f"Cloning 3W dataset from {THREE_W_REPO}...")
+        import subprocess
+
+        try:
+            # Clone with depth=1 to save space/time
+            result = subprocess.run(
+                ["git", "clone", "--depth", "1", THREE_W_REPO, str(CACHE_DIR)],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            logger.info(f"Cloned 3W dataset to {CACHE_DIR}")
+
+            # Get commit SHA
+            commit_result = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=CACHE_DIR,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            commit_sha = commit_result.stdout.strip()
+            logger.info(f"3W dataset commit: {commit_sha}")
+
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to clone 3W dataset: {e}\nStderr: {e.stderr}"
+            ) from e
+    else:
+        logger.info(f"3W dataset already cloned at {CACHE_DIR}")
+
+    return CACHE_DIR
+
+
+def discover_real_instances(dataset_path: Path) -> List[Dict]:
+    """
+    Discover all REAL instances in the 3W dataset.
+
+    Args:
+        dataset_path: Path to cloned 3W repository
+
+    Returns:
+        List of instance metadata dictionaries
+
+    Raises:
+        FileNotFoundError: If dataset directory not found
+    """
+    dataset_dir = dataset_path / "dataset"
+    if not dataset_dir.exists():
+        raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
+
+    instances = []
+
+    # Iterate through class folders (0-9)
+    for class_dir in sorted(dataset_dir.glob("[0-9]")):
+        event_class = int(class_dir.name)
+
+        # Find all REAL instances (prefixed with "WELL-")
+        for parquet_file in class_dir.glob("WELL-*.parquet"):
+            instance = {
+                "file": parquet_file.name,
+                "path": parquet_file,
+                "well": parquet_file.name.split("_")[0],  # e.g., "WELL-00001"
+                "event_class": event_class,
+                "event_label": EVENT_LABELS.get(event_class, "Unknown"),
+                "sha256": None,  # Computed on load
+            }
+            instances.append(instance)
+
+    logger.info(
+        f"Discovered {len(instances)} REAL instances across "
+        f"{len(set(i['well'] for i in instances))} wells"
+    )
+
+    return instances
 
 
 def load_parquet_instance(file_path: Path) -> pd.DataFrame:
-    """Load a single 3W parquet file."""
+    """
+    Load a single 3W parquet file.
+
+    Args:
+        file_path: Path to parquet file
+
+    Returns:
+        DataFrame with loaded data
+
+    Raises:
+        RuntimeError: If loading fails
+    """
     try:
         df = pd.read_parquet(file_path)
         logger.info(f"Loaded {len(df)} rows from {file_path.name}")
         return df
     except Exception as e:
-        raise RuntimeError(f"Failed to load {file_path}: {e}")
+        raise RuntimeError(f"Failed to load {file_path}: {e}") from e
 
 
-def download_real_instances(force_download: bool = False) -> List[Path]:
+def load_all_real_instances(
+    max_instances: Optional[int] = None,
+    event_classes: Optional[List[int]] = None,
+) -> Dict[str, List[pd.DataFrame]]:
     """
-    Download all REAL instances from the manifest.
+    Load all REAL instances from the 3W dataset.
 
     Args:
-        force_download: If True, re-download even if files exist
+        max_instances: Maximum instances to load (None = all)
+        event_classes: Filter by event classes (None = all)
 
     Returns:
-        List of paths to downloaded files
+        Dictionary mapping well_id to list of DataFrames
+
+    Raises:
+        RuntimeError: If dataset cannot be loaded
     """
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    downloaded_files = []
+    # Clone dataset
+    dataset_path = clone_3w_dataset()
 
-    for instance in REAL_INSTANCES_MANIFEST:
-        file_name = instance["file"]
-        dest_path = CACHE_DIR / file_name
+    # Discover instances
+    all_instances = discover_real_instances(dataset_path)
 
-        if force_download and dest_path.exists():
-            dest_path.unlink()
+    # Filter by event class if requested
+    if event_classes is not None:
+        all_instances = [
+            inst for inst in all_instances if inst["event_class"] in event_classes
+        ]
+        logger.info(f"Filtered to {len(all_instances)} instances for classes {event_classes}")
 
-        if not dest_path.exists():
-            # Construct full URL
-            url = DATASET_BASE_URL + instance["url_path"]
+    # Limit number of instances
+    if max_instances is not None:
+        all_instances = all_instances[:max_instances]
+        logger.info(f"Limited to {max_instances} instances")
 
-            try:
-                download_file(url, dest_path)
-            except Exception as e:
-                logger.error(f"Failed to download {file_name}: {e}")
-                # For demonstration, create a synthetic fallback if download fails
-                logger.warning(f"Creating synthetic placeholder for {file_name}")
-                create_synthetic_placeholder(dest_path, instance)
+    # Load instances
+    well_data = {}
+    for inst in all_instances:
+        df = load_parquet_instance(inst["path"])
 
-        downloaded_files.append(dest_path)
+        # Add metadata
+        df["well_id"] = inst["well"]
+        df["event_type"] = inst["event_class"]
+        df["instance_file"] = inst["file"]
 
-    logger.info(f"Downloaded/verified {len(downloaded_files)} REAL instances")
-    return downloaded_files
+        # Compute SHA256 of file
+        inst["sha256"] = compute_sha256(inst["path"])
 
+        # Group by well
+        well_id = inst["well"]
+        if well_id not in well_data:
+            well_data[well_id] = []
+        well_data[well_id].append(df)
 
-def create_synthetic_placeholder(dest_path: Path, instance: Dict) -> None:
-    """
-    Create a synthetic placeholder file for demonstration when download fails.
-    This simulates the structure of 3W data for testing purposes.
-    """
-    np.random.seed(hash(instance["file"]) % (2**32))
-
-    # Generate 1 hour of data at 1 Hz
-    n_samples = 3600
-    timestamps = pd.date_range("2017-01-01", periods=n_samples, freq="1s")
-
-    # Simulate realistic ranges for each sensor
-    data = {
-        "timestamp": timestamps,
-        "P-PDG": np.random.normal(150, 10, n_samples).clip(100, 200),
-        "P-TPT": np.random.normal(50, 5, n_samples).clip(30, 80),
-        "T-TPT": np.random.normal(60, 3, n_samples).clip(50, 70),
-        "P-MON-CKP": np.random.normal(40, 4, n_samples).clip(20, 60),
-        "T-JUS-CKP": np.random.normal(55, 2, n_samples).clip(45, 65),
-        "P-JUS-CKGL": np.random.normal(45, 3, n_samples).clip(30, 60),
-        "T-JUS-CKGL": np.random.normal(58, 2, n_samples).clip(50, 66),
-        "QGL": np.random.normal(100000, 10000, n_samples).clip(50000, 150000),
-    }
-
-    # Add event labels
-    event_type = int(instance["event"])
-    if event_type > 0:
-        # Inject anomaly in middle 20% of data
-        anomaly_start = int(n_samples * 0.4)
-        anomaly_end = int(n_samples * 0.6)
-        data["class"] = np.zeros(n_samples, dtype=int)
-        data["class"][anomaly_start:anomaly_end] = event_type
-
-        # Simulate anomaly: increase pressure variance
-        for col in ["P-PDG", "P-TPT", "P-MON-CKP"]:
-            noise = np.random.normal(0, 5, anomaly_end - anomaly_start)
-            data[col][anomaly_start:anomaly_end] += noise
-    else:
-        data["class"] = np.zeros(n_samples, dtype=int)
-
-    df = pd.DataFrame(data)
-
-    dest_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(dest_path, index=False)
-    logger.info(f"Created synthetic placeholder: {dest_path}")
+    logger.info(f"Loaded {len(well_data)} wells with {len(all_instances)} instances total")
+    return well_data
 
 
-def load_all_real_instances() -> Dict[str, pd.DataFrame]:
-    """
-    Load all REAL instances into memory.
-
-    Returns:
-        Dictionary mapping well_id to DataFrame
-    """
-    download_real_instances()
-
-    instances = {}
-    for meta in REAL_INSTANCES_MANIFEST:
-        file_path = CACHE_DIR / meta["file"]
-        if file_path.exists():
-            df = load_parquet_instance(file_path)
-            df["well_id"] = meta["well"]
-            df["event_type"] = int(meta["event"])
-
-            well_id = meta["well"]
-            if well_id in instances:
-                instances[well_id] = pd.concat(
-                    [instances[well_id], df], ignore_index=True
-                )
-            else:
-                instances[well_id] = df
-
-    logger.info(f"Loaded {len(instances)} wells")
-    return instances
-
-
-def get_dataset_summary() -> pd.DataFrame:
+def get_dataset_summary(well_data: Dict[str, List[pd.DataFrame]]) -> pd.DataFrame:
     """Get summary statistics of the loaded dataset."""
-    instances = load_all_real_instances()
-
     summaries = []
-    for well_id, df in instances.items():
-        event_counts = df["event_type"].value_counts()
+    for well_id, dfs in well_data.items():
+        total_samples = sum(len(df) for df in dfs)
+        event_classes = set()
+        for df in dfs:
+            event_classes.update(df["event_type"].unique())
+
         summaries.append(
             {
                 "well_id": well_id,
-                "total_samples": len(df),
-                "duration_hours": len(df) / 3600,
-                "event_types": event_counts.to_dict(),
-                "normal_samples": (df["event_type"] == 0).sum(),
-                "anomaly_samples": (df["event_type"] > 0).sum(),
+                "n_instances": len(dfs),
+                "total_samples": total_samples,
+                "duration_hours": total_samples / 3600,  # Assume 1 Hz
+                "event_classes": sorted(event_classes),
             }
         )
 
     return pd.DataFrame(summaries)
 
 
+def create_manifest(well_data: Dict[str, List[pd.DataFrame]], output_path: Path) -> None:
+    """
+    Create a manifest file documenting all loaded instances.
+
+    Args:
+        well_data: Loaded well data
+        output_path: Path to save manifest
+    """
+    import json
+    from datetime import datetime
+
+    manifest = {
+        "created_at": datetime.utcnow().isoformat(),
+        "dataset": "Petrobras 3W",
+        "repository": THREE_W_REPO,
+        "license": "CC BY 4.0",
+        "instances": [],
+    }
+
+    for well_id, dfs in well_data.items():
+        for df in dfs:
+            instance_file = df["instance_file"].iloc[0]
+            manifest["instances"].append(
+                {
+                    "file": instance_file,
+                    "well": well_id,
+                    "event_class": int(df["event_type"].iloc[0]),
+                    "samples": len(df),
+                    # SHA256 would be computed if we kept the Path reference
+                }
+            )
+
+    with open(output_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+
+    logger.info(f"Created manifest: {output_path}")
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     print("=" * 60)
-    print("Petrobras 3W Dataset Loader")
+    print("Petrobras 3W Dataset Loader (REAL instances only)")
     print("=" * 60)
 
-    # Download and load all instances
-    instances = load_all_real_instances()
+    # Load a subset for testing
+    well_data = load_all_real_instances(max_instances=20)
 
-    print(f"\nLoaded {len(instances)} wells:")
-    for well_id, df in instances.items():
-        print(f"  - {well_id}: {len(df):,} samples, {len(df) / 3600:.1f} hours")
+    print(f"\nLoaded {len(well_data)} wells")
+    for well_id, dfs in well_data.items():
+        total_samples = sum(len(df) for df in dfs)
+        print(
+            f"  - {well_id}: {len(dfs)} instances, {total_samples:,} samples, "
+            f"{total_samples / 3600:.1f} hours"
+        )
 
     # Print summary
     print("\nDataset Summary:")
-    summary = get_dataset_summary()
+    summary = get_dataset_summary(well_data)
     print(summary.to_string(index=False))

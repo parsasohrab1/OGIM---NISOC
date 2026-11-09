@@ -193,8 +193,18 @@ def main():
     logger.info("=" * 80)
 
     # Load data
-    logger.info("\n[1/7] Loading Petrobras 3W dataset...")
-    data = load_all_real_instances()
+    logger.info("\n[1/7] Loading Petrobras 3W dataset (REAL instances)...")
+    from validation.petrobras_3w.loader import load_all_real_instances
+    
+    well_data_raw = load_all_real_instances(
+        max_instances=100,
+        event_classes=None,
+    )
+    
+    # Concatenate instances by well
+    data = {}
+    for well_id, dfs in well_data_raw.items():
+        data[well_id] = pd.concat(dfs, ignore_index=True)
 
     # Split data
     logger.info("\n[2/7] Splitting data...")
