@@ -60,8 +60,10 @@ def prepare_features(data_dict, sequence_length=60):
         # Adapt to OGIM schema
         df_ogim = adapt_3w_to_ogim(df, well_id)
 
-        # Create feature vectors
-        features_df = create_feature_vectors(df_ogim, sequence_length=sequence_length)
+        # Create feature vectors (OPTIMIZED: vectorized, downsampled, float32)
+        features_df = create_feature_vectors(
+            df_ogim, sequence_length=sequence_length, downsample_seconds=10
+        )
 
         # Add ground truth labels
         # Map back to original timestamps
@@ -153,9 +155,11 @@ def main():
     logger.info("\n[1/6] Loading Petrobras 3W dataset (REAL instances)...")
     # Load from FAULT classes only (1-9) to have actual events to detect
     # Class 0 is normal operation - we need faults for anomaly detection
+    # STRATIFIED: up to 10 instances per class for balanced representation
     well_data_raw = load_all_real_instances(
-        max_instances=15,  # Small manageable subset
-        event_classes=[1, 2, 3, 4],  # Four diverse fault classes
+        max_per_class=10,  # Stratified: 10 per class
+        event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],  # All fault classes
+        random_seed=42,  # Deterministic
     )
 
     # Concatenate instances by well

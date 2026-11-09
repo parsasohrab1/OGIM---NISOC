@@ -57,7 +57,10 @@ def prepare_test_features(test_data, sequence_length=60):
 
         # Keep original df for evaluation
         df_ogim = adapt_3w_to_ogim(df, well_id)
-        features_df = create_feature_vectors(df_ogim, sequence_length=sequence_length)
+        # OPTIMIZED: vectorized, downsampled, float32
+        features_df = create_feature_vectors(
+            df_ogim, sequence_length=sequence_length, downsample_seconds=10
+        )
 
         # Add labels
         df_ogim_pivot = df_ogim.pivot_table(
@@ -194,9 +197,11 @@ def main():
 
     # Load data
     logger.info("\n[1/7] Loading Petrobras 3W dataset (REAL instances)...")
+    # STRATIFIED: same selection as training
     well_data_raw = load_all_real_instances(
-        max_instances=15,
-        event_classes=[1, 2, 3, 4],
+        max_per_class=10,
+        event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
+        random_seed=42,
     )
 
     # Concatenate instances by well

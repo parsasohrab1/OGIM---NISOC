@@ -204,6 +204,14 @@ class EventDetectionEvaluator:
         # Extract events from ground truth
         gt_events = self.extract_events(df, label_col=label_col)
 
+        # Compute per-class event counts
+        event_counts_by_class = {}
+        for event in gt_events:
+            cls = event["event_type"]
+            event_counts_by_class[cls] = event_counts_by_class.get(cls, 0) + 1
+
+        logger.info(f"Events by class: {event_counts_by_class}")
+
         # Match predictions to events
         matched_events, false_positives = self.match_predictions_to_events(
             gt_events, predictions, df
@@ -251,6 +259,7 @@ class EventDetectionEvaluator:
             "detected_events": len(detected_events),
             "missed_events": len(gt_events) - len(detected_events),
             "false_positive_events": false_positives,
+            "events_by_class": event_counts_by_class,
             # Sample-level metrics
             "sample_precision": precision,
             "sample_recall": recall,
