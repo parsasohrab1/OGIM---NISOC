@@ -15,7 +15,7 @@ from validation.petrobras_3w.loader import (
     compute_sha256,
     load_all_real_instances,
     get_dataset_summary,
-    REAL_INSTANCES_MANIFEST,
+    discover_real_instances,
 )
 
 
@@ -30,16 +30,14 @@ def test_sha256_computation(tmp_path):
 
 
 def test_manifest_structure():
-    """Test that manifest has required fields."""
-    assert len(REAL_INSTANCES_MANIFEST) > 0
+    """Test that discovered instances have required fields."""
+    instances = discover_real_instances()
+    assert len(instances) > 0
 
-    for instance in REAL_INSTANCES_MANIFEST:
-        assert "file" in instance
+    for instance in instances:
         assert "well" in instance
-        assert "event" in instance
-        assert "real" in instance
-        assert "url_path" in instance
-        assert instance["real"] is True
+        assert "path" in instance
+        assert "event_type" in instance
 
 
 def test_load_all_real_instances():
