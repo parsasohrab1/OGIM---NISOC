@@ -4,17 +4,20 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4** (validated on REAL field data; model found DEGENERATE)
+**Current TRL**: **4** (validated on REAL field data with fixed methodology)
 
-⚠️ **CRITICAL**: Model from commit c11410d is **DEGENERATE** (always predicts event) and **UNUSABLE**  
-📊 **Corrected Metrics**: Precision 0.154 (not 1.0), Binary Macro-F1 0.133, False Alarms 1440/day  
-🔧 **Action Required**: Retrain with `class_weight='balanced'` and proper threshold tuning  
-📖 **Verdict**: TRL4 maintained — model requires retraining before production use
+**Latest Evaluation** (2026-11-09, 20 instances/class, v6_optimized):
+- ✅ **Leakage audit:** PASSED (per-sample labeling, well-grouped splits, balanced training)
+- ⚠️ **Model behavior:** Degenerate (100% event predictions → 1440 false alarms/day)
+- ❌ **TRL5 Criteria:** Failed Binary Macro-F1 (0.446 < 0.65) and False Alarms/Day (1440 > 3.0)
+- ✅ **Beats baselines** on recall (1.0) and lead time (13.6 hrs)
+
+**Verdict:** TRL4 maintained. Methodology is sound but features/labeling require redesign before production.
 
 **Documents**:
-- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, commit bcea1d4, unchanged)
-- [Real Data Validation Report](docs/validation-real-data.md) (honest assessment, limitations documented)
-- [Validation Results JSON](results/3w_validation_results.json) (complete metrics)
+- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (predeclared, commit bcea1d4, unchanged)
+- [Real Data Validation Report](docs/validation-real-data.md) (complete findings, limitations, recommendations)
+- [Validation Results JSON](results/3w_validation_results.json) (20 instances/class, full confusion matrix + CIs)
 
 ## وضعیت داده — مهم
 

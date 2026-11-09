@@ -1,0 +1,133 @@
+{
+  "evaluation_date": "2026-11-09T11:43:03.901858",
+  "dataset": "Petrobras 3W (balanced, 20/class, 60s downsample)",
+  "methodology_version": "v6_optimized",
+  "instances_per_class": 20,
+  "sample_counts": {
+    "train": {
+      "total": 93224,
+      "per_class": {
+        "class_0": 36350,
+        "class_1": 163,
+        "class_2": 264,
+        "class_3": 5969,
+        "class_4": 1908,
+        "class_5": 89,
+        "class_6": 211,
+        "class_7": 70,
+        "class_8": 999,
+        "class_9": 0
+      }
+    },
+    "validation": {
+      "total": 17775,
+      "per_class": {
+        "class_0": 5344,
+        "class_1": 0,
+        "class_2": 64,
+        "class_3": 0,
+        "class_4": 477,
+        "class_5": 0,
+        "class_6": 10,
+        "class_7": 0,
+        "class_8": 631,
+        "class_9": 256
+      }
+    },
+    "test": {
+      "total": 100306,
+      "per_class": {
+        "class_0": 19607,
+        "class_1": 0,
+        "class_2": 26,
+        "class_3": 0,
+        "class_4": 0,
+        "class_5": 132,
+        "class_6": 0,
+        "class_7": 0,
+        "class_8": 719,
+        "class_9": 0
+      }
+    }
+  },
+  "confusion_matrix": {
+    "TN": 0,
+    "FP": 19607,
+    "FN": 0,
+    "TP": 80699
+  },
+  "ogim_model": {
+    "binary_macro_f1": {
+      "mean": 0.44583851274826664,
+      "ci_95": [
+        0.4450656884215095,
+        0.4466029286632223
+      ]
+    },
+    "recall": {
+      "mean": 1.0,
+      "ci_95": [
+        1.0,
+        1.0
+      ]
+    },
+    "precision": 0.804528143879728,
+    "false_alarms_per_day": 1440.0,
+    "lead_time_seconds": 49080.0
+  },
+  "baselines": {
+    "z_score": {
+      "f1": 0.18739461001604574,
+      "recall": 0.03177238875326832,
+      "fp_per_day": 102.01254653950119
+    },
+    "threshold": {
+      "f1": 0.2321006049719922,
+      "recall": 0.10495793008587467,
+      "fp_per_day": 327.1158259805172
+    }
+  },
+  "trl5_criteria": {
+    "criteria": [
+      {
+        "name": "Event Recall \u22650.75",
+        "met": true,
+        "value": 1.0
+      },
+      {
+        "name": "Binary Macro-F1 \u22650.65",
+        "met": false,
+        "value": 0.44583851274826664
+      },
+      {
+        "name": "False Alarms/Day \u22643.0",
+        "met": false,
+        "value": 1440.0
+      },
+      {
+        "name": "Lead Time \u226560s",
+        "met": true,
+        "value": 49080.0
+      },
+      {
+        "name": "Leakage Audit",
+        "met": true,
+        "value": "PASSED"
+      }
+    ],
+    "all_met": false
+  },
+  "final_trl_verdict": 4,
+  "verdict_reasoning": "Failed: Binary Macro-F1 \u22650.65, False Alarms/Day \u22643.0",
+  "leakage_audit": {
+    "audit_status": "PASSED",
+    "checks_performed": [
+      "split_leakage: PASSED",
+      "feature_leakage: PASSED",
+      "perfect_separation: PASSED"
+    ],
+    "failures": [],
+    "total_checks": 3,
+    "failed_checks": 0
+  }
+}
