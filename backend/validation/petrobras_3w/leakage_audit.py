@@ -5,7 +5,7 @@ Checks for data leakage in features, splits, and evaluation.
 """
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import pandas as pd
 import numpy as np
 
@@ -57,9 +57,7 @@ class LeakageAuditor:
         self.checks.append("feature_leakage: PASSED")
         return True
 
-    def check_split_leakage(
-        self, train_wells: List[str], test_wells: List[str]
-    ) -> bool:
+    def check_split_leakage(self, train_wells: List[str], test_wells: List[str]) -> bool:
         """
         Check that train and test wells do not overlap.
 
@@ -75,15 +73,14 @@ class LeakageAuditor:
         overlap = train_set & test_set
 
         if overlap:
-            msg = (
-                f"Split leakage detected: wells {overlap} appear in both train and test"
-            )
+            msg = f"Split leakage detected: wells {overlap} appear in both train and test"
             logger.error(msg)
             self.failures.append(msg)
             return False
 
         logger.info(
-            f"✓ Split leakage check PASSED: {len(train_set)} train wells, {len(test_set)} test wells, no overlap"
+            f"✓ Split leakage check PASSED: {len(train_set)} train wells, "
+            f"{len(test_set)} test wells, no overlap"
         )
         self.checks.append("split_leakage: PASSED")
         return True
@@ -109,16 +106,16 @@ class LeakageAuditor:
         if len(features_df) > split_index:
             # Check if features near boundary exist
             near_boundary = (
-                (features_df.index >= danger_zone_start)
-                & (features_df.index < danger_zone_end)
+                (features_df.index >= danger_zone_start) & (features_df.index < danger_zone_end)
             ).sum()
 
             if near_boundary > 0:
-                msg = f"Temporal leakage risk: {near_boundary} features within {sequence_length} samples of split boundary"
-                logger.warning(msg)
-                self.checks.append(
-                    f"temporal_leakage: WARNING ({near_boundary} at risk)"
+                msg = (
+                    f"Temporal leakage risk: {near_boundary} features within "
+                    f"{sequence_length} samples of split boundary"
                 )
+                logger.warning(msg)
+                self.checks.append(f"temporal_leakage: WARNING ({near_boundary} at risk)")
                 return True  # Warning, not failure
 
         logger.info("✓ Temporal leakage check PASSED: no windows crossing split")
@@ -144,21 +141,22 @@ class LeakageAuditor:
 
         # Perfect metrics (P=R=F1=1.0) with complex data are suspicious
         if precision == 1.0 and recall == 1.0 and f1 == 1.0:
-            n_samples = len(y_true)
             n_positive = (y_true > 0).sum()
             n_negative = (y_true == 0).sum()
 
             if n_positive > 100 and n_negative > 100:
                 msg = (
-                    f"Perfect separation detected (P=R=F1=1.0) with {n_positive} positives and {n_negative} negatives. "
-                    f"This is suspicious and may indicate label leakage."
+                    f"Perfect separation detected (P=R=F1=1.0) with {n_positive} "
+                    f"positives and {n_negative} negatives. "
+                    "This is suspicious and may indicate label leakage."
                 )
                 logger.warning(msg)
                 self.failures.append(msg)
                 return False
 
         logger.info(
-            f"✓ Perfect separation check PASSED: P={precision:.3f}, R={recall:.3f}, F1={f1:.3f} (reasonable)"
+            f"✓ Perfect separation check PASSED: P={precision:.3f}, R={recall:.3f}, "
+            f"F1={f1:.3f} (reasonable)"
         )
         self.checks.append("perfect_separation: PASSED")
         return True
@@ -190,15 +188,17 @@ class LeakageAuditor:
 
         if recall_var < 1e-6 and fp_var < 1e-6:
             msg = (
-                f"All models have identical performance (R={model_recall:.3f}, FP={model_fp_rate:.3f}). "
-                f"This may indicate trivial test set or lenient evaluation window."
+                f"All models have identical performance (R={model_recall:.3f}, "
+                f"FP={model_fp_rate:.3f}). "
+                "This may indicate trivial test set or lenient evaluation window."
             )
             logger.warning(msg)
             self.checks.append("baseline_tie: WARNING (all tied)")
             return True  # Warning, not failure
 
         logger.info(
-            f"✓ Baseline comparison check PASSED: performance varies (R_var={recall_var:.4f}, FP_var={fp_var:.4f})"
+            f"✓ Baseline comparison check PASSED: performance varies "
+            f"(R_var={recall_var:.4f}, FP_var={fp_var:.4f})"
         )
         self.checks.append("baseline_tie: PASSED")
         return True
