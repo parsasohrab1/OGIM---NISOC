@@ -210,6 +210,10 @@ def create_feature_vectors(
     numeric_cols = features_df.select_dtypes(include=[np.number]).columns
     features_df[numeric_cols] = features_df[numeric_cols].astype("float32")
 
+    # Replace inf/NaN with safe values
+    features_df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    features_df.fillna(0, inplace=True)
+
     logger.info(
         "Created %d feature vectors with %d features (vectorized, float32)",
         len(features_df),
