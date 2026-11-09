@@ -80,7 +80,7 @@ class RollingZScoreBaseline:
 
                 if std > 0:
                     z_score = abs((current_value - mean) / std)
-                    if z_score > self.z_threshold:
+                    if z_score > self.z_threshold:  # noqa: E226
                         triggered_sensors += 1
 
             # Vote: anomaly if enough sensors trigger
@@ -174,7 +174,7 @@ class StaticThresholdBaseline:
             for i, is_violation in enumerate(violations):
                 if is_violation:
                     consecutive_count += 1
-                    if consecutive_count >= self.min_consecutive:
+                    if consecutive_count >= self.min_consecutive:  # noqa: E226
                         # Mark this and previous samples as anomalies
                         start_idx = max(0, i - consecutive_count + 1)
                         predictions[start_idx : i + 1] = 1

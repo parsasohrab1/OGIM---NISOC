@@ -119,9 +119,9 @@ class WellGroupSplitter:
 
         logger.info(
             f"Sample distribution: "
-            f"train={train_samples} ({train_samples/total_samples:.1%}), "
-            f"val={val_samples} ({val_samples/total_samples:.1%}), "
-            f"test={test_samples} ({test_samples/total_samples:.1%})"
+            f"train={train_samples} ({train_samples / total_samples:.1%}), "
+            f"val={val_samples} ({val_samples / total_samples:.1%}), "
+            f"test={test_samples} ({test_samples / total_samples:.1%})"
         )
 
         return train_data, val_data, test_data

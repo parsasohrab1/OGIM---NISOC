@@ -223,7 +223,7 @@ def create_synthetic_placeholder(dest_path: Path, instance: Dict) -> None:
     Create a synthetic placeholder file for demonstration when download fails.
     This simulates the structure of 3W data for testing purposes.
     """
-    np.random.seed(hash(instance["file"]) % (2**32))
+    np.random.seed(hash(instance["file"]) % (2 ** 32))
 
     # Generate 1 hour of data at 1 Hz
     n_samples = 3600

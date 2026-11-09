@@ -191,7 +191,9 @@ def create_feature_vectors(df: pd.DataFrame, sequence_length: int = 60) -> pd.Da
 
     features_df = pd.DataFrame(features)
     logger.info(
-        f"Created {len(features_df)} feature vectors with {len(features_df.columns)} features"
+        "Created %d feature vectors with %d features",
+        len(features_df),
+        len(features_df.columns),
     )
     return features_df
 
