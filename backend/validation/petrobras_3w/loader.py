@@ -327,7 +327,7 @@ if __name__ == "__main__":
 
     print(f"\nLoaded {len(instances)} wells:")
     for well_id, df in instances.items():
-        print(f"  - {well_id}: {len(df):,} samples, {len(df)/3600:.1f} hours")
+        print(f"  - {well_id}: {len(df):,} samples, {len(df) / 3600:.1f} hours")
 
     # Print summary
     print("\nDataset Summary:")

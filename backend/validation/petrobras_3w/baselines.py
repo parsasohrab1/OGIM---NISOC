@@ -89,7 +89,7 @@ class RollingZScoreBaseline:
 
         logger.info(
             f"Z-Score baseline detected {predictions.sum()} / {len(predictions)} "
-            f"({predictions.sum()/len(predictions):.2%}) anomalies"
+            f"({predictions.sum() / len(predictions):.2%}) anomalies"
         )
         return predictions
 
@@ -183,7 +183,7 @@ class StaticThresholdBaseline:
 
         logger.info(
             f"Threshold baseline detected {predictions.sum()} / {len(predictions)} "
-            f"({predictions.sum()/len(predictions):.2%}) anomalies"
+            f"({predictions.sum() / len(predictions):.2%}) anomalies"
         )
         return predictions
 

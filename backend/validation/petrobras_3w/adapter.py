@@ -232,7 +232,7 @@ if __name__ == "__main__":
         df_ogim = adapt_3w_to_ogim(df_3w, well_id)
         print(f"OGIM data shape: {df_ogim.shape}")
         print(f"\nOGIM columns: {df_ogim.columns.tolist()}")
-        print(f"\nSample OGIM records:")
+        print("\nSample OGIM records:")
         print(df_ogim.head(10))
 
         # Create features
