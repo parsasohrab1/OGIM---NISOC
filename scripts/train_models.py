@@ -5,6 +5,7 @@ Utility script to train and register ML models for the OGIM inference service.
 Usage:
     python scripts/train_models.py --model all
 """
+
 from __future__ import annotations
 
 import argparse
@@ -19,7 +20,6 @@ sys.path.insert(0, str(ROOT / "backend" / "ml-inference-service"))
 
 from config import settings  # type: ignore  # noqa: E402
 from mlflow_integration import get_mlflow_manager  # type: ignore  # noqa: E402
-
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("train-models")
@@ -56,7 +56,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train OGIM ML inference models.")
     parser.add_argument(
         "--model",
-        choices=["anomaly_detection", "failure_prediction", "time_series_forecast", "all"],
+        choices=[
+            "anomaly_detection",
+            "failure_prediction",
+            "time_series_forecast",
+            "all",
+        ],
         default="all",
         help="Model to train (default: all).",
     )
@@ -70,4 +75,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

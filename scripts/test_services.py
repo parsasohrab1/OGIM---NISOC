@@ -2,6 +2,7 @@
 """
 Test script to verify all backend services are running
 """
+
 import requests
 import sys
 from typing import Dict, List
@@ -45,18 +46,18 @@ def main():
     print("OGIM Service Health Check")
     print("=" * 60)
     print()
-    
+
     results = []
     for name, url in SERVICES.items():
         results.append(test_service(name, url))
-    
+
     print()
     print("=" * 60)
     passed = sum(results)
     total = len(results)
     print(f"Results: {passed}/{total} services healthy")
     print("=" * 60)
-    
+
     if passed == total:
         print("All services are healthy! ✓")
         sys.exit(0)
@@ -67,4 +68,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

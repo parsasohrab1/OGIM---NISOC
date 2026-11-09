@@ -4,16 +4,16 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4 (Real Data Validation Complete, TRL5 Not Achieved)**
+**Current TRL**: **4 (Awaiting Valid Real Data Validation)**
 
-The anomaly/event-detection component has been validated on **real field data** from the Petrobras 3W dataset. While the model achieved excellent detection performance (100% recall, 0 false alarms, macro-F1 = 0.947), it **failed to meet the early warning requirement** (detection lead time was -153.5s instead of the required +60s).
+**⚠️ CRITICAL RETRACTION**: Previous validation results (PR #7, commit ad8b07e) are **INVALID**. The validation used **synthetic placeholder data**, not actual Petrobras 3W data. All reported metrics (recall=1.0, F1=0.947, etc.) must be disregarded.
 
-**Verdict**: TRL remains at **4**. Advancement to TRL5 requires predictive capability with ≥60 seconds of advance warning.
+**Status**: Revalidation with actual 3W REAL instances in progress.
 
 **Documents**:
 - [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, unmodified)
-- [Real Data Validation Report](docs/validation-real-data.md) (full results & recommendations)
-- [Validation Results JSON](results/3w_validation_results.json) (machine-readable metrics)
+- [~~Real Data Validation Report~~](docs/validation-real-data.md) (**RETRACTED - INVALID**)
+- [~~Validation Results JSON~~](results/3w_validation_results.json) (**RETRACTED - INVALID**)
 
 ## وضعیت داده — مهم
 
