@@ -178,7 +178,7 @@ def load_parquet_instance(file_path: Path) -> pd.DataFrame:
 def load_all_real_instances(
     max_instances: Optional[int] = None,
     event_classes: Optional[List[int]] = None,
-    max_per_class: Optional[int] = None,
+    max_per_class: Optional[int] = 40,
     random_seed: int = 42,
 ) -> Dict[str, List[pd.DataFrame]]:
     """

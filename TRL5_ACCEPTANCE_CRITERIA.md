@@ -187,6 +187,93 @@ All experiments must be fully reproducible:
 
 ---
 
+## ADDENDUM (2026-11-09): Metric Computation Clarifications
+
+**This addendum clarifies metric computation methodology without changing the threshold values locked above.**
+
+### A1. Macro-F1 Definition (Clarification)
+
+The **Macro-F1 ≥ 0.65** criterion in Section 4.2 applies to **binary event detection**:
+
+- **Positive class (Event):** Any transient/fault state
+  - 3W class labels: 1-9 (fault classes)
+  - 3W transient labels: 101-109 (transient onset states)
+- **Negative class (Normal):** Normal operation
+  - 3W class label: 0 (steady-state)
+
+**Computation:**
+```
+Binary labels: y_binary = (y_original > 0).astype(int)
+Macro-F1 = (F1_event + F1_normal) / 2
+```
+
+Where F1_event and F1_normal are computed using sklearn's `f1_score` with `average='binary'` for each class.
+
+**Rationale:** OGIM performs anomaly/event detection (binary), not fault classification (multiclass). The original criteria's mention of "Macro-F1 across Event Classes" is clarified to mean binary detection, consistent with the system's design.
+
+### A2. Lead Time Measurement (Clarification)
+
+The **Detection Lead Time ≥ 60s** criterion measures timing relative to **transient onset**:
+
+**Transient Onset Definition:**
+- In 3W dataset, the moment when class label transitions from:
+  - Steady-state (class 0) → Transient (classes 101-109) OR
+  - Steady-state (class 0) → Fault (classes 1-9)
+- This is the **earliest indication** of abnormal behavior
+
+**Lead Time Calculation:**
+```
+Lead Time = Transient Onset Timestamp - First Detection Timestamp
+```
+- **Positive lead time:** Early detection (before onset) ✅
+- **Zero lead time:** Detection at onset
+- **Negative lead time:** Late detection (after onset) ❌
+
+**Detection Window:**
+- **One-sided:** Only detections **before or at onset** count toward positive lead time
+- Detections after onset are penalized (negative lead time)
+- This enforces true early warning capability
+
+**Training Adjustment:**
+- Models must be trained on **pre-onset windows** to learn precursors
+- Using post-onset data as "normal" would leak the event into training
+
+### A3. Leakage Prevention Audit (New Requirement)
+
+All validations must document a **leakage audit** covering:
+
+1. **Feature Leakage:**
+   - No `event_type`, `class`, or `state` columns in features
+   - Only sensor readings (P-PDG, P-TPT, T-TPT, etc.) used
+   - No future information in rolling windows
+
+2. **Temporal Leakage:**
+   - Rolling windows do not cross train/test split boundary
+   - No lookback into test set from training features
+
+3. **Split Leakage:**
+   - Wells are 100% in train OR test, never both
+   - Validation/test splits use different wells
+
+4. **Label Leakage:**
+   - Ground truth labels not used during inference
+   - Predictions made before comparing to labels
+
+**Audit Outcome:** Must report "PASSED" or "FAILED" with specific leakage sources identified.
+
+### A4. Statistical Significance (New Requirement)
+
+Metrics must include **95% confidence intervals** via bootstrap:
+- 1000 bootstrap resamples of test events
+- Report: `metric_mean ± CI_95`
+- CIs allow honest assessment of statistical uncertainty
+
+---
+
+**All threshold values remain unchanged:** Event Recall ≥0.75, False Alarms/day ≤3.0, Macro-F1 ≥0.65, Lead Time ≥60s.
+
+---
+
 ## 11. Review & Approval
 
 **Pre-declared by**: Cloud Agent (automated)  

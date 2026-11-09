@@ -197,9 +197,9 @@ def main():
 
     # Load data
     logger.info("\n[1/7] Loading Petrobras 3W dataset (REAL instances)...")
-    # STRATIFIED: same selection as training
+    # STRATIFIED: same selection as training (40 per class for more test events)
     well_data_raw = load_all_real_instances(
-        max_per_class=10,
+        max_per_class=40,
         event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
         random_seed=42,
     )

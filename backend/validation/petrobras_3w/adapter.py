@@ -117,7 +117,10 @@ def adapt_3w_to_ogim(df: pd.DataFrame, well_id: str) -> pd.DataFrame:
                         "value": converted_value if quality == 1 else 0.0,
                         "unit": mapping["unit"],
                         "quality": quality,
-                        "event_type": event_type,
+                        "event_type": event_type,  # For evaluation only, NOT features
+                        "class_label": row.get(
+                            "class", event_type
+                        ),  # Original 3W class (includes transients 101-109)
                     }
                 )
 
