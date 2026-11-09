@@ -419,3 +419,166 @@ if __name__ == "__main__":
         print("Failures:")
         for failure in failures:
             print(f"  - {failure}")
+
+
+def compute_binary_macro_f1(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    """
+    Compute binary Macro-F1 (event vs. normal).
+
+    Per ADDENDUM: Macro-F1 = (F1_event + F1_normal) / 2
+
+    Args:
+        y_true: Ground truth (0=normal, >0=event)
+        y_pred: Predictions (0=normal, >0=event)
+
+    Returns:
+        Macro-F1 score
+    """
+    from sklearn.metrics import f1_score
+
+    # Binarize
+    y_true_bin = (y_true > 0).astype(int)
+    y_pred_bin = (y_pred > 0).astype(int)
+
+    # F1 for each class
+    f1_normal = f1_score(y_true_bin == 0, y_pred_bin == 0, zero_division=0)
+    f1_event = f1_score(y_true_bin == 1, y_pred_bin == 1, zero_division=0)
+
+    macro_f1 = (f1_normal + f1_event) / 2.0
+
+    logger.info(
+        f"Binary Macro-F1: F1_normal={f1_normal:.3f}, F1_event={f1_event:.3f}, Macro={macro_f1:.3f}"
+    )
+
+    return macro_f1
+
+
+def find_transient_onset(
+    df: pd.DataFrame, class_col: str = "class_label"
+) -> Optional[int]:
+    """
+    Find the first transient onset in the data.
+
+    Transient onset = first transition from 0 (normal) to >0 (transient 101-109 or fault 1-9).
+
+    Args:
+        df: DataFrame with class labels
+        class_col: Column name for class labels
+
+    Returns:
+        Index of first transient onset, or None if no onset found
+    """
+    if class_col not in df.columns:
+        return None
+
+    classes = df[class_col].values
+
+    # Find first transition from 0 to >0
+    for i in range(1, len(classes)):
+        if classes[i - 1] == 0 and classes[i] > 0:
+            return i
+
+    return None
+
+
+def compute_lead_time_to_onset(
+    predictions: np.ndarray, df: pd.DataFrame, class_col: str = "class_label"
+) -> Optional[float]:
+    """
+    Compute lead time from first detection to transient onset.
+
+    Per ADDENDUM: Lead time = onset_time - first_detection_time
+    Positive = early detection, negative = late detection.
+
+    Args:
+        predictions: Binary predictions (0/1)
+        df: DataFrame with timestamps and class labels
+        class_col: Column name for class labels
+
+    Returns:
+        Lead time in seconds, or None if no onset or no detection
+    """
+    onset_idx = find_transient_onset(df, class_col)
+
+    if onset_idx is None:
+        return None
+
+    # Find first detection
+    detection_indices = np.where(predictions == 1)[0]
+
+    if len(detection_indices) == 0:
+        return None  # No detection
+
+    first_detection_idx = detection_indices[0]
+
+    # Compute lead time (onset - detection)
+    lead_time_samples = onset_idx - first_detection_idx
+
+    # Convert to seconds (assume 1 Hz or use actual timestamps)
+    if "timestamp" in df.columns:
+        try:
+            onset_time = df.iloc[onset_idx]["timestamp"]
+            detection_time = df.iloc[first_detection_idx]["timestamp"]
+            lead_time = (onset_time - detection_time).total_seconds()
+        except:
+            lead_time = float(lead_time_samples)  # Fallback to sample count
+    else:
+        lead_time = float(lead_time_samples)
+
+    return lead_time
+
+
+def bootstrap_confidence_intervals(
+    metric_func,
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    n_bootstrap: int = 1000,
+    confidence_level: float = 0.95,
+    **kwargs,
+) -> Tuple[float, float, float]:
+    """
+    Compute bootstrap 95% confidence intervals for a metric.
+
+    Args:
+        metric_func: Function that computes metric(y_true, y_pred, **kwargs)
+        y_true: Ground truth labels
+        y_pred: Predicted labels
+        n_bootstrap: Number of bootstrap samples
+        confidence_level: Confidence level (default 0.95)
+        **kwargs: Additional arguments for metric_func
+
+    Returns:
+        (mean, lower_ci, upper_ci)
+    """
+    np.random.seed(42)
+
+    n_samples = len(y_true)
+    bootstrap_scores = []
+
+    for _ in range(n_bootstrap):
+        # Resample with replacement
+        indices = np.random.choice(n_samples, size=n_samples, replace=True)
+        y_true_boot = y_true[indices]
+        y_pred_boot = y_pred[indices]
+
+        try:
+            score = metric_func(y_true_boot, y_pred_boot, **kwargs)
+            bootstrap_scores.append(score)
+        except:
+            pass  # Skip failed resamples
+
+    if len(bootstrap_scores) == 0:
+        return (0.0, 0.0, 0.0)
+
+    bootstrap_scores = np.array(bootstrap_scores)
+    mean_score = np.mean(bootstrap_scores)
+
+    # Compute percentiles for CI
+    alpha = 1 - confidence_level
+    lower_percentile = 100 * (alpha / 2)
+    upper_percentile = 100 * (1 - alpha / 2)
+
+    lower_ci = np.percentile(bootstrap_scores, lower_percentile)
+    upper_ci = np.percentile(bootstrap_scores, upper_percentile)
+
+    return (mean_score, lower_ci, upper_ci)

@@ -155,9 +155,9 @@ def main():
     logger.info("\n[1/6] Loading Petrobras 3W dataset (REAL instances)...")
     # Load from FAULT classes only (1-9) to have actual events to detect
     # Class 0 is normal operation - we need faults for anomaly detection
-    # STRATIFIED: up to 10 instances per class for balanced representation
+    # STRATIFIED: up to 40 instances per class for larger test set
     well_data_raw = load_all_real_instances(
-        max_per_class=10,  # Stratified: 10 per class
+        max_per_class=40,  # Stratified: 40 per class for more test events
         event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],  # All fault classes
         random_seed=42,  # Deterministic
     )
