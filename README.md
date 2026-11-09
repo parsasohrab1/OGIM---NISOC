@@ -4,15 +4,15 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4** (validated on REAL field data with fixed methodology)
+**Current TRL**: **4** (evaluated on REAL field data with fixed methodology)
 
 **Latest Evaluation** (2026-11-09, 20 instances/class, v6_optimized):
-- ✅ **Leakage audit:** PASSED (per-sample labeling, well-grouped splits, balanced training)
-- ⚠️ **Model behavior:** Degenerate (100% event predictions → 1440 false alarms/day)
+- ✅ **Leakage audit:** PASSED (per-sample labeling, well-grouped splits, balanced training, missing-class check)
+- ❌ **Detector is degenerate (TN=0):** Predicts event 100% of the time; 1440 false alarms/day
 - ❌ **TRL5 Criteria:** Failed Binary Macro-F1 (0.446 < 0.65) and False Alarms/Day (1440 > 3.0)
-- ✅ **Beats baselines** on recall (1.0) and lead time (13.6 hrs)
+- ⚠️ **No practical discrimination:** Recall and lead time are trivial artifacts of always alarming
 
-**Verdict:** TRL4 maintained. Methodology is sound but features/labeling require redesign before production.
+**Verdict:** TRL4 maintained. Methodology is sound but detector provides no operational value; requires feature engineering redesign.
 
 **Documents**:
 - [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (predeclared, commit bcea1d4, unchanged)

@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-The OGIM anomaly detection component was validated on **real field data** from the Petrobras 3W dataset (https://github.com/petrobras/3W), using 20 instances per class across 10 event classes (0-9). The evaluation employed:
+The OGIM anomaly detection component was evaluated on **real field data** from the Petrobras 3W dataset (https://github.com/petrobras/3W), using 20 instances per class across 10 event classes (0-9). The evaluation employed:
 - **Balanced sampling** including normal (class-0) instances
 - **Per-sample binary labeling** from the 3W `class` column (0=normal, >0=event)
 - **Well-grouped splits** to prevent leakage (60% train, 20% validation, 20% test)
@@ -33,20 +33,21 @@ The OGIM anomaly detection component was validated on **real field data** from t
 
 **Metrics (with 95% CI):**
 - **Binary Macro-F1:** 0.446 [0.445, 0.447] ❌ (Criterion: ≥0.65)
-- **Event Recall:** 1.000 [1.000, 1.000] ✅ (Criterion: ≥0.75)
+- **Event Recall:** 1.000 [1.000, 1.000] (trivial; detector always alarms)
 - **Precision:** 0.805
-- **False Alarms/Day:** 1440.0 ❌ (Criterion: ≤3.0)
-- **Lead Time:** 49,080 seconds (~13.6 hrs) ✅ (Criterion: ≥60s)
+- **False Alarms/Day:** 1440.0 ❌ (Criterion: ≤3.0; alarms every minute)
+- **Lead Time:** 49,080 seconds (~13.6 hrs) (not meaningful; detector alarms immediately)
 
 **Baseline Comparison:**
 - Z-score: F1=0.187, R=0.032, FP/day=102.0
 - Threshold (99th percentile): F1=0.232, R=0.105, FP/day=327.1
-- **OGIM beats baselines on recall and lead time** but exhibits degenerate behavior (100% event predictions).
+- **OGIM detector is degenerate (TN=0):** predicts event 100% of the time, providing no practical discrimination. Recall and lead time metrics are not meaningful.
 
 **Leakage Audit:** ✅ **PASSED**
 - ✅ Split leakage: no well overlap
 - ✅ Feature leakage: no label columns in features
-- ✅ Perfect separation: metrics reasonable (P=0.805, R=1.0)
+- ✅ Perfect separation: metrics reasonable (P=0.805, R=1.0, F1=0.446)
+- ✅ Missing class check: both normal and event classes present in test set
 
 ### TRL Verdict
 
@@ -55,7 +56,7 @@ The OGIM anomaly detection component was validated on **real field data** from t
 - ❌ Binary Macro-F1 ≥0.65 (achieved 0.446)
 - ❌ False Alarms/Day ≤3.0 (achieved 1440.0 = every minute)
 
-**Root Cause:** The model predicts 100% event class despite class-weighted training and threshold tuning. This indicates the features (rolling statistics over 60s windows) cannot distinguish normal steady-state operations from pre-onset transients in the 3W data. The high false alarm rate (1440/day) renders the detector unusable in production.
+**Root Cause:** The detector is degenerate (TN=0): it predicts event 100% of the time despite class-weighted training and validation-tuned threshold. The features (rolling statistics over 60s windows) provide no practical discrimination between normal steady-state and pre-onset transients in 3W data. The detector has no operational value; recall and lead time are trivial artifacts of always alarming.
 
 ---
 
@@ -128,7 +129,7 @@ The OGIM anomaly detection component was validated on **real field data** from t
 
 ## Conclusion
 
-The OGIM anomaly detector was validated on real Petrobras 3W field data with honest reporting. The model achieved high recall (1.0) and lead time (13.6 hrs) but failed Binary Macro-F1 and false alarm rate criteria due to degenerate predictions. **TRL4 verdict is maintained.** TRL5 advancement requires feature/labeling improvements and NISOC-specific tuning.
+The OGIM anomaly detector was evaluated on real Petrobras 3W field data with honest reporting. **The detector is degenerate (TN=0):** it predicts event 100% of the time, providing no practical discrimination. Recall (1.0) and lead time (13.6 hrs) are trivial artifacts of always alarming and are not meaningful metrics. The detector failed Binary Macro-F1 and false alarm rate criteria. **TRL4 verdict is maintained.** TRL5 advancement requires feature engineering redesign and NISOC-specific tuning with field data.
 
 ---
 
