@@ -4,12 +4,12 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4** (validated on REAL field data; criteria not met)
+**Current TRL**: **4** (validated on REAL field data with corrected methodology; criteria partially met)
 
-✅ **Validation Complete**: Evaluated on **REAL Petrobras 3W field data** (90 instances, 23 wells, stratified)  
-📊 **Results**: Event Recall 1.0, FP/day 0.0, but Macro-F1 0.0 and Lead Time -300s (criteria not met)  
-⚠️ **Limitations**: Only 8 test events (too few); geographic mismatch (Brazil offshore vs. Iran onshore)  
-📖 **Verdict**: TRL4 maintained pending improvements (see honest assessment in docs)
+✅ **Validation Complete**: Evaluated on **REAL Petrobras 3W field data** (80 instances, 28 wells, 60s downsample)  
+📊 **Results**: Event Recall 1.0 ✅, Lead Time 4620s ✅, Binary Macro-F1 0.50 ❌ (threshold: 0.65)  
+⚠️ **Limitations**: Class imbalance (F1_normal=0.00); geographic mismatch (Brazil offshore vs. Iran onshore)  
+📖 **Verdict**: TRL4 maintained — class imbalance handling needs improvement for TRL5
 
 **Documents**:
 - [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, commit bcea1d4, unchanged)

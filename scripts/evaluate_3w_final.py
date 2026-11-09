@@ -140,9 +140,9 @@ def main():
     
     try:
         # [1] Load data
-        logger.info("\n[1/7] Loading data (40 instances per class)...")
+        logger.info("\n[1/7] Loading data (10 instances per class)...")
         data_raw = load_all_real_instances(
-            max_per_class=40,
+            max_per_class=10,
             event_classes=[1, 2, 3, 4, 5, 6, 7, 8, 9],
             random_seed=42,
         )

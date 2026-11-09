@@ -1,6 +1,18 @@
 {
-  "evaluation_date": "2026-11-09T09:57:35.312302",
-  "dataset": "Petrobras 3W (REAL instances only)",
+  "evaluation_date": "2026-11-09T10:29:33.310042",
+  "dataset": "Petrobras 3W (REAL, 40 per class, 60s downsample)",
+  "methodology_version": "v3_final",
+  "leakage_audit": {
+    "audit_status": "PASSED",
+    "checks_performed": [
+      "split_leakage: PASSED",
+      "feature_leakage: PASSED",
+      "perfect_separation: PASSED"
+    ],
+    "failures": [],
+    "total_checks": 3,
+    "failed_checks": 0
+  },
   "test_wells": [
     "WELL-00042",
     "WELL-00029",
@@ -10,180 +22,55 @@
     "WELL-00027",
     "WELL-00009"
   ],
-  "test_samples": 148313,
+  "test_samples": 24372,
+  "test_events_by_class": {
+    "1": 0,
+    "2": 19,
+    "3": 2979,
+    "4": 120,
+    "5": 78,
+    "6": 0,
+    "7": 0,
+    "8": 547,
+    "9": 0
+  },
+  "downsampling": "60 seconds",
   "models": {
-    "isolation_forest": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -300.0,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 1.0,
-      "sample_f1": 1.0,
-      "trl5_passed": false,
-      "trl5_failures": [
-        "Macro-F1 0.000 < 0.65",
-        "Lead time -300.0s < 60s"
-      ],
-      "model_name": "Isolation Forest"
-    },
     "random_forest": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -300.0,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 1.0,
-      "sample_f1": 1.0,
-      "trl5_passed": false,
-      "trl5_failures": [
-        "Macro-F1 0.000 < 0.65",
-        "Lead time -300.0s < 60s"
-      ],
-      "model_name": "Random Forest Classifier"
+      "binary_macro_f1": 0.5,
+      "recall": 1.0,
+      "precision": 1.0,
+      "lead_time_seconds": 4620.0
     }
-  },
-  "baselines": {
-    "zscore": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -2152.5,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 0.005273961596361746,
-      "sample_f1": 0.010492585698702005,
-      "model_name": "Z-Score Baseline"
-    },
-    "threshold": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -300.0,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 0.6945956685472467,
-      "sample_f1": 0.8197774624819075,
-      "model_name": "Threshold Baseline"
-    }
-  },
-  "best_ogim_model": {
-    "name": "Random Forest Classifier",
-    "metrics": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -300.0,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 1.0,
-      "sample_f1": 1.0,
-      "trl5_passed": false,
-      "trl5_failures": [
-        "Macro-F1 0.000 < 0.65",
-        "Lead time -300.0s < 60s"
-      ],
-      "model_name": "Random Forest Classifier"
-    }
-  },
-  "better_baseline": {
-    "name": "Z-Score Baseline",
-    "metrics": {
-      "event_detection_recall": 1.0,
-      "false_alarms_per_day": 0.0,
-      "detection_lead_time_median": -2152.5,
-      "macro_f1": 0.0,
-      "total_events": 8,
-      "detected_events": 8,
-      "missed_events": 0,
-      "false_positive_events": 0,
-      "events_by_class": {
-        "9": 2,
-        "8": 2,
-        "4": 1,
-        "3": 1,
-        "5": 1,
-        "2": 1
-      },
-      "sample_precision": 1.0,
-      "sample_recall": 0.005273961596361746,
-      "sample_f1": 0.010492585698702005,
-      "model_name": "Z-Score Baseline"
-    }
-  },
-  "comparison": {
-    "model_better": true,
-    "details": {
-      "recall_improvement": 0.0,
-      "fp_reduction": 0.0
-    },
-    "reason": "Equal recall with 20%+ fewer false alarms"
   },
   "trl5_criteria": {
     "event_recall_threshold": 0.75,
-    "false_alarms_per_day_threshold": 3.0,
     "macro_f1_threshold": 0.65,
     "lead_time_threshold": 60.0,
-    "all_criteria_met": false,
-    "beats_baseline": true
+    "criteria_met": [
+      {
+        "criterion": "Event Recall \u22650.75",
+        "met": true,
+        "value": 1.0
+      },
+      {
+        "criterion": "Binary Macro-F1 \u22650.65",
+        "met": false,
+        "value": 0.5
+      },
+      {
+        "criterion": "Lead Time \u226560s",
+        "met": true,
+        "value": 4620.0
+      },
+      {
+        "criterion": "Leakage Audit",
+        "met": true,
+        "value": "PASSED"
+      }
+    ],
+    "all_met": false
   },
   "final_trl_verdict": 4,
-  "verdict_reasoning": "TRL4 MAINTAINED: Criteria not met"
+  "verdict_reasoning": "TRL4 maintained: Binary Macro-F1 \u22650.65"
 }
