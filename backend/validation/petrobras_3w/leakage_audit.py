@@ -57,7 +57,9 @@ class LeakageAuditor:
         self.checks.append("feature_leakage: PASSED")
         return True
 
-    def check_split_leakage(self, train_wells: List[str], test_wells: List[str]) -> bool:
+    def check_split_leakage(
+        self, train_wells: List[str], test_wells: List[str]
+    ) -> bool:
         """
         Check that train and test wells do not overlap.
 
@@ -73,7 +75,9 @@ class LeakageAuditor:
         overlap = train_set & test_set
 
         if overlap:
-            msg = f"Split leakage detected: wells {overlap} appear in both train and test"
+            msg = (
+                f"Split leakage detected: wells {overlap} appear in both train and test"
+            )
             logger.error(msg)
             self.failures.append(msg)
             return False
@@ -106,7 +110,8 @@ class LeakageAuditor:
         if len(features_df) > split_index:
             # Check if features near boundary exist
             near_boundary = (
-                (features_df.index >= danger_zone_start) & (features_df.index < danger_zone_end)
+                (features_df.index >= danger_zone_start)
+                & (features_df.index < danger_zone_end)
             ).sum()
 
             if near_boundary > 0:
@@ -115,7 +120,9 @@ class LeakageAuditor:
                     f"{sequence_length} samples of split boundary"
                 )
                 logger.warning(msg)
-                self.checks.append(f"temporal_leakage: WARNING ({near_boundary} at risk)")
+                self.checks.append(
+                    f"temporal_leakage: WARNING ({near_boundary} at risk)"
+                )
                 return True  # Warning, not failure
 
         logger.info("✓ Temporal leakage check PASSED: no windows crossing split")

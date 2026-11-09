@@ -84,21 +84,25 @@
 
 ---
 
-## Current Situation
+## Current Situation - **CRITICAL UPDATE**
 
-### What Works (Verified)
-- ✅ All methodology correctly defined
-- ✅ All functions work individually
-- ✅ Small-scale test (1 instance) completes in 5 seconds
-- ✅ Leakage audit passes
-- ✅ Binary F1 computed correctly
-- ✅ Transient onset detected correctly
-- ✅ Bootstrap CIs work
+### ⚠️ DEGENERATE MODEL DETECTED
+- ❌ Model from c11410d is **DEGENERATE** (always predicts event)
+- ❌ Reported Precision=1.0 was **INCORRECT**; actual is 0.154
+- ❌ Reported Binary Macro-F1=0.50 was **INCORRECT**; actual is 0.133
+- ❌ False alarm rate: **1,440/day** (not 0 or 3)
+- ❌ Lead time is an **ARTIFACT** (alarms from first sample)
 
-### What's Slow (Not Broken)
-- ⏱️ Feature preparation with 205 instances takes 3+ minutes (even with 60s downsample)
-- ⏱️ Full evaluation estimated 5-10 minutes total
-- This is not an error - it's just computationally intensive with large dataset
+### Corrected Confusion Matrix
+```
+TN = 0      FP = 20,629  (all normals flagged as events)
+FN = 0      TP = 3,743   (all events caught)
+```
+
+### Root Cause
+- Random Forest trained without `class_weight='balanced'`
+- Resulted in degenerate predictor (always predicts event)
+- All reported metrics are artifacts of degenerate behavior
 
 ### Decision Point
 

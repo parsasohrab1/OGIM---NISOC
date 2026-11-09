@@ -4,17 +4,20 @@
 
 ## 🎯 Technology Readiness Level (TRL) Status
 
-**Current TRL**: **4** (validated on REAL field data with corrected methodology; criteria partially met)
+**Current TRL**: **4** (evaluated on REAL field data with fixed methodology)
 
-✅ **Validation Complete**: Evaluated on **REAL Petrobras 3W field data** (80 instances, 28 wells, 60s downsample)  
-📊 **Results**: Event Recall 1.0 ✅, Lead Time 4620s ✅, Binary Macro-F1 0.50 ❌ (threshold: 0.65)  
-⚠️ **Limitations**: Class imbalance (F1_normal=0.00); geographic mismatch (Brazil offshore vs. Iran onshore)  
-📖 **Verdict**: TRL4 maintained — class imbalance handling needs improvement for TRL5
+**Latest Evaluation** (2026-11-09, 20 instances/class, v6_optimized):
+- ✅ **Leakage audit:** PASSED (per-sample labeling, well-grouped splits, balanced training, missing-class check)
+- ❌ **Detector is degenerate (TN=0):** Predicts event 100% of the time; 1440 false alarms/day
+- ❌ **TRL5 Criteria:** Failed Binary Macro-F1 (0.446 < 0.65) and False Alarms/Day (1440 > 3.0)
+- ⚠️ **No practical discrimination:** Recall and lead time are trivial artifacts of always alarming
+
+**Verdict:** TRL4 maintained. Methodology is sound but detector provides no operational value; requires feature engineering redesign.
 
 **Documents**:
-- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (pre-declared, commit bcea1d4, unchanged)
-- [Real Data Validation Report](docs/validation-real-data.md) (honest assessment, limitations documented)
-- [Validation Results JSON](results/3w_validation_results.json) (complete metrics)
+- [TRL5 Acceptance Criteria](TRL5_ACCEPTANCE_CRITERIA.md) (predeclared, commit bcea1d4, unchanged)
+- [Real Data Validation Report](docs/validation-real-data.md) (complete findings, limitations, recommendations)
+- [Validation Results JSON](results/3w_validation_results.json) (20 instances/class, full confusion matrix + CIs)
 
 ## وضعیت داده — مهم
 
