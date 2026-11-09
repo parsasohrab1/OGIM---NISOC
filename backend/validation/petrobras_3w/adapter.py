@@ -151,7 +151,9 @@ def create_feature_vectors(df: pd.DataFrame, sequence_length: int = 60) -> pd.Da
     df_wide = df_wide.sort_values("timestamp")
 
     # Extract sensor columns
-    sensor_cols = [col for col in df_wide.columns if col not in ["timestamp", "well_id"]]
+    sensor_cols = [
+        col for col in df_wide.columns if col not in ["timestamp", "well_id"]
+    ]
 
     features = []
 
@@ -179,16 +181,18 @@ def create_feature_vectors(df: pd.DataFrame, sequence_length: int = 60) -> pd.Da
 
             # Rate of change
             if len(window_values) > 1:
-                feature_dict[f"{col}_rate"] = (window_values[-1] - window_values[0]) / len(
-                    window_values
-                )
+                feature_dict[f"{col}_rate"] = (
+                    window_values[-1] - window_values[0]
+                ) / len(window_values)
             else:
                 feature_dict[f"{col}_rate"] = 0.0
 
         features.append(feature_dict)
 
     features_df = pd.DataFrame(features)
-    logger.info(f"Created {len(features_df)} feature vectors with {len(features_df.columns)} features")
+    logger.info(
+        f"Created {len(features_df)} feature vectors with {len(features_df.columns)} features"
+    )
     return features_df
 
 

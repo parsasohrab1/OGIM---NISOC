@@ -133,7 +133,9 @@ def compute_sha256(file_path: Path) -> str:
     return sha256_hash.hexdigest()
 
 
-def download_file(url: str, dest_path: Path, expected_sha256: Optional[str] = None) -> None:
+def download_file(
+    url: str, dest_path: Path, expected_sha256: Optional[str] = None
+) -> None:
     """Download a file with optional checksum verification."""
     dest_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -282,7 +284,9 @@ def load_all_real_instances() -> Dict[str, pd.DataFrame]:
 
             well_id = meta["well"]
             if well_id in instances:
-                instances[well_id] = pd.concat([instances[well_id], df], ignore_index=True)
+                instances[well_id] = pd.concat(
+                    [instances[well_id], df], ignore_index=True
+                )
             else:
                 instances[well_id] = df
 

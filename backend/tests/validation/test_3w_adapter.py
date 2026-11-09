@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from validation.petrobras_3w.adapter import (
@@ -33,13 +34,15 @@ def test_variable_mapping():
 def test_adapt_3w_to_ogim():
     """Test adaptation of 3W data to OGIM schema."""
     # Create synthetic 3W data
-    df_3w = pd.DataFrame({
-        "timestamp": pd.date_range("2017-01-01", periods=100, freq="1s"),
-        "P-PDG": np.random.uniform(100, 200, 100),
-        "P-TPT": np.random.uniform(30, 80, 100),
-        "T-TPT": np.random.uniform(50, 70, 100),
-        "event_type": np.zeros(100, dtype=int),
-    })
+    df_3w = pd.DataFrame(
+        {
+            "timestamp": pd.date_range("2017-01-01", periods=100, freq="1s"),
+            "P-PDG": np.random.uniform(100, 200, 100),
+            "P-TPT": np.random.uniform(30, 80, 100),
+            "T-TPT": np.random.uniform(50, 70, 100),
+            "event_type": np.zeros(100, dtype=int),
+        }
+    )
     df_3w["event_type"][40:60] = 1  # Inject anomaly
 
     # Adapt to OGIM
@@ -77,15 +80,17 @@ def test_create_feature_vectors():
 
     for ts in timestamps:
         for tag in ["PDG_PRESSURE", "TPT_PRESSURE", "TPT_TEMPERATURE"]:
-            records.append({
-                "timestamp": ts,
-                "well_id": "WELL-TEST",
-                "sensor_tag": tag,
-                "value": np.random.uniform(50, 100),
-                "unit": "bar" if "PRESSURE" in tag else "degC",
-                "quality": 1,
-                "event_type": 0,
-            })
+            records.append(
+                {
+                    "timestamp": ts,
+                    "well_id": "WELL-TEST",
+                    "sensor_tag": tag,
+                    "value": np.random.uniform(50, 100),
+                    "unit": "bar" if "PRESSURE" in tag else "degC",
+                    "quality": 1,
+                    "event_type": 0,
+                }
+            )
 
     df_ogim = pd.DataFrame(records)
 
@@ -99,7 +104,9 @@ def test_create_feature_vectors():
     assert "well_id" in features_df.columns
 
     # Check feature columns
-    feature_cols = [col for col in features_df.columns if col not in ["timestamp", "well_id"]]
+    feature_cols = [
+        col for col in features_df.columns if col not in ["timestamp", "well_id"]
+    ]
     assert len(feature_cols) > 0
 
     # Should have current, mean, std, min, max, range, rate for each sensor

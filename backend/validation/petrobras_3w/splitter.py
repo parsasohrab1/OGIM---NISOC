@@ -21,7 +21,9 @@ class WellGroupSplitter:
     Ensures no well appears in multiple splits to avoid leakage.
     """
 
-    def __init__(self, train_ratio: float = 0.6, val_ratio: float = 0.2, random_seed: int = 42):
+    def __init__(
+        self, train_ratio: float = 0.6, val_ratio: float = 0.2, random_seed: int = 42
+    ):
         """
         Args:
             train_ratio: Fraction of wells for training
@@ -90,7 +92,9 @@ class WellGroupSplitter:
 
     def split_dataset(
         self, data: Dict[str, pd.DataFrame]
-    ) -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]]:
+    ) -> Tuple[
+        Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]
+    ]:
         """
         Split dataset dictionary by wells.
 
@@ -131,9 +135,17 @@ class WellGroupSplitter:
         """Generate summary statistics for each split."""
         summaries = []
 
-        for split_name, split_data in [("train", train_data), ("val", val_data), ("test", test_data)]:
+        for split_name, split_data in [
+            ("train", train_data),
+            ("val", val_data),
+            ("test", test_data),
+        ]:
             for well_id, df in split_data.items():
-                event_counts = df["event_type"].value_counts() if "event_type" in df.columns else {}
+                event_counts = (
+                    df["event_type"].value_counts()
+                    if "event_type" in df.columns
+                    else {}
+                )
 
                 summaries.append(
                     {
@@ -141,12 +153,16 @@ class WellGroupSplitter:
                         "well_id": well_id,
                         "total_samples": len(df),
                         "duration_hours": len(df) / 3600,
-                        "normal_samples": (df["event_type"] == 0).sum()
-                        if "event_type" in df.columns
-                        else 0,
-                        "anomaly_samples": (df["event_type"] > 0).sum()
-                        if "event_type" in df.columns
-                        else 0,
+                        "normal_samples": (
+                            (df["event_type"] == 0).sum()
+                            if "event_type" in df.columns
+                            else 0
+                        ),
+                        "anomaly_samples": (
+                            (df["event_type"] > 0).sum()
+                            if "event_type" in df.columns
+                            else 0
+                        ),
                         "unique_events": len(event_counts),
                     }
                 )

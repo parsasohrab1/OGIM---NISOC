@@ -207,7 +207,11 @@ def evaluate_baseline(
         Dictionary of evaluation metrics
     """
     # Fit baseline
-    baseline.fit(train_df, sensor_cols) if hasattr(baseline, "fit") else baseline.fit(train_df)
+    (
+        baseline.fit(train_df, sensor_cols)
+        if hasattr(baseline, "fit")
+        else baseline.fit(train_df)
+    )
 
     # Predict
     predictions = baseline.predict(test_df, sensor_cols)
@@ -280,13 +284,17 @@ if __name__ == "__main__":
     ]
     sensor_cols = [col for col in sensor_cols if col in train_df.columns]
 
-    print(f"\nEvaluating on {len(test_df)} test samples with {len(sensor_cols)} sensors")
+    print(
+        f"\nEvaluating on {len(test_df)} test samples with {len(sensor_cols)} sensors"
+    )
 
     # Evaluate Z-Score baseline
     print("\n" + "=" * 60)
     print("1. Rolling Z-Score Baseline")
     print("=" * 60)
-    zscore_baseline = RollingZScoreBaseline(window_size=60, z_threshold=3.0, min_sensors_trigger=2)
+    zscore_baseline = RollingZScoreBaseline(
+        window_size=60, z_threshold=3.0, min_sensors_trigger=2
+    )
     zscore_metrics = evaluate_baseline(zscore_baseline, train_df, test_df, sensor_cols)
     print(f"Recall: {zscore_metrics['recall']:.3f}")
     print(f"Precision: {zscore_metrics['precision']:.3f}")
@@ -300,7 +308,9 @@ if __name__ == "__main__":
     threshold_baseline = StaticThresholdBaseline(
         lower_quantile=0.05, upper_quantile=0.95, min_consecutive=30
     )
-    threshold_metrics = evaluate_baseline(threshold_baseline, train_df, test_df, sensor_cols)
+    threshold_metrics = evaluate_baseline(
+        threshold_baseline, train_df, test_df, sensor_cols
+    )
     print(f"Recall: {threshold_metrics['recall']:.3f}")
     print(f"Precision: {threshold_metrics['precision']:.3f}")
     print(f"F1: {threshold_metrics['f1']:.3f}")

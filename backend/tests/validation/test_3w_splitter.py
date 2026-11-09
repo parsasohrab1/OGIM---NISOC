@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from validation.petrobras_3w.splitter import (
@@ -21,11 +22,13 @@ def create_mock_data(n_wells=8):
     data = {}
     for i in range(n_wells):
         well_id = f"WELL-{i:03d}"
-        df = pd.DataFrame({
-            "timestamp": pd.date_range("2017-01-01", periods=1000, freq="1s"),
-            "value": np.random.randn(1000),
-            "event_type": np.random.choice([0, 1, 2], 1000, p=[0.8, 0.1, 0.1]),
-        })
+        df = pd.DataFrame(
+            {
+                "timestamp": pd.date_range("2017-01-01", periods=1000, freq="1s"),
+                "value": np.random.randn(1000),
+                "event_type": np.random.choice([0, 1, 2], 1000, p=[0.8, 0.1, 0.1]),
+            }
+        )
         data[well_id] = df
     return data
 

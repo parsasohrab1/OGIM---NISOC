@@ -21,8 +21,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "backend"))
 from validation.petrobras_3w.loader import load_all_real_instances
 from validation.petrobras_3w.adapter import adapt_3w_to_ogim, create_feature_vectors
 from validation.petrobras_3w.splitter import WellGroupSplitter
-from validation.petrobras_3w.baselines import RollingZScoreBaseline, StaticThresholdBaseline
-from validation.petrobras_3w.evaluator import EventDetectionEvaluator, compare_to_baseline
+from validation.petrobras_3w.baselines import (
+    RollingZScoreBaseline,
+    StaticThresholdBaseline,
+)
+from validation.petrobras_3w.evaluator import (
+    EventDetectionEvaluator,
+    compare_to_baseline,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,7 +36,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-MODEL_DIR = Path(__file__).parent.parent / "backend" / "ml-inference-service" / "models" / "3w_validation"
+MODEL_DIR = (
+    Path(__file__).parent.parent
+    / "backend"
+    / "ml-inference-service"
+    / "models"
+    / "3w_validation"
+)
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -109,7 +121,9 @@ def evaluate_model(model, X, y, df, model_name):
 
     logger.info(f"{model_name} - Event Recall: {metrics['event_detection_recall']:.3f}")
     logger.info(f"{model_name} - FP/day: {metrics['false_alarms_per_day']:.2f}")
-    logger.info(f"{model_name} - Lead Time: {metrics['detection_lead_time_median']:.1f}s")
+    logger.info(
+        f"{model_name} - Lead Time: {metrics['detection_lead_time_median']:.1f}s"
+    )
     logger.info(f"{model_name} - Macro-F1: {metrics['macro_f1']:.3f}")
     logger.info(f"{model_name} - TRL5: {'PASSED' if passed else 'FAILED'}")
 
@@ -152,13 +166,20 @@ def evaluate_baseline_on_raw(baseline, train_df, test_df, baseline_name):
 
     # Event-level evaluation
     evaluator = EventDetectionEvaluator(detection_window=300, min_event_duration=10)
-    metrics = evaluator.compute_metrics(y, predictions, test_df, label_col="event_type" if "event_type" in test_df.columns else "class")
+    metrics = evaluator.compute_metrics(
+        y,
+        predictions,
+        test_df,
+        label_col="event_type" if "event_type" in test_df.columns else "class",
+    )
 
     # Remove event details
     metrics_clean = {k: v for k, v in metrics.items() if k != "events"}
     metrics_clean["model_name"] = baseline_name
 
-    logger.info(f"{baseline_name} - Event Recall: {metrics['event_detection_recall']:.3f}")
+    logger.info(
+        f"{baseline_name} - Event Recall: {metrics['event_detection_recall']:.3f}"
+    )
     logger.info(f"{baseline_name} - FP/day: {metrics['false_alarms_per_day']:.2f}")
     logger.info(f"{baseline_name} - Macro-F1: {metrics['macro_f1']:.3f}")
 
@@ -184,7 +205,9 @@ def main():
 
     # Prepare test features
     logger.info("\n[3/7] Preparing test features...")
-    X_test, y_test, features_df, raw_test_df = prepare_test_features(test_data, sequence_length=60)
+    X_test, y_test, features_df, raw_test_df = prepare_test_features(
+        test_data, sequence_length=60
+    )
 
     # Load models
     logger.info("\n[4/7] Loading trained models...")
@@ -204,8 +227,12 @@ def main():
     # Evaluate OGIM models
     logger.info("\n[5/7] Evaluating OGIM models on test set...")
 
-    iso_metrics = evaluate_model(iso_forest, X_test_scaled, y_test, features_df, "Isolation Forest")
-    rf_metrics = evaluate_model(rf_classifier, X_test_scaled, y_test, features_df, "Random Forest Classifier")
+    iso_metrics = evaluate_model(
+        iso_forest, X_test_scaled, y_test, features_df, "Isolation Forest"
+    )
+    rf_metrics = evaluate_model(
+        rf_classifier, X_test_scaled, y_test, features_df, "Random Forest Classifier"
+    )
 
     # Select best OGIM model
     if rf_metrics["event_detection_recall"] >= iso_metrics["event_detection_recall"]:
@@ -224,16 +251,25 @@ def main():
     train_df = pd.concat(train_data.values(), ignore_index=True)
     test_df = pd.concat(test_data.values(), ignore_index=True)
 
-    zscore_baseline = RollingZScoreBaseline(window_size=60, z_threshold=3.0, min_sensors_trigger=2)
-    zscore_metrics = evaluate_baseline_on_raw(zscore_baseline, train_df, test_df, "Z-Score Baseline")
+    zscore_baseline = RollingZScoreBaseline(
+        window_size=60, z_threshold=3.0, min_sensors_trigger=2
+    )
+    zscore_metrics = evaluate_baseline_on_raw(
+        zscore_baseline, train_df, test_df, "Z-Score Baseline"
+    )
 
     threshold_baseline = StaticThresholdBaseline(
         lower_quantile=0.05, upper_quantile=0.95, min_consecutive=30
     )
-    threshold_metrics = evaluate_baseline_on_raw(threshold_baseline, train_df, test_df, "Threshold Baseline")
+    threshold_metrics = evaluate_baseline_on_raw(
+        threshold_baseline, train_df, test_df, "Threshold Baseline"
+    )
 
     # Select better baseline
-    if zscore_metrics["event_detection_recall"] >= threshold_metrics["event_detection_recall"]:
+    if (
+        zscore_metrics["event_detection_recall"]
+        >= threshold_metrics["event_detection_recall"]
+    ):
         better_baseline_metrics = zscore_metrics
         better_baseline_name = "Z-Score Baseline"
     else:

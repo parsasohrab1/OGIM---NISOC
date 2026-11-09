@@ -70,7 +70,9 @@ class EventDetectionEvaluator:
                 elif current_event["event_type"] != event_type:
                     # Event type changed, close current and start new
                     current_event["end_idx"] = idx - 1
-                    current_event["end_time"] = df.iloc[idx - 1].get("timestamp", idx - 1)
+                    current_event["end_time"] = df.iloc[idx - 1].get(
+                        "timestamp", idx - 1
+                    )
                     current_event["duration"] = (
                         current_event["end_idx"] - current_event["start_idx"] + 1
                     )
@@ -86,7 +88,9 @@ class EventDetectionEvaluator:
                 if current_event is not None:
                     # Close current event
                     current_event["end_idx"] = idx - 1
-                    current_event["end_time"] = df.iloc[idx - 1].get("timestamp", idx - 1)
+                    current_event["end_time"] = df.iloc[idx - 1].get(
+                        "timestamp", idx - 1
+                    )
                     current_event["duration"] = (
                         current_event["end_idx"] - current_event["start_idx"] + 1
                     )
@@ -105,7 +109,9 @@ class EventDetectionEvaluator:
         # Filter by minimum duration
         events = [e for e in events if e["duration"] >= self.min_event_duration]
 
-        logger.info(f"Extracted {len(events)} events (min_duration={self.min_event_duration})")
+        logger.info(
+            f"Extracted {len(events)} events (min_duration={self.min_event_duration})"
+        )
         return events
 
     def match_predictions_to_events(
@@ -145,7 +151,9 @@ class EventDetectionEvaluator:
 
             if first_detection_idx is not None:
                 # Event detected
-                lead_time = start_idx - first_detection_idx  # Positive = early, negative = late
+                lead_time = (
+                    start_idx - first_detection_idx
+                )  # Positive = early, negative = late
 
                 matched_event = gt_event.copy()
                 matched_event["detected"] = True
@@ -203,7 +211,9 @@ class EventDetectionEvaluator:
 
         # Event detection recall
         detected_events = [e for e in matched_events if e["detected"]]
-        event_recall = len(detected_events) / len(gt_events) if len(gt_events) > 0 else 0.0
+        event_recall = (
+            len(detected_events) / len(gt_events) if len(gt_events) > 0 else 0.0
+        )
 
         # False alarms per day
         total_days = len(df) / (3600 * 24)  # Assume 1 Hz sampling
@@ -314,7 +324,8 @@ def compare_to_baseline(model_metrics: Dict, baseline_metrics: Dict) -> Dict:
 
     # Check recall improvement
     recall_improvement = (
-        model_metrics["event_detection_recall"] - baseline_metrics["event_detection_recall"]
+        model_metrics["event_detection_recall"]
+        - baseline_metrics["event_detection_recall"]
     )
     comparison["details"]["recall_improvement"] = recall_improvement
 
@@ -330,7 +341,10 @@ def compare_to_baseline(model_metrics: Dict, baseline_metrics: Dict) -> Dict:
     if recall_improvement > 0:
         comparison["model_better"] = True
         comparison["reason"] = "Higher recall than baseline"
-    elif recall_improvement == 0 and fp_reduction >= 0.2 * baseline_metrics["false_alarms_per_day"]:
+    elif (
+        recall_improvement == 0
+        and fp_reduction >= 0.2 * baseline_metrics["false_alarms_per_day"]
+    ):
         comparison["model_better"] = True
         comparison["reason"] = "Equal recall with 20%+ fewer false alarms"
     else:

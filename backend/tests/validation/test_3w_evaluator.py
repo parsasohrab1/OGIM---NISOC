@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from validation.petrobras_3w.evaluator import (
@@ -27,10 +28,12 @@ def create_test_data():
     ground_truth[1500:1650] = 2  # Event 2: 150 samples
     ground_truth[2800:3000] = 1  # Event 3: 200 samples
 
-    df = pd.DataFrame({
-        "timestamp": timestamps,
-        "event_type": ground_truth,
-    })
+    df = pd.DataFrame(
+        {
+            "timestamp": timestamps,
+            "event_type": ground_truth,
+        }
+    )
 
     return df, ground_truth
 
@@ -76,7 +79,9 @@ def test_match_predictions_to_events():
 
     evaluator = EventDetectionEvaluator(detection_window=300, min_event_duration=10)
     gt_events = evaluator.extract_events(df, label_col="event_type")
-    matched_events, fp_count = evaluator.match_predictions_to_events(gt_events, predictions, df)
+    matched_events, fp_count = evaluator.match_predictions_to_events(
+        gt_events, predictions, df
+    )
 
     # Should have 3 events (2 detected, 1 missed)
     assert len(matched_events) == 3
@@ -96,7 +101,9 @@ def test_compute_metrics():
     predictions = (ground_truth > 0).astype(int)
 
     evaluator = EventDetectionEvaluator(detection_window=300, min_event_duration=10)
-    metrics = evaluator.compute_metrics(ground_truth, predictions, df, label_col="event_type")
+    metrics = evaluator.compute_metrics(
+        ground_truth, predictions, df, label_col="event_type"
+    )
 
     # Check metric structure
     assert "event_detection_recall" in metrics
