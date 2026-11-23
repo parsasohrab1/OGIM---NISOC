@@ -106,22 +106,22 @@ SUBSIDIARIES = [
 # dashboard displays, instead of the frontend's mock fallback being the
 # only place this data exists.
 EQUIPMENT_TYPE_LABEL_FA = {
-    "mot": "تجهیزات MOT (اندازه‌گیری چند فازی سیار)",
-    "rig": "دکل حفاری/تعمیر (Rig)",
-    "pipeline": "خطوط لوله",
-    "truck": "تراک (خودروی سرویس)",
-    "vfm": "دبی‌سنج مجازی (VFM)",
-    "coiled_tubing": "واحد کویل تیوبینگ (Coiled Tubing)",
-    "massive_acidizing": "عملیات اسیدکاری حجیم (Massive Acidizing)",
-    "injectivity": "آزمون تزریق‌پذیری (Injectivity Test)",
-    "fluid_injection": "تزریق سیال (Fluid Injection)",
-    "logging": "لاگ‌گیری چاه (Logging)",
-    "perforating": "عملیات پرفراسیون (Perforating)",
-    "shutoff_isolation": "مسدودسازی و ایزوله‌سازی (Shut-off / Isolation)",
-    "mobile_processing_unit": "واحد فرآورش سیار (Mobile Processing Unit)",
-    "slickline": "عملیات اسلیک‌لاین (Slickline)",
-    "workover_rig": "دکل تعمیر چاه (Workover Rig)",
-    "development_rig": "دکل حفاری توسعه‌ای (Development Rig)",
+    "mot": "MOT equipment (mobile multiphase measurement)",
+    "rig": "Drilling/workover rig (Rig)",
+    "pipeline": "Pipelines",
+    "truck": "Truck (service vehicle)",
+    "vfm": "Virtual flow meter (VFM)",
+    "coiled_tubing": "Coiled tubing unit (Coiled Tubing)",
+    "massive_acidizing": "Massive acidizing operation (Massive Acidizing)",
+    "injectivity": "Injectivity test (Injectivity Test)",
+    "fluid_injection": "Fluid injection (Fluid Injection)",
+    "logging": "Well logging (Logging)",
+    "perforating": "Perforating operation (Perforating)",
+    "shutoff_isolation": "Shut-off and isolation (Shut-off / Isolation)",
+    "mobile_processing_unit": "Mobile processing unit (Mobile Processing Unit)",
+    "slickline": "Slickline operation (Slickline)",
+    "workover_rig": "Workover rig (Workover Rig)",
+    "development_rig": "Development drilling rig (Development Rig)",
 }
 
 RIG_COUNT_BY_CODE = {"MIS": 10, "AGJ": 4, "KRN": 4, "MN": 10, "GCH": 18}

@@ -21,17 +21,17 @@ OUTPUT_DIR = Path(__file__).parent.parent / "data"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Time configuration
-START_DATE = datetime(2024, 5, 1, 0, 0, 0)  # شروع: 1 می 2024
-DURATION_DAYS = 180  # 6 ماه
-TIME_STEP_SECONDS = 1  # هر 1 ثانیه
-TOTAL_RECORDS = DURATION_DAYS * 24 * 60 * 60  # 15,552,000 رکورد
+START_DATE = datetime(2024, 5, 1, 0, 0, 0)  # Start: May 1, 2024
+DURATION_DAYS = 180  # 6 months
+TIME_STEP_SECONDS = 1  # every 1 second
+TOTAL_RECORDS = DURATION_DAYS * 24 * 60 * 60  # 15,552,000 records
 
 # Well types
 WELL_TYPES = {
-    "PROD-001": "production",  # چاه تولیدی 1
-    "PROD-002": "production",  # چاه تولیدی 2
-    "DEV-001": "development",  # چاه توسعه‌ای
-    "OBS-001": "observation",  # چاه مشاهده‌ای
+    "PROD-001": "production",  # production well 1
+    "PROD-002": "production",  # production well 2
+    "DEV-001": "development",  # development well
+    "OBS-001": "observation",  # observation well
 }
 
 
