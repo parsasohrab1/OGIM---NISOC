@@ -3,63 +3,63 @@
 ## Available Models
 
 ### 1. Anomaly Detection (Isolation Forest)
-- تشخیص ناهنجاری در داده‌های سنسور
-- استفاده از Isolation Forest
-- خروجی: anomaly score و probability
+- Anomaly detection in sensor data
+- Uses Isolation Forest
+- Output: anomaly score and probability
 
 ### 2. Failure Prediction (Random Forest)
-- پیش‌بینی احتمال خرابی تجهیزات
-- استفاده از Random Forest Classifier
-- خروجی: failure probability
+- Predicting the probability of equipment failure
+- Uses Random Forest Classifier
+- Output: failure probability
 
 ### 3. Time Series Forecasting (LSTM) ✅
-- پیش‌بینی سری‌های زمانی با استفاده از شبکه‌های عصبی بازگشتی LSTM
-- مناسب برای پیش‌بینی مقادیر آینده سنسورها
-- معماری: دو لایه LSTM با Dropout
-- پارامترهای قابل تنظیم:
-  - `seq_length`: طول دنباله ورودی (پیش‌فرض: 60)
-  - `forecast_horizon`: تعداد گام‌های پیش‌بینی (پیش‌فرض: 1)
-  - `epochs`: تعداد دوره‌های آموزش (پیش‌فرض: 50)
-  - `batch_size`: اندازه batch (پیش‌فرض: 32)
+- Time-series forecasting using LSTM recurrent neural networks
+- Suitable for predicting future sensor values
+- Architecture: two LSTM layers with Dropout
+- Configurable parameters:
+  - `seq_length`: Input sequence length (default: 60)
+  - `forecast_horizon`: Number of forecast steps (default: 1)
+  - `epochs`: Number of training epochs (default: 50)
+  - `batch_size`: Batch size (default: 32)
 
-**استفاده:**
+**Usage:**
 ```bash
-# آموزش مدل
+# Train the model
 python scripts/train_models.py --model time_series_forecast
 
-# یا از طریق API
+# Or via the API
 POST /models/time_series_forecast/train
 
-# پیش‌بینی
+# Prediction
 POST /forecast
 {
   "sensor_id": "TAG-001",
-  "historical_data": [1.2, 1.5, 1.3, ...],  # حداقل 60 نقطه
-  "forecast_steps": 5  # پیش‌بینی 5 گام آینده
+  "historical_data": [1.2, 1.5, 1.3, ...],  # at least 60 points
+  "forecast_steps": 5  # forecast 5 steps ahead
 }
 ```
 
 ## Scheduled Retraining
-- اجرای job دوره‌ای (مثل CronJob یا GitHub Actions) برای اجرای `scripts/train_models.py`.
-  - نمونه GitHub Actions: `.github/workflows/ml-retrain.yml`
-  - متغیرهای مورد نیاز: `DATABASE_URL`, `MLFLOW_TRACKING_URI`, `SYSTEM_ADMIN_TOKEN`
-- پس از موفقیت، endpoint `/models/reload` در سرویس ML فراخوانی می‌شود.
+- Run a periodic job (e.g. CronJob or GitHub Actions) to run `scripts/train_models.py`.
+  - Sample GitHub Actions: `.github/workflows/ml-retrain.yml`
+  - Required variables: `DATABASE_URL`, `MLFLOW_TRACKING_URI`, `SYSTEM_ADMIN_TOKEN`
+- After success, the `/models/reload` endpoint in the ML service is called.
 
 ## Monitoring Model Quality
-- متریک‌های دقت (accuracy، anomaly_rate) در هنگام آموزش با `_log_model_metrics` ثبت می‌شود.
-- برای خروجی Prometheus باید این متریک‌ها به صورت gauge جمع‌آوری شود (TODO: قرار دادن مقدار در endpoint metrics).
-- اگر مقدار دقت زیر 0.8 افت کند، rule `ModelAccuracyLow` فعال می‌شود.
+- Accuracy metrics (accuracy, anomaly_rate) are recorded during training with `_log_model_metrics`.
+- For Prometheus output, these metrics must be collected as gauges (TODO: put the value in the metrics endpoint).
+- If the accuracy drops below 0.8, the `ModelAccuracyLow` rule fires.
 
 ## Alerting Rules
-- فایل `infrastructure/prometheus/rules/model-quality.yml` شامل دو rule است:
-  - `ModelAccuracyLow`: accuracy < 0.8 به مدت 10 دقیقه.
-  - `ModelRetrainOverdue`: اگر بیش از 30 روز از آخرین بازآموزی بگذرد.
-- Alertmanager می‌تواند پیام را به Slack/Email ارسال کند.
+- The file `infrastructure/prometheus/rules/model-quality.yml` contains two rules:
+  - `ModelAccuracyLow`: accuracy < 0.8 for 10 minutes.
+  - `ModelRetrainOverdue`: If more than 30 days have passed since the last retraining.
+- Alertmanager can send the message to Slack/Email.
 
 ## Data Quality & Pipeline Health
-- قبل از آموزش داده‌ها validate می‌شود؛ توصیه می‌شود نرخ داده‌های invalid و سایر شاخص‌ها نیز در Prometheus ثبت شود.
-- در صورت مشاهده خطا یا کمبود داده، آموزش باید fail شود و هشدار ثبت گردد.
+- Data is validated before training; it is recommended to also record the invalid data rate and other indicators in Prometheus.
+- If an error or lack of data is observed, training must fail and an alert must be recorded.
 
 ## Rollback Strategy
-- نسخه‌های قبلی مدل در MLflow دسترس است؛ برای rollback کافیست نسخه قبل را load و `/models/reload` را فراخوانی کنید.
-- این فرآیند باید در Runbook (`HANDOFF.md`) ثبت شود.
+- Previous model versions are available in MLflow; to roll back, just load the previous version and call `/models/reload`.
+- This process must be recorded in the Runbook (`HANDOFF.md`).

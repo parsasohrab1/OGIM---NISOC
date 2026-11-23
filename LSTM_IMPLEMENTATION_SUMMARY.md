@@ -1,46 +1,46 @@
-# ✅ پیاده‌سازی مدل‌های LSTM پیشرفته
+# ✅ Implementation of Advanced LSTM Models
 
-## 📊 خلاصه پیاده‌سازی
+## 📊 Implementation summary
 
-مدل‌های LSTM پیشرفته برای پیش‌بینی دقیق‌تر رفتار چاه نفتی با موفقیت پیاده‌سازی شدند.
+Advanced LSTM models for more accurate prediction of oil well behavior were implemented successfully.
 
-## 🏗️ معماری‌های پیاده‌سازی شده
+## 🏗️ Implemented architectures
 
-### 1. Stacked LSTM (پیش‌فرض)
-- 3 لایه LSTM (128, 64, 32 units)
+### 1. Stacked LSTM (default)
+- 3 LSTM layers (128, 64, 32 units)
 - Batch Normalization
 - Dropout layers
-- Dense layers برای خروجی
+- Dense layers for the output
 
 ### 2. Bidirectional LSTM
-- LSTM دوطرفه
-- تحلیل بهتر الگوهای زمانی
-- مناسب برای روندهای پیچیده
+- Bidirectional LSTM
+- Better analysis of temporal patterns
+- Suitable for complex trends
 
 ### 3. LSTM with Attention
-- مکانیزم Attention
-- تمرکز بر نقاط مهم
-- دقت بالاتر
+- Attention mechanism
+- Focus on important points
+- Higher accuracy
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Backend
-- `backend/ml-inference-service/advanced_lstm_model.py` - مدل پیشرفته LSTM
-- `backend/ml-inference-service/main.py` - API endpoints به‌روزرسانی شد
+- `backend/ml-inference-service/advanced_lstm_model.py` - Advanced LSTM model
+- `backend/ml-inference-service/main.py` - API endpoints updated
 
 ### Frontend
-- `frontend/web/src/pages/LSTMForecast.tsx` - صفحه مدیریت و پیش‌بینی
-- `frontend/web/src/pages/LSTMForecast.css` - استایل‌ها
+- `frontend/web/src/pages/LSTMForecast.tsx` - Management and forecasting page
+- `frontend/web/src/pages/LSTMForecast.css` - Styles
 
 ### Scripts
-- `scripts/train_advanced_lstm.py` - اسکریپت آموزش خودکار
+- `scripts/train_advanced_lstm.py` - Automatic training script
 
 ### Documentation
-- `docs/ADVANCED_LSTM.md` - مستندات کامل
+- `docs/ADVANCED_LSTM.md` - Complete documentation
 
 ## 🔌 API Endpoints
 
-### آموزش مدل
+### Training the model
 ```
 POST /api/ml-inference/lstm/train
 {
@@ -53,7 +53,7 @@ POST /api/ml-inference/lstm/train
 }
 ```
 
-### پیش‌بینی
+### Forecasting
 ```
 POST /api/ml-inference/forecast
 {
@@ -63,44 +63,44 @@ POST /api/ml-inference/forecast
 }
 ```
 
-### لیست مدل‌ها
+### Listing models
 ```
 GET /api/ml-inference/lstm/models
 ```
 
-## 🎯 ویژگی‌های کلیدی
+## 🎯 Key features
 
-1. **معماری پیشرفته**: 3 نوع معماری مختلف
+1. **Advanced architecture**: 3 different architecture types
 2. **Callbacks**: Early Stopping, Reduce LR, Model Checkpoint
-3. **Normalization**: MinMaxScaler برای هر feature
-4. **Confidence Intervals**: بازه اطمینان برای پیش‌بینی‌ها
-5. **Well-Specific Models**: مدل جداگانه برای هر چاه
-6. **Frontend Integration**: صفحه کامل برای مدیریت
+3. **Normalization**: MinMaxScaler for each feature
+4. **Confidence Intervals**: Confidence interval for forecasts
+5. **Well-Specific Models**: A separate model for each well
+6. **Frontend Integration**: A complete management page
 
-## 🚀 استفاده
+## 🚀 Usage
 
-### از Frontend
-1. به تب "LSTM Forecast" بروید
-2. مدل را آموزش دهید یا پیش‌بینی انجام دهید
+### From the Frontend
+1. Go to the "LSTM Forecast" tab
+2. Train the model or run a forecast
 
-### از API
+### From the API
 ```python
 import requests
 
-# آموزش
+# Training
 response = requests.post(
     "http://localhost:8003/api/ml-inference/lstm/train",
     json={"well_name": "PROD-001", ...}
 )
 
-# پیش‌بینی
+# Prediction
 response = requests.post(
     "http://localhost:8003/api/ml-inference/forecast",
     json={"sensor_id": "PROD-001-PRESSURE", ...}
 )
 ```
 
-### از Script
+### From the Script
 ```bash
 python scripts/train_advanced_lstm.py \
     --well PROD-001 \
@@ -116,18 +116,18 @@ python scripts/train_advanced_lstm.py \
 - Train/Validation MAPE
 - Epochs Trained
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ مدل‌های پیشرفته پیاده‌سازی شدند
-- ✅ API endpoints اضافه شدند
-- ✅ Frontend page ایجاد شد
-- ✅ اسکریپت آموزش اضافه شد
-- ✅ مستندات کامل نوشته شد
+- ✅ Advanced models implemented
+- ✅ API endpoints added
+- ✅ Frontend page created
+- ✅ Training script added
+- ✅ Complete documentation written
 
-## 📝 نکات
+## 📝 Notes
 
-- حداقل 200 نقطه برای آموزش
-- حداقل 60 نقطه برای پیش‌بینی
-- مدل‌ها برای هر چاه جداگانه ذخیره می‌شوند
-- از Frontend می‌توانید مدل‌ها را مدیریت کنید
+- At least 200 points for training
+- At least 60 points for forecasting
+- Models are stored separately for each well
+- You can manage the models from the Frontend
 

@@ -1,46 +1,46 @@
-# ✅ ایجاد سریع Work Order از Dashboard
+# ✅ Quick Work Order Creation from the Dashboard
 
-## 📊 خلاصه
+## 📊 Summary
 
-دکمه Quick Action در Dashboard اضافه شد که امکان ایجاد Work Order برای تمام Alertهای بحرانی بدون Work Order را با یک کلیک فراهم می‌کند.
+A Quick Action button was added to the Dashboard that allows creating Work Orders for all critical Alerts without a Work Order with a single click.
 
-## 🎯 ویژگی‌های پیاده‌سازی شده
+## 🎯 Implemented features
 
-### 1. Quick Action Button در Dashboard
-- ✅ **دکمه در Header**: دکمه در بالای Dashboard
-- ✅ **نمایش تعداد**: نمایش تعداد Alertهای بحرانی بدون Work Order
-- ✅ **یک کلیک**: ایجاد Work Order برای همه Alertهای بحرانی
-- ✅ **Loading State**: نمایش وضعیت در حال ایجاد
+### 1. Quick Action Button in the Dashboard
+- ✅ **Button in the Header**: A button at the top of the Dashboard
+- ✅ **Count display**: Shows the number of critical Alerts without a Work Order
+- ✅ **One click**: Creates Work Orders for all critical Alerts
+- ✅ **Loading State**: Shows the creating state
 
 ### 2. Smart Detection
-- ✅ **فقط Critical Alerts**: فقط Alertهای بحرانی را نشان می‌دهد
-- ✅ **بدون Work Order**: فقط Alertهایی که Work Order ندارند
-- ✅ **Auto Hide**: دکمه فقط زمانی نمایش داده می‌شود که Alert بحرانی وجود دارد
+- ✅ **Critical Alerts only**: Shows only critical Alerts
+- ✅ **Without a Work Order**: Only Alerts that do not have a Work Order
+- ✅ **Auto Hide**: The button is shown only when a critical Alert exists
 
 ### 3. User Experience
-- ✅ **Confirmation Dialog**: تأیید قبل از ایجاد
-- ✅ **Success Notification**: نمایش پیام موفقیت
-- ✅ **Error Handling**: مدیریت خطاها
-- ✅ **Auto Refresh**: به‌روزرسانی خودکار لیست Alertها
+- ✅ **Confirmation Dialog**: Confirmation before creation
+- ✅ **Success Notification**: Displays a success message
+- ✅ **Error Handling**: Error handling
+- ✅ **Auto Refresh**: Automatic refresh of the Alerts list
 
-## 📁 فایل‌های به‌روزرسانی شده
+## 📁 Files updated
 
 ### Frontend
-- `frontend/web/src/pages/Dashboard.tsx` - دکمه Quick Action اضافه شد
-- `frontend/web/src/pages/Dashboard.css` - استایل دکمه اضافه شد
+- `frontend/web/src/pages/Dashboard.tsx` - Quick Action button added
+- `frontend/web/src/pages/Dashboard.css` - Button style added
 
 ## 🎨 UI Design
 
-### دکمه Quick Action
-- **Location**: در Header Dashboard، کنار عنوان
+### Quick Action button
+- **Location**: In the Dashboard Header, next to the title
 - **Style**: Gradient purple background
-- **Text**: "Create Work Orders (N)" - N تعداد Alertهای بحرانی
+- **Text**: "Create Work Orders (N)" - N is the number of critical Alerts
 - **Behavior**: 
-  - نمایش فقط زمانی که Alert بحرانی بدون Work Order وجود دارد
-  - نمایش "Creating..." در حین ایجاد
-  - غیرفعال شدن در حین ایجاد
+  - Shown only when a critical Alert without a Work Order exists
+  - Shows "Creating..." while creating
+  - Disabled while creating
 
-## 🔄 جریان کار
+## 🔄 Workflow
 
 ```
 User opens Dashboard
@@ -85,43 +85,43 @@ const criticalAlerts = alertsData?.alerts?.filter(
 )}
 ```
 
-## ✅ استفاده
+## ✅ Usage
 
-### از Dashboard
-1. به صفحه Dashboard بروید
-2. اگر Alert بحرانی بدون Work Order وجود داشته باشد، دکمه نمایش داده می‌شود
-3. روی دکمه کلیک کنید
-4. تأیید کنید
-5. Work Orderها ایجاد می‌شوند
+### From the Dashboard
+1. Go to the Dashboard page
+2. If a critical Alert without a Work Order exists, the button is displayed
+3. Click the button
+4. Confirm
+5. The Work Orders are created
 
-### از Alerts Page
-1. به صفحه Alerts بروید
-2. برای هر Alert، دکمه "Create Work Order" را بزنید
-3. Work Order ایجاد می‌شود
+### From the Alerts Page
+1. Go to the Alerts page
+2. For each Alert, press the "Create Work Order" button
+3. The Work Order is created
 
-## 🎯 مزایا
+## 🎯 Benefits
 
-1. **سرعت**: ایجاد Work Order برای چندین Alert با یک کلیک
-2. **کارایی**: فقط Alertهای بحرانی بدون Work Order
-3. **راحتی**: دسترسی سریع از Dashboard
-4. **وضوح**: نمایش تعداد Alertهای بحرانی
+1. **Speed**: Create Work Orders for several Alerts with one click
+2. **Efficiency**: Only critical Alerts without a Work Order
+3. **Convenience**: Quick access from the Dashboard
+4. **Clarity**: Shows the number of critical Alerts
 
-## 📝 نکات
+## 📝 Notes
 
-- دکمه فقط برای Alertهای بحرانی نمایش داده می‌شود
-- فقط Alertهایی که Work Order ندارند در نظر گرفته می‌شوند
-- می‌توانید برای هر Alert به صورت جداگانه از صفحه Alerts Work Order ایجاد کنید
-- پس از ایجاد، Alertها به‌روزرسانی می‌شوند و دکمه ناپدید می‌شود
+- The button is shown only for critical Alerts
+- Only Alerts that do not have a Work Order are considered
+- You can create a Work Order for each Alert separately from the Alerts page
+- After creation, the Alerts are refreshed and the button disappears
 
 ## 🔍 Troubleshooting
 
-### دکمه نمایش داده نمی‌شود
-- بررسی کنید که Alert بحرانی وجود دارد
-- بررسی کنید که Alertها Work Order ندارند
-- بررسی کنید که Alertها در وضعیت open یا acknowledged هستند
+### The button is not displayed
+- Check that a critical Alert exists
+- Check that the Alerts do not have a Work Order
+- Check that the Alerts are in the open or acknowledged state
 
-### Work Order ایجاد نمی‌شود
-- بررسی کنید که ERP Service در حال اجرا است
-- بررسی کنید که به ERP System متصل شده‌اید
-- بررسی لاگ‌های مرورگر و backend
+### The Work Order is not created
+- Check that the ERP Service is running
+- Check that you are connected to the ERP System
+- Check the browser and backend logs
 

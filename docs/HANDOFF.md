@@ -2,40 +2,40 @@
 
 ## Test Coverage & Quality
 - Pytest coverage threshold enforced at **60%** (`pytest.ini`).
-- Command & control, data ingestion، auth و سایر سرویس‌ها دارای unit tests کلیدی هستند. اجرای `pytest` گزارش پوشش (HTML + ترمینال) در `backend/htmlcov/` تولید می‌کند.
+- Command & control, data ingestion, auth and the other services have key unit tests. Running `pytest` produces a coverage report (HTML + terminal) in `backend/htmlcov/`.
 
 ## CI/CD Pipeline
 - GitHub Actions workflow: `.github/workflows/backend-ci.yml`
   - `black --check`, `flake8`, `pytest`
-  - `alembic upgrade head --sql` برای بررسی migration ها
-- خروجی pipeline باید قبل از merge بررسی شود (failure ها مانع merge می‌شوند).
+  - `alembic upgrade head --sql` to check the migrations
+- The pipeline output must be reviewed before merge (failures block the merge).
 
 ## Observability & Logging
-- Metrics: `/metrics` endpoint برای همه سرویس‌ها (Prometheus). راهنما: `docs/OBSERVABILITY.md`
-- Logging: فرمت JSON + Promtail/Loki نمونه در `docs/LOGGING.md`
-- Tracing: OpenTelemetry فعال؛ راهنما `docs/TRACING.md`
+- Metrics: `/metrics` endpoint for all services (Prometheus). Guide: `docs/OBSERVABILITY.md`
+- Logging: JSON format + sample Promtail/Loki in `docs/LOGGING.md`
+- Tracing: OpenTelemetry enabled; guide `docs/TRACING.md`
 
 ## Rollout Plan
-1. اعمال migrations طبق `docs/MIGRATIONS.md` (Dev → Stage → Prod).
-2. راه‌اندازی Prometheus/Grafana و Loki/Jaeger طبق اسناد Observability.
-3. اجرای `pytest` و بررسی pipeline در GitHub Actions پیش از استقرار.
-4. مانیتور کردن متریک‌ها و لاگ‌ها بعد از rollout؛ تعریف alert threshold ها در Prometheus/Grafana.
+1. Apply migrations per `docs/MIGRATIONS.md` (Dev → Stage → Prod).
+2. Set up Prometheus/Grafana and Loki/Jaeger per the Observability documents.
+3. Run `pytest` and check the pipeline in GitHub Actions before deployment.
+4. Monitor the metrics and logs after the rollout; define alert thresholds in Prometheus/Grafana.
 
 ## Next Steps for Ops
-- تنظیم Secrets مورد نیاز (DB URLs، OTLP endpoint) در محیط‌های Stage/Prod.
-- راه‌اندازی pipeline های مشابه در GitLab یا Jenkins در صورت ضرورت.
-- تعیین مالکیت Runbook و به‌روزرسانی آن با لینک dashboard ها.
+- Set the required Secrets (DB URLs, OTLP endpoint) in the Stage/Prod environments.
+- Set up similar pipelines in GitLab or Jenkins if necessary.
+- Assign Runbook ownership and update it with dashboard links.
 
 ## ML Operations
-- برنامه بازآموزی و هشدار کیفیت در [`docs/ML_OPERATIONS.md`](ML_OPERATIONS.md) توضیح داده شده است.
-- قوانین هشدار Prometheus: `infrastructure/prometheus/rules/model-quality.yml`
+- The retraining and quality alert plan is described in [`docs/ML_OPERATIONS.md`](ML_OPERATIONS.md).
+- Prometheus alert rules: `infrastructure/prometheus/rules/model-quality.yml`
 
 ## Testing & Smoke
-- تست‌های جامع: `pytest`
-- Smoke tests (ردیابی آسیب‌پذیری کلیدی): [`tests/smoke/`](../backend/tests/smoke/)
-- CI: `.github/workflows/backend-ci.yml` و `.github/workflows/smoke-tests.yml`
+- Comprehensive tests: `pytest`
+- Smoke tests (tracking key vulnerabilities): [`tests/smoke/`](../backend/tests/smoke/)
+- CI: `.github/workflows/backend-ci.yml` and `.github/workflows/smoke-tests.yml`
 
 ## Security & Ops
-- لیست چک امنیتی: [`SECURITY_CHECKLIST.md`](SECURITY_CHECKLIST.md)
-- برنامه بازبینی دوره‌ای (penetration test، RBAC audit، پایش pipeline) در بخش Periodic Review همان سند مشخص است.
-- مسئولیت پایش متریک‌های داده و مدل با تیم Data Ops است؛ هشدارها در `infrastructure/prometheus/rules/` تعریف شده‌اند.
+- Security checklist: [`SECURITY_CHECKLIST.md`](SECURITY_CHECKLIST.md)
+- The periodic review plan (penetration test, RBAC audit, pipeline monitoring) is specified in the Periodic Review section of the same document.
+- Responsibility for monitoring data and model metrics lies with the Data Ops team; alerts are defined in `infrastructure/prometheus/rules/`.

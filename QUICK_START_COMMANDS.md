@@ -1,6 +1,6 @@
-# ⚡ دستورات سریع اجرای OGIM
+# ⚡ Quick OGIM Run Commands
 
-## 🚀 اجرای یک‌کلیکی (Recommended)
+## 🚀 One-click run (Recommended)
 
 ```powershell
 .\start_dashboard.ps1
@@ -8,7 +8,7 @@
 
 ---
 
-## 📦 اجرای دستی
+## 📦 Manual run
 
 ### Backend Services
 
@@ -84,7 +84,7 @@ npm run dev
 
 ---
 
-## 🌐 آدرس‌های دسترسی
+## 🌐 Access addresses
 
 - **Frontend**: http://localhost:5173
 - **API Gateway**: http://localhost:8000
@@ -94,18 +94,18 @@ npm run dev
 
 ---
 
-## 📁 مسیر ریشه پروژه
+## 📁 Project root path
 
 ```
 C:\Users\asus\Documents\companies\ithub\AI\products\clones\OGIM
 ```
 
-یا:
+Or:
 
 ```powershell
-# در PowerShell
+# In PowerShell
 Get-Location
-# یا
+# or
 pwd
 ```
 

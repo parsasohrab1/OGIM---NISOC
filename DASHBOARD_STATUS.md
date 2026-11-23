@@ -1,24 +1,24 @@
-# وضعیت داشبورد OGIM
+# OGIM Dashboard Status
 
-## 🚀 داشبورد در حال اجرا است!
+## 🚀 The dashboard is running!
 
 ### Frontend
-- **آدرس**: http://localhost:3000
-- **وضعیت**: ✅ در حال اجرا
+- **Address**: http://localhost:3000
+- **Status**: ✅ Running
 
 ### Backend Services
 
-برای راه‌اندازی Backend، یکی از روش‌های زیر را انتخاب کنید:
+To start the Backend, choose one of the following methods:
 
-#### روش 1: استفاده از اسکریپت (توصیه می‌شود)
+#### Method 1: Using the script (recommended)
 
 ```powershell
 .\start_dashboard.ps1
 ```
 
-#### روش 2: راه‌اندازی دستی هر سرویس
+#### Method 2: Manually starting each service
 
-در ترمینال‌های جداگانه:
+In separate terminals:
 
 ```powershell
 # Terminal 1: API Gateway
@@ -58,16 +58,16 @@ cd backend/digital-twin-service
 python -m uvicorn main:app --port 8008 --reload
 ```
 
-#### روش 3: استفاده از Docker (اگر Docker Desktop نصب است)
+#### Method 3: Using Docker (if Docker Desktop is installed)
 
 ```powershell
-# راه‌اندازی Docker Desktop اول
+# Start Docker Desktop first
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
 ---
 
-## 📍 آدرس‌های دسترسی
+## 📍 Access addresses
 
 ### Frontend Dashboard
 - **Development**: http://localhost:3000
@@ -77,34 +77,34 @@ docker-compose -f docker-compose.dev.yml up -d
 - **API Gateway**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 
-### ورود به سیستم
+### Logging in
 - **Username**: `admin`
 - **Password**: `Admin@123`
 
 ---
 
-## ✅ بررسی وضعیت
+## ✅ Checking status
 
-### بررسی Frontend
+### Checking the Frontend
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing
 ```
 
-### بررسی Backend
+### Checking the Backend
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:8000/health" -UseBasicParsing
 ```
 
 ---
 
-## 🔧 نکات مهم
+## 🔧 Important notes
 
-1. **Frontend** در حال اجرا است و در آدرس http://localhost:3000 در دسترس است
-2. برای استفاده کامل از داشبورد، **Backend Services** باید راه‌اندازی شوند
-3. اگر Backend راه‌اندازی نشده باشد، Frontend نمی‌تواند به API متصل شود
-4. از اسکریپت `start_dashboard.ps1` برای راه‌اندازی خودکار استفاده کنید
+1. **Frontend** is running and available at http://localhost:3000
+2. To make full use of the dashboard, the **Backend Services** must be started
+3. If the Backend is not started, the Frontend cannot connect to the API
+4. Use the `start_dashboard.ps1` script for automatic startup
 
 ---
 
-**تاریخ به‌روزرسانی**: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+**Update date**: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 

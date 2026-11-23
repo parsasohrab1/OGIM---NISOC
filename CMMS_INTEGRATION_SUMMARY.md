@@ -1,47 +1,47 @@
-# ✅ یکپارچگی با سیستم‌های نگهداری (CMMS) - خلاصه پیاده‌سازی
+# ✅ Maintenance Systems (CMMS) Integration - Implementation Summary
 
-## 📊 خلاصه
+## 📊 Summary
 
-یکپارچگی با سیستم‌های نگهداری (CMMS) برای صدور خودکار و دستی Work Order از Alertها با موفقیت پیاده‌سازی شد.
+Integration with maintenance systems (CMMS) for automatic and manual Work Order issuance from Alerts was implemented successfully.
 
-## 🎯 ویژگی‌های پیاده‌سازی شده
+## 🎯 Implemented features
 
-### 1. ایجاد خودکار Work Order
-- ✅ **Auto-create for Critical Alerts**: ایجاد خودکار Work Order برای Alertهای بحرانی
-- ✅ **Configurable**: قابل تنظیم از طریق environment variable
-- ✅ **Background Processing**: پردازش در پس‌زمینه بدون تأثیر بر عملکرد
+### 1. Automatic Work Order creation
+- ✅ **Auto-create for Critical Alerts**: Automatic Work Order creation for critical Alerts
+- ✅ **Configurable**: Configurable through an environment variable
+- ✅ **Background Processing**: Background processing without affecting performance
 
-### 2. ایجاد دستی Work Order
-- ✅ **Manual Creation**: دکمه "Create Work Order" در داشبورد Alerts
-- ✅ **One-click Creation**: ایجاد با یک کلیک
-- ✅ **Status Display**: نمایش Work Order ID پس از ایجاد
-- ✅ **Duplicate Prevention**: جلوگیری از ایجاد Work Order تکراری
+### 2. Manual Work Order creation
+- ✅ **Manual Creation**: "Create Work Order" button in the Alerts dashboard
+- ✅ **One-click Creation**: Creation with one click
+- ✅ **Status Display**: Display of the Work Order ID after creation
+- ✅ **Duplicate Prevention**: Prevention of duplicate Work Order creation
 
-### 3. یکپارچگی با ERP Systems
-- ✅ **SAP Support**: پشتیبانی از SAP
-- ✅ **Oracle Support**: پشتیبانی از Oracle
-- ✅ **Extensible**: قابل گسترش برای سیستم‌های دیگر
+### 3. Integration with ERP Systems
+- ✅ **SAP Support**: SAP support
+- ✅ **Oracle Support**: Oracle support
+- ✅ **Extensible**: Extensible to other systems
 
 ### 4. UI/UX
-- ✅ **Button in Dashboard**: دکمه در صفحه Alerts
-- ✅ **Visual Feedback**: نمایش Work Order ID
-- ✅ **Loading States**: نمایش وضعیت در حال ایجاد
-- ✅ **Error Handling**: مدیریت خطاها
+- ✅ **Button in Dashboard**: Button on the Alerts page
+- ✅ **Visual Feedback**: Display of the Work Order ID
+- ✅ **Loading States**: Display of the creating state
+- ✅ **Error Handling**: Error handling
 
-## 📁 فایل‌های ایجاد/به‌روزرسانی شده
+## 📁 Files created/updated
 
 ### Backend
-- `backend/alert-service/main.py` - به‌روزرسانی شده (endpoint جدید)
-- `backend/erp-integration-service/main.py` - موجود (endpoint auto-create)
+- `backend/alert-service/main.py` - updated (new endpoint)
+- `backend/erp-integration-service/main.py` - existing (auto-create endpoint)
 
 ### Frontend
-- `frontend/web/src/pages/Alerts.tsx` - به‌روزرسانی شده (دکمه و منطق)
-- `frontend/web/src/pages/Alerts.css` - به‌روزرسانی شده (استایل دکمه)
-- `frontend/web/src/api/services.ts` - به‌روزرسانی شده (API client)
+- `frontend/web/src/pages/Alerts.tsx` - updated (button and logic)
+- `frontend/web/src/pages/Alerts.css` - updated (button style)
+- `frontend/web/src/api/services.ts` - updated (API client)
 
 ## 🔌 API Endpoints
 
-### ایجاد Work Order از Alert
+### Creating a Work Order from an Alert
 ```
 POST /api/alert/alerts/{alert_id}/create-work-order?erp_type=sap
 ```
@@ -57,44 +57,44 @@ POST /api/alert/alerts/{alert_id}/create-work-order?erp_type=sap
 }
 ```
 
-### ایجاد خودکار (از Alert Service)
+### Automatic creation (from the Alert Service)
 ```
 POST /api/erp-integration/work-orders/auto-create?alert_id={alert_id}&erp_type=sap
 ```
 
 ## 🎨 UI Components
 
-### دکمه Create Work Order
-- **Location**: در صفحه Alerts، کنار دکمه‌های Acknowledge و Resolve
+### Create Work Order button
+- **Location**: On the Alerts page, next to the Acknowledge and Resolve buttons
 - **Style**: Gradient purple background
 - **Behavior**: 
-  - نمایش فقط برای Alertهایی که Work Order ندارند
-  - نمایش "Creating..." در حین ایجاد
-  - نمایش Work Order ID پس از ایجاد موفق
+  - Shown only for Alerts that do not have a Work Order
+  - Shows "Creating..." while creating
+  - Shows the Work Order ID after successful creation
 
 ### Work Order Info Panel
-- **Location**: در Alert Card
-- **Content**: نمایش Work Order ID
-- **Style**: Purple border و background
+- **Location**: In the Alert Card
+- **Content**: Display of the Work Order ID
+- **Style**: Purple border and background
 
-## ⚙️ پیکربندی
+## ⚙️ Configuration
 
 ### Environment Variables
 ```bash
-# فعال‌سازی یکپارچگی ERP
+# Enable ERP integration
 ERP_INTEGRATION_ENABLED=true
 
-# URL سرویس ERP
+# ERP service URL
 ERP_SERVICE_URL=http://erp-integration-service:8010
 
-# سیستم ERP پیش‌فرض
+# Default ERP system
 ERP_DEFAULT_SYSTEM=sap  # sap, oracle, maximo
 
-# ایجاد خودکار برای Alertهای بحرانی
-ERP_AUTO_CREATE_WORK_ORDERS=false  # true برای فعال‌سازی
+# Automatic creation for critical Alerts
+ERP_AUTO_CREATE_WORK_ORDERS=false  # true to enable
 ```
 
-### اتصال به ERP System
+### Connecting to an ERP System
 ```bash
 POST /api/erp-integration/erp/connect
 {
@@ -107,9 +107,9 @@ POST /api/erp-integration/erp/connect
 }
 ```
 
-## 🔄 جریان کار
+## 🔄 Workflow
 
-### ایجاد خودکار
+### Automatic creation
 ```
 Alert Created (Critical)
     │
@@ -129,7 +129,7 @@ Link Work Order ID to Alert
 Update Alert.erp_work_order_id
 ```
 
-### ایجاد دستی
+### Manual creation
 ```
 User clicks "Create Work Order"
     │
@@ -152,7 +152,7 @@ Update Alert and return Work Order ID
 Display in UI
 ```
 
-## 📊 داده‌های Work Order
+## 📊 Work Order data
 
 ### Work Order Request
 ```json
@@ -179,36 +179,36 @@ Display in UI
 }
 ```
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ Endpoint ایجاد Work Order در Alert Service
-- ✅ یکپارچگی با ERP Service
-- ✅ دکمه در داشبورد Alerts
-- ✅ API client در frontend
-- ✅ استایل‌های CSS
-- ✅ مدیریت خطاها
-- ✅ نمایش Work Order ID
-- ✅ جلوگیری از ایجاد تکراری
-- ✅ ایجاد خودکار برای Alertهای بحرانی (قابل تنظیم)
+- ✅ Work Order creation endpoint in the Alert Service
+- ✅ Integration with the ERP Service
+- ✅ Button in the Alerts dashboard
+- ✅ API client in the frontend
+- ✅ CSS styles
+- ✅ Error handling
+- ✅ Work Order ID display
+- ✅ Duplicate creation prevention
+- ✅ Automatic creation for critical Alerts (configurable)
 
-## 🎯 استفاده
+## 🎯 Usage
 
-### ایجاد دستی Work Order
-1. به صفحه Alerts بروید
-2. Alert مورد نظر را پیدا کنید
-3. روی دکمه "Create Work Order" کلیک کنید
-4. Work Order ID نمایش داده می‌شود
+### Manually creating a Work Order
+1. Go to the Alerts page
+2. Find the desired Alert
+3. Click the "Create Work Order" button
+4. The Work Order ID is displayed
 
-### فعال‌سازی ایجاد خودکار
+### Enabling automatic creation
 ```bash
-# در .env یا environment variables
+# In .env or environment variables
 ERP_AUTO_CREATE_WORK_ORDERS=true
 ERP_DEFAULT_SYSTEM=sap
 ```
 
-### اتصال به ERP System
+### Connecting to an ERP System
 ```bash
-# ابتدا باید به ERP System متصل شوید
+# First you must connect to the ERP System
 POST /api/erp-integration/erp/connect
 {
   "erp_type": "sap",
@@ -217,25 +217,25 @@ POST /api/erp-integration/erp/connect
 }
 ```
 
-## 📝 نکات
+## 📝 Notes
 
-- Work Order فقط یک بار برای هر Alert ایجاد می‌شود
-- در صورت وجود Work Order، دکمه نمایش داده نمی‌شود
-- ایجاد خودکار فقط برای Alertهای بحرانی فعال می‌شود (اگر تنظیم شده باشد)
-- می‌توانید سیستم ERP را از طریق query parameter انتخاب کنید (sap, oracle)
+- A Work Order is created only once for each Alert
+- If a Work Order exists, the button is not displayed
+- Automatic creation is enabled only for critical Alerts (if configured)
+- You can choose the ERP system through a query parameter (sap, oracle)
 
 ## 🔍 Troubleshooting
 
-### Work Order ایجاد نمی‌شود
-1. بررسی کنید که ERP Service در حال اجرا است
-2. بررسی کنید که به ERP System متصل شده‌اید
-3. بررسی لاگ‌های Alert Service و ERP Service
+### Work Order is not created
+1. Check that the ERP Service is running
+2. Check that you are connected to the ERP System
+3. Check the Alert Service and ERP Service logs
 
-### دکمه نمایش داده نمی‌شود
-1. بررسی کنید که Alert دارای Work Order نیست
-2. بررسی کنید که Alert در وضعیت open یا acknowledged است
+### Button is not displayed
+1. Check that the Alert does not have a Work Order
+2. Check that the Alert is in the open or acknowledged state
 
-### خطای Timeout
-- بررسی کنید که ERP Service قابل دسترسی است
-- Timeout به صورت پیش‌فرض 30 ثانیه است
+### Timeout error
+- Check that the ERP Service is reachable
+- The default Timeout is 30 seconds
 

@@ -1,144 +1,144 @@
 # 🌐 OGIM Live Demo - HTML Edition
 
-دمو زنده و تعاملی سیستم OGIM با HTML/JavaScript خالص
+Live and interactive demo of the OGIM system with pure HTML/JavaScript
 
-## 🎯 درباره
+## 🎯 About
 
-این یک دموی کاملاً عملیاتی از سیستم OGIM است که:
-- ✅ به Backend API متصل می‌شود (Real-time)
-- ✅ داده‌های واقعی نمایش می‌دهد
-- ✅ بدون نیاز به Build یا Compile اجرا می‌شود
-- ✅ در صورت عدم اتصال، از داده‌های Mock استفاده می‌کند
-- ✅ Responsive و Mobile-friendly است
+This is a fully operational demo of the OGIM system that:
+- ✅ Connects to the Backend API (Real-time)
+- ✅ Displays real data
+- ✅ Runs without needing a Build or Compile
+- ✅ Uses Mock data if the connection is unavailable
+- ✅ Is Responsive and Mobile-friendly
 
-## 📁 فایل‌ها
+## 📁 Files
 
 ```
 html-demo/
-├── index.html          # صفحه اصلی داشبورد
-├── wells.html          # صفحه چاه‌ها
-├── alerts.html         # صفحه هشدارها
-├── style.css           # استایل‌های CSS
-├── api.js              # کلاینت API و Mock Data
-├── app.js              # منطق اصلی برنامه
-└── README.md           # این فایل
+├── index.html          # Main dashboard page
+├── wells.html          # Wells page
+├── alerts.html         # Alerts page
+├── style.css           # CSS styles
+├── api.js              # API client and Mock Data
+├── app.js              # Main application logic
+└── README.md           # This file
 ```
 
-## 🚀 نحوه اجرا
+## 🚀 How to run
 
-### روش 1: با Python HTTP Server (توصیه شده)
+### Method 1: With a Python HTTP Server (recommended)
 
 ```bash
-# ورود به پوشه
+# Change into the folder
 cd html-demo
 
-# اجرا با Python 3
+# Run with Python 3
 python -m http.server 8080
 
-# یا با Python 2
+# Or with Python 2
 python -m SimpleHTTPServer 8080
 
-# باز کردن مرورگر
+# Open the browser
 # http://localhost:8080
 ```
 
-### روش 2: با Node.js (http-server)
+### Method 2: With Node.js (http-server)
 
 ```bash
-# نصب http-server (یک بار)
+# Install http-server (once)
 npm install -g http-server
 
-# اجرا
+# Run
 cd html-demo
 http-server -p 8080
 
-# باز کردن مرورگر
+# Open the browser
 # http://localhost:8080
 ```
 
-### روش 3: با Live Server (VS Code Extension)
+### Method 3: With Live Server (VS Code Extension)
 
-1. نصب extension "Live Server" در VS Code
-2. راست کلیک روی `index.html`
-3. انتخاب "Open with Live Server"
+1. Install the "Live Server" extension in VS Code
+2. Right-click `index.html`
+3. Choose "Open with Live Server"
 
-### روش 4: مستقیم در مرورگر (محدود)
+### Method 4: Directly in the browser (limited)
 
-فقط فایل `index.html` را در مرورگر باز کنید (ممکن است CORS error بگیرید)
+Just open the `index.html` file in the browser (you may get a CORS error)
 
-## ⚙️ تنظیمات
+## ⚙️ Settings
 
-### اتصال به Backend
+### Connecting to the Backend
 
-1. کلیک روی آیکون تنظیمات (⚙️) در منو
-2. وارد کردن آدرس API Gateway:
+1. Click the settings icon (⚙️) in the menu
+2. Enter the API Gateway address:
    ```
    http://localhost:8000
    ```
-3. تنظیم فاصله بروزرسانی (پیش‌فرض: 10 ثانیه)
-4. ذخیره تنظیمات
+3. Set the refresh interval (default: 10 seconds)
+4. Save the settings
 
-### حالت‌ها
+### Modes
 
-**حالت Online (Connected):**
-- دموی به backend متصل است
-- داده‌های واقعی نمایش داده می‌شود
-- بروزرسانی خودکار فعال است
+**Online mode (Connected):**
+- The demo is connected to the backend
+- Real data is displayed
+- Automatic refresh is enabled
 
-**حالت Offline (Mock Data):**
-- دموی به backend متصل نیست
-- داده‌های نمونه (Mock) نمایش داده می‌شود
-- قابلیت‌های اصلی همچنان کار می‌کنند
+**Offline mode (Mock Data):**
+- The demo is not connected to the backend
+- Sample (Mock) data is displayed
+- The main features still work
 
-## 🎨 ویژگی‌ها
+## 🎨 Features
 
-### 📊 داشبورد (index.html)
-- **آمار کلی:**
-  - تعداد چاه‌های فعال
-  - هشدارهای فعال
-  - نرخ تولید
-  - سلامت سیستم
+### 📊 Dashboard (index.html)
+- **Overall statistics:**
+  - Number of active wells
+  - Active alerts
+  - Production rate
+  - System health
 
-- **نمودارها:**
-  - نمودار تولید لحظه‌ای (Real-time Production)
-  - نمودار فشار و دما (Pressure & Temperature)
-  - قابلیت انتخاب بازه زمانی
+- **Charts:**
+  - Real-time production chart
+  - Pressure and temperature chart
+  - Time range selection
 
-- **جدول چاه‌ها:**
-  - وضعیت هر چاه
-  - نرخ تولید
-  - فشار و دما
-  - آخرین بروزرسانی
+- **Wells table:**
+  - Status of each well
+  - Production rate
+  - Pressure and temperature
+  - Last update
 
-- **هشدارهای اخیر:**
-  - 5 هشدار اخیر
-  - سطح بحرانیت
-  - زمان وقوع
+- **Recent alerts:**
+  - The 5 most recent alerts
+  - Severity level
+  - Time of occurrence
 
-### 🛢️ صفحه چاه‌ها (wells.html)
-- لیست کامل چاه‌ها
-- جزئیات هر چاه
-- نمودارهای اختصاصی
-- تاریخچه عملکرد
+### 🛢️ Wells page (wells.html)
+- Complete list of wells
+- Details of each well
+- Dedicated charts
+- Performance history
 
-### 🔔 صفحه هشدارها (alerts.html)
-- لیست کامل هشدارها
-- فیلتر بر اساس سطح و وضعیت
-- قابلیت Acknowledge و Resolve
-- جستجو در هشدارها
+### 🔔 Alerts page (alerts.html)
+- Complete list of alerts
+- Filter by level and status
+- Acknowledge and Resolve actions
+- Search within alerts
 
-## 🔧 تکنولوژی‌ها
+## 🔧 Technologies
 
-- **HTML5** - ساختار صفحات
-- **CSS3** - استایل‌ها و انیمیشن‌ها
-- **JavaScript (Vanilla)** - منطق برنامه
-- **Chart.js** - نمودارها
-- **Font Awesome** - آیکون‌ها
-- **Fetch API** - ارتباط با Backend
+- **HTML5** - Page structure
+- **CSS3** - Styles and animations
+- **JavaScript (Vanilla)** - Application logic
+- **Chart.js** - Charts
+- **Font Awesome** - Icons
+- **Fetch API** - Communication with the Backend
 
 ## 📡 API Endpoints
 
-دمو از این API endpoints استفاده می‌کند:
+The demo uses these API endpoints:
 
 ```javascript
 // Health Check
@@ -164,12 +164,12 @@ POST /api/auth/token
 GET /api/auth/users/me
 ```
 
-## 🔐 احراز هویت (اختیاری)
+## 🔐 Authentication (optional)
 
-اگر backend شما نیاز به احراز هویت دارد:
+If your backend requires authentication:
 
 ```javascript
-// در Console مرورگر
+// In the browser Console
 api.login('admin', 'Admin@123')
   .then(() => {
     console.log('Logged in successfully');
@@ -177,91 +177,91 @@ api.login('admin', 'Admin@123')
   });
 ```
 
-Token به صورت خودکار در localStorage ذخیره می‌شود.
+The token is stored automatically in localStorage.
 
-## 🐛 عیب‌یابی
+## 🐛 Troubleshooting
 
-### مشکل: CORS Error
+### Problem: CORS Error
 
-**راه‌حل:**
-1. Backend شما باید CORS را فعال کند:
+**Solution:**
+1. Your backend must enable CORS:
 ```python
 CORS_ORIGINS = ["http://localhost:8080"]
 ```
 
-2. یا از Chrome با flag اجرا کنید:
+2. Or run Chrome with the flag:
 ```bash
 chrome.exe --disable-web-security --user-data-dir="C:/temp/chrome"
 ```
 
-### مشکل: Cannot connect to backend
+### Problem: Cannot connect to backend
 
-**راه‌حل:**
-1. مطمئن شوید backend در حال اجرا است:
+**Solution:**
+1. Make sure the backend is running:
 ```bash
 curl http://localhost:8000/health
 ```
 
-2. تنظیمات را بررسی کنید (⚙️ Settings)
+2. Check the settings (⚙️ Settings)
 
-3. دمو به صورت خودکار به حالت Mock می‌رود
+3. The demo automatically falls back to Mock mode
 
-### مشکل: Charts not showing
+### Problem: Charts not showing
 
-**راه‌حل:**
-1. مطمئن شوید Chart.js بارگذاری شده است
-2. Console مرورگر را برای خطاها بررسی کنید
-3. صفحه را Refresh کنید
+**Solution:**
+1. Make sure Chart.js has loaded
+2. Check the browser Console for errors
+3. Refresh the page
 
-## 📱 سازگاری
+## 📱 Compatibility
 
 - ✅ Chrome/Edge (latest)
 - ✅ Firefox (latest)
 - ✅ Safari (latest)
 - ✅ Mobile browsers
-- ⚠️ IE11 (نیاز به Polyfill)
+- ⚠️ IE11 (requires a Polyfill)
 
-## 🎯 نکات
+## 🎯 Notes
 
 ### Auto-Refresh
-- پیش‌فرض: هر 10 ثانیه
-- قابل تنظیم از 5 تا 60 ثانیه
-- در تب Settings تغییر دهید
+- Default: every 10 seconds
+- Adjustable from 5 to 60 seconds
+- Change it in the Settings tab
 
 ### Mock Data
-- هنگامی که backend در دسترس نیست فعال می‌شود
-- داده‌های تصادفی ولی واقع‌گرایانه
-- برای Demo و Testing مناسب است
+- Activated when the backend is unavailable
+- Random but realistic data
+- Suitable for Demo and Testing
 
 ### Performance
-- نمودارها با Animation سبک
-- Update optimized با Chart.js
-- حافظه کم مصرف
+- Charts with light Animation
+- Update optimized with Chart.js
+- Low memory usage
 
-## 📊 داده‌های نمونه
+## 📊 Sample data
 
-دمو شامل 4 چاه است:
+The demo includes 4 wells:
 
-| چاه | نوع | تولید (bbl/day) |
+| Well | Type | Production (bbl/day) |
 |-----|-----|-----------------|
 | PROD-001 | Production | 800-1500 |
 | PROD-002 | Production | 800-1500 |
 | DEV-001 | Development | 500-1000 |
 | OBS-001 | Observation | 0 |
 
-## 🚀 استقرار (Deployment)
+## 🚀 Deployment
 
 ### GitHub Pages
 
 ```bash
-# فقط محتوای html-demo را deploy کنید
+# Deploy only the contents of html-demo
 git subtree push --prefix html-demo origin gh-pages
 ```
 
 ### Netlify/Vercel
 
-1. پوشه `html-demo` را به عنوان root انتخاب کنید
-2. Build command: (خالی)
+1. Select the `html-demo` folder as the root
+2. Build command: (empty)
 3. Publish directory: `.`
 
 ### Docker
@@ -277,41 +277,41 @@ docker build -t ogim-demo .
 docker run -p 8080:80 ogim-demo
 ```
 
-## 🔗 لینک‌های مرتبط
+## 🔗 Related links
 
-- **پروژه اصلی:** [OGIM Repository](../)
-- **مستندات Backend:** [docs/](../docs/)
+- **Main project:** [OGIM Repository](../)
+- **Backend documentation:** [docs/](../docs/)
 - **API Docs:** http://localhost:8000/docs
 
-## 📝 لایسنس
+## 📝 License
 
-MIT License - همانند پروژه اصلی
+MIT License - same as the main project
 
 ---
 
-## 🎉 استفاده سریع
+## 🎉 Quick start
 
 ```bash
-# 1. کلون پروژه
+# 1. Clone the project
 git clone https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring.git
 
-# 2. ورود به پوشه demo
+# 2. Enter the demo folder
 cd OGIM---Oil-Gas-Intelligent-Monitoring/html-demo
 
-# 3. اجرای backend (terminal دیگر)
+# 3. Run the backend (another terminal)
 cd ../
 docker-compose -f docker-compose.dev.yml up -d
 
-# 4. اجرای demo
+# 4. Run the demo
 python -m http.server 8080
 
-# 5. باز کردن مرورگر
+# 5. Open the browser
 # http://localhost:8080
 ```
 
 ---
 
-**ساخته شده با ❤️ برای صنعت نفت و گاز**
+**Built with ❤️ for the oil and gas industry**
 
-نسخه: 1.0.0 | تاریخ: نوامبر 2025
+Version: 1.0.0 | Date: November 2025
 

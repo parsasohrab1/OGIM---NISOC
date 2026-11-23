@@ -1,32 +1,32 @@
 # CI/CD Pipeline Guide
 
-این راهنما مراحل اجرای Lint، تست و بررسی migration ها را در GitHub Actions توضیح می‌دهد.
+This guide explains the steps for running Lint, tests and migration checks in GitHub Actions.
 
 ## 1. GitHub Actions Workflow
 
-فایل `.github/workflows/backend-ci.yml` شامل مراحل زیر است:
+The file `.github/workflows/backend-ci.yml` includes the following steps:
 
-1. **نصب وابستگی‌ها**: نصب `black`, `flake8`, `alembic` و تمام requirements سرویس‌ها.
-2. **Lint**: اجرای `black --check` و `flake8` روی پوشه `backend/`.
-3. **Tests**: اجرای `pytest` با متغیر `SQLALCHEMY_DATABASE_URL=sqlite:///./ci.db` (sqlite داخل CI).
-4. **Alembic Check**: اجرای `alembic upgrade head --sql` برای تولید اسکریپت SQL و اطمینان از صحت migrationها.
+1. **Install dependencies**: Install `black`, `flake8`, `alembic` and all the services' requirements.
+2. **Lint**: Run `black --check` and `flake8` on the `backend/` folder.
+3. **Tests**: Run `pytest` with the variable `SQLALCHEMY_DATABASE_URL=sqlite:///./ci.db` (sqlite inside CI).
+4. **Alembic Check**: Run `alembic upgrade head --sql` to generate the SQL script and verify the migrations are valid.
 
-Pipeline با شکست هر یک از مراحل (lint/test/migration) متوقف می‌شود.
+The pipeline stops if any of the steps (lint/test/migration) fails.
 
-## 2. متغیرهای مورد نیاز
+## 2. Required variables
 
-- `SQLALCHEMY_DATABASE_URL` یا `DATABASE_URL`: URL دیتابیس برای pytest و alembic (در CI می‌تواند sqlite باشد).
-- در محیط‌های Production، این مقدار باید از Secret/Env مناسبی (GitHub Secrets) تأمین شود.
+- `SQLALCHEMY_DATABASE_URL` or `DATABASE_URL`: The database URL for pytest and alembic (it can be sqlite in CI).
+- In Production environments, this value must be supplied from a suitable Secret/Env (GitHub Secrets).
 
-## 3. اجرای دستی
+## 3. Manual execution
 
-برای اجرای lint و تست به صورت دستی:
+To run lint and tests manually:
 
 ```bash
 python -m pip install --upgrade pip
 pip install black flake8 alembic
 pip install -r requirements.txt
-# نصب سایر requirements سرویس‌ها در صورت نیاز
+# Install the other services' requirements if needed
 black --check backend
 flake8 backend
 cd backend
@@ -34,7 +34,7 @@ pytest
 alembic upgrade head --sql > migration.sql
 ```
 
-## 4. توسعه آینده
+## 4. Future development
 
-- ادغام با GitLab CI نیز مشابه است: مرحله‌ی نصب وابستگی‌ها، اجرای lint/test و `alembic upgrade --sql` باید در jobs جداگانه تعریف شود.
-- در محیط‌های staging/prod، مرحله‌ی `alembic upgrade head` (بدون `--sql`) پس از تأیید QA اجرا می‌شود.
+- Integration with GitLab CI is similar: the dependency installation step, running lint/test and `alembic upgrade --sql` should be defined in separate jobs.
+- In staging/prod environments, the `alembic upgrade head` step (without `--sql`) runs after QA approval.

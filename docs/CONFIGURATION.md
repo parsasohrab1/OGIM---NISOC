@@ -2,36 +2,36 @@
 
 ## Environment Profiles
 
-پوشه `config/` حاوی فایل‌های نمونه برای محیط‌های مختلف است:
+The `config/` folder contains sample files for different environments:
 
 - `config/development.env.example`
 - `config/production.env.example`
 
-برای استفاده:
+To use:
 
 ```bash
 cp config/development.env.example config/development.env
 cp config/production.env.example config/production.env
 ```
 
-سپس متغیر `OGIM_ENV_FILE` را به مسیر فایل مناسب تنظیم کنید یا متغیر `ENVIRONMENT` را مقداردهی کنید تا فایل به صورت خودکار بارگذاری شود:
+Then set the `OGIM_ENV_FILE` variable to the path of the appropriate file, or set the `ENVIRONMENT` variable so that the file is loaded automatically:
 
 ```bash
 export OGIM_ENV_FILE=config/development.env
-# یا
-export ENVIRONMENT=production  # به طور خودکار به دنبال config/production.env می‌گردد
+# or
+export ENVIRONMENT=production  # automatically looks for config/production.env
 ```
 
-اگر فایل مطابق نام انتخاب‌شده موجود نباشد، برنامه از `.env` در ریشه پروژه استفاده می‌کند.
+If no file matching the chosen name exists, the application uses `.env` in the project root.
 
 ## Secret Management
 
-در محیط‌های Production توصیه می‌شود مقادیر حساس از Secret Manager خارجی تزریق شوند:
+In Production environments it is recommended to inject sensitive values from an external Secret Manager:
 
-- **Docker/Kubernetes**: استفاده از Docker secrets یا Kubernetes Secrets و Mount کردن به صورت فایل یا متغیر محیطی.
-- **Cloud Vaults**: Azure Key Vault، AWS Secrets Manager یا HashiCorp Vault.
+- **Docker/Kubernetes**: Use Docker secrets or Kubernetes Secrets and mount them as a file or environment variable.
+- **Cloud Vaults**: Azure Key Vault, AWS Secrets Manager or HashiCorp Vault.
 
-نمونه برای Kubernetes:
+Example for Kubernetes:
 
 ```yaml
 env:
@@ -42,8 +42,8 @@ env:
         key: database-url
 ```
 
-در CI/CD (GitHub Actions) نیز می‌توان Secrets را در Settings مخزن تعریف و هنگام اجرا تزریق کرد (`secrets.DATABASE_URL`).
+In CI/CD (GitHub Actions) you can also define Secrets in the repository Settings and inject them at run time (`secrets.DATABASE_URL`).
 
 ## Default Values
 
-برای توسعه محلی فایل `development.env.example` شامل مقادیر پیش‌فرض (Postgres/Kafka/Redis محلی) است. قبل از commit، این فایل‌ها را به `.example` برگردانید تا secrets واقعی وارد مخزن نشوند.
+For local development, the file `development.env.example` contains default values (local Postgres/Kafka/Redis). Before committing, rename these files back to `.example` so that real secrets do not enter the repository.

@@ -60,7 +60,7 @@ export default function Dashboard() {
     return () => window.clearInterval(id)
   }, [])
 
-  // Auto Pilot: هر ۲٫۵ثانیه متغیرهای منحرف را به‌سمت بهینه برمی‌گرداند
+  // Auto Pilot: every 2.5 seconds returns the deviated variables toward the optimum
   useEffect(() => {
     if (!autoPilotOn) {
       setApStatus('idle')
@@ -157,71 +157,71 @@ export default function Dashboard() {
             <span className="deh-en">({FIELD.nameEn})</span>
           </h2>
           <p className="deh-meta">
-            کارفرما: {FIELD.clientFa} · نوع نفت: {FIELD.oilTypeFa} · درجه سنگینی ≈ {FIELD.apiGravity}°
+            Client: {FIELD.clientFa} · Oil type: {FIELD.oilTypeFa} · API gravity ≈ {FIELD.apiGravity}°
           </p>
         </div>
         <div className="deh-stream">
-          جریان زنده: {transportLabelFa(transport)}
-          {autoPilotOn && <span className="ap-badge"> · اپراتور هوشمند</span>}
+          Live stream: {transportLabelFa(transport)}
+          {autoPilotOn && <span className="ap-badge"> · Smart operator</span>}
         </div>
       </header>
 
       <div className="metrics-grid deh-kpis">
         <div className="metric-card">
-          <h3>تعداد چاه</h3>
+          <h3>Number of wells</h3>
           <div className="metric-value">{FIELD.wellCount}</div>
-          <small>حلقه · آنلاین {totals.online}</small>
+          <small>wells · online {totals.online}</small>
         </div>
         <div className="metric-card">
-          <h3>دبی نفت میدان</h3>
+          <h3>Field oil rate</h3>
           <div className="metric-value">{totals.oil.toLocaleString()}</div>
           <small>
-            bbl/day · پایه {baseTotals.oil.toLocaleString()}
-            {oilLoss > 0 ? ` · افت ${Math.round(oilLoss).toLocaleString()} (${oilLossPct.toFixed(1)}٪)` : ''}
+            bbl/day · base {baseTotals.oil.toLocaleString()}
+            {oilLoss > 0 ? ` · decline ${Math.round(oilLoss).toLocaleString()} (${oilLossPct.toFixed(1)}%)` : ''}
           </small>
         </div>
         <div className="metric-card">
-          <h3>درصد آب تولیدی میانگین</h3>
+          <h3>Average produced water cut</h3>
           <div className="metric-value">{totals.avgWc.toFixed(1)}%</div>
           <small>
-            پایه {baseTotals.avgWc.toFixed(1)}٪ · Δ {(totals.avgWc - baseTotals.avgWc).toFixed(1)}
+            Base {baseTotals.avgWc.toFixed(1)}% · Δ {(totals.avgWc - baseTotals.avgWc).toFixed(1)}
           </small>
         </div>
         <div className="metric-card">
-          <h3>وضعیت چاه‌ها</h3>
+          <h3>Well status</h3>
           <div className="deh-status-pills">
-            <span className="pill healthy">{totals.healthy} سالم</span>
-            <span className="pill warning">{totals.warning} هشدار</span>
-            <span className="pill critical">{totals.critical} مشکل</span>
-            <span className="pill offline">{totals.offline} آفلاین</span>
+            <span className="pill healthy">{totals.healthy} healthy</span>
+            <span className="pill warning">{totals.warning} warning</span>
+            <span className="pill critical">{totals.critical} problem</span>
+            <span className="pill offline">{totals.offline} offline</span>
           </div>
         </div>
         <div className="metric-card">
-          <h3>هشدارهای فعال</h3>
+          <h3>Active alerts</h3>
           <div className="metric-value alert">{openAlerts}</div>
-          <small>اولویت‌بندی هوشمند</small>
+          <small>Smart prioritization</small>
         </div>
         <div className="metric-card">
-          <h3>گاز / آب</h3>
+          <h3>Gas / water</h3>
           <div className="metric-value deh-dual">
             {Math.round(totals.gas).toLocaleString()}
             <span>Mscf/d</span>
           </div>
-          <small>آب: {Math.round(totals.water).toLocaleString()} bbl/d</small>
+          <small>Water: {Math.round(totals.water).toLocaleString()} bbl/d</small>
         </div>
       </div>
 
       <section className={`deh-layer ap-section ${autoPilotOn ? 'on' : ''}`}>
         <div className="deh-layer-head ap-head">
           <div>
-            <h3>اپراتور هوشمند</h3>
+            <h3>Smart operator</h3>
             <p>
-              متغیرهای قابل تنظیم دستی را کم/زیاد کنید؛ در صورت افت تولید، اپراتور هوشمند به‌صورت خودکار
-              ست‌پوینت‌ها را به‌سمت نقطه بهینه برمی‌گرداند و افت را جبران می‌کند.
+              Increase/decrease the manually adjustable variables; if production declines, the smart operator automatically
+              returns the setpoints toward the optimum and compensates for the decline.
             </p>
           </div>
           <div className="ap-toggles">
-            <div className="ap-power" role="group" aria-label="وضعیت اپراتور هوشمند">
+            <div className="ap-power" role="group" aria-label="Smart operator status">
               <button
                 type="button"
                 className={`ap-power-btn on ${autoPilotOn ? 'active' : ''}`}
@@ -229,7 +229,7 @@ export default function Dashboard() {
                 aria-pressed={autoPilotOn}
               >
                 <span className="ap-power-dot" aria-hidden />
-                روشن
+                On
               </button>
               <button
                 type="button"
@@ -238,40 +238,40 @@ export default function Dashboard() {
                 aria-pressed={!autoPilotOn}
               >
                 <span className="ap-power-dot" aria-hidden />
-                خاموش
+                Off
               </button>
             </div>
             <button type="button" className="ap-reset" onClick={resetControls}>
-              بازگشت به بهینه
+              Return to optimum
             </button>
           </div>
         </div>
 
         <div className="ap-status-row">
           <div className={`ap-status-pill ${apStatus}`}>
-            وضعیت:{' '}
+            Status:{' '}
             {apStatus === 'idle'
-              ? 'دستی'
+              ? 'Manual'
               : apStatus === 'stable'
-                ? 'پایدار'
+                ? 'Stable'
                 : apStatus === 'recovering'
-                  ? 'در حال بازیابی افت'
-                  : 'افت تشخیص داده‌شد'}
+                  ? 'Recovering from decline'
+                  : 'Decline detected'}
           </div>
           <div className="ap-status-pill">
-            ضریب تولید: <strong>{(impact.oilFactor * 100).toFixed(1)}٪</strong>
+            Production factor: <strong>{(impact.oilFactor * 100).toFixed(1)}%</strong>
           </div>
           <div className={`ap-status-pill ${oilLossPct > 2 ? 'warn' : ''}`}>
-            افت ناشی از تنظیمات: <strong>{oilLossPct.toFixed(1)}٪</strong>
+            Decline due to settings: <strong>{oilLossPct.toFixed(1)}%</strong>
           </div>
           <div className="ap-status-pill">
-            انحراف از بهینه: <strong>{(impact.deviationScore * 100).toFixed(0)}٪</strong>
+            Deviation from optimum: <strong>{(impact.deviationScore * 100).toFixed(0)}%</strong>
           </div>
         </div>
 
         <div className="ap-grid">
           <div className="deh-panel ap-sliders">
-            <h4>متغیرهای قابل تنظیم دستی</h4>
+            <h4>Manually adjustable variables</h4>
             {CONTROLLABLE_VARS.map((v) => {
               const val = controls[v.key]
               const row = impact.perVar.find((p) => p.key === v.key)
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   <div className="ap-slider-label">
                     <strong>{v.nameFa}</strong>
                     <span>
-                      {v.nameEn} · بهینه {v.optimal} {v.unit}
+                      {v.nameEn} · optimum {v.optimal} {v.unit}
                     </span>
                   </div>
                   <input
@@ -296,7 +296,7 @@ export default function Dashboard() {
                       {val} {v.unit}
                     </b>
                     {row && row.deviationPct > 0 && (
-                      <em className="warn">انحراف {row.deviationPct}٪</em>
+                      <em className="warn">Deviation {row.deviationPct}%</em>
                     )}
                   </div>
                 </div>
@@ -305,15 +305,15 @@ export default function Dashboard() {
           </div>
 
           <div className="deh-panel ap-log-panel">
-            <h4>اقدامات اپراتور هوشمند</h4>
+            <h4>Smart operator actions</h4>
             {!autoPilotOn && (
               <p className="deh-muted">
-                برای جبران خودکار افت ناشی از تنظیم دستی، اپراتور هوشمند را روشن کنید. ابتدا اسلایدرها را
-                از بهینه دور کنید تا افت را در شاخص کلیدی عملکرد ببینید.
+                To automatically compensate for the decline caused by manual settings, turn on the smart operator. First move the sliders
+                away from the optimum to see the decline in the key performance indicator.
               </p>
             )}
             {autoPilotOn && apLog.length === 0 && (
-              <p className="deh-muted">در انتظار انحراف… سیستم در حالت پایدار است.</p>
+              <p className="deh-muted">Waiting for deviation… the system is in a stable state.</p>
             )}
             <ul className="ap-log">
               {apLog.map((a, i) => (
@@ -332,25 +332,25 @@ export default function Dashboard() {
 
       <section className="deh-layer">
         <div className="deh-layer-head">
-          <h3>لایه دیداری</h3>
-          <p>نمایش لحظه‌ای فشار/دمای سرچاهی، دبی نفت/گاز/آب، وضعیت تجهیزات و نقشه میدان</p>
+          <h3>Visual layer</h3>
+          <p>Real-time display of wellhead pressure/temperature, oil/gas/water rates, equipment status and the field map</p>
         </div>
         <div className="deh-sight-grid">
           <div className="deh-panel deh-map-panel">
             <div className="deh-map-title">
-              نقشه میدان مارون
+              Maroun field map
               <div className="deh-legend">
                 <span>
-                  <i style={{ background: STATUS_COLOR.healthy }} /> سالم
+                  <i style={{ background: STATUS_COLOR.healthy }} /> Healthy
                 </span>
                 <span>
-                  <i style={{ background: STATUS_COLOR.warning }} /> هشدار
+                  <i style={{ background: STATUS_COLOR.warning }} /> Warning
                 </span>
                 <span>
-                  <i style={{ background: STATUS_COLOR.critical }} /> مشکل
+                  <i style={{ background: STATUS_COLOR.critical }} /> Problem
                 </span>
                 <span>
-                  <i style={{ background: STATUS_COLOR.offline }} /> آفلاین
+                  <i style={{ background: STATUS_COLOR.offline }} /> Offline
                 </span>
               </div>
             </div>
@@ -384,16 +384,16 @@ export default function Dashboard() {
               {selected.nameFa} ({selected.id})
             </h4>
             <div className="deh-well-stats">
-              <Stat label="فشار سرچاهی" value={`${selected.thp} psi`} />
-              <Stat label="دمای سرچاهی" value={`${selected.tht} °C`} />
-              <Stat label="دبی نفت" value={`${selected.oilRate} bbl/d`} />
-              <Stat label="دبی گاز" value={`${selected.gasRate} Mscf/d`} />
-              <Stat label="دبی آب" value={`${selected.waterRate} bbl/d`} />
-              <Stat label="درصد آب تولیدی" value={`${selected.waterCut}%`} />
-              <Stat label="دبی‌سنج مجازی نفت" value={`${selected.vfmOilRate} bbl/d`} accent />
+              <Stat label="Wellhead pressure" value={`${selected.thp} psi`} />
+              <Stat label="Wellhead temperature" value={`${selected.tht} °C`} />
+              <Stat label="Oil rate" value={`${selected.oilRate} bbl/d`} />
+              <Stat label="Gas rate" value={`${selected.gasRate} Mscf/d`} />
+              <Stat label="Water rate" value={`${selected.waterRate} bbl/d`} />
+              <Stat label="Produced water cut" value={`${selected.waterCut}%`} />
+              <Stat label="Virtual flow meter oil" value={`${selected.vfmOilRate} bbl/d`} accent />
               <Stat
-                label="پمپ / تجهیزات"
-                value={selected.pumpOnline ? 'آنلاین' : 'آفلاین'}
+                label="Pump / equipment"
+                value={selected.pumpOnline ? 'Online' : 'Offline'}
                 tone={selected.pumpOnline ? 'ok' : 'bad'}
               />
             </div>
@@ -402,11 +402,11 @@ export default function Dashboard() {
 
         <div className="deh-panel deh-sensors">
           <div className="deh-sensors-head">
-            <h4>سنسورهای چاه و تاسیسات — وضعیت با چراغ</h4>
+            <h4>Well and facility sensors — status with indicator lights</h4>
             <div className="sensor-light-legend">
-              <span><i className="sensor-light green" /> سبز · سالم</span>
-              <span><i className="sensor-light yellow" /> زرد · هشدار</span>
-              <span><i className="sensor-light red" /> قرمز · مشکل</span>
+              <span><i className="sensor-light green" /> Green · healthy</span>
+              <span><i className="sensor-light yellow" /> Yellow · warning</span>
+              <span><i className="sensor-light red" /> Red · problem</span>
             </div>
           </div>
 
@@ -432,11 +432,11 @@ export default function Dashboard() {
             <table className="deh-sensor-table">
               <thead>
                 <tr>
-                  <th>وضعیت</th>
-                  <th>متغیر</th>
-                  <th>دسته</th>
-                  <th>واحد</th>
-                  <th>مقدار فعلی ({selected.id})</th>
+                  <th>Status</th>
+                  <th>Variable</th>
+                  <th>Category</th>
+                  <th>Unit</th>
+                  <th>Current value ({selected.id})</th>
                 </tr>
               </thead>
               <tbody>
@@ -468,12 +468,12 @@ export default function Dashboard() {
 
       <section className="deh-layer">
         <div className="deh-layer-head">
-          <h3>لایه تحلیلی</h3>
-          <p>سلامت‌سنجی چاه، شناسایی خودکار عملکرد غیرعادی و شاخص‌های کلیدی</p>
+          <h3>Analytical layer</h3>
+          <p>Well health assessment, automatic detection of abnormal performance and key indicators</p>
         </div>
         <div className="deh-insight-grid">
           <div className="deh-panel">
-            <h4>سلامت‌سنجی چاه‌ها</h4>
+            <h4>Well health assessment</h4>
             <div className="deh-health-list">
               {wells.map((w) => (
                 <button
@@ -493,9 +493,9 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="deh-panel">
-            <h4>چاه‌های نیازمند مداخله</h4>
+            <h4>Wells needing intervention</h4>
             {abnormalWells.length === 0 ? (
-              <p className="deh-muted">همه چاه‌ها در وضعیت قابل قبول هستند.</p>
+              <p className="deh-muted">All wells are in an acceptable condition.</p>
             ) : (
               <ul className="deh-action-list">
                 {abnormalWells.map((w) => (
@@ -503,7 +503,7 @@ export default function Dashboard() {
                     <strong>{w.nameFa}</strong>
                     <span className={`tag ${w.status}`}>{STATUS_LABEL_FA[w.status]}</span>
                     <p>
-                      درصد آب تولیدی {w.waterCut}% · افت ۳۰روزه {w.declinePct30d}% · ریسک تجهیزات{' '}
+                      Produced water cut {w.waterCut}% · 30-day decline {w.declinePct30d}% · equipment risk{' '}
                       {w.equipmentRisk}%
                     </p>
                   </li>
@@ -516,15 +516,15 @@ export default function Dashboard() {
 
       <section className="deh-layer">
         <div className="deh-layer-head">
-          <h3>لایه پیش‌بینی‌کننده</h3>
+          <h3>Predictive layer</h3>
           <p>
-            منحنی افت تولید، پیش‌بینی درصد آب تولیدی، خرابی تجهیزات، دبی‌سنج مجازی و مدیریت هوشمند هشدارها با مدل‌های
-            داده‌کاوی و هوش مصنوعی
+            Production decline curve, produced water cut forecast, equipment failure, virtual flow meter and smart alert management with
+            data-mining and artificial intelligence models
           </p>
         </div>
         <div className="deh-foresight-grid">
           <div className="deh-panel chart-container">
-            <h4>پیش‌بینی درصد آب تولیدی</h4>
+            <h4>Produced water cut forecast</h4>
             <ResponsiveContainer width="100%" height={220}>
               <AreaChart data={wcSeries}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
@@ -534,7 +534,7 @@ export default function Dashboard() {
                 <Area
                   type="monotone"
                   dataKey="waterCut"
-                  name="درصد آب تولیدی %"
+                  name="Produced water cut %"
                   stroke="#42a5f5"
                   fill="#1565c0"
                   fillOpacity={0.35}
@@ -543,7 +543,7 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
           <div className="deh-panel chart-container">
-            <h4>پیش‌بینی افت تولید (منحنی افت تولید) میدان</h4>
+            <h4>Field production decline forecast (production decline curve)</h4>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={declineSeries}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
@@ -554,7 +554,7 @@ export default function Dashboard() {
                 <Line
                   type="monotone"
                   dataKey="actual"
-                  name="فعلی"
+                  name="Current"
                   stroke="#66bb6a"
                   strokeWidth={2}
                   connectNulls={false}
@@ -562,7 +562,7 @@ export default function Dashboard() {
                 <Line
                   type="monotone"
                   dataKey="forecast"
-                  name="پیش‌بینی"
+                  name="Forecast"
                   stroke="#ffa726"
                   strokeDasharray="6 4"
                 />
@@ -570,43 +570,43 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
           <div className="deh-panel">
-            <h4>پیش‌بینی خرابی تجهیزات / پمپ</h4>
+            <h4>Equipment / pump failure forecast</h4>
             <ul className="deh-action-list">
               {highRiskEquipment.map((w) => (
                 <li key={w.id}>
                   <strong>{w.id}</strong>
-                  <span className="tag warning">ریسک {w.equipmentRisk}%</span>
-                  <p>هشدار قبل از خرابی — پیشنهاد برنامه‌ریزی تعمیرات پیشگیرانه پمپ درون‌چاهی الکتریکی</p>
+                  <span className="tag warning">Risk {w.equipmentRisk}%</span>
+                  <p>Alert before failure — plan preventive maintenance of the electric submersible pump</p>
                 </li>
               ))}
               {highRiskEquipment.length === 0 && (
                 <li>
-                  <p className="deh-muted">ریسک تجهیزات در محدوده پایین است.</p>
+                  <p className="deh-muted">Equipment risk is within the low range.</p>
                 </li>
               )}
             </ul>
           </div>
           <div className="deh-panel">
-            <h4>دبی‌سنج مجازی</h4>
+            <h4>Virtual flow meter</h4>
             <p className="deh-muted">
-              تخمین تولید هر چاه بدون دبی‌سنج فیزیکی جداگانه — مقرون‌به‌صرفه برای ۲۴ حلقه مارون
+              Production estimate for each well without a separate physical flow meter — cost-effective for the 24 Maroun wells
             </p>
             <div className="deh-vfm-grid">
               {wells.slice(0, 8).map((w) => (
                 <div key={w.id} className="deh-vfm-card">
                   <strong>{w.id}</strong>
                   <span>{w.vfmOilRate} bbl/d</span>
-                  <small>Δ {(w.vfmOilRate - w.oilRate).toFixed(0)} vs مرجع</small>
+                  <small>Δ {(w.vfmOilRate - w.oilRate).toFixed(0)} vs reference</small>
                 </div>
               ))}
             </div>
             <p className="deh-muted" style={{ marginTop: 8 }}>
-              و {wells.length - 8} چاه دیگر در مدل دبی‌سنج مجازی میدان…
+              and {wells.length - 8} more wells in the field virtual flow meter model…
             </p>
           </div>
           <div className="deh-panel deh-alerts-smart">
-            <h4>مدیریت هوشمند هشدارها</h4>
-            <p className="deh-muted">اولویت‌بندی و کاهش هشدارهای کاذب با همبستگی چاه/تجهیزات</p>
+            <h4>Smart alert management</h4>
+            <p className="deh-muted">Prioritization and reduction of false alerts with well/equipment correlation</p>
             <ul className="deh-action-list">
               {prioritizedAlerts.map((a) => (
                 <li key={a.id}>
@@ -643,18 +643,18 @@ function Stat({
 }
 
 function categoryFa(cat: string) {
-  if (cat === 'wellhead') return 'سرچاهی'
-  if (cat === 'production') return 'تولید'
-  if (cat === 'equipment') return 'تجهیزات'
-  return 'تاسیسات'
+  if (cat === 'wellhead') return 'Wellhead'
+  if (cat === 'production') return 'Production'
+  if (cat === 'equipment') return 'Equipment'
+  return 'Facilities'
 }
 
 type SensorLight = 'green' | 'yellow' | 'red'
 
 function statusLabelFa(s: SensorLight) {
-  if (s === 'green') return 'سالم'
-  if (s === 'yellow') return 'هشدار'
-  return 'مشکل'
+  if (s === 'green') return 'Healthy'
+  if (s === 'yellow') return 'Warning'
+  return 'Problem'
 }
 
 function getSensorReading(key: string, w: WellLiveState): { display: string; status: SensorLight; value: number | null } {
@@ -771,26 +771,26 @@ function buildPrioritizedAlerts(wells: WellLiveState[], openCount: number | stri
   const items = [
     ...critical.map((w, i) => ({
       id: `c-${w.id}`,
-      title: `اولویت بحرانی — ${w.nameFa}`,
+      title: `Critical priority — ${w.nameFa}`,
       priority: 'P1',
       severity: 'critical' as WellHealthStatus,
-      detail: `عملکرد غیرعادی / پمپ ${w.pumpOnline ? 'تحت تنش' : 'آفلاین'} · امتیاز سلامت ${w.healthScore}`,
+      detail: `Abnormal performance / pump ${w.pumpOnline ? 'under stress' : 'offline'} · health score ${w.healthScore}`,
       order: i,
     })),
     ...highWc.slice(0, 3).map((w, i) => ({
       id: `wc-${w.id}`,
-      title: `درصد آب تولیدی بالا — ${w.id}`,
+      title: `High produced water cut — ${w.id}`,
       priority: 'P2',
       severity: 'warning' as WellHealthStatus,
-      detail: `درصد آب تولیدی ${w.waterCut}% — همبسته‌سازی برای کاهش هشدار کاذب انجام شد`,
+      detail: `Produced water cut ${w.waterCut}% — correlation performed to reduce false alerts`,
       order: 10 + i,
     })),
     {
       id: 'fp-filter',
-      title: 'فیلتر هشدار کاذب فعال',
+      title: 'False alert filter active',
       priority: 'Info',
       severity: 'healthy' as WellHealthStatus,
-      detail: `از مجموعه هشدارهای خام، موارد تکراری/نویزی سرکوب شدند · هشدارهای باز: ${openCount}`,
+      detail: `Duplicate/noisy items were suppressed from the set of raw alerts · open alerts: ${openCount}`,
       order: 99,
     },
   ]

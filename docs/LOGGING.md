@@ -1,22 +1,22 @@
 # Logging & Centralized Aggregation
 
-این راهنما توضیح می‌دهد که چگونه لاگ‌های سرویس‌ها به فرمت JSON تولید و در Dev/Prod به مقصد مرکزی (ELK / Loki) ارسال شوند.
+This guide explains how service logs are produced in JSON format and shipped to a central destination (ELK / Loki) in Dev/Prod.
 
-## فرمت لاگ
+## Log format
 
-کلاس `JSONFormatter` در `backend/shared/logging_config.py` فیلدهای زیر را ثبت می‌کند:
+The `JSONFormatter` class in `backend/shared/logging_config.py` records the following fields:
 
-| فیلد | توضیح |
+| Field | Description |
 |------|-------|
-| `timestamp` | زمان UTC ایجاد لاگ |
-| `level` | سطح (INFO، ERROR، …) |
-| `service` | نام سرویس (`setup_logging("service-name")`) |
-| `environment` | مقدار `settings.ENVIRONMENT` (dev/staging/prod) |
-| `message`, `module`, `function`, `line` | اطلاعات استاندارد لاگ |
-| `correlation_id`, `request_id`, `user_id` | در صورت ارسال از logger adapter |
-| `exception` | متن استک اگر خطا رخ دهد |
+| `timestamp` | UTC time the log was created |
+| `level` | Level (INFO, ERROR, …) |
+| `service` | Service name (`setup_logging("service-name")`) |
+| `environment` | The value of `settings.ENVIRONMENT` (dev/staging/prod) |
+| `message`, `module`, `function`, `line` | Standard log information |
+| `correlation_id`, `request_id`, `user_id` | If passed via the logger adapter |
+| `exception` | Stack trace text if an error occurs |
 
-در صورت نیاز به زمینه‌ی بیشتر، از `LoggerAdapter` استفاده کنید:
+If you need more context, use `LoggerAdapter`:
 
 ```python
 from shared.logging_config import LoggerAdapter, setup_logging
@@ -26,10 +26,10 @@ logger = LoggerAdapter(logger, {"correlation_id": req_id})
 logger.info("Alert acknowledged", extra={"user_id": user.username})
 ```
 
-## ارسال به Loki (مثال Dev)
+## Shipping to Loki (Dev example)
 
-### فایل `infrastructure/logging/promtail-config.yaml`
-این فایل نمونه‌ای از Promtail است که لاگ‌ها را از stdout سرویس‌ها جمع می‌کند و به Loki ارسال می‌کند:
+### The file `infrastructure/logging/promtail-config.yaml`
+This file is a sample Promtail that collects logs from the services' stdout and ships them to Loki:
 
 ```yaml
 server:
@@ -52,7 +52,7 @@ scrape_configs:
           __path__: /var/log/containers/*ogim*.log
 ```
 
-### اجرای Loki + Promtail + Grafana (نمونه docker-compose)
+### Running Loki + Promtail + Grafana (sample docker-compose)
 
 ```yaml
 services:
@@ -73,19 +73,19 @@ services:
     ports: ["3002:3000"]
 ```
 
-در Grafana یک datasource از نوع Loki اضافه کرده و کوئری نمونه زیر را برای مشاهده لاگ‌های یک سرویس اجرا کنید:
+In Grafana, add a datasource of type Loki and run the following sample query to view a service's logs:
 
 ```logql
 {job="ogim", service="auth-service"} | json | level="ERROR"
 ```
 
-## ارسال به ELK (گزینه دیگر)
+## Shipping to ELK (another option)
 
-اگر از ELK استفاده می‌کنید، می‌توانید Filebeat یا Logstash را جایگزین Promtail کنید. کافی است ورودی را از stdout کانتینرها یا فایل لاگ دریافت و به Elasticsearch ارسال کنید. JSON formatter نیاز به تنظیم اضافی ندارد.
+If you use ELK, you can replace Promtail with Filebeat or Logstash. Just take the input from the containers' stdout or the log file and ship it to Elasticsearch. The JSON formatter needs no additional configuration.
 
-## نکات عملیاتی
-- سطح لاگ‌ها توسط `settings.LOG_LEVEL` کنترل می‌شود (پیش‌فرض `INFO`).
-- در تولید حتماً `LOG_FORMAT=json` باشد تا لاگ‌ها ساختار یافته ذخیره شوند.
-- برای ردیابی درخواست‌ها، آیدی درخواست را از Gateway یا middleware به لاگر پاس کنید (correlation/request id).
-- در صورت وجود حادثه، می‌توانید با فیلتر `correlation_id` مسیر درخواست را در تمام سرویس‌ها بیابید.
+## Operational notes
+- Log levels are controlled by `settings.LOG_LEVEL` (default `INFO`).
+- In production, `LOG_FORMAT=json` must be set so that logs are stored in structured form.
+- For request tracing, pass the request ID from the Gateway or middleware to the logger (correlation/request id).
+- In case of an incident, you can follow the request path across all services by filtering on `correlation_id`.
 

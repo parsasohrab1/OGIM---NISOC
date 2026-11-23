@@ -230,7 +230,7 @@ class Simulation(Base):
 
 class Subsidiary(Base):
     """
-    یکی از ۵ شرکت بهره‌برداری تابعه شرکت ملی مناطق نفت‌خیز جنوب (NISOC).
+    One of the 5 subsidiary operating companies of the National Iranian South Oil Company (NISOC).
     Reservoir/well counts here are the manually-entered rollups shown on the
     subsidiaries combo page; per-reservoir detail lives in `Reservoir`.
     """

@@ -1,127 +1,127 @@
-# 📚 مستندات OGIM
+# 📚 OGIM Documentation
 
-مرکز مستندات سیستم هوشمند نظارت و پایش میدان نفت و گاز
+Documentation hub for the intelligent oil and gas field monitoring system
 
 ---
 
-## 📖 فهرست مستندات
+## 📖 Documentation index
 
-### 🚀 شروع کار
+### 🚀 Getting started
 
-- **[README](README.md)** - راهنمای جامع پروژه (فارسی + English)
-  - معرفی پروژه
-  - ویژگی‌ها و قابلیت‌ها
-  - تکنولوژی‌های استفاده شده
-  - شروع سریع
-  - مثال‌های کد
-- **[REPO_STRUCTURE](REPO_STRUCTURE.md)** - ساختار پوشه‌ها و بخش‌های اصلی پروژه
-- **[DEVELOPER_GUIDE](DEVELOPER_GUIDE.md)** - راهنمای توسعه‌دهنده و گردش کار
-- **[USER_GUIDE](USER_GUIDE.md)** - راهنمای کاربر نهایی (Dashboard/Alerts/BI/3D/AR)
-- **[API_REFERENCE](API_REFERENCE.md)** - مرجع API به‌روز با endpointهای جدید
-- **[PHASE3_HARDENING](PHASE3_HARDENING.md)** - تست ≥85٪، بهینه‌سازی، API Security، KPIها
+- **[README](README.md)** - Comprehensive project guide (English)
+  - Project introduction
+  - Features and capabilities
+  - Technologies used
+  - Quick start
+  - Code examples
+- **[REPO_STRUCTURE](REPO_STRUCTURE.md)** - Folder structure and main parts of the project
+- **[DEVELOPER_GUIDE](DEVELOPER_GUIDE.md)** - Developer guide and workflow
+- **[USER_GUIDE](USER_GUIDE.md)** - End-user guide (Dashboard/Alerts/BI/3D/AR)
+- **[API_REFERENCE](API_REFERENCE.md)** - Up-to-date API reference with the new endpoints
+- **[PHASE3_HARDENING](PHASE3_HARDENING.md)** - Tests ≥85%, optimization, API Security, KPIs
 
-### ⚙️ نصب و راه‌اندازی
+### ⚙️ Installation and setup
 
-- **[INSTALLATION](INSTALLATION.md)** - راهنمای کامل نصب و راه‌اندازی
-  - پیش‌نیازها
-  - نصب با Docker Compose
-  - نصب دستی (Development)
-  - تنظیمات اولیه
-  - عیب‌یابی
-- **[CONFIGURATION](CONFIGURATION.md)** - پروفایل‌های dev/prod و مدیریت Secret ها
+- **[INSTALLATION](INSTALLATION.md)** - Complete installation and setup guide
+  - Prerequisites
+  - Installation with Docker Compose
+  - Manual installation (Development)
+  - Initial settings
+  - Troubleshooting
+- **[CONFIGURATION](CONFIGURATION.md)** - dev/prod profiles and Secret management
 
-### 🏗️ معماری
+### 🏗️ Architecture
 
-- **[ARCHITECTURE](ARCHITECTURE.md)** - معماری سیستم
-  - نمای کلی معماری
-  - لایه‌های سیستم
-  - میکروسرویس‌ها
-  - جریان داده
-  - مقیاس‌پذیری
-  - امنیت
+- **[ARCHITECTURE](ARCHITECTURE.md)** - System architecture
+  - Architecture overview
+  - System layers
+  - Microservices
+  - Data flow
+  - Scalability
+  - Security
 
-### 📊 داده و متغیرها
+### 📊 Data and variables
 
-**فایل CSV:**
-- **[variables_list.csv](../data/variables_list.csv)** - لیست کامل 65+ متغیر در فرمت CSV
-  - دسته‌بندی متغیرها
-  - واحدها و محدوده‌ها
-  - نام‌های فارسی
+**CSV file:**
+- **[variables_list.csv](../data/variables_list.csv)** - Complete list of 65+ variables in CSV format
+  - Variable categories
+  - Units and ranges
+  - Localized names
 
-**راهنمای تولید داده:**
-- مراجعه کنید به: [data/README.md](../data/README.md)
-- اسکریپت‌های تولید داده: [data/](../data/)
-  - `advanced_data_generator.py` - 6 ماه، 1 ثانیه
-  - `generate_sample_data.py` - 1 هفته، 1 دقیقه
+**Data generation guide:**
+- See: [data/README.md](../data/README.md)
+- Data generation scripts: [data/](../data/)
+  - `advanced_data_generator.py` - 6 months, 1 second
+  - `generate_sample_data.py` - 1 week, 1 minute
 
 ### 🖥️ Frontend
 
-- **[frontend/web/README.md](../frontend/web/README.md)** - راهنمای Frontend
-  - نصب و راه‌اندازی
-  - ساختار پروژه
-  - توسعه
-  - Build و Deploy
+- **[frontend/web/README.md](../frontend/web/README.md)** - Frontend guide
+  - Installation and setup
+  - Project structure
+  - Development
+  - Build and Deploy
 
 ### 🛠️ Backend
 
-**سرویس‌های Backend:**
+**Backend services:**
 
-1. **Auth Service** - احراز هویت و مجوزدهی
-   - مسیر: `backend/auth-service/`
+1. **Auth Service** - Authentication and authorization
+   - Path: `backend/auth-service/`
    - Port: 8001
    - API Docs: http://localhost:8001/docs
 
-2. **Data Ingestion Service** - دریافت داده
-   - مسیر: `backend/data-ingestion-service/`
+2. **Data Ingestion Service** - Data ingestion
+   - Path: `backend/data-ingestion-service/`
    - Port: 8002
    - API Docs: http://localhost:8002/docs
 
-3. **ML Inference Service** - استنتاج ML
-   - مسیر: `backend/ml-inference-service/`
+3. **ML Inference Service** - ML inference
+   - Path: `backend/ml-inference-service/`
    - Port: 8004
    - API Docs: http://localhost:8004/docs
 
-4. **Alert Service** - مدیریت هشدارها
-   - مسیر: `backend/alert-service/`
+4. **Alert Service** - Alert management
+   - Path: `backend/alert-service/`
    - Port: 8003
    - API Docs: http://localhost:8003/docs
 
-5. **Command & Control Service** - فرمان و کنترل
-   - مسیر: `backend/command-control-service/`
+5. **Command & Control Service** - Command and control
+   - Path: `backend/command-control-service/`
    - Port: 8005
    - API Docs: http://localhost:8005/docs
 
-6. **Tag Catalog Service** - کاتالوگ تگ‌ها
-   - مسیر: `backend/tag-catalog-service/`
+6. **Tag Catalog Service** - Tag catalog
+   - Path: `backend/tag-catalog-service/`
    - Port: 8006
    - API Docs: http://localhost:8006/docs
 
 **Shared Modules:**
-- مسیر: `backend/shared/`
-- شامل: Database, Models, Security, Config, Logging
+- Path: `backend/shared/`
+- Includes: Database, Models, Security, Config, Logging
 
 **Stream Processing:**
-- مسیر: `backend/flink-jobs/`
-- Apache Flink jobs برای پردازش real-time
+- Path: `backend/flink-jobs/`
+- Apache Flink jobs for real-time processing
 
 **Testing:**
-- مسیر: `backend/tests/`
-- اجرا: `pytest backend/tests/`
+- Path: `backend/tests/`
+- Run: `pytest backend/tests/`
 
 ---
 
-## 📚 مستندات بر اساس موضوع
+## 📚 Documentation by topic
 
-### برای توسعه‌دهندگان
+### For developers
 
-1. **شروع سریع:** [README.md](README.md)
-2. **نصب محیط Development:** [INSTALLATION.md](INSTALLATION.md)
-3. **معماری سیستم:** [ARCHITECTURE.md](ARCHITECTURE.md)
+1. **Quick start:** [README.md](README.md)
+2. **Development environment setup:** [INSTALLATION.md](INSTALLATION.md)
+3. **System architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
 4. **Frontend Development:** [../frontend/web/README.md](../frontend/web/README.md)
-5. **Backend Development:** مراجعه به `backend/*/main.py`
+5. **Backend Development:** See `backend/*/main.py`
 6. **Testing:** `backend/tests/`
 
-### برای DevOps
+### For DevOps
 
 1. **Docker Setup:** `docker-compose.dev.yml`
 2. **Kubernetes Deployment:** `infrastructure/kubernetes/`
@@ -132,14 +132,14 @@
 7. **Security Checklist:** [`SECURITY_CHECKLIST.md`](SECURITY_CHECKLIST.md)
 8. **ML Operations:** [`ML_OPERATIONS.md`](ML_OPERATIONS.md)
 
-### برای Data Engineers
+### For Data Engineers
 
 1. **Data Generation:** [../data/README.md](../data/README.md)
 2. **Variables List:** [../data/variables_list.csv](../data/variables_list.csv)
 3. **Flink Jobs:** `backend/flink-jobs/`
 4. **ML Models:** `backend/ml-inference-service/mlflow_integration.py`
 
-### برای مدیران پروژه
+### For project managers
 
 1. **Project Overview:** [README.md](README.md)
 2. **System Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
@@ -147,7 +147,7 @@
 
 ---
 
-## 🔗 لینک‌های سریع
+## 🔗 Quick links
 
 ### API Documentation
 - **API Gateway:** http://localhost:8000/docs
@@ -157,11 +157,11 @@
 - **ML Inference:** http://localhost:8004/docs
 - **API Curated Reference:** [API_REFERENCE.md](API_REFERENCE.md)
 
-### رابط کاربری
+### User interface
 - **Web Portal:** http://localhost:3000
 - **MLflow UI:** http://localhost:5000
 
-### پایگاه داده
+### Database
 - **PostgreSQL:** localhost:5432
 - **TimescaleDB:** localhost:5433
 - **Redis:** localhost:6379
@@ -172,18 +172,18 @@
 
 ---
 
-## 📊 ساختار پروژه
+## 📊 Project structure
 
 ```
 OGIM---Oil-Gas-Intelligent-Monitoring/
-├── docs/                          # 📚 این پوشه
-│   ├── README.md                  # راهنمای جامع پروژه
-│   ├── INSTALLATION.md            # راهنمای نصب
-│   ├── ARCHITECTURE.md            # معماری سیستم
-│   └── INDEX.md                   # این فایل
+├── docs/                          # 📚 This folder
+│   ├── README.md                  # Comprehensive project guide
+│   ├── INSTALLATION.md            # Installation guide
+│   ├── ARCHITECTURE.md            # System architecture
+│   └── INDEX.md                   # This file
 │
 ├── backend/                       # 🔧 Backend Services
-│   ├── shared/                    # ماژول‌های مشترک
+│   ├── shared/                    # Shared modules
 │   ├── auth-service/
 │   ├── data-ingestion-service/
 │   ├── ml-inference-service/
@@ -220,23 +220,23 @@ OGIM---Oil-Gas-Intelligent-Monitoring/
 
 ---
 
-## 🎓 آموزش‌های گام به گام
+## 🎓 Step-by-step tutorials
 
-### 1️⃣ اولین بار استفاده می‌کنید؟
+### 1️⃣ Using it for the first time?
 
-1. **خواندن:** [README.md](README.md)
-2. **نصب:** [INSTALLATION.md](INSTALLATION.md)
-3. **تست:** اجرای `generate_sample_data.py`
-4. **اکسپلور:** باز کردن Web Portal
+1. **Read:** [README.md](README.md)
+2. **Install:** [INSTALLATION.md](INSTALLATION.md)
+3. **Test:** Run `generate_sample_data.py`
+4. **Explore:** Open the Web Portal
 
-### 2️⃣ می‌خواهید توسعه بدهید؟
+### 2️⃣ Want to develop?
 
-1. **معماری:** [ARCHITECTURE.md](ARCHITECTURE.md)
+1. **Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
 2. **Backend:** `backend/shared/README.md` (if exists)
 3. **Frontend:** [../frontend/web/README.md](../frontend/web/README.md)
 4. **Testing:** `pytest backend/tests/`
 
-### 3️⃣ می‌خواهید Deploy کنید؟
+### 3️⃣ Want to Deploy?
 
 1. **Docker:** `docker-compose -f docker-compose.dev.yml up`
 2. **Kubernetes:** `kubectl apply -f infrastructure/kubernetes/`
@@ -245,46 +245,46 @@ OGIM---Oil-Gas-Intelligent-Monitoring/
 
 ---
 
-## 🆘 دریافت کمک
+## 🆘 Getting help
 
-### مشکل فنی دارید؟
-1. **عیب‌یابی:** [INSTALLATION.md#troubleshooting](INSTALLATION.md)
+### Have a technical problem?
+1. **Troubleshooting:** [INSTALLATION.md#troubleshooting](INSTALLATION.md)
 2. **Issues:** [GitHub Issues](https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring/issues)
 3. **API Docs:** http://localhost:8000/docs
 
-### سوال دارید؟
+### Have a question?
 1. **README:** [README.md](README.md)
 2. **GitHub Discussions:** (if enabled)
-3. **Email:** مشخص شده در LICENSE
+3. **Email:** Specified in the LICENSE
 
 ---
 
-## 📝 مشارکت
+## 📝 Contributing
 
-برای مشارکت در پروژه:
+To contribute to the project:
 
-1. Fork کنید
-2. Feature branch بسازید
-3. Commit کنید
-4. Pull Request بزنید
+1. Fork it
+2. Create a feature branch
+3. Commit
+4. Open a Pull Request
 
-جزئیات در [README.md#contributing](README.md)
-
----
-
-## 📄 لایسنس
-
-MIT License - مراجعه کنید به LICENSE file
+Details in [README.md#contributing](README.md)
 
 ---
 
-## 🔄 به‌روزرسانی‌ها
+## 📄 License
 
-- **v1.0.0** (نوامبر 2025): اولین نسخه
-  - معماری میکروسرویس کامل
-  - 65+ متغیر شبیه‌سازی
-  - ML Integration با MLflow
-  - Stream Processing با Flink
+MIT License - see the LICENSE file
+
+---
+
+## 🔄 Updates
+
+- **v1.0.0** (November 2025): First release
+  - Complete microservice architecture
+  - 65+ simulated variables
+  - ML Integration with MLflow
+  - Stream Processing with Flink
   - React Web Portal
 
 ---

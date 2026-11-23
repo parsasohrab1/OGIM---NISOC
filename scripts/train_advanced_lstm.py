@@ -1,6 +1,6 @@
 """
 Script to train advanced LSTM models for oil well time series prediction
-اسکریپت آموزش مدل‌های LSTM پیشرفته برای پیش‌بینی سری زمانی چاه نفتی
+Training script for advanced LSTM models for oil well time-series forecasting
 """
 
 import sys
@@ -22,7 +22,7 @@ import pandas as pd
 def load_well_data(well_name: str, data_path: str = None) -> np.ndarray:
     """
     Load historical data for a well
-    بارگذاری داده‌های تاریخی برای یک چاه
+    Load historical data for a single well
     """
     if data_path is None:
         data_path = os.path.join(os.path.dirname(__file__), "..", "data")
@@ -65,7 +65,7 @@ def train_well_model(
 ):
     """
     Train LSTM model for a specific well
-    آموزش مدل LSTM برای یک چاه خاص
+    Train the LSTM model for a specific well
     """
     print("=" * 70)
     print(f"Training {model_type} LSTM model for well: {well_name}")
@@ -128,7 +128,7 @@ def train_well_model(
 def test_prediction(model: AdvancedLSTMModel, well_name: str, n_points: int = 100):
     """
     Test model prediction
-    تست پیش‌بینی مدل
+    Test the model's predictions
     """
     print(f"\n4. Testing prediction for {well_name}...")
 

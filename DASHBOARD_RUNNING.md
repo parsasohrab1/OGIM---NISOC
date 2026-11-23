@@ -1,15 +1,15 @@
-# ✅ داشبورد OGIM در حال اجرا است!
+# ✅ The OGIM dashboard is running!
 
-## 📍 آدرس‌های دسترسی
+## 📍 Access addresses
 
 ### Frontend
 - **Frontend Dashboard**: http://localhost:3000
 - **API Gateway**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 
-### سرویس‌های Backend
+### Backend services
 
-#### سرویس‌های اصلی
+#### Main services
 - Auth Service: http://localhost:8001
 - Data Ingestion: http://localhost:8002
 - ML Inference: http://localhost:8003
@@ -21,17 +21,17 @@
 - Edge Computing: http://localhost:8009
 - ERP Integration: http://localhost:8010
 
-#### سرویس‌های جدید
+#### New services
 - **DVR Service**: http://localhost:8011
 - **Remote Operations**: http://localhost:8012
 - **Data Variables**: http://localhost:8013
 
-## 🔐 ورود به سیستم
+## 🔐 Logging in
 
 - **Username**: admin
 - **Password**: Admin@123
 
-## 📊 تب‌های جدید در Navigation
+## 📊 New tabs in Navigation
 
 1. **DVR** - Data Validation & Reconciliation
    - Quality scores
@@ -63,13 +63,13 @@
    - Real-time synchronization
    - Protocol conversion
 
-## 🚀 وضعیت سرویس‌ها
+## 🚀 Service status
 
-سرویس‌های جدید در حال راه‌اندازی هستند. لطفاً چند ثانیه صبر کنید تا کاملاً آماده شوند.
+The new services are starting. Please wait a few seconds until they are fully ready.
 
-## 📝 نکات
+## 📝 Notes
 
-- تمام سرویس‌ها از طریق API Gateway در دسترس هستند
-- Frontend در پورت 3000 اجرا می‌شود
-- برای دسترسی به API Documentation به http://localhost:8000/docs بروید
+- All services are accessible through the API Gateway
+- The Frontend runs on port 3000
+- To access the API Documentation go to http://localhost:8000/docs
 

@@ -21,7 +21,7 @@ export default function Login() {
     try {
       await login(username, password)
     } catch (err: any) {
-      setError(err?.response?.data?.detail || 'ورود ناموفق بود')
+      setError(err?.response?.data?.detail || 'Login failed')
     } finally {
       setLoading(false)
     }
@@ -30,10 +30,10 @@ export default function Login() {
   return (
     <div className="login-page" dir="rtl">
       <form className="login-card" onSubmit={handleSubmit}>
-        <h1>هوشمندسازی میادین نفت و گاز</h1>
-        <p className="login-subtitle">میدان مارون · شرکت ملی مناطق نفت‌خیز جنوب</p>
+        <h1>Oil and Gas Field Smartification</h1>
+        <p className="login-subtitle">Maroun field · National Iranian South Oil Company</p>
 
-        <label htmlFor="username">نام کاربری</label>
+        <label htmlFor="username">Username</label>
         <input
           id="username"
           type="text"
@@ -43,7 +43,7 @@ export default function Login() {
           required
         />
 
-        <label htmlFor="password">رمز عبور</label>
+        <label htmlFor="password">Password</label>
         <input
           id="password"
           type="password"
@@ -56,7 +56,7 @@ export default function Login() {
         {error && <p className="login-error">{error}</p>}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'در حال ورود…' : 'ورود'}
+          {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
     </div>

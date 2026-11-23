@@ -6,7 +6,7 @@ const API_BASE_URL = getApiBaseUrl()
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  // در حالت آفلاین سریع شکست بخور تا fallback محلی فعال شود
+  // In offline mode fail fast so the local fallback is activated
   timeout: shouldUseLocalLive() ? 2500 : 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     if (shouldUseLocalLive()) {
-      // درخواست‌های API در حالت آفلاین را زود قطع کن
+      // Abort API requests quickly in offline mode
       config.timeout = Math.min(config.timeout ?? 2500, 2500)
     }
 

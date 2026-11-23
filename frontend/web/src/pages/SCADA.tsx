@@ -37,9 +37,9 @@ import './SCADA.css'
 type Tab = 'overview' | 'control' | 'alarms' | 'tags' | 'pipeline'
 
 const STATUS_FA: Record<ConnStatus, string> = {
-  online: 'آنلاین',
-  degraded: 'افت کیفیت',
-  offline: 'قطع',
+  online: 'Online',
+  degraded: 'Degraded',
+  offline: 'Disconnected',
 }
 
 const STATUS_COLOR_CONN: Record<ConnStatus, string> = {
@@ -48,14 +48,14 @@ const STATUS_COLOR_CONN: Record<ConnStatus, string> = {
   offline: '#c62828',
 }
 
-const QUALITY_FA = { good: 'خوب', uncertain: 'مشکوک', bad: 'بد' } as const
-const SEV_FA = { critical: 'بحرانی', warning: 'هشدار', info: 'اطلاع' } as const
-const IL_FA = { armed: 'آماده', tripped: 'فعال‌شده', bypassed: 'بای‌پس' } as const
+const QUALITY_FA = { good: 'Good', uncertain: 'Uncertain', bad: 'Bad' } as const
+const SEV_FA = { critical: 'Critical', warning: 'Warning', info: 'Info' } as const
+const IL_FA = { armed: 'Armed', tripped: 'Tripped', bypassed: 'Bypassed' } as const
 
 const REG_TYPE_FA: Record<string, string> = {
-  Holding: 'ست‌پوینت نوشتني',
-  Input: 'فیدبک خواندنی',
-  Coil: 'اینترلاک بولین',
+  Holding: 'Writable setpoint',
+  Input: 'Readable feedback',
+  Coil: 'Boolean interlock',
 }
 
 const TOOLTIP = { background: '#ffffff', border: '1px solid #ccc', borderRadius: 8, color: '#111' }
@@ -121,7 +121,7 @@ export default function SCADA() {
   }, [selectedTag])
 
   const padOilChart = useMemo(
-    () => pads.map((p) => ({ pad: `پد ${p.pad}`, oil: p.oil, alarms: p.alarms })),
+    () => pads.map((p) => ({ pad: `Pad ${p.pad}`, oil: p.oil, alarms: p.alarms })),
     [pads]
   )
 
@@ -130,9 +130,9 @@ export default function SCADA() {
     const u = tags.filter((t) => t.quality === 'uncertain').length
     const b = tags.filter((t) => t.quality === 'bad').length
     return [
-      { name: 'خوب', value: g, color: '#2e7d32' },
-      { name: 'مشکوک', value: u, color: '#f9a825' },
-      { name: 'بد', value: b, color: '#c62828' },
+      { name: 'Good', value: g, color: '#2e7d32' },
+      { name: 'Uncertain', value: u, color: '#f9a825' },
+      { name: 'Bad', value: b, color: '#c62828' },
     ]
   }, [tags])
 
@@ -153,7 +153,7 @@ export default function SCADA() {
   const applySetpoint = (sp: ControlSetpoint) => {
     setWriteLog((prev) =>
       [
-        `${new Date().toLocaleTimeString('fa-IR')} — ارسال ست‌پوینت «${sp.nameFa}» = ${sp.value} ${sp.unit} → آدرس ${sp.address} (صف فرمان و کنترل)`,
+        `${new Date().toLocaleTimeString('en-US')} — sent setpoint "${sp.nameFa}" = ${sp.value} ${sp.unit} → address ${sp.address} (command and control queue)`,
         ...prev,
       ].slice(0, 24)
     )
@@ -161,7 +161,7 @@ export default function SCADA() {
 
   const ackAlarm = (title: string) => {
     setWriteLog((prev) =>
-      [`${new Date().toLocaleTimeString('fa-IR')} — تأیید آلارم: ${title}`, ...prev].slice(0, 24)
+      [`${new Date().toLocaleTimeString('en-US')} — alarm acknowledged: ${title}`, ...prev].slice(0, 24)
     )
   }
 
@@ -170,20 +170,20 @@ export default function SCADA() {
       <header className="scada-hero">
         <div>
           <p className="scada-client">{FIELD.clientFa}</p>
-          <h2>اسکادا و کنترل‌گر منطقی — {FIELD.nameFa}</h2>
+          <h2>SCADA and logic controller — {FIELD.nameFa}</h2>
           <p className="scada-meta">
-            پایش زنده ۲۴ حلقه، تأسیسات سطح، آلارم صنعتی، اینترلاک ایمنی و ارسال ست‌پوینت کنترل برای نفت سبک-میانه ترش
-            درجه سنگینی {FIELD.apiGravity}
+            Live monitoring of 24 wells, surface facilities, industrial alarms, safety interlocks and sending control setpoints for sour light-to-medium crude
+            API gravity {FIELD.apiGravity}
           </p>
         </div>
         <div className="scada-tabs">
           {(
             [
-              ['overview', 'نمای عملیاتی'],
-              ['control', 'کنترل و ست‌پوینت'],
-              ['alarms', 'آلارم و اینترلاک'],
-              ['tags', 'تگ‌ها و رجیسترها'],
-              ['pipeline', 'مسیر داده'],
+              ['overview', 'Operations view'],
+              ['control', 'Control and setpoints'],
+              ['alarms', 'Alarms and interlocks'],
+              ['tags', 'Tags and registers'],
+              ['pipeline', 'Data path'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -200,38 +200,38 @@ export default function SCADA() {
 
       <div className="scada-kpis">
         <div className="skpi">
-          <span>اتصالات میدانی</span>
+          <span>Field connections</span>
           <strong>
             {summary.online}/{summary.connections}
           </strong>
           <small>
-            افت {summary.degraded} · قطع {summary.offline}
+            Degraded {summary.degraded} · disconnected {summary.offline}
           </small>
         </div>
         <div className="skpi">
-          <span>آلارم‌های باز</span>
+          <span>Open alarms</span>
           <strong>{alarms.length}</strong>
           <small>
-            بحرانی {alarms.filter((a) => a.severity === 'critical').length} · هشدار{' '}
+            Critical {alarms.filter((a) => a.severity === 'critical').length} · warning{' '}
             {alarms.filter((a) => a.severity === 'warning').length}
           </small>
         </div>
         <div className="skpi">
-          <span>نفت صادراتی تأسیسات</span>
+          <span>Facility export oil</span>
           <strong>{facility.exportOil.toLocaleString()}</strong>
-          <small>بشکه در روز</small>
+          <small>barrels per day</small>
         </div>
         <div className="skpi">
-          <span>نقاط پویش / ثانیه</span>
+          <span>Scan points / second</span>
           <strong>{summary.pointsPerSec.toLocaleString()}</strong>
-          <small>تگ قابل‌نوشتن {summary.writable}</small>
+          <small>Writable tags {summary.writable}</small>
         </div>
       </div>
 
       {tab === 'overview' && (
         <div className="scada-grid">
           <section className="scada-card wide">
-            <h3>نمای پدهای تولید</h3>
+            <h3>Production pads view</h3>
             <div className="pad-grid">
               {pads.map((p) => (
                 <button
@@ -250,19 +250,19 @@ export default function SCADA() {
                   </div>
                   <div className="pad-metrics">
                     <div>
-                      <small>نفت</small>
+                      <small>Oil</small>
                       <b>{p.oil.toLocaleString()}</b>
                     </div>
                     <div>
-                      <small>آب تولیدی</small>
+                      <small>Produced water</small>
                       <b>{p.avgWc}%</b>
                     </div>
                     <div>
-                      <small>فشار سرچاهی</small>
+                      <small>Wellhead pressure</small>
                       <b>{p.avgThp}</b>
                     </div>
                     <div>
-                      <small>آنلاین / آلارم</small>
+                      <small>Online / alarms</small>
                       <b>
                         {p.online}/4 · {p.alarms}
                       </b>
@@ -284,27 +284,27 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>مقایسه دبی نفت پدها</h3>
+            <h3>Pad oil rate comparison</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={padOilChart}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                 <XAxis dataKey="pad" stroke="#888" />
                 <YAxis stroke="#888" />
                 <Tooltip contentStyle={TOOLTIP} />
-                <Bar dataKey="oil" name="نفت (بشکه/روز)" fill="#42a5f5" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="oil" name="Oil (barrels/day)" fill="#42a5f5" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </section>
 
           <section className="scada-card">
-            <h3>کیفیت تگ‌های زنده</h3>
+            <h3>Live tag quality</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={qualityBars}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                 <XAxis dataKey="name" stroke="#888" />
                 <YAxis stroke="#888" />
                 <Tooltip contentStyle={TOOLTIP} />
-                <Bar dataKey="value" name="تعداد" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="value" name="Count" radius={[4, 4, 0, 0]}>
                   {qualityBars.map((d) => (
                     <Cell key={d.name} fill={d.color} />
                   ))}
@@ -314,15 +314,15 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card wide">
-            <h3>پنل تأسیسات سطح</h3>
+            <h3>Surface facilities panel</h3>
             <div className="facility-grid">
-              <FacilityStat label="فشار منیفولد" value={facility.manifoldPsi} unit="psi" />
-              <FacilityStat label="فشار جداکننده" value={facility.separatorPsi} unit="psi" />
-              <FacilityStat label="سطح جداکننده" value={facility.separatorLevel} unit="%" warn={facility.separatorLevel > 78 || facility.separatorLevel < 28} />
-              <FacilityStat label="نفت صادراتی" value={facility.exportOil} unit="bbl/d" />
-              <FacilityStat label="فشار خط لوله" value={facility.pipelinePsi} unit="psi" />
-              <FacilityStat label="هدر گاز لیفت" value={facility.gasLiftHeader} unit="psi" />
-              <FacilityStat label="فشار تزریق آب" value={facility.waterInjectionPsi} unit="psi" />
+              <FacilityStat label="Manifold pressure" value={facility.manifoldPsi} unit="psi" />
+              <FacilityStat label="Separator pressure" value={facility.separatorPsi} unit="psi" />
+              <FacilityStat label="Separator level" value={facility.separatorLevel} unit="%" warn={facility.separatorLevel > 78 || facility.separatorLevel < 28} />
+              <FacilityStat label="Export oil" value={facility.exportOil} unit="bbl/d" />
+              <FacilityStat label="Pipeline pressure" value={facility.pipelinePsi} unit="psi" />
+              <FacilityStat label="Gas lift header" value={facility.gasLiftHeader} unit="psi" />
+              <FacilityStat label="Water injection pressure" value={facility.waterInjectionPsi} unit="psi" />
             </div>
             <ul className="advice-list">
               {facility.advice.map((a, i) => (
@@ -332,7 +332,7 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>راهنمای اپراتور</h3>
+            <h3>Operator guide</h3>
             <ul className="tip-list">
               {tips.map((t, i) => (
                 <li key={i} className={t.priority}>
@@ -344,14 +344,14 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>اتصالات (خلاصه)</h3>
+            <h3>Connections (summary)</h3>
             <div className="conn-mini">
               {connections.map((c) => (
                 <div key={c.id} className={`conn-mini-row ${c.status}`}>
                   <span>{c.nameFa}</span>
                   <em style={{ color: STATUS_COLOR_CONN[c.status] }}>{STATUS_FA[c.status]}</em>
                   <button type="button" onClick={() => toggleConn(c)}>
-                    {c.status === 'online' ? 'قطع' : 'وصل'}
+                    {c.status === 'online' ? 'Disconnect' : 'Connect'}
                   </button>
                 </div>
               ))}
@@ -363,7 +363,7 @@ export default function SCADA() {
       {tab === 'control' && (
         <div className="scada-grid">
           <section className="scada-card">
-            <h3>انتخاب چاه برای کنترل</h3>
+            <h3>Select a well for control</h3>
             <div className="well-chips">
               {MARUN_WELLS.map((w) => {
                 const live = wells.find((x) => x.id === w.id)!
@@ -386,9 +386,9 @@ export default function SCADA() {
                   <strong>{selectedWellLive.nameFa}</strong> — {STATUS_LABEL_FA[selectedWellLive.status]}
                 </p>
                 <p>
-                  نفت {selectedWellLive.oilRate} · آب تولیدی {selectedWellLive.waterCut}% · فشار سرچاهی{' '}
-                  {selectedWellLive.thp} psi · پمپ{' '}
-                  {selectedWellLive.pumpOnline ? 'آنلاین' : 'آفلاین'}
+                  Oil {selectedWellLive.oilRate} · produced water {selectedWellLive.waterCut}% · wellhead pressure{' '}
+                  {selectedWellLive.thp} psi · pump{' '}
+                  {selectedWellLive.pumpOnline ? 'Online' : 'Offline'}
                 </p>
               </div>
             )}
@@ -396,8 +396,8 @@ export default function SCADA() {
 
           <section className="scada-card wide-2">
             <h3>
-              ست‌پوینت‌های قابل ارسال
-              <small>تغییر مقدار و ارسال به صف فرمان و کنترل — برای ایمنی واقعی نیاز به تأیید دو نفره است</small>
+              Sendable setpoints
+              <small>Change the value and send to the command and control queue — real safety requires two-person approval</small>
             </h3>
             <div className="sp-list">
               {setpoints.map((sp) => (
@@ -405,7 +405,7 @@ export default function SCADA() {
                   <div className="sp-label">
                     <strong>{sp.nameFa}</strong>
                     <span>{sp.purpose}</span>
-                    <small dir="ltr">آدرس {sp.address}</small>
+                    <small dir="ltr">Address {sp.address}</small>
                   </div>
                   <input
                     type="range"
@@ -425,7 +425,7 @@ export default function SCADA() {
                       {sp.value} {sp.unit}
                     </b>
                     <button type="button" className="primary" onClick={() => applySetpoint(sp)}>
-                      ارسال
+                      Send
                     </button>
                   </div>
                 </div>
@@ -434,7 +434,7 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>روند تگ مرتبط</h3>
+            <h3>Related tag trend</h3>
             <div className="tag-pick">
               <select value={selectedTagId} onChange={(e) => setSelectedTagId(e.target.value)}>
                 {wellTags
@@ -461,9 +461,9 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>لاگ فرمان‌ها</h3>
+            <h3>Command log</h3>
             {writeLog.length === 0 ? (
-              <p className="muted">هنوز فرمانی ارسال نشده است.</p>
+              <p className="muted">No command has been sent yet.</p>
             ) : (
               <ul className="write-log">
                 {writeLog.map((l, i) => (
@@ -479,11 +479,11 @@ export default function SCADA() {
         <div className="scada-grid">
           <section className="scada-card wide-2">
             <h3>
-              آلارم‌های صنعتی زنده
-              <small>بر اساس وضعیت چاه، کیفیت تگ و تأسیسات سطح</small>
+              Live industrial alarms
+              <small>Based on well status, tag quality and surface facilities</small>
             </h3>
             <div className="alarm-list">
-              {alarms.length === 0 && <p className="muted">آلارم بازی وجود ندارد.</p>}
+              {alarms.length === 0 && <p className="muted">There are no open alarms.</p>}
               {alarms.map((a) => (
                 <div key={a.id} className={`alarm-card ${a.severity}`}>
                   <div className="alarm-head">
@@ -491,13 +491,13 @@ export default function SCADA() {
                     <em>{SEV_FA[a.severity]}</em>
                   </div>
                   <p>{a.detail}</p>
-                  <p className="alarm-action">اقدام پیشنهادی: {a.action}</p>
+                  <p className="alarm-action">Suggested action: {a.action}</p>
                   <div className="alarm-foot">
                     <span>{a.source}</span>
                     <span>{a.at}</span>
                     {a.wellId && <span>{a.wellId}</span>}
                     <button type="button" onClick={() => ackAlarm(a.title)}>
-                      تأیید
+                      Acknowledge
                     </button>
                     {a.tagId && (
                       <button
@@ -509,7 +509,7 @@ export default function SCADA() {
                           setTab('tags')
                         }}
                       >
-                        مشاهده تگ
+                        View tag
                       </button>
                     )}
                   </div>
@@ -519,7 +519,7 @@ export default function SCADA() {
           </section>
 
           <section className="scada-card">
-            <h3>اینترلاک‌های ایمنی</h3>
+            <h3>Safety interlocks</h3>
             <ul className="interlock-list">
               {interlocks.map((il) => (
                 <li key={il.id} className={il.state}>
@@ -527,8 +527,8 @@ export default function SCADA() {
                     <strong>{il.nameFa}</strong>
                     <em>{IL_FA[il.state]}</em>
                   </div>
-                  <p>شرط: {il.condition}</p>
-                  <p>اثر: {il.effect}</p>
+                  <p>Condition: {il.condition}</p>
+                  <p>Effect: {il.effect}</p>
                 </li>
               ))}
             </ul>
@@ -539,7 +539,7 @@ export default function SCADA() {
       {tab === 'tags' && (
         <div className="scada-grid">
           <section className="scada-card">
-            <h3>اتصال و چاه</h3>
+            <h3>Connection and well</h3>
             <div className="mini-conn-list">
               {connections.map((c) => (
                 <button
@@ -572,7 +572,7 @@ export default function SCADA() {
 
           <section className="scada-card wide-2">
             <h3>
-              تگ‌های زنده — {connections.find((c) => c.id === selectedConn)?.nameFa || selectedConn}
+              Live tags — {connections.find((c) => c.id === selectedConn)?.nameFa || selectedConn}
               <small>
                 {PROTOCOL_LABEL_FA[connections.find((c) => c.id === selectedConn)?.protocol || 'OPC-UA']}
               </small>
@@ -581,11 +581,11 @@ export default function SCADA() {
               <table className="tag-table">
                 <thead>
                   <tr>
-                    <th>کیفیت</th>
-                    <th>نام</th>
-                    <th>آدرس</th>
-                    <th>مقدار</th>
-                    <th>هدف عملیاتی</th>
+                    <th>Quality</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Value</th>
+                    <th>Operational purpose</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -610,14 +610,14 @@ export default function SCADA() {
                       </td>
                       <td>
                         <b>
-                          {typeof t.value === 'boolean' ? (t.value ? 'فعال' : 'غیرفعال') : t.value}
+                          {typeof t.value === 'boolean' ? (t.value ? 'Active' : 'Inactive') : t.value}
                         </b>{' '}
                         {t.unit}
                       </td>
                       <td className="purpose">{t.purpose}</td>
                       <td>
                         <button type="button" onClick={() => setSelectedTagId(t.id)}>
-                          روند
+                          Trend
                         </button>
                       </td>
                     </tr>
@@ -626,16 +626,16 @@ export default function SCADA() {
               </table>
             </div>
 
-            <h3 style={{ marginTop: '1rem' }}>رجیسترهای کنترل‌گر — {selectedWell}</h3>
+            <h3 style={{ marginTop: '1rem' }}>Controller registers — {selectedWell}</h3>
             <div className="tag-table-wrap">
               <table className="tag-table">
                 <thead>
                   <tr>
-                    <th>آدرس</th>
-                    <th>نوع</th>
-                    <th>نام</th>
-                    <th>مقدار</th>
-                    <th>هدف</th>
+                    <th>Address</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Purpose</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -654,7 +654,7 @@ export default function SCADA() {
                       </td>
                       <td>
                         <b>
-                          {typeof r.value === 'boolean' ? (r.value ? '۱' : '۰') : r.value}
+                          {typeof r.value === 'boolean' ? (r.value ? '1' : '0') : r.value}
                         </b>{' '}
                         {r.unit}
                       </td>
@@ -671,31 +671,31 @@ export default function SCADA() {
       {tab === 'pipeline' && (
         <div className="scada-grid">
           <section className="scada-card wide">
-            <h3>مسیر داده از میدان تا داشبورد</h3>
+            <h3>Data path from the field to the dashboard</h3>
             <div className="pipeline">
               {pipeline.map((hop, i) => (
                 <div key={i} className={`pipe-hop ${hop.status}`}>
                   <div className="pipe-from">{hop.from}</div>
-                  <div className="pipe-arrow">← {hop.rateHz} هرتز →</div>
+                  <div className="pipe-arrow">← {hop.rateHz} Hz →</div>
                   <div className="pipe-to">{hop.to}</div>
                   <em>
-                    {hop.status === 'ok' ? 'پایدار' : hop.status === 'lag' ? 'تأخیر' : 'قطع'}
+                    {hop.status === 'ok' ? 'Stable' : hop.status === 'lag' ? 'Lagging' : 'Disconnected'}
                   </em>
                 </div>
               ))}
             </div>
             <ul className="pipe-notes">
-              <li>پایانه‌های سرچاهی چهار پد، فشار و دمای سرچاه و وضعیت ایمنی را می‌خوانند.</li>
-              <li>درایو پمپ و کنترل‌گر فرآیند، سرعت پمپ و شیر کنترل جریان را برای حفظ دبی می‌نویسند.</li>
-              <li>تأسیسات سطح (منیفولد، جداکننده، خط لوله) برای تطبیق تولید و جلوگیری از سرریز پایش می‌شود.</li>
-              <li>هدف: کاهش توقف تولید، ایمنی توقف اضطراری، و تغذیه اپراتور هوشمند داشبورد.</li>
+              <li>The wellhead terminals of the four pads read wellhead pressure and temperature and the safety status.</li>
+              <li>The pump drive and the process controller write the pump speed and the choke valve to maintain the rate.</li>
+              <li>Surface facilities (manifold, separator, pipeline) are monitored for production reconciliation and overflow prevention.</li>
+              <li>Goal: reduce production stoppages, emergency shutdown safety, and feeding the dashboard smart operator.</li>
             </ul>
           </section>
 
           <section className="scada-card wide">
-            <h3>لاگ عملیات</h3>
+            <h3>Operations log</h3>
             {writeLog.length === 0 ? (
-              <p className="muted">رویداد عملیاتی ثبت نشده است.</p>
+              <p className="muted">No operational event has been recorded.</p>
             ) : (
               <ul className="write-log">
                 {writeLog.map((l, i) => (

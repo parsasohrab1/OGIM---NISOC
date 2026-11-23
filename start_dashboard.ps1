@@ -135,7 +135,7 @@ Write-Host "Frontend: http://localhost:3000" -ForegroundColor Green
 Write-Host "API Gateway: http://localhost:18000" -ForegroundColor Green
 Write-Host "API Docs: http://localhost:18000/docs" -ForegroundColor Green
 Write-Host ""
-Write-Host "برای اجرای زنده بدون اینترنت (فقط فرانت‌اند):" -ForegroundColor Yellow
+Write-Host "To run live without internet (frontend only):" -ForegroundColor Yellow
 Write-Host "  .\start_offline_dashboard.ps1" -ForegroundColor White
 Write-Host ""
 Write-Host "======================================" -ForegroundColor Cyan

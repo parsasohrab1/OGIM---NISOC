@@ -1,20 +1,20 @@
-# وضعیت Backend Services
+# Backend Services Status
 
-## ⚠️ مشکل: Network Error
+## ⚠️ Problem: Network Error
 
-اگر خطای `ERR_NETWORK` یا `ERR_EMPTY_RESPONSE` دریافت می‌کنید، این یعنی سرویس‌های Backend در حال اجرا نیستند.
+If you get an `ERR_NETWORK` or `ERR_EMPTY_RESPONSE` error, it means the Backend services are not running.
 
-## 🔧 راه‌حل: راه‌اندازی سرویس‌ها
+## 🔧 Solution: Starting the services
 
-### روش 1: استفاده از اسکریپت (توصیه می‌شود)
+### Method 1: Using the script (recommended)
 
 ```powershell
 .\start_dashboard.ps1
 ```
 
-### روش 2: راه‌اندازی دستی
+### Method 2: Manual startup
 
-هر سرویس را در یک ترمینال جداگانه راه‌اندازی کنید:
+Start each service in a separate terminal:
 
 ```powershell
 # Terminal 1: API Gateway
@@ -34,10 +34,10 @@ cd backend\alert-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8004 --reload
 ```
 
-## ✅ بررسی وضعیت سرویس‌ها
+## ✅ Checking service status
 
 ```powershell
-# بررسی پورت‌ها
+# Check the ports
 $ports = @(8000, 8001, 8002, 8004)
 foreach ($port in $ports) {
     $result = Test-NetConnection -ComputerName localhost -Port $port -WarningAction SilentlyContinue -InformationLevel Quiet
@@ -49,25 +49,25 @@ foreach ($port in $ports) {
 }
 ```
 
-## 📍 آدرس‌های سرویس‌ها
+## 📍 Service addresses
 
 - **API Gateway**: http://localhost:8000
 - **Auth Service**: http://localhost:8001
 - **Data Ingestion**: http://localhost:8002
 - **Alert Service**: http://localhost:8004
 
-## 💡 نکات
+## 💡 Notes
 
-1. **Frontend Fallback**: Frontend به صورت خودکار از mock data استفاده می‌کند اگر Backend در دسترس نباشد
-2. **Auto Retry**: Frontend به صورت خودکار 2 بار تلاش می‌کند قبل از استفاده از mock data
-3. **Refresh**: بعد از راه‌اندازی سرویس‌ها، صفحه Frontend را Refresh کنید
+1. **Frontend Fallback**: The Frontend automatically uses mock data if the Backend is unavailable
+2. **Auto Retry**: The Frontend automatically retries 2 times before using mock data
+3. **Refresh**: After starting the services, refresh the Frontend page
 
-## 🔍 عیب‌یابی
+## 🔍 Troubleshooting
 
-اگر سرویس‌ها راه‌اندازی نمی‌شوند:
+If the services do not start:
 
-1. بررسی کنید که Python نصب است: `python --version`
-2. بررسی کنید که dependencies نصب شده‌اند: `pip install -r requirements.txt`
-3. بررسی کنید که پورت‌ها در حال استفاده نیستند: `netstat -ano | findstr :8000`
-4. لاگ‌های خطا را در ترمینال‌های سرویس‌ها بررسی کنید
+1. Check that Python is installed: `python --version`
+2. Check that dependencies are installed: `pip install -r requirements.txt`
+3. Check that the ports are not in use: `netstat -ano | findstr :8000`
+4. Check the error logs in the service terminals
 

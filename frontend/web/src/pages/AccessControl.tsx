@@ -37,7 +37,7 @@ export default function AccessControl() {
     },
   })
 
-  if (isLoading) return <div className="loading">در حال بارگذاری سطوح دسترسی...</div>
+  if (isLoading) return <div className="loading">Loading access levels...</div>
 
   const roles = [...(data?.roles || [])].sort((a, b) => b.level - a.level)
   const permissions = data?.permissions || {}
@@ -45,19 +45,19 @@ export default function AccessControl() {
 
   return (
     <div className="ops-page">
-      <h2>تعریف سطوح دسترسی</h2>
+      <h2>Access level definitions</h2>
       <p className="ops-subtitle">
-        سلسله‌مراتب نقش‌ها تا سطح «رئیس مهندسی بهره‌برداری ستاد» و گزارش‌های تصمیم‌یار مرتبط با این سمت.
+        Role hierarchy up to the level of "Head of Operations Engineering (HQ)" and the decision-support reports related to this position.
       </p>
 
       <div className="ops-grid">
         <div className="ops-card full">
-          <h3>سلسله‌مراتب نقش‌ها و دسترسی‌ها</h3>
+          <h3>Role and access hierarchy</h3>
           <div className="ops-role-list">
             {roles.map((r) => (
               <div key={r.role} className={`ops-role-item ${r.role === 'hq_operations_chief' ? 'hq' : ''}`}>
                 <h4>
-                  {r.title_fa} {r.role === 'hq_operations_chief' && <span className="ops-badge ahead">سمت کلیدی</span>}
+                  {r.title_fa} {r.role === 'hq_operations_chief' && <span className="ops-badge ahead">Key position</span>}
                 </h4>
                 <p>{r.description_fa}</p>
                 <div>
@@ -73,7 +73,7 @@ export default function AccessControl() {
         </div>
 
         <div className="ops-card full">
-          <h3>گزارش‌های تصمیم‌یار برای رئیس مهندسی بهره‌برداری ستاد</h3>
+          <h3>Decision-support reports for the Head of Operations Engineering (HQ)</h3>
           <div className="ops-report-list">
             {reports.map((rep) => (
               <div key={rep.id} className="ops-report-item">

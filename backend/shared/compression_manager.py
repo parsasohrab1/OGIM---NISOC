@@ -1,6 +1,6 @@
 """
 TimescaleDB Compression Policy Manager
-مدیریت سیاست‌های فشرده‌سازی برای داده‌های قدیمی
+Managing compression policies for old data
 """
 
 import logging
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class CompressionManager:
     """
     Manages TimescaleDB compression policies
-    مدیریت سیاست‌های فشرده‌سازی TimescaleDB
+    Managing TimescaleDB compression policies
     """
 
     def __init__(self):
@@ -37,7 +37,7 @@ class CompressionManager:
     ) -> bool:
         """
         Enable compression on a hypertable
-        فعال‌سازی فشرده‌سازی روی hypertable
+        Enable compression on a hypertable
         """
         try:
             if session:
@@ -81,7 +81,7 @@ class CompressionManager:
     ) -> bool:
         """
         Add compression policy to compress chunks older than specified days
-        اضافه کردن سیاست فشرده‌سازی برای chunks قدیمی‌تر از روزهای مشخص شده
+        Add a compression policy for chunks older than the specified number of days
         """
         try:
             if session:
@@ -137,7 +137,7 @@ class CompressionManager:
     ) -> bool:
         """
         Remove compression policy from a hypertable
-        حذف سیاست فشرده‌سازی از hypertable
+        Remove the compression policy from a hypertable
         """
         try:
             if session:
@@ -168,7 +168,7 @@ class CompressionManager:
     ) -> Dict[str, any]:
         """
         Get compression status for a hypertable
-        دریافت وضعیت فشرده‌سازی برای hypertable
+        Get the compression status for a hypertable
         """
         try:
             if session:
@@ -286,7 +286,7 @@ class CompressionManager:
     ) -> Dict[str, any]:
         """
         Manually compress chunks older than specified days
-        فشرده‌سازی دستی chunks قدیمی‌تر از روزهای مشخص شده
+        Manually compress chunks older than the specified number of days
         """
         try:
             if session:
@@ -346,7 +346,7 @@ class CompressionManager:
     ) -> List[Dict[str, any]]:
         """
         Get detailed chunk statistics
-        دریافت آمار تفصیلی chunks
+        Get detailed chunk statistics
         """
         try:
             if session:

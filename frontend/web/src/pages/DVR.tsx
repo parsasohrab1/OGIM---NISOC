@@ -91,7 +91,7 @@ export default function DVR() {
   }, [qualityScores])
 
   if (isLoading && !qualityScores.length) {
-    return <div className="loading">در حال بارگذاری اعتبارسنجی و تطبیق داده مارون…</div>
+    return <div className="loading">Loading Maroun data validation and reconciliation…</div>
   }
 
   return (
@@ -99,9 +99,9 @@ export default function DVR() {
       <header className="deh-dvr-hero">
         <div>
           <p className="deh-dvr-client">{FIELD.clientFa}</p>
-          <h2>اعتبارسنجی و تطبیق داده — {FIELD.nameFa}</h2>
+          <h2>Data validation and reconciliation — {FIELD.nameFa}</h2>
           <p className="deh-dvr-meta">
-            کنترل کیفیت سنسورهای ۲۴ حلقه · همخوانی با دبی‌سنج مجازی · موازنه جرمی تولید نفت سبک-میانه ترش درجه سنگینی{' '}
+            Sensor quality control of 24 wells · consistency with the virtual flow meter · mass balance of sour light-to-medium crude production, API gravity{' '}
             {FIELD.apiGravity}°
           </p>
         </div>
@@ -109,32 +109,32 @@ export default function DVR() {
 
       <div className="deh-dvr-kpis">
         <div className="deh-dvr-kpi">
-          <span>میانگین کیفیت داده</span>
+          <span>Average data quality</span>
           <strong>{summary.avgQuality}%</strong>
         </div>
         <div className="deh-dvr-kpi">
-          <span>سنسورهای پایش‌شده</span>
+          <span>Monitored sensors</span>
           <strong>{summary.sensors}</strong>
-          <small>{summary.wells} چاه</small>
+          <small>{summary.wells} wells</small>
         </div>
         <div className="deh-dvr-kpi warn">
-          <span>کیفیت &lt; ۹۰٪</span>
+          <span>Quality &lt; 90%</span>
           <strong>{summary.below90}</strong>
         </div>
         <div className="deh-dvr-kpi bad">
-          <span>کیفیت &lt; ۷۰٪</span>
+          <span>Quality &lt; 70%</span>
           <strong>{summary.below70}</strong>
         </div>
         <div className="deh-dvr-kpi">
-          <span>عدم‌تراز میدان (نفت)</span>
+          <span>Field imbalance (oil)</span>
           <strong>{reconciliation.field.field_imbalance_pct}%</strong>
-          <small>{reconciliation.field.material_wells} چاه با عدم‌تراز مادی</small>
+          <small>{reconciliation.field.material_wells} wells with material imbalance</small>
         </div>
       </div>
 
       <div className="dvr-grid">
         <div className="dvr-card deh-dvr-card span-2">
-          <h3>کیفیت داده به‌ازای چاه (میانگین سنسورها)</h3>
+          <h3>Data quality per well (sensor average)</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -142,16 +142,16 @@ export default function DVR() {
               <YAxis stroke="#888" domain={[0, 100]} />
               <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #ccc', color: '#111' }} />
               <Legend />
-              <Bar dataKey="quality" name="کیفیت %" fill="#42a5f5" />
+              <Bar dataKey="quality" name="Quality %" fill="#42a5f5" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="dvr-card deh-dvr-card span-2">
           <div className="deh-dvr-toolbar">
-            <h3>جدول کیفیت سنسورهای مارون</h3>
+            <h3>Maroun sensor quality table</h3>
             <select value={wellFilter} onChange={(e) => setWellFilter(e.target.value)}>
-              <option value="ALL">همه ۲۴ چاه</option>
+              <option value="ALL">All 24 wells</option>
               {MARUN_WELLS.map((w) => (
                 <option key={w.id} value={w.id}>
                   {w.nameFa} ({w.id})
@@ -163,16 +163,16 @@ export default function DVR() {
             <table>
               <thead>
                 <tr>
-                  <th>سنسور</th>
-                  <th>چاه</th>
-                  <th>متغیر</th>
-                  <th>کیفیت</th>
-                  <th>کامل بودن</th>
-                  <th>دقت</th>
-                  <th>تازگی</th>
-                  <th>سازگاری</th>
-                  <th>اعتبار</th>
-                  <th>مسائل</th>
+                  <th>Sensor</th>
+                  <th>Well</th>
+                  <th>Variable</th>
+                  <th>Quality</th>
+                  <th>Completeness</th>
+                  <th>Accuracy</th>
+                  <th>Freshness</th>
+                  <th>Consistency</th>
+                  <th>Validity</th>
+                  <th>Issues</th>
                 </tr>
               </thead>
               <tbody>
@@ -202,7 +202,7 @@ export default function DVR() {
                     <td>{(score.consistency * 100).toFixed(0)}%</td>
                     <td>{(score.validity * 100).toFixed(0)}%</td>
                     <td className="issues-cell">
-                      {score.issues?.length ? score.issues.join('؛ ') : '—'}
+                      {score.issues?.length ? score.issues.join('; ') : '—'}
                     </td>
                   </tr>
                 ))}
@@ -212,7 +212,7 @@ export default function DVR() {
         </div>
 
         <div className="dvr-card deh-dvr-card">
-          <h3>اعتبارسنجی نقطه داده</h3>
+          <h3>Data point validation</h3>
           <select
             value={selectedSensor}
             onChange={(e) => setSelectedSensor(e.target.value)}
@@ -227,12 +227,12 @@ export default function DVR() {
           {validation && (
             <div className="validation-info">
               <div className={`validation-status ${validation.is_valid ? 'valid' : 'invalid'}`}>
-                وضعیت: {validation.is_valid ? 'معتبر' : 'نامعتبر'}
+                Status: {validation.is_valid ? 'Valid' : 'Invalid'}
               </div>
               <div>
-                مقدار: <b>{validation.value}</b> {validation.unit}
+                Value: <b>{validation.value}</b> {validation.unit}
               </div>
-              <div>امتیاز اعتبارسنجی: {(validation.validation_score * 100).toFixed(1)}%</div>
+              <div>Validation score: {(validation.validation_score * 100).toFixed(1)}%</div>
               <ul className="rule-list">
                 {validation.rule_checks.map((r, i) => (
                   <li key={i} className={r.passed ? 'ok' : 'fail'}>
@@ -242,7 +242,7 @@ export default function DVR() {
               </ul>
               {validation.violations.length > 0 && (
                 <div className="violations">
-                  <strong>نقض‌ها:</strong>
+                  <strong>Violations:</strong>
                   <ul>
                     {validation.violations.map((v, i) => (
                       <li key={i}>{v}</li>
@@ -255,9 +255,9 @@ export default function DVR() {
         </div>
 
         <div className="dvr-card deh-dvr-card">
-          <h3>تشخیص نقاط پرت</h3>
+          <h3>Outlier detection</h3>
           {outliers.length === 0 ? (
-            <p className="deh-dvr-muted">نقطه پرت معناداری برای این سنسور ثبت نشده است.</p>
+            <p className="deh-dvr-muted">No significant outlier has been recorded for this sensor.</p>
           ) : (
             <div className="outliers-list">
               {outliers.slice(0, 8).map((o, i) => (
@@ -265,7 +265,7 @@ export default function DVR() {
                   <div>
                     <b>{o.value}</b> · Z={o.outlier_score} · {severityFaDvr(o.severity)}
                   </div>
-                  <div>بازه مورد انتظار: {o.expected_range}</div>
+                  <div>Expected range: {o.expected_range}</div>
                   <div>{o.reason_fa}</div>
                   <div className="ts">{new Date(o.timestamp).toLocaleString('fa-IR')}</div>
                 </div>
@@ -275,25 +275,25 @@ export default function DVR() {
         </div>
 
         <div className="dvr-card deh-dvr-card span-2">
-          <h3>تطبیق تولید — اندازه‌گیری در برابر دبی‌سنج مجازی</h3>
+          <h3>Production reconciliation — measurement versus virtual flow meter</h3>
           <p className="deh-dvr-muted">
-            نفت اندازه‌گیری‌شده میدان:{' '}
-            <b>{reconciliation.field.measured_oil_total.toLocaleString()} bbl/d</b> · دبی‌سنج مجازی:{' '}
-            <b>{reconciliation.field.vfm_oil_total.toLocaleString()} bbl/d</b> · تطبیق‌شده:{' '}
+            Field measured oil:{' '}
+            <b>{reconciliation.field.measured_oil_total.toLocaleString()} bbl/d</b> · virtual flow meter:{' '}
+            <b>{reconciliation.field.vfm_oil_total.toLocaleString()} bbl/d</b> · reconciled:{' '}
             <b>{reconciliation.field.reconciled_oil_total.toLocaleString()} bbl/d</b>
           </p>
           <div className="table-container">
             <table>
               <thead>
                 <tr>
-                  <th>چاه</th>
-                  <th>نفت اندازه‌گیری</th>
-                  <th>دبی‌سنج مجازی</th>
-                  <th>تطبیق‌شده</th>
-                  <th>عدم‌تراز %</th>
-                  <th>درصد آب اندازه‌گیری</th>
-                  <th>درصد آب تطبیق</th>
-                  <th>وضعیت</th>
+                  <th>Well</th>
+                  <th>Measured oil</th>
+                  <th>Virtual flow meter</th>
+                  <th>Reconciled</th>
+                  <th>Imbalance %</th>
+                  <th>Measured water cut</th>
+                  <th>Reconciled water cut</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -325,14 +325,14 @@ export default function DVR() {
 }
 
 function statusFa(s: string) {
-  if (s === 'balanced') return 'متوازن'
-  if (s === 'minor') return 'جزئی'
-  return 'مادی'
+  if (s === 'balanced') return 'Balanced'
+  if (s === 'minor') return 'Minor'
+  return 'Material'
 }
 
 function severityFaDvr(s: string) {
-  if (s === 'critical') return 'بحرانی'
-  if (s === 'warning') return 'هشدار'
-  if (s === 'info') return 'اطلاع'
+  if (s === 'critical') return 'Critical'
+  if (s === 'warning') return 'Warning'
+  if (s === 'info') return 'Info'
   return s
 }

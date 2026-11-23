@@ -70,9 +70,9 @@ export default function Subsidiaries() {
           well_count: r.well_count,
         }))
       )
-      setFeedback('تغییرات با موفقیت ذخیره شد.')
+      setFeedback('The changes were saved successfully.')
     } catch {
-      setFeedback('سرویس در دسترس نبود؛ تغییرات فقط به‌صورت محلی اعمال شد (حالت آفلاین).')
+      setFeedback('The service was unavailable; the changes were applied locally only (offline mode).')
     } finally {
       setSaving(false)
     }
@@ -80,10 +80,10 @@ export default function Subsidiaries() {
 
   return (
     <div className="ops-page">
-      <h2>شرکت‌های تابعه شرکت ملی مناطق نفت‌خیز جنوب</h2>
+      <h2>Subsidiary companies of the National Iranian South Oil Company</h2>
       <p className="ops-subtitle">
-        بخش‌بندی کمبویی ۵ شرکت بهره‌برداری تابعه NISOC؛ تعداد مخازن به تفکیک ماهیت سیال و تعداد چاه‌های فعال هر
-        شرکت به‌صورت دستی قابل انتخاب و ویرایش است.
+        Combined breakdown of the 5 NISOC operating subsidiary companies; the number of reservoirs by fluid nature and the number of active wells of each
+        company can be selected and edited manually.
       </p>
 
       <div className="ops-overview">
@@ -96,13 +96,13 @@ export default function Subsidiaries() {
           >
             <h3>{s.name_fa}</h3>
             <div className="ops-stat-value">{s.active_well_count}</div>
-            <div style={{ fontSize: 11, color: '#888' }}>چاه فعال</div>
+            <div style={{ fontSize: 11, color: '#888' }}>active wells</div>
           </div>
         ))}
       </div>
 
       <div className="ops-combo-row">
-        <label style={{ fontSize: 13 }}>انتخاب شرکت تابعه:</label>
+        <label style={{ fontSize: 13 }}>Select subsidiary:</label>
         <select
           value={selectedId}
           onChange={(e) => setSelectedId(Number(e.target.value))}
@@ -122,7 +122,7 @@ export default function Subsidiaries() {
             <h3>{selected.name_fa}</h3>
             <div className="ops-form-grid">
               <div className="ops-field">
-                <label>تعداد چاه فعال</label>
+                <label>Number of active wells</label>
                 <input
                   type="number"
                   value={selected.active_well_count}
@@ -130,19 +130,19 @@ export default function Subsidiaries() {
                 />
               </div>
               <div className="ops-field">
-                <label>هدف تولید (bopd)</label>
+                <label>Production target (bopd)</label>
                 <input type="number" value={selected.target_production_bopd} readOnly />
               </div>
             </div>
 
-            <h3 style={{ marginTop: 20 }}>مخازن به تفکیک ماهیت سیال</h3>
+            <h3 style={{ marginTop: 20 }}>Reservoirs by fluid nature</h3>
             <div className="ops-table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>نام مخزن</th>
-                    <th>ماهیت سیال</th>
-                    <th>تعداد چاه</th>
+                    <th>Reservoir name</th>
+                    <th>Fluid nature</th>
+                    <th>Number of wells</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,7 +165,7 @@ export default function Subsidiaries() {
             </div>
 
             <button className="ops-btn" style={{ marginTop: 16 }} onClick={handleSave} disabled={saving}>
-              {saving ? 'در حال ذخیره...' : 'ذخیره تغییرات'}
+              {saving ? 'Saving...' : 'Save changes'}
             </button>
             {feedback && <p style={{ marginTop: 10, fontSize: 13, color: '#555' }}>{feedback}</p>}
           </div>

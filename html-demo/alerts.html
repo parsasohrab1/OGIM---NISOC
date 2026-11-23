@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هشدارها - OGIM</title>
+    <title>Alerts - OGIM</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,30 +17,30 @@
         <nav class="nav-menu">
             <a href="index.html" class="nav-item">
                 <i class="fas fa-home"></i>
-                <span>داشبورد</span>
+                <span>Dashboard</span>
             </a>
             <a href="wells.html" class="nav-item">
                 <i class="fas fa-oil-well"></i>
-                <span>چاه‌ها</span>
+                <span>Wells</span>
             </a>
             <a href="alerts.html" class="nav-item active">
                 <i class="fas fa-bell"></i>
-                <span>هشدارها</span>
+                <span>Alerts</span>
                 <span class="badge" id="alertBadge">0</span>
             </a>
             <a href="analytics.html" class="nav-item">
                 <i class="fas fa-chart-line"></i>
-                <span>تحلیل‌ها</span>
+                <span>Analytics</span>
             </a>
             <a href="#" class="nav-item" onclick="showSettings()">
                 <i class="fas fa-cog"></i>
-                <span>تنظیمات</span>
+                <span>Settings</span>
             </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span id="username">مدیر سیستم</span>
+                <span id="username">System Administrator</span>
             </div>
         </div>
     </div>
@@ -50,13 +50,13 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <h1><i class="fas fa-bell"></i> مدیریت هشدارها</h1>
-                <p>مشاهده و مدیریت هشدارهای سیستم</p>
+                <h1><i class="fas fa-bell"></i> Alert Management</h1>
+                <p>View and manage system alerts</p>
             </div>
             <div class="header-right">
                 <div class="connection-status" id="connectionStatus">
                     <i class="fas fa-circle"></i>
-                    <span>در حال اتصال...</span>
+                    <span>Connecting...</span>
                 </div>
             </div>
         </header>
@@ -65,27 +65,27 @@
         <div class="filters-card">
             <div class="filters-row">
                 <div class="filter-group">
-                    <label>سطح:</label>
+                    <label>Level:</label>
                     <select id="severityFilter" onchange="filterAlerts()">
-                        <option value="all">همه</option>
-                        <option value="critical">بحرانی</option>
-                        <option value="warning">هشدار</option>
-                        <option value="info">اطلاع</option>
+                        <option value="all">All</option>
+                        <option value="critical">Critical</option>
+                        <option value="warning">Warning</option>
+                        <option value="info">Info</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>وضعیت:</label>
+                    <label>Status:</label>
                     <select id="statusFilter" onchange="filterAlerts()">
-                        <option value="all">همه</option>
-                        <option value="open">باز</option>
-                        <option value="acknowledged">تایید شده</option>
-                        <option value="resolved">حل شده</option>
+                        <option value="all">All</option>
+                        <option value="open">Open</option>
+                        <option value="acknowledged">Acknowledged</option>
+                        <option value="resolved">Resolved</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>چاه:</label>
+                    <label>Well:</label>
                     <select id="wellFilter" onchange="filterAlerts()">
-                        <option value="all">همه</option>
+                        <option value="all">All</option>
                         <option value="PROD-001">PROD-001</option>
                         <option value="PROD-002">PROD-002</option>
                         <option value="DEV-001">DEV-001</option>
@@ -93,7 +93,7 @@
                     </select>
                 </div>
                 <button class="btn btn-primary" onclick="loadAllAlerts()">
-                    <i class="fas fa-sync-alt"></i> بروزرسانی
+                    <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
         </div>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="criticalCount">-</h3>
-                    <p>بحرانی</p>
+                    <p>Critical</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -115,7 +115,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="warningCount">-</h3>
-                    <p>هشدار</p>
+                    <p>Warning</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="infoCount">-</h3>
-                    <p>اطلاع</p>
+                    <p>Info</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -133,14 +133,14 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="resolvedCount">-</h3>
-                    <p>حل شده</p>
+                    <p>Resolved</p>
                 </div>
             </div>
         </div>
 
         <!-- Alerts List -->
         <div class="alerts-container" id="alertsContainer">
-            <div class="loading">در حال بارگذاری هشدارها...</div>
+            <div class="loading">Loading alerts...</div>
         </div>
     </div>
 
@@ -167,7 +167,7 @@
                 
                 if (isConnected) {
                     statusEl.className = 'connection-status connected';
-                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>متصل به سرور</span>';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Connected to server</span>';
                     useMockData = false;
                 } else {
                     throw new Error('Backend not available');
@@ -176,7 +176,7 @@
                 isConnected = false;
                 useMockData = true;
                 statusEl.className = 'connection-status disconnected';
-                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>حالت آفلاین (داده نمونه)</span>';
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline mode (sample data)</span>';
             }
         }
 
@@ -238,7 +238,7 @@
             const container = document.getElementById('alertsContainer');
             
             if (alerts.length === 0) {
-                container.innerHTML = '<div class="alert-item"><div class="loading">هشداری یافت نشد</div></div>';
+                container.innerHTML = '<div class="alert-item"><div class="loading">No alerts found</div></div>';
                 return;
             }
             
@@ -255,22 +255,22 @@
                         <span class="alert-time">${formatTime(alert.timestamp)}</span>
                     </div>
                     <div class="alert-details">
-                        <p><strong>چاه:</strong> ${alert.well_name}</p>
-                        <p><strong>پیام:</strong> ${alert.message}</p>
-                        <p><strong>وضعیت:</strong> ${translateStatus(alert.status)}</p>
+                        <p><strong>Well:</strong> ${alert.well_name}</p>
+                        <p><strong>Message:</strong> ${alert.message}</p>
+                        <p><strong>Status:</strong> ${translateStatus(alert.status)}</p>
                     </div>
                     <div class="alert-actions">
                         ${alert.status === 'open' ? `
                             <button class="btn btn-small btn-primary" onclick="acknowledgeAlert('${alert.alert_id}')">
-                                <i class="fas fa-check"></i> تایید
+                                <i class="fas fa-check"></i> Acknowledge
                             </button>
                             <button class="btn btn-small btn-secondary" onclick="resolveAlert('${alert.alert_id}')">
-                                <i class="fas fa-times"></i> حل شده
+                                <i class="fas fa-times"></i> Resolved
                             </button>
                         ` : ''}
                         ${alert.status === 'acknowledged' ? `
                             <button class="btn btn-small btn-secondary" onclick="resolveAlert('${alert.alert_id}')">
-                                <i class="fas fa-times"></i> حل شده
+                                <i class="fas fa-times"></i> Resolved
                             </button>
                         ` : ''}
                     </div>
@@ -291,10 +291,10 @@
                 }
                 
                 filterAlerts();
-                alert('هشدار تایید شد');
+                alert('Alert acknowledged');
             } catch (error) {
                 console.error('Error acknowledging alert:', error);
-                alert('خطا در تایید هشدار');
+                alert('Error acknowledging the alert');
             }
         }
 
@@ -311,10 +311,10 @@
                 
                 updateStats();
                 filterAlerts();
-                alert('هشدار حل شد');
+                alert('Alert resolved');
             } catch (error) {
                 console.error('Error resolving alert:', error);
-                alert('خطا در حل هشدار');
+                alert('Error resolving the alert');
             }
         }
 
@@ -329,18 +329,18 @@
 
         function translateSeverity(severity) {
             const translations = {
-                'critical': 'بحرانی',
-                'warning': 'هشدار',
-                'info': 'اطلاع'
+                'critical': 'Critical',
+                'warning': 'Warning',
+                'info': 'Info'
             };
             return translations[severity] || severity;
         }
 
         function translateStatus(status) {
             const translations = {
-                'open': 'باز',
-                'acknowledged': 'تایید شده',
-                'resolved': 'حل شده'
+                'open': 'Open',
+                'acknowledged': 'Acknowledged',
+                'resolved': 'Resolved'
             };
             return translations[status] || status;
         }

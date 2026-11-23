@@ -1,7 +1,7 @@
 /**
- * SCADA / PLC — معماری هدفمند میدان مارون
- * OPC-UA برای RTU سرچاهی و اسکادای تأسیسات
- * Modbus TCP برای VFD پمپ ESP و PLC فرآیند
+ * SCADA / PLC — targeted architecture of the Maroun field
+ * OPC-UA for wellhead RTUs and facility SCADA
+ * Modbus TCP for ESP pump VFDs and process PLCs
  */
 import {
   MARUN_WELLS,
@@ -79,122 +79,122 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
   const base: Omit<ScadaConnection, 'status' | 'tagsCount'>[] = [
     {
       id: 'OPC-RTU-PAD-A',
-      nameFa: 'پایانه راه دور پد A (چاه ۱–۴)',
+      nameFa: 'Remote terminal unit, Pad A (wells 1–4)',
       nameEn: 'Well Pad A RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.11',
       port: 4840,
       scanMs: 1000,
-      purpose: 'خواندن فشار سرچاهی، دمای سرچاهی، فشار دالیز و وضعیت شیرهای سرچاهی پد A',
+      purpose: 'Reading wellhead pressure, wellhead temperature, annulus pressure and wellhead valve status of Pad A',
       asset: 'MN-01…04',
     },
     {
       id: 'OPC-RTU-PAD-B',
-      nameFa: 'پایانه راه دور پد B (چاه ۵–۸)',
+      nameFa: 'Remote terminal unit, Pad B (wells 5–8)',
       nameEn: 'Well Pad B RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.12',
       port: 4840,
       scanMs: 1000,
-      purpose: 'تله‌متری سرچاهی و اینترلاک ایمنی پد B',
+      purpose: 'Wellhead telemetry and safety interlock of Pad B',
       asset: 'MN-05…08',
     },
     {
       id: 'OPC-RTU-PAD-C',
-      nameFa: 'پایانه راه دور پد C (چاه ۹–۱۲)',
+      nameFa: 'Remote terminal unit, Pad C (wells 9–12)',
       nameEn: 'Well Pad C RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.13',
       port: 4840,
       scanMs: 1000,
-      purpose: 'فشار/دما و وضعیت شیر کنترل جریان پد C',
+      purpose: 'Pressure/temperature and choke valve status of Pad C',
       asset: 'MN-09…12',
     },
     {
       id: 'OPC-RTU-PAD-D',
-      nameFa: 'پایانه راه دور پد D (چاه ۱۳–۱۶)',
+      nameFa: 'Remote terminal unit, Pad D (wells 13–16)',
       nameEn: 'Well Pad D RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.14',
       port: 4840,
       scanMs: 1000,
-      purpose: 'تله‌متری پد D و سیگنال توقف اضطراری محلی',
+      purpose: 'Pad D telemetry and local emergency shutdown signal',
       asset: 'MN-13…16',
     },
     {
       id: 'OPC-RTU-PAD-E',
-      nameFa: 'پایانه راه دور پد E (چاه ۱۷–۲۰)',
+      nameFa: 'Remote terminal unit, Pad E (wells 17–20)',
       nameEn: 'Well Pad E RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.15',
       port: 4840,
       scanMs: 1000,
-      purpose: 'تله‌متری سرچاهی و اینترلاک ایمنی پد E',
+      purpose: 'Wellhead telemetry and safety interlock of Pad E',
       asset: 'MN-17…20',
     },
     {
       id: 'OPC-RTU-PAD-F',
-      nameFa: 'پایانه راه دور پد F (چاه ۲۱–۲۴)',
+      nameFa: 'Remote terminal unit, Pad F (wells 21–24)',
       nameEn: 'Well Pad F RTU',
       protocol: 'OPC-UA',
       role: 'Wellhead RTU',
       host: '10.40.10.16',
       port: 4840,
       scanMs: 1000,
-      purpose: 'فشار/دما و وضعیت شیر کنترل جریان پد F',
+      purpose: 'Pressure/temperature and choke valve status of Pad F',
       asset: 'MN-21…24',
     },
     {
       id: 'OPC-FACILITY',
-      nameFa: 'اسکادای تأسیسات سطح',
+      nameFa: 'Surface facilities SCADA',
       nameEn: 'Surface Facility SCADA',
       protocol: 'OPC-UA',
       role: 'Facility SCADA',
       host: '10.40.20.5',
       port: 4840,
       scanMs: 2000,
-      purpose: 'منیفولد، جداکننده، خط لوله و سطح مخازن',
+      purpose: 'Manifold, separator, pipeline and tank levels',
       asset: 'Separator / Manifold',
     },
     {
       id: 'MB-ESP-VFD',
-      nameFa: 'شبکه درایو فرکانس متغیر پمپ‌های درون‌چاهی الکتریکی',
+      nameFa: 'Variable frequency drive network of electric submersible pumps',
       nameEn: 'ESP VFD Network',
       protocol: 'Modbus-TCP',
       role: 'Drive PLC',
       host: '10.40.30.20',
       port: 502,
       scanMs: 500,
-      purpose: 'سرعت، جریان، لرزش و دمای موتور پمپ درون‌چاهی الکتریکی',
+      purpose: 'Speed, current, vibration and motor temperature of the electric submersible pump',
       asset: 'ESP Drives',
     },
     {
       id: 'MB-PROCESS-PLC',
-      nameFa: 'کنترل‌گر منطقی برنامه‌پذیر فرآیند تولید',
+      nameFa: 'Production process programmable logic controller',
       nameEn: 'Production Process PLC',
       protocol: 'Modbus-TCP',
       role: 'Process PLC',
       host: '10.40.30.30',
       port: 502,
       scanMs: 500,
-      purpose: 'ست‌پوینت شیر کنترل جریان، گاز لیفت و اینترلاک فرآیند',
+      purpose: 'Choke valve setpoint, gas lift and process interlock',
       asset: 'Process Control',
     },
     {
       id: 'MQTT-EDGE',
-      nameFa: 'پل لبه بی‌سیم',
+      nameFa: 'Wireless edge bridge',
       nameEn: 'Edge MQTT Bridge',
       protocol: 'MQTT-Bridge',
       role: 'Edge Gateway',
       host: '10.40.40.8',
       port: 1883,
       scanMs: 5000,
-      purpose: 'سنسورهای کمکی بی‌سیم و همگام‌سازی با صف پیام کافکا',
+      purpose: 'Auxiliary wireless sensors and synchronization with the Kafka message queue',
       asset: 'Edge / Soft sensors',
     },
   ]
@@ -254,7 +254,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         connectionId: conn,
         protocol: 'OPC-UA',
         address: `ns=2;s=Wells.${w.id}.THP`,
-        nameFa: `فشار سرچاهی ${n}`,
+        nameFa: `Wellhead pressure ${n}`,
         nameEn: `${w.id} THP`,
         unit: 'psi',
         dataType: 'Float',
@@ -263,14 +263,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: q,
         wellId: w.id,
         category: 'wellhead',
-        purpose: 'پایش فشار سرچاه برای کنترل تولید و ایمنی',
+        purpose: 'Wellhead pressure monitoring for production control and safety',
       },
       {
         id: `${w.id}.THT`,
         connectionId: conn,
         protocol: 'OPC-UA',
         address: `ns=2;s=Wells.${w.id}.THT`,
-        nameFa: `دمای سرچاهی ${n}`,
+        nameFa: `Wellhead temperature ${n}`,
         nameEn: `${w.id} THT`,
         unit: '°C',
         dataType: 'Float',
@@ -279,14 +279,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: q,
         wellId: w.id,
         category: 'wellhead',
-        purpose: 'پایش دمای سیال سرچاه',
+        purpose: 'Well fluid temperature monitoring',
       },
       {
         id: `${w.id}.CHP`,
         connectionId: conn,
         protocol: 'OPC-UA',
         address: `ns=2;s=Wells.${w.id}.CHP`,
-        nameFa: `فشار دالیز ${n}`,
+        nameFa: `Annulus pressure ${n}`,
         nameEn: `${w.id} CHP`,
         unit: 'psi',
         dataType: 'Float',
@@ -295,14 +295,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: q,
         wellId: w.id,
         category: 'wellhead',
-        purpose: 'تشخیص نشتی دالیز و یکپارچگی چاه',
+        purpose: 'Annulus leak detection and well integrity',
       },
       {
         id: `${w.id}.CHOKE_POS`,
         connectionId: 'MB-PROCESS-PLC',
         protocol: 'Modbus-TCP',
         address: `Holding[${40010 + i}]`,
-        nameFa: `موقعیت شیر کنترل جریان ${n}`,
+        nameFa: `Choke valve position ${n}`,
         nameEn: `${w.id} Choke %`,
         unit: '%',
         dataType: 'Float',
@@ -311,14 +311,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: w.status === 'offline' ? 'bad' : 'good',
         wellId: w.id,
         category: 'control',
-        purpose: 'ست‌پوینت دستی/اپراتور هوشمند برای تنظیم دبی',
+        purpose: 'Manual/smart-operator setpoint for rate adjustment',
       },
       {
         id: `${w.id}.ESP_HZ`,
         connectionId: 'MB-ESP-VFD',
         protocol: 'Modbus-TCP',
         address: `Holding[${41000 + i * 10}]`,
-        nameFa: `فرکانس پمپ درون‌چاهی الکتریکی ${n}`,
+        nameFa: `Electric submersible pump frequency ${n}`,
         nameEn: `${w.id} ESP Hz`,
         unit: 'Hz',
         dataType: 'Float',
@@ -327,14 +327,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: w.pumpOnline ? qualityFromWell(w) : 'bad',
         wellId: w.id,
         category: 'esp',
-        purpose: 'کنترل سرعت پمپ برای حفظ دبی هدف',
+        purpose: 'Pump speed control to maintain the target rate',
       },
       {
         id: `${w.id}.ESP_AMP`,
         connectionId: 'MB-ESP-VFD',
         protocol: 'Modbus-TCP',
         address: `Input[${30010 + i}]`,
-        nameFa: `جریان پمپ درون‌چاهی الکتریکی ${n}`,
+        nameFa: `Electric submersible pump current ${n}`,
         nameEn: `${w.id} ESP Current`,
         unit: 'A',
         dataType: 'Float',
@@ -343,14 +343,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: w.pumpOnline ? qualityFromWell(w) : 'bad',
         wellId: w.id,
         category: 'esp',
-        purpose: 'تشخیص اضافه جریان و خرابی قریب‌الوقوع',
+        purpose: 'Overcurrent detection and imminent failure',
       },
       {
         id: `${w.id}.ESD`,
         connectionId: conn,
         protocol: 'OPC-UA',
         address: `ns=2;s=Wells.${w.id}.ESD_TRIP`,
-        nameFa: `تریپ توقف اضطراری ${n}`,
+        nameFa: `Emergency shutdown trip ${n}`,
         nameEn: `${w.id} ESD`,
         unit: '',
         dataType: 'Bool',
@@ -359,7 +359,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         quality: 'good',
         wellId: w.id,
         category: 'safety',
-        purpose: 'وضعیت توقف اضطراری سرچاه',
+        purpose: 'Wellhead emergency shutdown status',
       }
     )
   })
@@ -376,7 +376,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         connectionId: 'OPC-FACILITY',
         protocol: 'OPC-UA',
         address: 'ns=2;s=Facility.Manifold.Pressure',
-        nameFa: 'فشار منیفولد',
+        nameFa: 'Manifold pressure',
         nameEn: 'Manifold Pressure',
         unit: 'psi',
         dataType: 'Float',
@@ -384,14 +384,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         value: Math.round(900 + avgWc * 4),
         quality: 'good',
         category: 'facility',
-        purpose: 'پایداری جمع‌آوری سیال از ۲۴ چاه',
+        purpose: 'Stability of fluid gathering from 24 wells',
       },
       {
         id: 'FAC.SEP_P',
         connectionId: 'OPC-FACILITY',
         protocol: 'OPC-UA',
         address: 'ns=2;s=Facility.Separator.Pressure',
-        nameFa: 'فشار جداکننده',
+        nameFa: 'Separator pressure',
         nameEn: 'Separator Pressure',
         unit: 'psi',
         dataType: 'Float',
@@ -399,14 +399,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         value: Math.round(160 + avgWc * 0.8),
         quality: 'good',
         category: 'facility',
-        purpose: 'ست‌پوینت جداسازی نفت/گاز/آب',
+        purpose: 'Oil/gas/water separation setpoint',
       },
       {
         id: 'FAC.SEP_LEVEL',
         connectionId: 'OPC-FACILITY',
         protocol: 'OPC-UA',
         address: 'ns=2;s=Facility.Separator.Level',
-        nameFa: 'سطح مایع جداکننده',
+        nameFa: 'Separator liquid level',
         nameEn: 'Separator Level',
         unit: '%',
         dataType: 'Float',
@@ -414,14 +414,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         value: Math.round(45 + avgWc * 0.3),
         quality: avgWc > 60 ? 'uncertain' : 'good',
         category: 'facility',
-        purpose: 'جلوگیری از سرریز / خشک شدن جداکننده',
+        purpose: 'Preventing separator overflow / running dry',
       },
       {
         id: 'FAC.EXPORT_OIL',
         connectionId: 'OPC-FACILITY',
         protocol: 'OPC-UA',
         address: 'ns=2;s=Facility.Export.OilRate',
-        nameFa: 'دبی صادرات نفت',
+        nameFa: 'Oil export rate',
         nameEn: 'Export Oil Rate',
         unit: 'bbl/d',
         dataType: 'Float',
@@ -429,14 +429,14 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         value: Math.round(oil * 0.98),
         quality: 'good',
         category: 'facility',
-        purpose: 'تطبیق تولید میدان با اندازه‌گیری صادرات',
+        purpose: 'Reconciling field production with export measurement',
       },
       {
         id: 'FAC.PIPELINE_P',
         connectionId: 'OPC-FACILITY',
         protocol: 'OPC-UA',
         address: 'ns=2;s=Facility.Pipeline.Pressure',
-        nameFa: 'فشار خط لوله',
+        nameFa: 'Pipeline pressure',
         nameEn: 'Pipeline Pressure',
         unit: 'psi',
         dataType: 'Float',
@@ -444,7 +444,7 @@ export function getScadaTags(tick = Date.now(), wellFilter?: string): ScadaTag[]
         value: Math.round(720 + seeded(42) * 80),
         quality: 'good',
         category: 'facility',
-        purpose: 'پایش یکپارچگی خط انتقال',
+        purpose: 'Transmission line integrity monitoring',
       }
     )
   }
@@ -463,61 +463,61 @@ export function getModbusMap(tick = Date.now(), wellId?: string): ModbusRegister
       {
         connectionId: 'MB-ESP-VFD',
         address: base,
-        nameFa: `ست‌پوینت سرعت پمپ درون‌چاهی الکتریکی ${w.id}`,
+        nameFa: `Electric submersible pump speed setpoint ${w.id}`,
         nameEn: 'ESP Speed SP',
         type: 'Holding',
         scale: 0.1,
         unit: 'Hz',
         value: w.pumpOnline ? Math.round(45 + seeded(idx + 2) * 15) : 0,
-        purpose: 'نوشتن سرعت هدف به درایو',
+        purpose: 'Writing the target speed to the drive',
         wellId: w.id,
       },
       {
         connectionId: 'MB-ESP-VFD',
         address: base + 1,
-        nameFa: `جریان واقعی پمپ درون‌چاهی الکتریکی ${w.id}`,
+        nameFa: `Actual electric submersible pump current ${w.id}`,
         nameEn: 'ESP Current Feedback',
         type: 'Input',
         scale: 0.1,
         unit: 'A',
         value: w.pumpOnline ? Math.round((28 + w.equipmentRisk * 0.15) * 10) / 10 : 0,
-        purpose: 'فیدبک حفاظتی اضافه جریان',
+        purpose: 'Overcurrent protection feedback',
         wellId: w.id,
       },
       {
         connectionId: 'MB-ESP-VFD',
         address: base + 2,
-        nameFa: `لرزش موتور ${w.id}`,
+        nameFa: `Motor vibration ${w.id}`,
         nameEn: 'Motor Vibration',
         type: 'Input',
         scale: 0.01,
         unit: 'mm/s',
         value: w.pumpOnline ? Math.round((1.2 + w.equipmentRisk * 0.04) * 100) / 100 : 0,
-        purpose: 'هشدار مکانیکی قبل از خرابی',
+        purpose: 'Mechanical alert before failure',
         wellId: w.id,
       },
       {
         connectionId: 'MB-PROCESS-PLC',
         address: 40010 + idx,
-        nameFa: `ست‌پوینت شیر کنترل جریان ${w.id}`,
+        nameFa: `Choke valve setpoint ${w.id}`,
         nameEn: 'Choke Setpoint',
         type: 'Holding',
         scale: 1,
         unit: '%',
         value: Math.round(40 + seeded(idx + 4) * 35),
-        purpose: 'کنترل دبی از طریق چوک',
+        purpose: 'Rate control via the choke',
         wellId: w.id,
       },
       {
         connectionId: 'MB-PROCESS-PLC',
         address: 10 + idx,
-        nameFa: `مجوز تولید ${w.id}`,
+        nameFa: `Production permissive ${w.id}`,
         nameEn: 'Produce Permit',
         type: 'Coil',
         scale: 1,
         unit: '',
         value: w.status !== 'offline' && w.status !== 'critical',
-        purpose: 'اجازه باز بودن مسیر تولید',
+        purpose: 'Permission to keep the production path open',
         wellId: w.id,
       }
     )
@@ -530,11 +530,11 @@ export function getDataPipeline(tick = Date.now()): PipelineHop[] {
   const conns = getScadaConnections(tick)
   const degraded = conns.filter((c) => c.status !== 'online').length
   return [
-    { from: 'پایانه راه دور / کنترل‌گر منطقی', to: 'پروتکل ارتباط باز صنعتی / مودباس', rateHz: 2.4, status: degraded ? 'lag' : 'ok' },
-    { from: 'پروتکل صنعتی', to: 'ورود داده', rateHz: 1.8, status: 'ok' },
-    { from: 'ورود داده', to: 'صف پیام کافکا (داده خام سنسور)', rateHz: 1.8, status: 'ok' },
-    { from: 'کافکا', to: 'پایگاه سری‌زمانی + داشبورد', rateHz: 1.5, status: degraded > 2 ? 'lag' : 'ok' },
-    { from: 'کنترل‌گر منطقی قابل‌نوشتن', to: 'فرمان و کنترل', rateHz: 0.2, status: 'ok' },
+    { from: 'Remote terminal unit / logic controller', to: 'Open industrial communication protocol / Modbus', rateHz: 2.4, status: degraded ? 'lag' : 'ok' },
+    { from: 'Industrial protocol', to: 'Data ingestion', rateHz: 1.8, status: 'ok' },
+    { from: 'Data ingestion', to: 'Kafka message queue (raw sensor data)', rateHz: 1.8, status: 'ok' },
+    { from: 'Kafka', to: 'Time-series database + dashboard', rateHz: 1.5, status: degraded > 2 ? 'lag' : 'ok' },
+    { from: 'Writable logic controller', to: 'Command and control', rateHz: 0.2, status: 'ok' },
   ]
 }
 
@@ -579,9 +579,9 @@ export function tagHistory(tagId: string, baseValue: number, points = 24) {
 }
 
 export const PROTOCOL_LABEL_FA: Record<ProtocolKind, string> = {
-  'OPC-UA': 'پروتکل ارتباط باز صنعتی',
-  'Modbus-TCP': 'مودباس',
-  'MQTT-Bridge': 'پل پیام‌رسان بی‌سیم',
+  'OPC-UA': 'Open industrial communication protocol',
+  'Modbus-TCP': 'Modbus',
+  'MQTT-Bridge': 'Wireless messaging bridge',
 }
 
 export type ScadaAlarm = {
@@ -633,17 +633,17 @@ export type OperatorTip = {
   priority: 'high' | 'medium' | 'low'
 }
 
-/** نمای پدهای تولید برای اپراتور اسکادا */
+/** Production pads view for the SCADA operator */
 export function getPadOverviews(tick = Date.now()): PadOverview[] {
   const wells = getMarunLiveState(tick)
   const conns = getScadaConnections(tick)
   const pads = [
-    { pad: 'A', nameFa: 'پد الف — چاه‌های ۱ تا ۴', ids: wells.slice(0, 4), connId: 'OPC-RTU-PAD-A' },
-    { pad: 'B', nameFa: 'پد ب — چاه‌های ۵ تا ۸', ids: wells.slice(4, 8), connId: 'OPC-RTU-PAD-B' },
-    { pad: 'C', nameFa: 'پد ج — چاه‌های ۹ تا ۱۲', ids: wells.slice(8, 12), connId: 'OPC-RTU-PAD-C' },
-    { pad: 'D', nameFa: 'پد د — چاه‌های ۱۳ تا ۱۶', ids: wells.slice(12, 16), connId: 'OPC-RTU-PAD-D' },
-    { pad: 'E', nameFa: 'پد ه‍ — چاه‌های ۱۷ تا ۲۰', ids: wells.slice(16, 20), connId: 'OPC-RTU-PAD-E' },
-    { pad: 'F', nameFa: 'پد و — چاه‌های ۲۱ تا ۲۴', ids: wells.slice(20, 24), connId: 'OPC-RTU-PAD-F' },
+    { pad: 'A', nameFa: 'Pad A — wells 1 to 4', ids: wells.slice(0, 4), connId: 'OPC-RTU-PAD-A' },
+    { pad: 'B', nameFa: 'Pad B — wells 5 to 8', ids: wells.slice(4, 8), connId: 'OPC-RTU-PAD-B' },
+    { pad: 'C', nameFa: 'Pad C — wells 9 to 12', ids: wells.slice(8, 12), connId: 'OPC-RTU-PAD-C' },
+    { pad: 'D', nameFa: 'Pad D — wells 13 to 16', ids: wells.slice(12, 16), connId: 'OPC-RTU-PAD-D' },
+    { pad: 'E', nameFa: 'Pad E — wells 17 to 20', ids: wells.slice(16, 20), connId: 'OPC-RTU-PAD-E' },
+    { pad: 'F', nameFa: 'Pad F — wells 21 to 24', ids: wells.slice(20, 24), connId: 'OPC-RTU-PAD-F' },
   ]
   return pads.map((p) => {
     const onlineWells = p.ids.filter((w) => w.status !== 'offline')
@@ -672,7 +672,7 @@ export function getPadOverviews(tick = Date.now()): PadOverview[] {
   })
 }
 
-/** پنل تأسیسات سطح (جداکننده / منیفولد / خط لوله) */
+/** Surface facilities panel (separator / manifold / pipeline) */
 export function getFacilityHmi(tick = Date.now()): FacilityHmi {
   const wells = getMarunLiveState(tick).filter((w) => w.status !== 'offline')
   const oil = wells.reduce((s, w) => s + w.oilRate, 0)
@@ -682,12 +682,12 @@ export function getFacilityHmi(tick = Date.now()): FacilityHmi {
   const separatorLevel = Math.round(45 + avgWc * 0.3)
   const pipelinePsi = Math.round(720 + seeded(42) * 80)
   const advice: string[] = []
-  if (separatorLevel > 78) advice.push('سطح جداکننده بالاست — دبی خروجی آب/نفت را افزایش دهید.')
-  if (separatorLevel < 28) advice.push('سطح جداکننده پایین است — از خشک شدن پمپ خروجی جلوگیری کنید.')
-  if (separatorPsi > 240) advice.push('فشار جداکننده نزدیک سقف — شیر گاز خروجی را بازتر کنید.')
-  if (avgWc > 55) advice.push('درصد آب تولیدی میدان بالاست — تزریق و چوک چاه‌های پرآب را بازبینی کنید.')
-  if (pipelinePsi < 600) advice.push('فشار خط لوله پایین — احتمال نشتی یا افت پمپ ایستگاه را بررسی کنید.')
-  if (advice.length === 0) advice.push('تأسیسات سطح در محدوده پایدار است — پایش دوره‌ای ادامه یابد.')
+  if (separatorLevel > 78) advice.push('Separator level is high — increase the water/oil outlet rate.')
+  if (separatorLevel < 28) advice.push('Separator level is low — prevent the outlet pump from running dry.')
+  if (separatorPsi > 240) advice.push('Separator pressure is near the ceiling — open the gas outlet valve further.')
+  if (avgWc > 55) advice.push('The field produced water cut is high — review injection and the chokes of high-water wells.')
+  if (pipelinePsi < 600) advice.push('Pipeline pressure is low — check for a possible leak or a booster station pump drop.')
+  if (advice.length === 0) advice.push('Surface facilities are within the stable range — continue periodic monitoring.')
   return {
     manifoldPsi,
     separatorPsi,
@@ -700,7 +700,7 @@ export function getFacilityHmi(tick = Date.now()): FacilityHmi {
   }
 }
 
-/** آلارم‌های صنعتی استخراج‌شده از تگ‌ها و وضعیت چاه */
+/** Industrial alarms extracted from the tags and well status */
 export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
   const wells = getMarunLiveState(tick)
   const tags = getScadaTags(tick)
@@ -713,10 +713,10 @@ export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
         id: `alm-${w.id}-crit`,
         severity: 'critical',
         wellId: w.id,
-        source: 'پایانه سرچاهی',
-        title: `وضعیت بحرانی ${w.nameFa}`,
-        detail: `امتیاز سلامت ${w.healthScore} · درصد آب ${w.waterCut}% · ریسک تجهیزات ${w.equipmentRisk}%`,
-        action: 'بررسی فشار سرچاهی، جریان پمپ و تریپ توقف اضطراری؛ در صورت نیاز چاه را ایمن کنید.',
+        source: 'Wellhead terminal',
+        title: `Critical status of ${w.nameFa}`,
+        detail: `Health score ${w.healthScore} · water cut ${w.waterCut}% · equipment risk ${w.equipmentRisk}%`,
+        action: 'Check wellhead pressure, pump current and the emergency shutdown trip; make the well safe if necessary.',
         tagId: `${w.id}.THP`,
         at: now,
       })
@@ -725,10 +725,10 @@ export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
         id: `alm-${w.id}-warn`,
         severity: 'warning',
         wellId: w.id,
-        source: 'پایش تولید',
-        title: `هشدار عملکرد ${w.id}`,
-        detail: `افت ۳۰روزه ${w.declinePct30d}% · آب تولیدی ${w.waterCut}%`,
-        action: 'ست‌پوینت شیر کنترل جریان و سرعت پمپ را با اپراتور هوشمند هماهنگ کنید.',
+        source: 'Production monitoring',
+        title: `Performance warning ${w.id}`,
+        detail: `30-day decline ${w.declinePct30d}% · produced water ${w.waterCut}%`,
+        action: 'Coordinate the choke valve setpoint and pump speed with the smart operator.',
         tagId: `${w.id}.CHOKE_POS`,
         at: now,
       })
@@ -738,10 +738,10 @@ export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
         id: `alm-${w.id}-esp`,
         severity: 'critical',
         wellId: w.id,
-        source: 'درایو پمپ درون‌چاهی',
-        title: `پمپ ${w.id} خارج از سرویس`,
-        detail: 'فرکانس و جریان پمپ صفر است.',
-        action: 'وضعیت درایو فرکانس متغیر، اینترلاک و تغذیه را بررسی کنید.',
+        source: 'Electric submersible pump drive',
+        title: `Pump ${w.id} out of service`,
+        detail: 'Pump frequency and current are zero.',
+        action: 'Check the variable frequency drive status, interlock and power supply.',
         tagId: `${w.id}.ESP_HZ`,
         at: now,
       })
@@ -757,9 +757,9 @@ export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
         severity: 'warning',
         wellId: t.wellId,
         source: t.connectionId,
-        title: `کیفیت بد تگ — ${t.nameFa}`,
-        detail: `آدرس ${t.address}`,
-        action: 'کابل‌کشی، مبدل و ارتباط پایانه راه دور را بررسی کنید.',
+        title: `Bad tag quality — ${t.nameFa}`,
+        detail: `Address ${t.address}`,
+        action: 'Check the cabling, the transmitter and the remote terminal unit connection.',
         tagId: t.id,
         at: now,
       })
@@ -770,10 +770,10 @@ export function getScadaAlarms(tick = Date.now()): ScadaAlarm[] {
     alarms.push({
       id: 'alm-sep-level',
       severity: fac.separatorLevel > 85 || fac.separatorLevel < 22 ? 'critical' : 'warning',
-      source: 'اسکادای تأسیسات',
-      title: 'سطح غیرعادی جداکننده',
-      detail: `سطح فعلی ${fac.separatorLevel}%`,
-      action: 'کنترل سطح و شیرهای خروجی نفت/آب را تنظیم کنید.',
+      source: 'Facilities SCADA',
+      title: 'Abnormal separator level',
+      detail: `Current level ${fac.separatorLevel}%`,
+      action: 'Adjust the level control and the oil/water outlet valves.',
       tagId: 'FAC.SEP_LEVEL',
       at: now,
     })
@@ -790,38 +790,38 @@ export function getInterlocks(tick = Date.now()): Interlock[] {
   return [
     {
       id: 'il-esd',
-      nameFa: 'توقف اضطراری سرچاه',
+      nameFa: 'Wellhead emergency shutdown',
       state: critical ? 'tripped' : 'armed',
-      condition: 'فشار غیرمجاز یا فرمان دستی ایمنی',
-      effect: 'بستن شیر اصلی و قطع مسیر تولید چاه آسیب‌دیده',
+      condition: 'Unauthorized pressure or manual safety command',
+      effect: 'Close the master valve and cut off the production path of the affected well',
     },
     {
       id: 'il-esp-overcurrent',
-      nameFa: 'اضافه‌جریان پمپ درون‌چاهی',
+      nameFa: 'Electric submersible pump overcurrent',
       state: offlinePump ? 'tripped' : 'armed',
-      condition: 'جریان موتور بالاتر از حد حفاظتی',
-      effect: 'توقف درایو و قفل فرمان افزایش سرعت تا رفع علت',
+      condition: 'Motor current above the protection limit',
+      effect: 'Stop the drive and lock the speed-increase command until the cause is resolved',
     },
     {
       id: 'il-sep-hh',
-      nameFa: 'سطح بالای جداکننده',
+      nameFa: 'Separator high level',
       state: getFacilityHmi(tick).separatorLevel > 80 ? 'tripped' : 'armed',
-      condition: 'سطح مایع > ۸۰٪',
-      effect: 'کاهش ورودی منیفولد و افزایش خروجی',
+      condition: 'Liquid level > 80%',
+      effect: 'Reduce manifold inlet and increase outlet',
     },
     {
       id: 'il-choke-permit',
-      nameFa: 'مجوز تغییر شیر کنترل جریان',
+      nameFa: 'Choke valve change permissive',
       state: 'armed',
-      condition: 'نشست فرمان و کنترل + تأیید نقش اپراتور',
-      effect: 'اجازه نوشتن ست‌پوینت روی کنترل‌گر منطقی فرآیند',
+      condition: 'Command and control session + operator role confirmation',
+      effect: 'Permission to write the setpoint to the process logic controller',
     },
     {
       id: 'il-comm-loss',
-      nameFa: 'قطع ارتباط پایانه راه دور',
+      nameFa: 'Remote terminal unit disconnect',
       state: getScadaConnections(tick).some((c) => c.status === 'offline') ? 'tripped' : 'armed',
-      condition: 'عدم پاسخ بیش از سه دوره پویش',
-      effect: 'نگه‌داشت آخرین مقدار ایمن و هشدار به اتاق کنترل',
+      condition: 'No response for more than three scan cycles',
+      effect: 'Hold the last safe value and alert the control room',
     },
   ]
 }
@@ -831,31 +831,31 @@ export function getOperatorTips(tick = Date.now()): OperatorTip[] {
   const fac = getFacilityHmi(tick)
   const tips: OperatorTip[] = [
     {
-      title: 'اولویت پایش',
-      detail: 'ابتدا پد با بیشترین آلارم و سپس جداکننده سطح را چک کنید.',
+      title: 'Monitoring priority',
+      detail: 'First check the pad with the most alarms, then the separator level.',
       priority: 'high',
     },
     {
-      title: 'هماهنگی با اپراتور هوشمند',
-      detail: 'قبل از نوشتن دستی سرعت پمپ یا شیر کنترل جریان، اپراتور هوشمند داشبورد را موقتاً خاموش کنید.',
+      title: 'Coordination with the smart operator',
+      detail: 'Before manually writing the pump speed or choke valve, temporarily turn off the dashboard smart operator.',
       priority: 'medium',
     },
     {
-      title: 'نفت سبک-میانه ترش مارون',
-      detail: `درجه سنگینی حدود ${FIELD.apiGravity} — از افت ناگهانی دمای سرچاهی که می‌تواند ویسکوزیته را بالا ببرد غافل نشوید.`,
+      title: 'Maroun sour light-to-medium crude',
+      detail: `API gravity about ${FIELD.apiGravity} — do not overlook a sudden drop in wellhead temperature, which can increase viscosity.`,
       priority: 'medium',
     },
   ]
   const worst = [...pads].sort((a, b) => b.alarms - a.alarms)[0]
   if (worst && worst.alarms > 0) {
     tips.unshift({
-      title: `تمرکز روی ${worst.nameFa}`,
-      detail: `${worst.alarms} آلارم · دبی نفت پد ${worst.oil.toLocaleString()} بشکه در روز`,
+      title: `Focus on ${worst.nameFa}`,
+      detail: `${worst.alarms} alarms · pad oil rate ${worst.oil.toLocaleString()} barrels per day`,
       priority: 'high',
     })
   }
   if (fac.advice[0]) {
-    tips.push({ title: 'تأسیسات سطح', detail: fac.advice[0], priority: 'medium' })
+    tips.push({ title: 'Surface facilities', detail: fac.advice[0], priority: 'medium' })
   }
   return tips
 }

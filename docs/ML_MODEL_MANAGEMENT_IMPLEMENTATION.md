@@ -1,16 +1,16 @@
-# 🤖 راهنمای پیاده‌سازی ML Model Management
+# 🤖 ML Model Management Implementation Guide
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** بهبود دقت پیش‌بینی‌های ML با مدیریت بهتر مدل‌ها
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** Improve the accuracy of ML predictions with better model management
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
-3. [طراحی UI](#ui-design)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
+3. [UI Design](#ui-design)
 4. [Model Registry API](#model-registry)
 5. [Model Comparison](#model-comparison)
 6. [A/B Testing Framework](#ab-testing)
@@ -19,20 +19,20 @@
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-این سند راهنمای کامل پیاده‌سازی سیستم مدیریت مدل‌های ML است که شامل UI، Model Registry، Model Comparison، و A/B Testing Framework می‌شود.
+This document is the complete implementation guide for the ML model management system, which includes the UI, Model Registry, Model Comparison, and A/B Testing Framework.
 
-### اهداف
+### Goals
 
-- ✅ UI جامع برای مدیریت مدل‌ها
-- ✅ Model Registry با MLflow integration
-- ✅ Model Comparison برای انتخاب بهترین model
+- ✅ Comprehensive UI for managing models
+- ✅ Model Registry with MLflow integration
+- ✅ Model Comparison for choosing the best model
 - ✅ A/B Testing Framework
 - ✅ Model deployment workflow
 - ✅ Model drift detection
 
-### مدل‌های پشتیبانی شده
+### Supported models
 
 - **Anomaly Detection**: Isolation Forest
 - **Failure Prediction**: Random Forest
@@ -41,7 +41,7 @@
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -75,7 +75,7 @@
 
 ---
 
-## <a name="ui-design"></a>🎨 طراحی UI
+## <a name="ui-design"></a>🎨 UI Design
 
 ### 1. Model List Page
 
@@ -1136,6 +1136,6 @@ def test_model_comparison():
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

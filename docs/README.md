@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**سیستم هوشمند نظارت و پایش میدان نفت و گاز**
+**Intelligent Oil and Gas Field Monitoring System**
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-green.svg)](https://python.org)
@@ -10,33 +10,33 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-blue.svg)](https://kubernetes.io)
 
-[English](#english) | [فارسی](#persian)
+[English](#english) | [Full details](#persian)
 
 </div>
 
 ---
 
-## <a name="persian"></a>📖 توضیحات (فارسی)
+## <a name="persian"></a>📖 Description (detailed)
 
-### 🆕 به‌روزرسانی‌های اخیر مستندات
+### 🆕 Recent documentation updates
 
-- مرجع API جدید: [`API_REFERENCE.md`](API_REFERENCE.md)
-- راهنمای کاربر جدید: [`USER_GUIDE.md`](USER_GUIDE.md)
-- آدرس‌ها و endpointهای به‌روز: [`../SERVICE_URLS.md`](../SERVICE_URLS.md)
-- Observability/APM و امنیت SIEM: [`OBSERVABILITY.md`](OBSERVABILITY.md), [`TRACING.md`](TRACING.md)
+- New API reference: [`API_REFERENCE.md`](API_REFERENCE.md)
+- New user guide: [`USER_GUIDE.md`](USER_GUIDE.md)
+- Up-to-date addresses and endpoints: [`../SERVICE_URLS.md`](../SERVICE_URLS.md)
+- Observability/APM and SIEM security: [`OBSERVABILITY.md`](OBSERVABILITY.md), [`TRACING.md`](TRACING.md)
 
-### 🎯 درباره پروژه
+### 🎯 About the project
 
-OGIM یک سیستم جامع و هوشمند برای نظارت، پایش و کنترل میدان‌های نفت و گاز است که با استفاده از فناوری‌های مدرن شامل:
-- ✅ **یادگیری ماشین (ML)** برای تشخیص ناهنجاری و پیش‌بینی خرابی
-- ✅ **پردازش جریانی (Stream Processing)** با Apache Flink
-- ✅ **معماری میکروسرویس (Microservices)** با FastAPI
-- ✅ **رابط کاربری مدرن (Modern UI)** با React + TypeScript
-- ✅ **پایگاه داده سری زمانی (Time-Series DB)** با TimescaleDB
-- ✅ **مدیریت هوشمند هشدارها (Alert Management)**
-- ✅ **اتصال به SCADA/PLC** با OPC UA و Modbus
+OGIM is a comprehensive, intelligent system for monitoring, tracking and controlling oil and gas fields, built with modern technologies including:
+- ✅ **Machine learning (ML)** for anomaly detection and failure prediction
+- ✅ **Stream Processing** with Apache Flink
+- ✅ **Microservices architecture** with FastAPI
+- ✅ **Modern UI** with React + TypeScript
+- ✅ **Time-Series DB** with TimescaleDB
+- ✅ **Intelligent alert management (Alert Management)**
+- ✅ **SCADA/PLC connectivity** via OPC UA and Modbus
 
-### 🏗️ معماری سیستم
+### 🏗️ System architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -73,38 +73,38 @@ OGIM یک سیستم جامع و هوشمند برای نظارت، پایش و 
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 📊 داده‌های تولیدی
+### 📊 Generated data
 
-سیستم شامل **65+ متغیر** برای نظارت کامل میدان است:
+The system includes **65+ variables** for complete field monitoring:
 
-| دسته | تعداد | شامل |
+| Category | Count | Includes |
 |------|-------|------|
-| 🔧 فشار | 6 | Wellhead, Tubing, Casing, Separator, Line, Bottom Hole |
-| 🌡️ دما | 5 | Wellhead, Separator, Line, Motor, Bearing |
-| 💧 جریان | 5 | Oil, Gas, Water, Total Liquid, Injection |
-| 🧪 ترکیب | 5 | Oil Cut, Water Cut, GOR, BS&W, API Gravity |
-| ⚙️ پمپ | 6 | Speed, Frequency, Current, Voltage, Power, Efficiency |
-| 📳 لرزش | 4 | X/Y/Z axes, Overall |
-| 🚰 شیر و ولو | 4 | Choke, Wing, Master, Safety Valve |
-| 📏 سطح | 4 | Separator Oil/Water, Tank, Fluid |
-| 🔬 کیفیت | 5 | H2S, CO2, Salt, Viscosity, Density |
-| 🌍 محیطی | 4 | Temperature, Pressure, Humidity, Wind |
-| ⚡ الکتریکی | 8 | 3-Phase Voltage/Current, Power Factor, Frequency |
-| 📈 عملکرد | 5 | Production Rate, Cumulative, Uptime, Efficiency |
-| 🔔 وضعیت | 4 | Well, Pump, Alarm, Production Mode |
+| 🔧 Pressure | 6 | Wellhead, Tubing, Casing, Separator, Line, Bottom Hole |
+| 🌡️ Temperature | 5 | Wellhead, Separator, Line, Motor, Bearing |
+| 💧 Flow | 5 | Oil, Gas, Water, Total Liquid, Injection |
+| 🧪 Composition | 5 | Oil Cut, Water Cut, GOR, BS&W, API Gravity |
+| ⚙️ Pump | 6 | Speed, Frequency, Current, Voltage, Power, Efficiency |
+| 📳 Vibration | 4 | X/Y/Z axes, Overall |
+| 🚰 Valves | 4 | Choke, Wing, Master, Safety Valve |
+| 📏 Level | 4 | Separator Oil/Water, Tank, Fluid |
+| 🔬 Quality | 5 | H2S, CO2, Salt, Viscosity, Density |
+| 🌍 Environmental | 4 | Temperature, Pressure, Humidity, Wind |
+| ⚡ Electrical | 8 | 3-Phase Voltage/Current, Power Factor, Frequency |
+| 📈 Performance | 5 | Production Rate, Cumulative, Uptime, Efficiency |
+| 🔔 Status | 4 | Well, Pump, Alarm, Production Mode |
 
-**جمع کل: 65+ متغیر**
+**Total: 65+ variables**
 
-### 🏭 چاه‌های شبیه‌سازی شده
+### 🏭 Simulated wells
 
-| نام چاه | نوع | نرخ تولید | فشار پایه |
+| Well name | Type | Production rate | Base pressure |
 |---------|-----|-----------|-----------|
-| **PROD-001** | تولیدی | 800-1500 bbl/day | 2000-3500 psi |
-| **PROD-002** | تولیدی | 800-1500 bbl/day | 2000-3500 psi |
-| **DEV-001** | توسعه‌ای | 500-1000 bbl/day | 1500-3000 psi |
-| **OBS-001** | مشاهده‌ای | 0 bbl/day | 1000-2500 psi |
+| **PROD-001** | Production | 800-1500 bbl/day | 2000-3500 psi |
+| **PROD-002** | Production | 800-1500 bbl/day | 2000-3500 psi |
+| **DEV-001** | Development | 500-1000 bbl/day | 1500-3000 psi |
+| **OBS-001** | Observation | 0 bbl/day | 1000-2500 psi |
 
-### 📂 ساختار پروژه
+### 📂 Project structure
 
 ```
 OGIM---Oil-Gas-Intelligent-Monitoring/
@@ -160,13 +160,13 @@ OGIM---Oil-Gas-Intelligent-Monitoring/
 │   ├── ARCHITECTURE.md              # System architecture
 │   └── DEPLOYMENT.md                # Deployment guide
 │
-├── 📄 README.md                      # این فایل
+├── 📄 README.md                      # This file
 └── 📋 requirements.txt               # Python dependencies
 ```
 
-### 🚀 شروع سریع
+### 🚀 Quick start
 
-#### پیش‌نیازها
+#### Prerequisites
 
 - **Python** 3.10+
 - **Node.js** 18+
@@ -175,51 +175,51 @@ OGIM---Oil-Gas-Intelligent-Monitoring/
 - **Redis** 7+
 - **Kafka** 3.0+
 
-#### نصب و راه‌اندازی
+#### Installation and setup
 
-##### 1️⃣ کلون کردن پروژه
+##### 1️⃣ Cloning the project
 
 ```bash
 git clone https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring.git
 cd OGIM---Oil-Gas-Intelligent-Monitoring
 ```
 
-##### 2️⃣ راه‌اندازی با Docker Compose (توصیه شده)
+##### 2️⃣ Setup with Docker Compose (recommended)
 
 ```bash
-# ایجاد فایل .env
+# Create the .env file
 cp .env.example .env
 
-# راه‌اندازی تمام سرویس‌ها
+# Start all services
 docker-compose -f docker-compose.dev.yml up -d
 
-# بررسی وضعیت
+# Check the status
 docker-compose ps
 ```
 
-##### 3️⃣ راه‌اندازی دستی (Development)
+##### 3️⃣ Manual setup (Development)
 
 **Backend:**
 ```bash
-# ایجاد محیط مجازی
+# Create a virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# نصب وابستگی‌ها
+# Install the dependencies
 cd backend/shared
 pip install -r requirements.txt
 
-# مقداردهی اولیه دیتابیس
+# Initialize the database
 python -m init_db
 
-# اجرای سرویس‌ها
+# Run the services
 cd ../auth-service
 uvicorn main:app --reload --port 8001
 
 cd ../data-ingestion-service
 uvicorn main:app --reload --port 8002
 
-# ... (سایر سرویس‌ها)
+# ... (other services)
 ```
 
 **Frontend:**
@@ -229,145 +229,145 @@ npm install
 npm run dev
 ```
 
-##### 4️⃣ تولید داده نمونه
+##### 4️⃣ Generating sample data
 
 ```bash
-# داده نمونه (1 هفته، 1 دقیقه)
+# Sample data (1 week, 1 minute)
 cd data
 python generate_sample_data.py
 
-# داده کامل (6 ماه، 1 ثانیه)
+# Full data (6 months, 1 second)
 python advanced_data_generator.py
 ```
 
-### 🎯 ویژگی‌های کلیدی
+### 🎯 Key features
 
-#### 1. نظارت بلادرنگ (Real-Time Monitoring)
-- ✅ Dashboard تعاملی با نمودارهای زنده
-- ✅ بروزرسانی هر 1-10 ثانیه
-- ✅ نمایش 65+ متغیر به صورت همزمان
-- ✅ تاریخچه و روندها (Historical Trends)
+#### 1. Real-Time Monitoring
+- ✅ Interactive Dashboard with live charts
+- ✅ Updates every 1-10 seconds
+- ✅ Display of 65+ variables simultaneously
+- ✅ Historical Trends
 
-#### 2. یادگیری ماشین (Machine Learning)
-- ✅ **Anomaly Detection** با Isolation Forest
-- ✅ **Failure Prediction** با Random Forest
-- ✅ **Time Series Forecasting** با LSTM (شبکه‌های عصبی بازگشتی)
-- ✅ مدیریت مدل‌ها با MLflow
-- ✅ Training و Inference بلادرنگ
-- ✅ Model versioning و A/B testing
+#### 2. Machine Learning
+- ✅ **Anomaly Detection** with Isolation Forest
+- ✅ **Failure Prediction** with Random Forest
+- ✅ **Time Series Forecasting** with LSTM (recurrent neural networks)
+- ✅ Model management with MLflow
+- ✅ Real-time Training and Inference
+- ✅ Model versioning and A/B testing
 
-#### 3. مدیریت هوشمند هشدارها (Alert Management)
-- ✅ قوانین پویا (Dynamic Rules)
-- ✅ سطوح مختلف: Info, Warning, Critical
-- ✅ جلوگیری از هشدارهای تکراری (Deduplication)
-- ✅ Escalation و Notification
-- ✅ تاریخچه کامل هشدارها
+#### 3. Intelligent Alert Management
+- ✅ Dynamic Rules
+- ✅ Different levels: Info, Warning, Critical
+- ✅ Preventing duplicate alerts (Deduplication)
+- ✅ Escalation and Notification
+- ✅ Complete alert history
 
-#### 4. کنترل و فرمان (Command & Control)
-- ✅ ارسال فرمان به تجهیزات
-- ✅ احراز هویت دو مرحله‌ای (2FA)
-- ✅ سیستم تایید و اجرا (Approval Workflow)
-- ✅ Audit logging کامل
-- ✅ نقش‌ها و دسترسی‌ها (RBAC)
+#### 4. Command & Control
+- ✅ Sending commands to equipment
+- ✅ Two-factor authentication (2FA)
+- ✅ Approval and execution system (Approval Workflow)
+- ✅ Complete audit logging
+- ✅ Roles and permissions (RBAC)
 
-#### 5. پردازش جریانی (Stream Processing)
-- ✅ Apache Flink برای پردازش real-time
-- ✅ Data cleansing و enrichment
+#### 5. Stream Processing
+- ✅ Apache Flink for real-time processing
+- ✅ Data cleansing and enrichment
 - ✅ Complex Event Processing (CEP)
 - ✅ Window operations (Tumbling, Sliding)
-- ✅ Checkpointing برای fault tolerance
+- ✅ Checkpointing for fault tolerance
 
-#### 6. اتصال به SCADA/PLC
-- ✅ پروتکل OPC UA
-- ✅ پروتکل Modbus TCP
-- ✅ Connector قابل توسعه
+#### 6. SCADA/PLC connectivity
+- ✅ OPC UA protocol
+- ✅ Modbus TCP protocol
+- ✅ Extensible Connector
 - ✅ Auto-reconnection
 - ✅ Data buffering
 
-### 🔐 امنیت
+### 🔐 Security
 
 - ✅ **Authentication**: JWT tokens
 - ✅ **Authorization**: Role-Based Access Control (RBAC)
 - ✅ **Password Hashing**: Bcrypt
-- ✅ **2FA**: Two-Factor Authentication برای فرمان‌های حساس
-- ✅ **Audit Logging**: ثبت تمام فعالیت‌ها
-- ✅ **Rate Limiting**: محدودیت درخواست با Redis
-- ✅ **CORS**: تنظیمات امن Cross-Origin
+- ✅ **2FA**: Two-Factor Authentication for sensitive commands
+- ✅ **Audit Logging**: Recording all activity
+- ✅ **Rate Limiting**: Request limiting with Redis
+- ✅ **CORS**: Secure Cross-Origin settings
 
-### 📊 تولید داده
+### 📊 Data generation
 
-#### داده نمونه (سریع - برای تست)
+#### Sample data (fast - for testing)
 ```bash
 cd data
 python generate_sample_data.py
 ```
-- **مدت:** 1 هفته
-- **تایم لپس:** 1 دقیقه
-- **رکورد:** 40,320
-- **حجم:** ~98 MB
-- **زمان:** 3-5 دقیقه
+- **Duration:** 1 week
+- **Time lapse:** 1 minute
+- **Records:** 40,320
+- **Size:** ~98 MB
+- **Time:** 3-5 minutes
 
-#### داده کامل (6 ماه - طبق SRS)
+#### Full data (6 months - per SRS)
 ```bash
 cd data
 python advanced_data_generator.py
 ```
-- **مدت:** 6 ماه (180 روز)
-- **تایم لپس:** 1 ثانیه ⏱️
-- **رکورد:** 62,208,000
-- **حجم:** ~12-15 GB (compressed)
-- **زمان:** 4-8 ساعت
+- **Duration:** 6 months (180 days)
+- **Time lapse:** 1 second ⏱️
+- **Records:** 62,208,000
+- **Size:** ~12-15 GB (compressed)
+- **Time:** 4-8 hours
 
-#### ویژگی‌های شبیه‌سازی
-- ✅ کاهش تولید (Production Decline)
-- ✅ چرخه‌های روزانه و هفتگی
-- ✅ افزایش Water Cut (10% → 95%)
-- ✅ تعمیرات دوره‌ای (هر 30 روز)
-- ✅ فرسودگی تجهیزات
-- ✅ شناسایی ناهنجاری
-- ✅ Shutdowns و Maintenance
+#### Simulation features
+- ✅ Production Decline
+- ✅ Daily and weekly cycles
+- ✅ Water Cut increase (10% → 95%)
+- ✅ Periodic maintenance (every 30 days)
+- ✅ Equipment wear
+- ✅ Anomaly detection
+- ✅ Shutdowns and Maintenance
 
-### 🧪 تست
+### 🧪 Testing
 
 ```bash
-# اجرای تمام تست‌ها
+# Run all tests
 cd backend
 pytest
 
-# تست با coverage
+# Test with coverage
 pytest --cov=backend --cov-report=html
 
-# تست یک سرویس خاص
+# Test a specific service
 pytest tests/test_auth_service.py -v
 ```
 
-### 🚢 استقرار (Deployment)
+### 🚢 Deployment
 
 #### Kubernetes (Production)
 
 ```bash
-# ایجاد namespace
+# Create the namespace
 kubectl create namespace ogim
 
-# اعمال ConfigMaps و Secrets
+# Apply ConfigMaps and Secrets
 kubectl apply -f infrastructure/kubernetes/configmap.yaml
 kubectl apply -f infrastructure/kubernetes/secrets.yaml
 
-# استقرار databases
+# Deploy the databases
 kubectl apply -f infrastructure/kubernetes/postgres-deployment.yaml
 kubectl apply -f infrastructure/kubernetes/timescaledb-deployment.yaml
 kubectl apply -f infrastructure/kubernetes/redis-deployment.yaml
 
-# استقرار Kafka
+# Deploy Kafka
 kubectl apply -f infrastructure/kubernetes/kafka-deployment.yaml
 
-# استقرار backend services
+# Deploy the backend services
 kubectl apply -f infrastructure/kubernetes/backend-deployments.yaml
 
-# استقرار frontend
+# Deploy the frontend
 kubectl apply -f infrastructure/kubernetes/frontend-deployment.yaml
 
-# بررسی وضعیت
+# Check the status
 kubectl get pods -n ogim
 kubectl get services -n ogim
 ```
@@ -380,7 +380,7 @@ docker-compose -f docker-compose.dev.yml up -d
 
 ### 📖 API Documentation
 
-پس از راه‌اندازی، مستندات API در آدرس‌های زیر قابل دسترسی است:
+After setup, the API documentation is available at the following addresses:
 
 - **API Gateway:** http://localhost:8000/docs
 - **Auth Service:** http://localhost:8001/docs
@@ -388,7 +388,7 @@ docker-compose -f docker-compose.dev.yml up -d
 - **Alert Service:** http://localhost:8003/docs
 - **ML Inference:** http://localhost:8004/docs
 
-### 🛠️ تکنولوژی‌ها
+### 🛠️ Technologies
 
 #### Backend
 - **FastAPI** - Web framework
@@ -425,23 +425,23 @@ docker-compose -f docker-compose.dev.yml up -d
 - 🔄 **Uptime:** 99.9%+ (High availability)
 - 📊 **Scalability:** Horizontal scaling ready
 
-### 🤝 مشارکت
+### 🤝 Contributing
 
-1. Fork کنید
-2. Feature branch بسازید (`git checkout -b feature/AmazingFeature`)
-3. تغییرات را commit کنید (`git commit -m 'Add AmazingFeature'`)
-4. Push کنید (`git push origin feature/AmazingFeature`)
-5. Pull Request باز کنید
+1. Fork it
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### 📝 لایسنس
+### 📝 License
 
-این پروژه تحت لایسنس MIT منتشر شده است.
+This project is released under the MIT license.
 
-### 👥 نویسندگان
+### 👥 Authors
 
 - **Parsa Sohrab** - [parsasohrab1](https://github.com/parsasohrab1)
 
-### 🙏 تشکر
+### 🙏 Acknowledgments
 
 - Apache Software Foundation (Kafka, Flink)
 - PostgreSQL & TimescaleDB teams
@@ -522,6 +522,6 @@ MIT License - see LICENSE file
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** نوامبر 2025  
-**وضعیت:** ✅ Production Ready
+**Version:** 1.0.0
+**Date:** November 2025
+**Status:** ✅ Production Ready

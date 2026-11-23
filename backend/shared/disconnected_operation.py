@@ -1,6 +1,6 @@
 """
 Disconnected Operation Manager for Edge Computing
-مدیریت عملیات در حالت قطع ارتباط برای Edge Computing
+Managing operation in disconnected mode for Edge Computing
 """
 
 import asyncio

@@ -1,14 +1,14 @@
 # Observability – Prometheus & Grafana
 
-این راهنما نحوه‌ی جمع‌آوری متریک‌ها و ساخت داشبورد برای سرویس‌های OGIM را توضیح می‌دهد.
+This guide explains how to collect metrics and build dashboards for the OGIM services.
 
-## 1. اجزای پیشنهادی
+## 1. Recommended components
 
-- **Prometheus**: جمع‌آوری متریک از سرویس‌ها (`/metrics`).
-- **Grafana**: نمایش داشبورد، تعریف هشدار.
-- (اختیاری) **Alertmanager**: مدیریت هشدارهای Prometheus.
+- **Prometheus**: Collects metrics from the services (`/metrics`).
+- **Grafana**: Displays dashboards, defines alerts.
+- (Optional) **Alertmanager**: Manages Prometheus alerts.
 
-نمونه docker-compose (خلاصه):
+Sample docker-compose (summary):
 
 ```yaml
 services:
@@ -35,7 +35,7 @@ services:
       - "3001:3000"
 ```
 
-فایل‌های production-ready برای این استک در پروژه اضافه شده‌اند:
+Production-ready files for this stack have been added to the project:
 
 - `infrastructure/otel/otel-collector-config.yaml`
 - `infrastructure/tempo/tempo.yaml`
@@ -43,9 +43,9 @@ services:
 - `infrastructure/grafana/provisioning/dashboards/dashboards.yaml`
 - `infrastructure/grafana/provisioning/dashboards/json/ogim-apm-overview.json`
 
-## 2. پیکربندی Prometheus
+## 2. Prometheus configuration
 
-در `infrastructure/prometheus/prometheus.yml` (نمونه):
+In `infrastructure/prometheus/prometheus.yml` (sample):
 
 ```yaml
 global:
@@ -64,59 +64,59 @@ scrape_configs:
           - api-gateway:8000
 ```
 
-هر سرویس FastAPI اکنون مسیر `/metrics` را ارائه می‌دهد. در صورت عدم نصب `prometheus-client`، سرویس خطای 503 برمی‌گرداند.
+Every FastAPI service now exposes the `/metrics` path. If `prometheus-client` is not installed, the service returns a 503 error.
 
-## 3. متریک‌های موجود
+## 3. Available metrics
 
-### عمومی (همه سرویس‌ها)
+### General (all services)
 - `service_requests_total{service,method,status}`
 - `service_request_errors_total{service,method,status}`
 - `service_request_latency_seconds{service,method,path}`
 
-### اختصاصی ML Inference
+### ML Inference specific
 - `ml_inference_requests_total{model_type}`
 - `ml_inference_errors_total{model_type,reason}`
 - `ml_inference_latency_seconds{model_type}`
 
-## 4. داشبورد پایه Grafana
+## 4. Basic Grafana dashboard
 
-پنل‌های پیشنهادی:
-- **Latency (p95/p99)**: از `histogram_quantile` روی `service_request_latency_seconds`.
-- **Error Rate**: درصد درخواست‌های `status>=500`.
-- **Request Volume**: نمودار تجمعی `service_requests_total`.
-- **Inference Performance** (پیشرفته): latency/خطا بر اساس `model_type`.
+Recommended panels:
+- **Latency (p95/p99)**: From `histogram_quantile` on `service_request_latency_seconds`.
+- **Error Rate**: Percentage of requests with `status>=500`.
+- **Request Volume**: Cumulative chart of `service_requests_total`.
+- **Inference Performance** (advanced): latency/errors by `model_type`.
 
-نمونه کوئری Latency:
+Sample Latency query:
 ```promql
 histogram_quantile(0.95, sum(rate(service_request_latency_seconds_bucket{service="api-gateway"}[5m])) by (le))
 ```
 
-## 5. هشدارها
-- **خطای زیاد**: اگر `rate(service_request_errors_total[5m]) > 0.01` برای سرویسی خاص.
-- **Latency بالا**: `histogram_quantile(0.99, ...) > 2s`.
-- **ورود ناموفق مکرر**: قابل استفاده از لاگ‌های audit (integration با Alertmanager / SIEM).
+## 5. Alerts
+- **High error rate**: If `rate(service_request_errors_total[5m]) > 0.01` for a specific service.
+- **High Latency**: `histogram_quantile(0.99, ...) > 2s`.
+- **Repeated failed logins**: Can be used from audit logs (integration with Alertmanager / SIEM).
 
 ## 6. Tracing (OpenTelemetry)
-- تمام سرویس‌ها با `setup_tracing` پیکربندی شده‌اند؛ برای فعال‌سازی، متغیر `OTEL_EXPORTER_OTLP_ENDPOINT` را تنظیم کنید.
-- در `infrastructure/docker/docker-compose.yml` این مقدار به شکل پیش‌فرض روی `http://otel-collector:4317` تنظیم شده است.
-- نمونه تنظیمات و استقرار Jaeger در [`docs/TRACING.md`](TRACING.md) موجود است.
-- API Gateway به صورت خودکار context را به سرویس‌های پایین‌دست منتقل می‌کند.
+- All services are configured with `setup_tracing`; to enable it, set the `OTEL_EXPORTER_OTLP_ENDPOINT` variable.
+- In `infrastructure/docker/docker-compose.yml` this value is set by default to `http://otel-collector:4317`.
+- A sample configuration and deployment of Jaeger is available in [`docs/TRACING.md`](TRACING.md).
+- The API Gateway automatically propagates the context to downstream services.
 
-## 7. Logging ساخت‌یافته
-- خروجی لاگ همه سرویس‌ها JSON است (فایل `shared/logging_config.py`). فیلدهایی مانند `service`، `environment`، `correlation_id` و جزئیات exception به طور پیش‌فرض ثبت می‌شوند.
-- برای ارسال لاگ‌ها به Loki یا ELK، به [`docs/LOGGING.md`](LOGGING.md) مراجعه کنید و نمونه پیکربندی `infrastructure/logging/promtail-config.yaml` را به کار ببرید.
-- توصیه می‌شود در Grafana/Kibana داشبوردی بسازید که لاگ‌ها را براساس `service` و `level` فیلتر کند.
+## 7. Structured Logging
+- The log output of all services is JSON (file `shared/logging_config.py`). Fields such as `service`, `environment`, `correlation_id` and exception details are recorded by default.
+- To ship logs to Loki or ELK, see [`docs/LOGGING.md`](LOGGING.md) and use the sample configuration `infrastructure/logging/promtail-config.yaml`.
+- It is recommended to build a dashboard in Grafana/Kibana that filters logs by `service` and `level`.
 
-## 8. CI/CD و مستندسازی
-- در pipeline استقرار، پس از deploy سرویس‌ها، Prometheus/Grafana را reload کنید (یا از Kubernetes ServiceMonitor استفاده کنید).
-- آدرس و نحوه دسترسی داشبوردها و ابزار tracing را در Runbook عملیاتی ثبت کنید.
-- برای تیم Ops، سقف‌های هشدار (threshold) و اقدامات پاسخ را در Runbook اضافه کنید.
+## 8. CI/CD and documentation
+- In the deployment pipeline, after deploying the services, reload Prometheus/Grafana (or use a Kubernetes ServiceMonitor).
+- Record the address and access method of the dashboards and tracing tools in the operational Runbook.
+- For the Ops team, add alert thresholds and response actions to the Runbook.
 
 ## 9. SIEM & Threat Detection
-- رخدادهای امنیتی با prefix `SIEM_EVENT` در لاگ سرویس‌ها emit می‌شوند (فرمت JSON).
-- در صورت تنظیم `SIEM_OUTPUT_FILE`، رخدادها به فایل newline-delimited JSON نیز نوشته می‌شوند.
-- سیاست Zero Trust در gateway با `ZERO_TRUST_ENFORCED=true` و `ZERO_TRUST_ALLOWED_NETWORKS` فعال می‌شود.
-- threat scoring با `THREAT_BLOCK_THRESHOLD` کنترل می‌شود؛ درخواست‌های پرخطر در gateway بلاک می‌شوند.
+- Security events are emitted in the services' logs with the `SIEM_EVENT` prefix (JSON format).
+- If `SIEM_OUTPUT_FILE` is set, events are also written to a newline-delimited JSON file.
+- The Zero Trust policy in the gateway is enabled with `ZERO_TRUST_ENFORCED=true` and `ZERO_TRUST_ALLOWED_NETWORKS`.
+- Threat scoring is controlled with `THREAT_BLOCK_THRESHOLD`; high-risk requests are blocked at the gateway.
 
-با این ساختار می‌توانید روند سلامت سرویس‌ها را رصد و هشدارهای اولیه را مدیریت کنید.
+With this structure you can track the health trend of the services and manage early alerts.
 

@@ -33,68 +33,68 @@ USERS = [
     ("viewer1", "viewer1@ogim.local", "Viewer@123", "viewer"),
 ]
 
-# تعداد چاه و دبی تولید هر شرکت تابعه بر مبنای منابع عمومی (ویکی‌پدیای فارسی،
-# شانا، ایرنا) در شهریور ۱۴۰۵ تخمین زده شده - نه رقم رسمی لحظه‌ای شرکت؛ جزئیات
-# منبع هر ردیف را در frontend/web/src/data/operationsData.ts ببینید.
+# The number of wells and production rate of each subsidiary company are estimated from public sources (Persian Wikipedia,
+# SHANA, IRNA) as of September 2026 - not an official real-time company figure; for the details of
+# each row's source see frontend/web/src/data/operationsData.ts.
 SUBSIDIARIES = [
     (
         "MIS",
-        "شرکت بهره‌برداری نفت و گاز مسجدسلیمان",
+        "Masjed Soleyman Oil and Gas Exploitation Company",
         "Masjed Soleyman Oil & Gas Producing Company",
         492,
         142000,
         [
-            ("مسجدسلیمان", "oil", 300),
-            ("هفت‌شهیدان", "gas", 92),
-            ("نفت سفید", "associated_gas", 100),
+            ("Masjed Soleyman", "oil", 300),
+            ("Haft Shahidan", "gas", 92),
+            ("Naft Safid", "associated_gas", 100),
         ],
     ),
     (
         "AGJ",
-        "شرکت بهره‌برداری نفت و گاز آغاجاری",
+        "Aghajari Oil and Gas Exploitation Company",
         "Aghajari Oil & Gas Producing Company",
         218,
         180000,
         [
-            ("آغاجاری", "oil", 150),
-            ("کلاهک گازی آغاجاری (خامی)", "gas_cap", 33),
-            ("رگ سفید", "oil", 35),
+            ("Aghajari", "oil", 150),
+            ("Aghajari gas cap (crude)", "gas_cap", 33),
+            ("Rag Sefid", "oil", 35),
         ],
     ),
     (
         "KRN",
-        "شرکت بهره‌برداری نفت و گاز کارون",
+        "Karun Oil and Gas Exploitation Company",
         "Karoun Oil & Gas Producing Company",
         220,
         150000,
         [
-            ("اهواز", "oil", 110),
-            ("منصوری", "oil", 80),
-            ("اهواز - آب همراه", "water", 30),
+            ("Ahvaz", "oil", 110),
+            ("Mansouri", "oil", 80),
+            ("Ahvaz - associated water", "water", 30),
         ],
     ),
     (
         "MN",
-        "شرکت بهره‌برداری نفت و گاز مارون",
+        "Maroun Oil and Gas Exploitation Company",
         "Marun Oil & Gas Producing Company",
         500,
         520000,
         [
-            ("آسماری مارون", "oil", 460),
-            ("بنگستان مارون", "oil", 30),
-            ("خامی مارون", "associated_gas", 10),
+            ("Asmari Maroun", "oil", 460),
+            ("Bangestan Maroun", "oil", 30),
+            ("Maroun crude", "associated_gas", 10),
         ],
     ),
     (
         "GCH",
-        "شرکت بهره‌برداری نفت و گاز گچساران",
+        "Gachsaran Oil and Gas Exploitation Company",
         "Gachsaran Oil & Gas Producing Company",
         853,
         580000,
         [
-            ("گچساران", "oil", 650),
-            ("بی‌بی حکیمه", "oil", 150),
-            ("کلاهک گازی گچساران", "gas_cap", 53),
+            ("Gachsaran", "oil", 650),
+            ("Bibi Hakimeh", "oil", 150),
+            ("Gachsaran gas cap", "gas_cap", 53),
         ],
     ),
 ]

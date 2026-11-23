@@ -1,11 +1,11 @@
-/** داده و منطق محلی مدیریت مدل‌های یادگیری ماشین (بدون نیاز به بک‌اند) */
+/** Local data and logic for machine learning model management (no backend needed) */
 
 export type MlModelType = 'anomaly_detection' | 'failure_prediction' | 'time_series_forecast'
 
 export const ML_MODEL_TYPES: { id: MlModelType; labelFa: string }[] = [
-  { id: 'anomaly_detection', labelFa: 'تشخیص ناهنجاری' },
-  { id: 'failure_prediction', labelFa: 'پیش‌بینی خرابی' },
-  { id: 'time_series_forecast', labelFa: 'پیش‌بینی سری‌زمانی' },
+  { id: 'anomaly_detection', labelFa: 'Anomaly detection' },
+  { id: 'failure_prediction', labelFa: 'Failure prediction' },
+  { id: 'time_series_forecast', labelFa: 'Time-series forecast' },
 ]
 
 interface LocalModelVersion {
@@ -16,16 +16,16 @@ interface LocalModelVersion {
 
 const VERSION_HISTORY: Record<MlModelType, LocalModelVersion[]> = {
   anomaly_detection: [
-    { version: 1, stage: 'بایگانی‌شده', metrics: { accuracy: 0.881, precision: 0.84, recall: 0.79 } },
-    { version: 2, stage: 'آزمایشی', metrics: { accuracy: 0.912, precision: 0.88, recall: 0.85 } },
-    { version: 3, stage: 'تولید', metrics: { accuracy: 0.934, precision: 0.91, recall: 0.89 } },
+    { version: 1, stage: 'Archived', metrics: { accuracy: 0.881, precision: 0.84, recall: 0.79 } },
+    { version: 2, stage: 'Staging', metrics: { accuracy: 0.912, precision: 0.88, recall: 0.85 } },
+    { version: 3, stage: 'Production', metrics: { accuracy: 0.934, precision: 0.91, recall: 0.89 } },
   ],
   failure_prediction: [
-    { version: 1, stage: 'بایگانی‌شده', metrics: { accuracy: 0.79, f1: 0.74 } },
-    { version: 2, stage: 'تولید', metrics: { accuracy: 0.86, f1: 0.82 } },
+    { version: 1, stage: 'Archived', metrics: { accuracy: 0.79, f1: 0.74 } },
+    { version: 2, stage: 'Production', metrics: { accuracy: 0.86, f1: 0.82 } },
   ],
   time_series_forecast: [
-    { version: 1, stage: 'تولید', metrics: { mae: 4.2, rmse: 6.1 } },
+    { version: 1, stage: 'Production', metrics: { mae: 4.2, rmse: 6.1 } },
   ],
 }
 
@@ -48,7 +48,7 @@ export function compareLocalMlVersions(modelType: string, baseline: string, cand
   const b = versions.find((v) => String(v.version) === String(baseline))
   const c = versions.find((v) => String(v.version) === String(candidate))
   if (!b || !c) {
-    throw new Error('نگارش موردنظر در تاریخچهٔ محلی یافت نشد')
+    throw new Error('The requested version was not found in the local history')
   }
   const metric_deltas: Record<string, { baseline: number; candidate: number; delta: number }> = {}
   for (const key of Object.keys(b.metrics)) {
@@ -112,7 +112,7 @@ export function setLocalDriftBaseline(modelType: string, samples: Record<string,
 export function detectLocalDrift(modelType: string, samples: Record<string, number>[], threshold = 2.0) {
   const baseline = localDriftBaselines[modelType as MlModelType]
   if (!baseline) {
-    throw new Error('ابتدا باید خط پایه (Baseline) برای این مدل تنظیم شود')
+    throw new Error('A baseline must first be set for this model')
   }
   const { means: currentMeans } = computeStats(samples)
   const feature_drift: Record<string, { baseline_mean: number; current_mean: number; z_score: number; drift: boolean }> = {}

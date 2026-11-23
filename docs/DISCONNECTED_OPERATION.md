@@ -1,17 +1,17 @@
-# عملیات در حالت قطع ارتباط (Disconnected Operation)
+# Disconnected Operation
 
-## 📋 خلاصه
+## 📋 Summary
 
-این مستندات نحوه کار Edge Computing در حالت قطع ارتباط با سرور مرکزی را توضیح می‌دهد.
+This documentation explains how Edge Computing works when disconnected from the central server.
 
-## 🎯 اهداف
+## 🎯 Goals
 
-1. **Local Processing**: پردازش داده‌ها در محل بدون نیاز به سرور مرکزی
-2. **Critical Decision Making**: تصمیم‌گیری‌های حیاتی در حالت offline
-3. **Data Buffering**: ذخیره داده‌ها برای sync بعدی
-4. **Automatic Sync**: همگام‌سازی خودکار هنگام برقراری ارتباط
+1. **Local Processing**: Process data on-site without needing the central server
+2. **Critical Decision Making**: Critical decisions in offline mode
+3. **Data Buffering**: Store data for later sync
+4. **Automatic Sync**: Automatic synchronization when the connection is restored
 
-## 🏗️ معماری
+## 🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────┐
@@ -49,26 +49,26 @@
     └──────────────────────┘
 ```
 
-## ⚙️ ویژگی‌ها
+## ⚙️ Features
 
 ### 1. Local Processing
-- **Anomaly Detection**: تشخیص ناهنجاری در محل
-- **Threshold Checking**: بررسی thresholdها
-- **Trend Analysis**: تحلیل روند
-- **Aggregation**: تجمیع داده‌ها
+- **Anomaly Detection**: On-site anomaly detection
+- **Threshold Checking**: Checking thresholds
+- **Trend Analysis**: Trend analysis
+- **Aggregation**: Data aggregation
 
 ### 2. Critical Alerts
-- ذخیره alertهای حیاتی در local storage
-- ارسال فوری هنگام برقراری ارتباط
+- Store critical alerts in local storage
+- Send immediately when the connection is restored
 - Priority-based sync
 
 ### 3. Local Decisions
-- ثبت تصمیم‌گیری‌های محلی
-- Sync به سرور مرکزی
-- Audit trail کامل
+- Record local decisions
+- Sync to the central server
+- Complete audit trail
 
 ### 4. Data Caching
-- Cache نتایج پردازش
+- Cache processing results
 - TTL-based expiration
 - Storage management
 
@@ -142,7 +142,7 @@ Manually trigger sync of pending data
 - `timestamp`: Cache timestamp
 - `expires_at`: Expiration time
 
-## 🚀 استفاده
+## 🚀 Usage
 
 ### Configuration
 ```python

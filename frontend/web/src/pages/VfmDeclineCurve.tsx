@@ -46,13 +46,13 @@ export default function VfmDeclineCurve() {
 
   return (
     <div className="ops-page">
-      <h2>دبی‌سنج مجازی و منحنی افت تولید</h2>
+      <h2>Virtual flow meter and production decline curve</h2>
       <p className="ops-subtitle">
-        تلفیق داده دبی‌سنج مجازی (VFM) با منحنی افت تولید (Decline Curve) برای رصد نرخ تغییر دبی هر چاه.
+        Combining virtual flow meter (VFM) data with the production decline curve (Decline Curve) to track the rate of change of each well's flow rate.
       </p>
 
       <div className="ops-combo-row">
-        <label style={{ fontSize: 13 }}>انتخاب چاه:</label>
+        <label style={{ fontSize: 13 }}>Select well:</label>
         <select value={well} onChange={(e) => setWell(e.target.value)} style={{ padding: 8, borderRadius: 4 }}>
           {WELLS.map((w) => (
             <option key={w} value={w}>
@@ -64,22 +64,22 @@ export default function VfmDeclineCurve() {
 
       <div className="ops-overview">
         <div className="ops-stat-card">
-          <h3>دبی فعلی VFM (bopd)</h3>
+          <h3>Current VFM rate (bopd)</h3>
           <div className="ops-stat-value">{latest?.vfm_oil_rate_bopd ?? '-'}</div>
         </div>
         <div className="ops-stat-card">
-          <h3>دبی پیش‌بینی منحنی افت (bopd)</h3>
+          <h3>Decline curve forecast rate (bopd)</h3>
           <div className="ops-stat-value">{latest?.decline_predicted_rate_bopd ?? '-'}</div>
         </div>
         <div className="ops-stat-card">
-          <h3>درصد انحراف از منحنی افت</h3>
+          <h3>Deviation percentage from the decline curve</h3>
           <div className="ops-stat-value">{latest?.rate_change_pct ?? 0}%</div>
         </div>
         <div className="ops-stat-card">
-          <h3>وضعیت هشدار</h3>
+          <h3>Alert status</h3>
           <div>
             <span className={`ops-badge ${latest?.alert_flag ? 'alert' : 'ahead'}`}>
-              {latest?.alert_flag ? 'هشدار افت/جهش غیرمنتظره' : 'در محدوده نرمال'}
+              {latest?.alert_flag ? 'Unexpected decline/jump alert' : 'Within normal range'}
             </span>
           </div>
         </div>
@@ -87,9 +87,9 @@ export default function VfmDeclineCurve() {
 
       <div className="ops-grid">
         <div className="ops-card full">
-          <h3>روند دبی مجازی در برابر منحنی افت — {well}</h3>
+          <h3>Virtual rate trend versus decline curve — {well}</h3>
           {isLoading ? (
-            <div className="loading">در حال بارگذاری...</div>
+            <div className="loading">Loading...</div>
           ) : (
             <ResponsiveContainer width="100%" height={380}>
               <LineChart data={chartData}>
@@ -98,11 +98,11 @@ export default function VfmDeclineCurve() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="vfm" name="دبی‌سنج مجازی (VFM)" stroke="#007bff" dot={false} />
+                <Line type="monotone" dataKey="vfm" name="Virtual flow meter (VFM)" stroke="#007bff" dot={false} />
                 <Line
                   type="monotone"
                   dataKey="decline"
-                  name="منحنی افت تولید (Decline)"
+                  name="Production decline curve (Decline)"
                   stroke="#f9a825"
                   strokeDasharray="5 5"
                   dot={false}
@@ -123,21 +123,21 @@ export default function VfmDeclineCurve() {
         </div>
 
         <div className="ops-card full">
-          <h3>موارد هشدار نرخ تغییر (انحراف ≥ ۱۰٪ از منحنی افت)</h3>
+          <h3>Rate-of-change alert cases (deviation ≥ 10% from the decline curve)</h3>
           <div className="ops-table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>تاریخ</th>
-                  <th>دبی VFM</th>
-                  <th>دبی پیش‌بینی‌شده</th>
-                  <th>درصد انحراف</th>
+                  <th>Date</th>
+                  <th>VFM rate</th>
+                  <th>Forecast rate</th>
+                  <th>Deviation percentage</th>
                 </tr>
               </thead>
               <tbody>
                 {alertPoints.length === 0 && (
                   <tr>
-                    <td colSpan={4}>هشداری ثبت نشده است.</td>
+                    <td colSpan={4}>No alert has been recorded.</td>
                   </tr>
                 )}
                 {alertPoints.map((p) => (

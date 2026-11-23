@@ -1,5 +1,5 @@
 # Generate mTLS certificates for inter-service communication (PowerShell)
-# تولید گواهینامه‌های mTLS برای ارتباطات بین میکروسرویس‌ها
+# Generate mTLS certificates for communication between microservices
 
 $ErrorActionPreference = "Stop"
 

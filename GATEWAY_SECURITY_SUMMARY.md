@@ -1,32 +1,32 @@
-# ✅ امنیت لایه Gateway
+# ✅ Gateway Layer Security
 
-## 📊 خلاصه پیاده‌سازی
+## 📊 Implementation summary
 
-امنیت پیشرفته لایه Gateway با موفقیت پیاده‌سازی شد:
-- ✅ Rate Limiting سخت‌گیرانه‌تر با استراتژی‌های مختلف
-- ✅ mTLS (Mutual TLS) برای ارتباطات بین میکروسرویس‌ها
+Advanced Gateway layer security was implemented successfully:
+- ✅ Stricter Rate Limiting with different strategies
+- ✅ mTLS (Mutual TLS) for communication between microservices
 
 ## 🛡️ Rate Limiting
 
-### ویژگی‌های پیاده‌سازی شده
+### Implemented features
 
-1. **Sliding Window** (پیش‌فرض)
-   - استفاده از Redis sorted set
-   - حذف خودکار درخواست‌های قدیمی
-   - دقیق‌تر از fixed window
+1. **Sliding Window** (default)
+   - Uses a Redis sorted set
+   - Automatic removal of old requests
+   - More accurate than a fixed window
 
 2. **Token Bucket**
-   - Refill rate قابل تنظیم
-   - پشتیبانی از burst
-   - مناسب برای ترافیک متغیر
+   - Configurable refill rate
+   - Burst support
+   - Suitable for variable traffic
 
 3. **Per-Service Limits**
-   - محدودیت‌های مختلف برای هر سرویس
-   - Auth: 10 requests/minute (سخت‌گیرانه‌تر)
+   - Different limits for each service
+   - Auth: 10 requests/minute (stricter)
    - Data Ingestion: 1000 requests/minute
 
 4. **Per-User Limits**
-   - محدودیت‌های مختلف بر اساس نقش کاربر
+   - Different limits based on user role
    - System Admin: 500 requests/minute
    - Viewer: 100 requests/minute
 
@@ -40,7 +40,7 @@ Retry-After: 60
 
 ## 🔐 mTLS (Mutual TLS)
 
-### ویژگی‌های پیاده‌سازی شده
+### Implemented features
 
 1. **Certificate Management**
    - CA Certificate
@@ -58,21 +58,21 @@ Retry-After: 60
    - Automatic certificate loading
    - Configurable verification
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Backend
-- `backend/shared/advanced_rate_limiter.py` - Rate Limiter پیشرفته
-- `backend/shared/mtls_manager.py` - مدیریت mTLS
-- `backend/api-gateway/main.py` - به‌روزرسانی شده با Rate Limiting و mTLS
+- `backend/shared/advanced_rate_limiter.py` - Advanced Rate Limiter
+- `backend/shared/mtls_manager.py` - mTLS management
+- `backend/api-gateway/main.py` - updated with Rate Limiting and mTLS
 
 ### Scripts
-- `scripts/generate_mtls_certs.sh` - تولید گواهینامه‌ها (Linux/Mac)
-- `scripts/generate_mtls_certs.ps1` - تولید گواهینامه‌ها (Windows)
+- `scripts/generate_mtls_certs.sh` - certificate generation (Linux/Mac)
+- `scripts/generate_mtls_certs.ps1` - certificate generation (Windows)
 
 ### Documentation
-- `docs/GATEWAY_SECURITY.md` - مستندات کامل
+- `docs/GATEWAY_SECURITY.md` - Complete documentation
 
-## ⚙️ پیکربندی
+## ⚙️ Configuration
 
 ### Rate Limiting
 ```bash
@@ -91,9 +91,9 @@ MTLS_CLIENT_KEY_PATH=./backend/certs/client.key
 MTLS_VERIFY_SERVER=true
 ```
 
-## 🚀 استفاده
+## 🚀 Usage
 
-### تولید گواهینامه‌های mTLS
+### Generating mTLS certificates
 
 **Linux/Mac:**
 ```bash
@@ -106,12 +106,12 @@ chmod +x scripts/generate_mtls_certs.sh
 .\scripts\generate_mtls_certs.ps1
 ```
 
-### راه‌اندازی Redis (برای Rate Limiting)
+### Starting Redis (for Rate Limiting)
 ```bash
 docker run -d -p 6379:6379 redis:7-alpine
 ```
 
-### راه‌اندازی API Gateway
+### Starting the API Gateway
 ```bash
 cd backend/api-gateway
 python -m uvicorn main:app --host 0.0.0.0 --port 8000
@@ -121,7 +121,7 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 ### Per-Service Limits
 - **default**: 100 requests/minute
-- **auth**: 10 requests/minute (سخت‌گیرانه‌تر)
+- **auth**: 10 requests/minute (stricter)
 - **command-control**: 50 requests/minute
 - **ml-inference**: 200 requests/minute
 - **data-ingestion**: 1000 requests/minute
@@ -132,19 +132,19 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8000
 - **field_operator**: 200 requests/minute
 - **viewer**: 100 requests/minute
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ Rate Limiting سخت‌گیرانه‌تر پیاده‌سازی شد
-- ✅ mTLS برای ارتباطات بین میکروسرویس‌ها اضافه شد
-- ✅ Certificate management ایجاد شد
-- ✅ Scripts برای تولید گواهینامه‌ها اضافه شد
-- ✅ مستندات کامل نوشته شد
+- ✅ Stricter Rate Limiting implemented
+- ✅ mTLS added for communication between microservices
+- ✅ Certificate management created
+- ✅ Scripts for generating certificates added
+- ✅ Complete documentation written
 
-## 📝 نکات
+## 📝 Notes
 
-- Rate limiting در production باید با Redis باشد
-- mTLS در development می‌تواند غیرفعال باشد
-- Certificates باید در secrets management ذخیره شوند
-- Regular certificate rotation ضروری است
-- Monitor rate limit violations برای تشخیص حملات
+- Rate limiting in production should use Redis
+- mTLS can be disabled in development
+- Certificates must be stored in secrets management
+- Regular certificate rotation is essential
+- Monitor rate limit violations to detect attacks
 

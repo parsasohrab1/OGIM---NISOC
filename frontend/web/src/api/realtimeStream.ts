@@ -26,14 +26,14 @@ const SSE_RETRY_MAX_MS = 12000
 const REMOTE_GIVE_UP_MS = 8000
 
 export function startRealtimeStream(handlers: RealtimeStreamHandlers): () => void {
-  // حالت آفلاین / بدون اینترنت: فقط شبیه‌سازی محلی زنده
+  // Offline / no-internet mode: local live simulation only
   if (shouldUseLocalLive()) {
     return startLocalRealtimeStream(handlers)
   }
 
   const token = localStorage.getItem('access_token')
   if (!token) {
-    // بدون توکن هم داشبورد زنده بماند
+    // Keep the dashboard live even without a token
     return startLocalRealtimeStream(handlers)
   }
 
@@ -173,7 +173,7 @@ export function startRealtimeStream(handlers: RealtimeStreamHandlers): () => voi
     }
   }
 
-  // اگر ظرف چند ثانیه وصل نشد، به زنده محلی برو (بدون اینترنت)
+  // If it does not connect within a few seconds, switch to local live (no internet)
   giveUpTimeout = window.setTimeout(() => {
     if (!closed && !usingLocal) fallBackToLocal()
   }, REMOTE_GIVE_UP_MS)

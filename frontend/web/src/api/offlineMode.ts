@@ -1,8 +1,8 @@
-/** حالت اجرای زنده بدون اینترنت / بدون بک‌اند */
+/** Live run mode without internet / without a backend */
 
 const STORAGE_KEY = 'sogf_offline_live'
 
-/** صریحاً با VITE_OFFLINE_LIVE=true یا localStorage فعال می‌شود */
+/** Explicitly enabled with VITE_OFFLINE_LIVE=true or localStorage */
 export function isOfflineLiveForced(): boolean {
   if (import.meta.env.VITE_OFFLINE_LIVE === 'true') return true
   try {
@@ -21,7 +21,7 @@ export function setOfflineLiveForced(on: boolean) {
   }
 }
 
-/** مرورگر آفلاین است یا حالت آفلاین اجباری */
+/** The browser is offline or offline mode is forced */
 export function shouldUseLocalLive(): boolean {
   if (isOfflineLiveForced()) return true
   if (typeof navigator !== 'undefined' && navigator.onLine === false) return true
@@ -33,12 +33,12 @@ export type LiveTransport = 'websocket' | 'sse' | 'simulation' | 'disconnected'
 export function transportLabelFa(transport: LiveTransport | string): string {
   switch (transport) {
     case 'websocket':
-      return 'زنده (وب‌سوکت)'
+      return 'Live (WebSocket)'
     case 'sse':
-      return 'زنده (رویداد سمت سرور)'
+      return 'Live (server-sent events)'
     case 'simulation':
-      return 'زنده (محلی — بدون اینترنت)'
+      return 'Live (local — no internet)'
     default:
-      return 'زنده (محلی — بدون اینترنت)'
+      return 'Live (local — no internet)'
   }
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Generate mTLS certificates for inter-service communication
-# تولید گواهینامه‌های mTLS برای ارتباطات بین میکروسرویس‌ها
+# Generate mTLS certificates for communication between microservices
 
 set -e
 

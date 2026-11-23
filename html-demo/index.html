@@ -17,30 +17,30 @@
         <nav class="nav-menu">
             <a href="index.html" class="nav-item active">
                 <i class="fas fa-home"></i>
-                <span>داشبورد</span>
+                <span>Dashboard</span>
             </a>
             <a href="wells.html" class="nav-item">
                 <i class="fas fa-oil-well"></i>
-                <span>چاه‌ها</span>
+                <span>Wells</span>
             </a>
             <a href="alerts.html" class="nav-item">
                 <i class="fas fa-bell"></i>
-                <span>هشدارها</span>
+                <span>Alerts</span>
                 <span class="badge" id="alertBadge">0</span>
             </a>
             <a href="analytics.html" class="nav-item">
                 <i class="fas fa-chart-line"></i>
-                <span>تحلیل‌ها</span>
+                <span>Analytics</span>
             </a>
             <a href="#" class="nav-item" onclick="showSettings()">
                 <i class="fas fa-cog"></i>
-                <span>تنظیمات</span>
+                <span>Settings</span>
             </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span id="username">مدیر سیستم</span>
+                <span id="username">System Administrator</span>
             </div>
         </div>
     </div>
@@ -50,13 +50,13 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <h1>داشبورد مانیتورینگ</h1>
-                <p>نظارت لحظه‌ای بر میدان نفت و گاز</p>
+                <h1>Monitoring Dashboard</h1>
+                <p>Real-time monitoring of the oil and gas field</p>
             </div>
             <div class="header-right">
                 <div class="connection-status" id="connectionStatus">
                     <i class="fas fa-circle"></i>
-                    <span>در حال اتصال...</span>
+                    <span>Connecting...</span>
                 </div>
                 <div class="datetime" id="datetime"></div>
             </div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="totalWells">-</h3>
-                    <p>چاه‌های فعال</p>
+                    <p>Active wells</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -79,7 +79,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="activeAlerts">-</h3>
-                    <p>هشدارهای فعال</p>
+                    <p>Active alerts</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -88,7 +88,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="productionRate">-</h3>
-                    <p>نرخ تولید (bbl/day)</p>
+                    <p>Production rate (bbl/day)</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="stat-info">
                     <h3 id="systemHealth">-</h3>
-                    <p>سلامت سیستم</p>
+                    <p>System health</p>
                 </div>
             </div>
         </div>
@@ -106,19 +106,19 @@
         <div class="charts-grid">
             <div class="chart-card">
                 <div class="chart-header">
-                    <h3>تولید لحظه‌ای چاه‌ها</h3>
+                    <h3>Real-time well production</h3>
                     <select id="chartTimeRange" onchange="updateCharts()">
-                        <option value="1h">1 ساعت اخیر</option>
-                        <option value="6h">6 ساعت اخیر</option>
-                        <option value="24h" selected>24 ساعت اخیر</option>
-                        <option value="7d">7 روز اخیر</option>
+                        <option value="1h">Last 1 hour</option>
+                        <option value="6h">Last 6 hours</option>
+                        <option value="24h" selected>Last 24 hours</option>
+                        <option value="7d">Last 7 days</option>
                     </select>
                 </div>
                 <canvas id="productionChart"></canvas>
             </div>
             <div class="chart-card">
                 <div class="chart-header">
-                    <h3>فشار و دمای چاه‌ها</h3>
+                    <h3>Well pressure and temperature</h3>
                 </div>
                 <canvas id="pressureTempChart"></canvas>
             </div>
@@ -127,27 +127,27 @@
         <!-- Wells Status Table -->
         <div class="table-card">
             <div class="table-header">
-                <h3>وضعیت چاه‌ها</h3>
+                <h3>Well status</h3>
                 <button class="btn btn-primary" onclick="refreshData()">
-                    <i class="fas fa-sync-alt"></i> بروزرسانی
+                    <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
             <div class="table-container">
                 <table class="data-table" id="wellsTable">
                     <thead>
                         <tr>
-                            <th>نام چاه</th>
-                            <th>نوع</th>
-                            <th>وضعیت</th>
-                            <th>تولید (bbl/day)</th>
-                            <th>فشار (psi)</th>
-                            <th>دما (°C)</th>
-                            <th>آخرین بروزرسانی</th>
+                            <th>Well name</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Production (bbl/day)</th>
+                            <th>Pressure (psi)</th>
+                            <th>Temperature (°C)</th>
+                            <th>Last update</th>
                         </tr>
                     </thead>
                     <tbody id="wellsTableBody">
                         <tr>
-                            <td colspan="7" class="loading">در حال بارگذاری...</td>
+                            <td colspan="7" class="loading">Loading...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -157,12 +157,12 @@
         <!-- Recent Alerts -->
         <div class="alerts-card">
             <div class="alerts-header">
-                <h3>هشدارهای اخیر</h3>
-                <a href="alerts.html" class="view-all">مشاهده همه</a>
+                <h3>Recent alerts</h3>
+                <a href="alerts.html" class="view-all">View all</a>
             </div>
             <div class="alerts-list" id="recentAlerts">
                 <div class="alert-item">
-                    <div class="loading">در حال بارگذاری هشدارها...</div>
+                    <div class="loading">Loading alerts...</div>
                 </div>
             </div>
         </div>
@@ -172,26 +172,26 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>تنظیمات</h2>
+                <h2>Settings</h2>
                 <span class="close" onclick="closeSettings()">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>آدرس API Gateway:</label>
+                    <label>API Gateway address:</label>
                     <input type="text" id="apiUrl" value="http://localhost:8000" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label>فاصله بروزرسانی (ثانیه):</label>
+                    <label>Refresh interval (seconds):</label>
                     <input type="number" id="refreshInterval" value="10" min="5" max="60" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label>نمایش نمودارها:</label>
+                    <label>Show charts:</label>
                     <input type="checkbox" id="showCharts" checked>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="saveSettings()">ذخیره</button>
-                <button class="btn btn-secondary" onclick="closeSettings()">انصراف</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save</button>
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
             </div>
         </div>
     </div>

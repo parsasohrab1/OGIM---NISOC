@@ -1,6 +1,6 @@
 """
 LoRaWAN Client for Low-Power Wireless Sensor Integration
-پشتیبانی از LoRaWAN برای سنسورهای کم‌مصرف بی‌سیم
+LoRaWAN support for low-power wireless sensors
 """
 
 import json

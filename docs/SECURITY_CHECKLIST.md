@@ -1,28 +1,28 @@
 # Security Checklist
 
 ## Pre-Deployment
-- [ ] همه SECRET ها از طریق Secret Manager تزریق شده‌اند (بدون مقادیر پیش‌فرض).
-- [ ] کلید JWT (`SECRET_KEY`) حداقل 32 کاراکتر و تصادفی است.
-- [ ] آدرس‌های CORS فقط دامنه‌های معتبر را شامل می‌شود.
-- [ ] مهاجرت‌های پایگاه داده روی staging اجرا و تأیید شده‌اند.
-- [ ] Role/RBAC برای سرویس‌ها مطابق با `docs/SECURITY_ROLES.md` بررسی شده است.
+- [ ] All SECRETs are injected through a Secret Manager (no default values).
+- [ ] The JWT key (`SECRET_KEY`) is at least 32 characters and random.
+- [ ] The CORS addresses include only valid domains.
+- [ ] Database migrations have been run and verified on staging.
+- [ ] Role/RBAC for the services has been reviewed per `docs/SECURITY_ROLES.md`.
 
 ## Runtime
-- [x] Rate limiting روی gateway و ورودی‌های حساس فعال است (`RATE_LIMIT_ENABLED`).
-- [x] Input hardening برای XSS/SQLi (`shared/input_validation.py`).
-- [x] Response cache برای GETهای پرتکرار (`TTLResponseCache`).
-- [ ] Logging ساخت‌یافته (JSON) به سیستم مرکزی ارسال می‌شود.
-- [x] Tracing و metrics فعال و در داشبوردها قابل مشاهده است.
-- [x] هشدارهای امنیتی در SIEM buffer و Prometheus (`executive-kpis.yml`) تعریف شده‌اند.
+- [x] Rate limiting is enabled on the gateway and sensitive inputs (`RATE_LIMIT_ENABLED`).
+- [x] Input hardening for XSS/SQLi (`shared/input_validation.py`).
+- [x] Response cache for frequently requested GETs (`TTLResponseCache`).
+- [ ] Structured logging (JSON) is shipped to the central system.
+- [x] Tracing and metrics are enabled and visible in the dashboards.
+- [x] Security alerts are defined in the SIEM buffer and Prometheus (`executive-kpis.yml`).
 
 ## Post-Deployment
-- [ ] حساب‌های پیش‌فرض حذف یا غیرفعال شده‌اند.
-- [ ] دسترسی‌ها در گیت‌وی و سرویس‌ها تست شده (کاربر غیرمجاز دسترسی ندارد).
-- [ ] نسخه‌های dependency ها بررسی و بسته‌های آسیب‌پذیر به‌روزرسانی شده‌اند.
-- [ ] نسخه پشتیبان و برنامه بازیابی (DRP) تست شده است.
+- [ ] Default accounts have been removed or disabled.
+- [ ] Access on the gateway and services has been tested (an unauthorized user has no access).
+- [ ] Dependency versions have been reviewed and vulnerable packages updated.
+- [ ] Backup and the recovery plan (DRP) have been tested.
 
 ## Periodic Review
-- [ ] Penetration test (هر ۶ ماه یا پس از نسخه‌ی بزرگ) – ابزار پیشنهادی: OWASP ZAP یا همکاری با تیم امنیت.
-- [ ] RBAC audit (مقایسه نقش‌ها با `docs/SECURITY_ROLES.md` و حذف نقش‌های زائد)
-- [ ] بررسی سلامت pipeline داده (نرخ خطای ingest، mismatch سنسور) – alert rule: `infrastructure/prometheus/rules/data-quality.yml`
-- [ ] بازبینی هشدارهای Prometheus/Grafana و به‌روزرسانی آستانه‌ها
+- [ ] Penetration test (every 6 months or after a major release) – recommended tool: OWASP ZAP or work with the security team.
+- [ ] RBAC audit (compare roles with `docs/SECURITY_ROLES.md` and remove redundant roles)
+- [ ] Data pipeline health check (ingest error rate, sensor mismatch) – alert rule: `infrastructure/prometheus/rules/data-quality.yml`
+- [ ] Review Prometheus/Grafana alerts and update the thresholds

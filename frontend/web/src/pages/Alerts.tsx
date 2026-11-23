@@ -28,16 +28,16 @@ function normalizePhoneInput(raw: string) {
 }
 
 function severityFa(s: string) {
-  if (s === 'critical') return 'بحرانی'
-  if (s === 'warning') return 'هشدار'
-  if (s === 'info') return 'اطلاع'
+  if (s === 'critical') return 'Critical'
+  if (s === 'warning') return 'Warning'
+  if (s === 'info') return 'Info'
   return s
 }
 
 function statusFa(s: string) {
-  if (s === 'open') return 'باز'
-  if (s === 'acknowledged') return 'تأییدشده'
-  if (s === 'resolved') return 'رفع‌شده'
+  if (s === 'open') return 'Open'
+  if (s === 'acknowledged') return 'Acknowledged'
+  if (s === 'resolved') return 'Resolved'
   return s
 }
 
@@ -53,7 +53,7 @@ export default function Alerts() {
   const [tab, setTab] = useState<Tab>('all')
   const [rcaResults, setRcaResults] = useState<Record<string, any>>({})
   const [phone, setPhone] = useState(() => localStorage.getItem(SMS_PHONE_KEY) || '')
-  const [smsLabel, setSmsLabel] = useState('اپراتور میدان مارون')
+  const [smsLabel, setSmsLabel] = useState('Maroun field operator')
   const [smsMsg, setSmsMsg] = useState<string | null>(null)
   const [smsErr, setSmsErr] = useState<string | null>(null)
 
@@ -164,10 +164,10 @@ export default function Alerts() {
       alertAPI.createWorkOrder(alertId, erpType || 'sap'),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['alerts'] })
-      alert(`دستور کار ایجاد شد: ${data.work_order_id}`)
+      alert(`Work order created: ${data.work_order_id}`)
     },
     onError: (error: any) => {
-      alert(`ایجاد دستور کار ناموفق: ${error.response?.data?.detail || error.message}`)
+      alert(`Work order creation failed: ${error.response?.data?.detail || error.message}`)
     },
   })
 
@@ -181,7 +181,7 @@ export default function Alerts() {
   const registerSmsMutation = useMutation({
     mutationFn: async () => {
       const p = resolvePhone(phone)
-      if (!p) throw new Error('شماره موبایل را وارد کنید')
+      if (!p) throw new Error('Enter the mobile number')
       try {
         return await alertAPI.registerSmsPhone({
           phone: p,
@@ -191,34 +191,34 @@ export default function Alerts() {
         })
       } catch {
         saveLocalSmsRecipient(p, smsLabel)
-        return { message: 'شماره به‌صورت محلی ثبت شد (آماده ارسال پیامک هشدار)' }
+        return { message: 'Number registered locally (ready to send alert SMS)' }
       }
     },
     onSuccess: (data) => {
       localStorage.setItem(SMS_PHONE_KEY, resolvePhone(phone))
       setSmsErr(null)
-      setSmsMsg(data.message || 'شماره ثبت شد')
+      setSmsMsg(data.message || 'Number registered')
       refetchSms()
     },
     onError: (error: any) => {
       setSmsMsg(null)
-      setSmsErr(error.response?.data?.detail || error.message || 'خطا در ثبت شماره')
+      setSmsErr(error.response?.data?.detail || error.message || 'Error registering the number')
     },
   })
 
   const testSmsMutation = useMutation({
     mutationFn: async () => {
       const p = resolvePhone(phone)
-      if (!p) throw new Error('ابتدا شماره موبایل را وارد/ثبت کنید')
+      if (!p) throw new Error('Enter/register the mobile number first')
       try {
         return await alertAPI.sendTestSms(p)
       } catch {
         const entry = pushLocalSms(
           p,
-          `هوشمندسازی میادین — پیامک آزمایشی\nمیدان مارون\nزمان: ${new Date().toLocaleString('fa-IR')}`,
+          `Field Smartification — test SMS\nMaroun field\nTime: ${new Date().toLocaleString('en-US')}`,
           { type: 'test' }
         )
-        return { entry, message: 'پیامک آزمایشی در صف محلی قرار گرفت' }
+        return { entry, message: 'Test SMS queued locally' }
       }
     },
     onSuccess: (data) => {
@@ -226,22 +226,22 @@ export default function Alerts() {
       setSmsErr(null)
       setSmsMsg(
         st === 'sent'
-          ? 'پیامک آزمایشی ارسال شد'
-          : `پیامک آزمایشی در صف قرار گرفت (${data.entry?.effective_provider || 'local-mock'})`
+          ? 'Test SMS sent'
+          : `Test SMS queued (${data.entry?.effective_provider || 'local-mock'})`
       )
       refetchOutbox()
       refetchSms()
     },
     onError: (error: any) => {
       setSmsMsg(null)
-      setSmsErr(error.response?.data?.detail || error.message || 'ارسال آزمایشی ناموفق')
+      setSmsErr(error.response?.data?.detail || error.message || 'Test send failed')
     },
   })
 
   const alertSmsMutation = useMutation({
     mutationFn: async (alertItem: any) => {
       const p = resolvePhone(phone)
-      if (!p) throw new Error('ابتدا شماره موبایل را ثبت کنید')
+      if (!p) throw new Error('Register the mobile number first')
       try {
         return await alertAPI.sendAlertSms(alertItem.alert_id)
       } catch {
@@ -256,24 +256,24 @@ export default function Alerts() {
     },
     onSuccess: () => {
       setSmsErr(null)
-      setSmsMsg('پیامک هشدار ارسال/صف‌بندی شد — متن در بخش «آخرین پیامک‌ها» قابل مشاهده است')
+      setSmsMsg('Alert SMS sent/queued — the text is visible in the "Latest SMS" section')
       refetchOutbox()
       setTab('sms')
     },
     onError: (error: any) => {
       setSmsMsg(null)
-      setSmsErr(error.response?.data?.detail || error.message || 'ارسال پیامک هشدار ناموفق')
+      setSmsErr(error.response?.data?.detail || error.message || 'Sending the alert SMS failed')
     },
   })
 
   const bulkCriticalSmsMutation = useMutation({
     mutationFn: async () => {
       const p = resolvePhone(phone)
-      if (!p) throw new Error('ابتدا شماره موبایل را ثبت کنید')
+      if (!p) throw new Error('Register the mobile number first')
       const criticals = (alertsResponse?.alerts || []).filter(
         (a: any) => a.severity === 'critical' && a.status === 'open'
       )
-      if (criticals.length === 0) throw new Error('هشدار بحرانی بازی برای ارسال وجود ندارد')
+      if (criticals.length === 0) throw new Error('There is no open critical alert to send')
       let sent = 0
       for (const a of criticals.slice(0, 8)) {
         try {
@@ -288,13 +288,13 @@ export default function Alerts() {
     },
     onSuccess: (data) => {
       setSmsErr(null)
-      setSmsMsg(`${data.sent} پیامک هشدار بحرانی در صف قرار گرفت`)
+      setSmsMsg(`${data.sent} critical alert SMS queued`)
       refetchOutbox()
       setTab('sms')
     },
     onError: (error: any) => {
       setSmsMsg(null)
-      setSmsErr(error.message || 'ارسال گروهی ناموفق')
+      setSmsErr(error.message || 'Bulk send failed')
     },
   })
 
@@ -306,7 +306,7 @@ export default function Alerts() {
   const handleResolve = (alertId: string) => resolveMutation.mutate(alertId)
 
   const handleCreateWorkOrder = (alertId: string) => {
-    if (window.confirm('برای این هشدار دستور کار ایجاد شود؟')) {
+    if (window.confirm('Create a work order for this alert?')) {
       createWorkOrderMutation.mutate({ alertId })
     }
   }
@@ -316,16 +316,16 @@ export default function Alerts() {
   const criticalOpen = alerts.filter((a: any) => a.severity === 'critical' && a.status === 'open')
   const warningOpen = alerts.filter((a: any) => a.severity === 'warning' && a.status === 'open')
 
-  if (isLoading) return <div className="loading">در حال بارگذاری هشدارها…</div>
+  if (isLoading) return <div className="loading">Loading alerts…</div>
 
   const smsPanel = (
     <section className="sms-panel">
       <div className="sms-panel-head">
         <div>
-          <h3>ارسال پیامک هشدار</h3>
+          <h3>Send alert SMS</h3>
           <p>
-            شماره موبایل اپراتور را ثبت کنید، سپس از لیست هشدارها دکمه «ارسال پیامک» را بزنید یا همه
-            هشدارهای بحرانی را یکجا ارسال کنید.
+            Register the operator's mobile number, then press the "Send SMS" button in the alerts list or send all
+            critical alerts at once.
           </p>
         </div>
         {smsStatus && (
@@ -337,14 +337,14 @@ export default function Alerts() {
       </div>
 
       <div className="sms-stats">
-        <span className="sms-stat critical">{criticalOpen.length} بحرانی</span>
-        <span className="sms-stat warning">{warningOpen.length} هشدار</span>
-        <span className="sms-stat">{alerts.length} کل</span>
+        <span className="sms-stat critical">{criticalOpen.length} critical</span>
+        <span className="sms-stat warning">{warningOpen.length} warning</span>
+        <span className="sms-stat">{alerts.length} total</span>
       </div>
 
       <div className="sms-form">
         <label>
-          شماره موبایل
+          Mobile number
           <input
             type="tel"
             inputMode="tel"
@@ -355,12 +355,12 @@ export default function Alerts() {
           />
         </label>
         <label>
-          برچسب
+          Label
           <input
             type="text"
             value={smsLabel}
             onChange={(e) => setSmsLabel(e.target.value)}
-            placeholder="اپراتور میدان"
+            placeholder="Field operator"
           />
         </label>
         <div className="sms-actions">
@@ -370,14 +370,14 @@ export default function Alerts() {
             disabled={!phone.trim() || registerSmsMutation.isPending}
             onClick={() => registerSmsMutation.mutate()}
           >
-            {registerSmsMutation.isPending ? 'در حال ثبت…' : 'ثبت شماره'}
+            {registerSmsMutation.isPending ? 'Registering…' : 'Register number'}
           </button>
           <button
             type="button"
             disabled={testSmsMutation.isPending}
             onClick={() => testSmsMutation.mutate()}
           >
-            {testSmsMutation.isPending ? 'ارسال…' : 'پیامک آزمایشی'}
+            {testSmsMutation.isPending ? 'Sending…' : 'Test SMS'}
           </button>
           <button
             type="button"
@@ -386,8 +386,8 @@ export default function Alerts() {
             onClick={() => bulkCriticalSmsMutation.mutate()}
           >
             {bulkCriticalSmsMutation.isPending
-              ? 'در حال ارسال…'
-              : `ارسال پیامک همه بحرانی‌ها (${criticalOpen.length})`}
+              ? 'Sending…'
+              : `Send SMS for all critical alerts (${criticalOpen.length})`}
           </button>
         </div>
       </div>
@@ -398,13 +398,13 @@ export default function Alerts() {
 
       {smsStatus?.recipients?.length > 0 && (
         <div className="sms-recipients">
-          <strong>شماره‌های ثبت‌شده:</strong>
+          <strong>Registered numbers:</strong>
           <ul>
             {smsStatus.recipients.map((r: any) => (
               <li key={r.phone}>
                 <span dir="ltr">{r.phone_display || r.phone}</span>
                 <em>{r.label}</em>
-                <small>{(r.severities || []).map((s: string) => severityFa(s)).join('، ')}</small>
+                <small>{(r.severities || []).map((s: string) => severityFa(s)).join(', ')}</small>
               </li>
             ))}
           </ul>
@@ -413,7 +413,7 @@ export default function Alerts() {
 
       {(smsOutbox?.messages?.length || 0) > 0 && (
         <div className="sms-outbox">
-          <strong>آخرین پیامک‌ها</strong>
+          <strong>Latest SMS</strong>
           <ul>
             {smsOutbox.messages.slice(0, 8).map((m: any) => (
               <li key={m.id}>
@@ -431,26 +431,26 @@ export default function Alerts() {
   return (
     <div className="alerts-page" dir="rtl">
       <div className="alerts-toolbar">
-        <h2>هشدارها</h2>
+        <h2>Alerts</h2>
         <div className="alerts-toolbar-right">
           <span className={`transport-badge ${transport}`}>
             {transportLabelFa(transport)}
           </span>
           <div className="tab-buttons">
             <button className={tab === 'all' ? 'active' : ''} onClick={() => setTab('all')}>
-              همه هشدارها ({alerts.length})
+              All alerts ({alerts.length})
             </button>
             <button
               className={tab === 'sms' ? 'active' : ''}
               onClick={() => setTab('sms')}
             >
-              ارسال پیامک
+              Send SMS
             </button>
             <button
               className={tab === 'correlated' ? 'active' : ''}
               onClick={() => setTab('correlated')}
             >
-              گروه‌های همبسته
+              Correlated groups
             </button>
           </div>
         </div>
@@ -460,9 +460,9 @@ export default function Alerts() {
 
       {tab === 'sms' ? (
         <div className="sms-alert-pick">
-          <h3>هشدارهای قابل ارسال با پیامک</h3>
+          <h3>Alerts that can be sent by SMS</h3>
           <p className="sms-pick-hint">
-            روی هر هشدار «ارسال پیامک» را بزنید. اولویت با موارد بحرانی و هشدار است.
+            Press "Send SMS" on each alert. Critical and warning items take priority.
           </p>
           <div className="alerts-list">
             {alerts
@@ -477,13 +477,13 @@ export default function Alerts() {
                   </div>
                   <div className="alert-body">
                     <p>
-                      <strong>چاه / محل:</strong> {alertItem.well_name}
+                      <strong>Well / location:</strong> {alertItem.well_name}
                     </p>
                     <p>
-                      <strong>پیام:</strong> {alertItem.message}
+                      <strong>Message:</strong> {alertItem.message}
                     </p>
                     <p className="sms-preview">
-                      <strong>پیش‌نمایش پیامک:</strong>
+                      <strong>SMS preview:</strong>
                       <span>{buildAlertSmsText(alertItem)}</span>
                     </p>
                     <div className="alert-actions">
@@ -492,7 +492,7 @@ export default function Alerts() {
                         onClick={() => alertSmsMutation.mutate(alertItem)}
                         disabled={alertSmsMutation.isPending}
                       >
-                        {alertSmsMutation.isPending ? 'ارسال…' : 'ارسال پیامک این هشدار'}
+                        {alertSmsMutation.isPending ? 'Sending…' : 'Send SMS for this alert'}
                       </button>
                     </div>
                   </div>
@@ -503,10 +503,10 @@ export default function Alerts() {
       ) : tab === 'correlated' ? (
         <div className="correlation-groups">
           {correlationsLoading ? (
-            <p>در حال بارگذاری همبستگی‌ها…</p>
+            <p>Loading correlations…</p>
           ) : groups.length === 0 ? (
             <div className="no-alerts">
-              <p>گروه هشدار همبسته‌ای یافت نشد.</p>
+              <p>No correlated alert group found.</p>
             </div>
           ) : (
             groups.map((group: any) => (
@@ -519,16 +519,16 @@ export default function Alerts() {
                 </div>
                 <div className="alert-body">
                   <p>
-                    <strong>چاه:</strong> {group.well_name}
+                    <strong>Well:</strong> {group.well_name}
                   </p>
                   <p>
-                    <strong>تعداد هشدار در گروه:</strong> {group.count}
+                    <strong>Number of alerts in the group:</strong> {group.count}
                   </p>
                   <p>
-                    <strong>سرکوب‌شده (خستگی هشدار):</strong> {group.suppressed_total}
+                    <strong>Suppressed (alert fatigue):</strong> {group.suppressed_total}
                   </p>
                   <p>
-                    <strong>شناسه هشدارها:</strong> {group.alerts.join(', ')}
+                    <strong>Alert IDs:</strong> {group.alerts.join(', ')}
                   </p>
                 </div>
               </div>
@@ -539,7 +539,7 @@ export default function Alerts() {
         <>
           {alerts.length === 0 && (
             <div className="no-alerts">
-              <p>هشداری یافت نشد. همه سامانه‌ها در وضعیت عادی هستند.</p>
+              <p>No alerts found. All systems are normal.</p>
             </div>
           )}
           <div className="alerts-list">
@@ -558,43 +558,43 @@ export default function Alerts() {
                   </div>
                   <div className="alert-body">
                     <p>
-                      <strong>چاه:</strong> {alertItem.well_name}
+                      <strong>Well:</strong> {alertItem.well_name}
                     </p>
                     <p>
-                      <strong>پیام:</strong> {alertItem.message}
+                      <strong>Message:</strong> {alertItem.message}
                     </p>
                     <p>
-                      <strong>وضعیت:</strong> {statusFa(alertItem.status)}
+                      <strong>Status:</strong> {statusFa(alertItem.status)}
                     </p>
                     <p>
-                      <strong>زمان:</strong> {new Date(alertItem.timestamp).toLocaleString('fa-IR')}
+                      <strong>Time:</strong> {new Date(alertItem.timestamp).toLocaleString('en-US')}
                     </p>
                     {meta.correlation_id && (
                       <p>
-                        <strong>همبستگی:</strong> {meta.correlation_id}
+                        <strong>Correlation:</strong> {meta.correlation_id}
                       </p>
                     )}
                     {suppressed > 0 && (
                       <p className="fatigue-badge">
-                        <strong>سرکوب خستگی هشدار:</strong> {suppressed} مورد تکراری
+                        <strong>Alert fatigue suppression:</strong> {suppressed} duplicate(s)
                       </p>
                     )}
                     {alertItem.erp_work_order_id && (
                       <div className="work-order-info">
                         <p>
-                          <strong>دستور کار:</strong> {alertItem.erp_work_order_id}
+                          <strong>Work order:</strong> {alertItem.erp_work_order_id}
                         </p>
                       </div>
                     )}
                     {rca && (
                       <div className="rca-box">
-                        <strong>تحلیل ریشه علت (RCA)</strong>
-                        <p>قانون غالب: {rca.dominant_rule || rca.primary_rule || '—'}</p>
+                        <strong>Root cause analysis (RCA)</strong>
+                        <p>Dominant rule: {rca.dominant_rule || rca.primary_rule || '—'}</p>
                         <p>
-                          سنسور غالب: {rca.dominant_sensor || rca.primary_sensor || '—'}
+                          Dominant sensor: {rca.dominant_sensor || rca.primary_sensor || '—'}
                         </p>
                         {rca.confidence !== undefined && (
-                          <p>اطمینان: {(rca.confidence * 100).toFixed(0)}%</p>
+                          <p>Confidence: {(rca.confidence * 100).toFixed(0)}%</p>
                         )}
                       </div>
                     )}
@@ -603,14 +603,14 @@ export default function Alerts() {
                         onClick={() => rcaMutation.mutate(alertItem.alert_id)}
                         disabled={rcaMutation.isPending}
                       >
-                        {rcaMutation.isPending ? 'در حال اجرای RCA…' : 'اجرای RCA'}
+                        {rcaMutation.isPending ? 'Running RCA…' : 'Run RCA'}
                       </button>
                       <button
                         className="sms-btn sms-primary"
                         onClick={() => alertSmsMutation.mutate(alertItem)}
                         disabled={alertSmsMutation.isPending}
                       >
-                        {alertSmsMutation.isPending ? 'ارسال…' : 'ارسال پیامک'}
+                        {alertSmsMutation.isPending ? 'Sending…' : 'Send SMS'}
                       </button>
                       {alertItem.status === 'open' && (
                         <>
@@ -618,13 +618,13 @@ export default function Alerts() {
                             onClick={() => handleAcknowledge(alertItem.alert_id)}
                             disabled={acknowledgeMutation.isPending}
                           >
-                            تأیید
+                            Acknowledge
                           </button>
                           <button
                             onClick={() => handleResolve(alertItem.alert_id)}
                             disabled={resolveMutation.isPending}
                           >
-                            رفع
+                            Resolve
                           </button>
                           {!alertItem.erp_work_order_id && (
                             <button
@@ -632,7 +632,7 @@ export default function Alerts() {
                               disabled={createWorkOrderMutation.isPending}
                               className="work-order-btn"
                             >
-                              ایجاد دستور کار
+                              Create work order
                             </button>
                           )}
                         </>
@@ -643,7 +643,7 @@ export default function Alerts() {
                             onClick={() => handleResolve(alertItem.alert_id)}
                             disabled={resolveMutation.isPending}
                           >
-                            رفع
+                            Resolve
                           </button>
                           {!alertItem.erp_work_order_id && (
                             <button
@@ -651,7 +651,7 @@ export default function Alerts() {
                               disabled={createWorkOrderMutation.isPending}
                               className="work-order-btn"
                             >
-                              ایجاد دستور کار
+                              Create work order
                             </button>
                           )}
                         </>

@@ -1,56 +1,56 @@
-# راهنمای کامل راه‌اندازی OGIM
+# Complete OGIM Setup Guide
 
-این راهنما شامل دستورالعمل‌های کامل برای راه‌اندازی داشبورد و تمام سرویس‌های OGIM است.
+This guide contains complete instructions for setting up the dashboard and all OGIM services.
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [پیش‌نیازها](#prerequisites)
-2. [راه‌اندازی با Docker Compose](#docker-compose)
-3. [راه‌اندازی دستی Backend](#manual-backend)
-4. [راه‌اندازی دستی Frontend](#manual-frontend)
-5. [آدرس‌های سرویس‌ها](#service-urls)
-6. [تست و بررسی](#testing)
-7. [مشکلات رایج](#troubleshooting)
-
----
-
-## <a name="prerequisites"></a>🔧 پیش‌نیازها
-
-### نرم‌افزارهای مورد نیاز
-
-- **Docker** و **Docker Compose** (برای راه‌اندازی با Docker)
-- **Python 3.9+** (برای راه‌اندازی دستی Backend)
-- **Node.js 18+** و **npm** (برای راه‌اندازی Frontend)
-- **PostgreSQL 15+** (اگر به صورت دستی نصب می‌کنید)
-- **TimescaleDB** (extension برای PostgreSQL)
-- **Redis** (برای cache و session)
-- **Apache Kafka** (برای stream processing)
+1. [Prerequisites](#prerequisites)
+2. [Setup with Docker Compose](#docker-compose)
+3. [Manual Backend setup](#manual-backend)
+4. [Manual Frontend setup](#manual-frontend)
+5. [Service addresses](#service-urls)
+6. [Testing and verification](#testing)
+7. [Common problems](#troubleshooting)
 
 ---
 
-## <a name="docker-compose"></a>🐳 راه‌اندازی با Docker Compose (توصیه می‌شود)
+## <a name="prerequisites"></a>🔧 Prerequisites
 
-### 1. کلون کردن پروژه
+### Required software
+
+- **Docker** and **Docker Compose** (for Docker setup)
+- **Python 3.9+** (for manual Backend setup)
+- **Node.js 18+** and **npm** (for Frontend setup)
+- **PostgreSQL 15+** (if installing manually)
+- **TimescaleDB** (extension for PostgreSQL)
+- **Redis** (for cache and sessions)
+- **Apache Kafka** (for stream processing)
+
+---
+
+## <a name="docker-compose"></a>🐳 Setup with Docker Compose (recommended)
+
+### 1. Cloning the project
 
 ```bash
 git clone https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring.git
 cd OGIM---Oil-Gas-Intelligent-Monitoring
 ```
 
-### 2. راه‌اندازی تمام سرویس‌ها
+### 2. Starting all services
 
 ```bash
-# راه‌اندازی تمام سرویس‌ها (Backend + Databases + Kafka)
+# Start all services (Backend + Databases + Kafka)
 docker-compose -f docker-compose.dev.yml up -d
 
-# بررسی وضعیت سرویس‌ها
+# Check service status
 docker-compose -f docker-compose.dev.yml ps
 
-# مشاهده لاگ‌ها
+# View logs
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-### 3. راه‌اندازی Frontend
+### 3. Starting the Frontend
 
 ```bash
 cd frontend/web
@@ -58,56 +58,56 @@ npm install
 npm run dev
 ```
 
-### 4. دسترسی به داشبورد
+### 4. Accessing the dashboard
 
-- **Frontend Dashboard**: http://localhost:5173 (یا پورت نمایش داده شده توسط Vite)
+- **Frontend Dashboard**: http://localhost:5173 (or the port shown by Vite)
 - **API Gateway**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 
 ---
 
-## <a name="manual-backend"></a>⚙️ راه‌اندازی دستی Backend
+## <a name="manual-backend"></a>⚙️ Manual Backend setup
 
-### 1. نصب پیش‌نیازها
+### 1. Installing prerequisites
 
-#### نصب PostgreSQL و TimescaleDB
+#### Installing PostgreSQL and TimescaleDB
 
 ```bash
 # Ubuntu/Debian
 sudo apt-get update
 sudo apt-get install postgresql-15 postgresql-contrib-15
 
-# نصب TimescaleDB extension
+# Install the TimescaleDB extension
 sudo apt-get install timescaledb-2-postgresql-15
 sudo timescaledb-tune
 
-# راه‌اندازی PostgreSQL
+# Start PostgreSQL
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 ```
 
-#### ایجاد دیتابیس‌ها
+#### Creating the databases
 
 ```bash
-# ورود به PostgreSQL
+# Log in to PostgreSQL
 sudo -u postgres psql
 
-# ایجاد دیتابیس‌ها
+# Create the databases
 CREATE DATABASE ogim;
 CREATE DATABASE ogim_tsdb;
 
-# ایجاد کاربر
+# Create the user
 CREATE USER ogim_user WITH PASSWORD 'ogim_password';
 GRANT ALL PRIVILEGES ON DATABASE ogim TO ogim_user;
 GRANT ALL PRIVILEGES ON DATABASE ogim_tsdb TO ogim_user;
 
-# فعال‌سازی TimescaleDB
+# Enable TimescaleDB
 \c ogim_tsdb
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 \q
 ```
 
-#### نصب Redis
+#### Installing Redis
 
 ```bash
 # Ubuntu/Debian
@@ -116,46 +116,46 @@ sudo systemctl start redis
 sudo systemctl enable redis
 ```
 
-#### نصب Apache Kafka
+#### Installing Apache Kafka
 
 ```bash
-# دانلود Kafka
+# Download Kafka
 wget https://downloads.apache.org/kafka/2.13-3.6.0/kafka_2.13-3.6.0.tgz
 tar -xzf kafka_2.13-3.6.0.tgz
 cd kafka_2.13-3.6.0
 
-# راه‌اندازی Zookeeper
+# Start Zookeeper
 bin/zookeeper-server-start.sh config/zookeeper.properties &
 
-# راه‌اندازی Kafka
+# Start Kafka
 bin/kafka-server-start.sh config/server.properties &
 ```
 
-### 2. راه‌اندازی Backend Services
+### 2. Starting the Backend Services
 
-#### ایجاد Virtual Environment
+#### Creating a Virtual Environment
 
 ```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
-# یا
+# or
 venv\Scripts\activate  # Windows
 ```
 
-#### نصب Dependencies
+#### Installing Dependencies
 
 ```bash
 pip install -r shared/requirements.txt
 pip install -r data-ingestion-service/requirements.txt
 pip install -r ml-inference-service/requirements.txt
 pip install -r alert-service/requirements.txt
-# ... و سایر سرویس‌ها
+# ... and the other services
 ```
 
-#### تنظیم Environment Variables
+#### Setting Environment Variables
 
-ایجاد فایل `.env` در ریشه پروژه:
+Create the `.env` file in the project root:
 
 ```bash
 # Database
@@ -187,9 +187,9 @@ EDGE_COMPUTING_SERVICE_URL=http://localhost:8009
 ERP_INTEGRATION_SERVICE_URL=http://localhost:8010
 ```
 
-#### راه‌اندازی سرویس‌ها
+#### Starting the services
 
-در ترمینال‌های جداگانه:
+In separate terminals:
 
 ```bash
 # Terminal 1: API Gateway
@@ -228,16 +228,16 @@ uvicorn main:app --host 0.0.0.0 --port 8007 --reload
 cd backend/digital-twin-service
 uvicorn main:app --host 0.0.0.0 --port 8008 --reload
 
-# Terminal 10: Edge Computing Service (اختیاری)
+# Terminal 10: Edge Computing Service (optional)
 cd backend/edge-computing-service
 uvicorn main:app --host 0.0.0.0 --port 8009 --reload
 
-# Terminal 11: ERP Integration Service (اختیاری)
+# Terminal 11: ERP Integration Service (optional)
 cd backend/erp-integration-service
 uvicorn main:app --host 0.0.0.0 --port 8010 --reload
 ```
 
-#### استفاده از اسکریپت راه‌اندازی
+#### Using the startup script
 
 ```bash
 # Linux/Mac
@@ -248,14 +248,14 @@ chmod +x scripts/start_backend.sh
 .\scripts\start_backend.ps1
 ```
 
-### 3. راه‌اندازی Database Migrations
+### 3. Running Database Migrations
 
 ```bash
 cd backend
 alembic upgrade head
 ```
 
-### 4. راه‌اندازی Initial Data
+### 4. Loading Initial Data
 
 ```bash
 cd backend/shared
@@ -264,79 +264,79 @@ python init_db.py
 
 ---
 
-## <a name="manual-frontend"></a>🎨 راه‌اندازی دستی Frontend
+## <a name="manual-frontend"></a>🎨 Manual Frontend setup
 
-### 1. نصب Dependencies
+### 1. Installing Dependencies
 
 ```bash
 cd frontend/web
 npm install
 ```
 
-### 2. تنظیم API URL
+### 2. Setting the API URL
 
-ویرایش فایل `frontend/web/src/api/client.ts`:
+Edit the file `frontend/web/src/api/client.ts`:
 
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 ```
 
-یا ایجاد فایل `.env` در `frontend/web/`:
+Or create a `.env` file in `frontend/web/`:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-### 3. راه‌اندازی Development Server
+### 3. Starting the Development Server
 
 ```bash
 npm run dev
 ```
 
-Frontend در آدرس زیر در دسترس خواهد بود:
-- **Development**: http://localhost:5173 (پورت پیش‌فرض Vite)
+The Frontend will be available at the following address:
+- **Development**: http://localhost:5173 (Vite default port)
 
-### 4. Build برای Production
+### 4. Build for Production
 
 ```bash
 npm run build
-npm run preview  # برای تست build
+npm run preview  # to test the build
 ```
 
 ---
 
-## <a name="service-urls"></a>🌐 آدرس‌های سرویس‌ها
+## <a name="service-urls"></a>🌐 Service addresses
 
 ### Backend Services
 
-| سرویس | پورت | آدرس | توضیحات |
+| Service | Port | Address | Description |
 |-------|------|------|---------|
-| **API Gateway** | 8000 | http://localhost:8000 | نقطه ورود اصلی API |
-| Auth Service | 8001 | http://localhost:8001 | احراز هویت و مدیریت کاربران |
-| Data Ingestion | 8002 | http://localhost:8002 | دریافت داده از سنسورها |
-| ML Inference | 8003 | http://localhost:8003 | مدل‌های ML و پیش‌بینی |
-| Alert Service | 8004 | http://localhost:8004 | مدیریت هشدارها |
-| Reporting Service | 8005 | http://localhost:8005 | گزارش‌گیری |
-| Command Control | 8006 | http://localhost:8006 | کنترل و فرمان‌ها |
-| Tag Catalog | 8007 | http://localhost:8007 | کاتالوگ تگ‌ها |
-| Digital Twin | 8008 | http://localhost:8008 | شبیه‌سازی و 3D BIM |
-| Edge Computing | 8009 | http://localhost:8009 | پردازش لبه |
-| ERP Integration | 8010 | http://localhost:8010 | یکپارچگی ERP |
+| **API Gateway** | 8000 | http://localhost:8000 | Main API entry point |
+| Auth Service | 8001 | http://localhost:8001 | Authentication and user management |
+| Data Ingestion | 8002 | http://localhost:8002 | Receiving data from sensors |
+| ML Inference | 8003 | http://localhost:8003 | ML models and forecasting |
+| Alert Service | 8004 | http://localhost:8004 | Alert management |
+| Reporting Service | 8005 | http://localhost:8005 | Reporting |
+| Command Control | 8006 | http://localhost:8006 | Control and commands |
+| Tag Catalog | 8007 | http://localhost:8007 | Tag catalog |
+| Digital Twin | 8008 | http://localhost:8008 | Simulation and 3D BIM |
+| Edge Computing | 8009 | http://localhost:8009 | Edge processing |
+| ERP Integration | 8010 | http://localhost:8010 | ERP integration |
 
 ### Frontend
 
-| محیط | آدرس | توضیحات |
+| Environment | Address | Description |
 |------|------|---------|
 | Development | http://localhost:5173 | Vite Dev Server |
-| Production | http://localhost:3000 | Build شده (پس از `npm run build`) |
+| Production | http://localhost:3000 | Built (after `npm run build`) |
 
 ### Infrastructure Services
 
-| سرویس | پورت | آدرس | توضیحات |
+| Service | Port | Address | Description |
 |-------|------|------|---------|
-| PostgreSQL | 5432 | localhost:5432 | دیتابیس اصلی |
-| TimescaleDB | 5433 | localhost:5433 | دیتابیس سری زمانی |
-| Redis | 6379 | localhost:6379 | Cache و Session |
+| PostgreSQL | 5432 | localhost:5432 | Main database |
+| TimescaleDB | 5433 | localhost:5433 | Time-series database |
+| Redis | 6379 | localhost:6379 | Cache and Session |
 | Kafka | 9092 | localhost:9092 | Message Broker |
 | Zookeeper | 2181 | localhost:2181 | Kafka Coordination |
 
@@ -347,25 +347,25 @@ npm run preview  # برای تست build
 
 ---
 
-## <a name="testing"></a>✅ تست و بررسی
+## <a name="testing"></a>✅ Testing and verification
 
-### 1. بررسی سلامت سرویس‌ها
+### 1. Checking service health
 
 ```bash
-# بررسی API Gateway
+# Check the API Gateway
 curl http://localhost:8000/health
 
-# بررسی سایر سرویس‌ها
+# Check the other services
 curl http://localhost:8001/health
 curl http://localhost:8002/health
 curl http://localhost:8003/health
 # ...
 ```
 
-### 2. تست احراز هویت
+### 2. Testing authentication
 
 ```bash
-# ثبت‌نام کاربر جدید
+# Register a new user
 curl -X POST http://localhost:8000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
@@ -375,7 +375,7 @@ curl -X POST http://localhost:8000/api/auth/register \
     "role": "system_admin"
   }'
 
-# ورود
+# Login
 curl -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
@@ -384,17 +384,17 @@ curl -X POST http://localhost:8000/api/auth/login \
   }'
 ```
 
-### 3. تست Frontend
+### 3. Testing the Frontend
 
-1. باز کردن مرورگر: http://localhost:5173
-2. ورود با کاربر پیش‌فرض:
+1. Open the browser: http://localhost:5173
+2. Log in with the default user:
    - **Username**: `admin`
    - **Password**: `Admin@123`
 
-### 4. تست Data Ingestion
+### 4. Testing Data Ingestion
 
 ```bash
-# ارسال داده سنسور
+# Send sensor data
 curl -X POST http://localhost:8000/api/data-ingestion/ingest \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -415,39 +415,39 @@ curl -X POST http://localhost:8000/api/data-ingestion/ingest \
 
 ---
 
-## <a name="troubleshooting"></a>🔍 مشکلات رایج
+## <a name="troubleshooting"></a>🔍 Common problems
 
-### مشکل: سرویس‌ها راه‌اندازی نمی‌شوند
+### Problem: Services do not start
 
-**راه‌حل:**
-1. بررسی لاگ‌ها: `docker-compose logs [service-name]`
-2. بررسی پورت‌ها: اطمینان حاصل کنید که پورت‌ها در دسترس هستند
-3. بررسی دیتابیس: اطمینان حاصل کنید که PostgreSQL و TimescaleDB در حال اجرا هستند
+**Solution:**
+1. Check the logs: `docker-compose logs [service-name]`
+2. Check the ports: make sure the ports are available
+3. Check the database: make sure PostgreSQL and TimescaleDB are running
 
-### مشکل: Frontend به Backend متصل نمی‌شود
+### Problem: The Frontend does not connect to the Backend
 
-**راه‌حل:**
-1. بررسی `VITE_API_BASE_URL` در `.env`
-2. بررسی CORS settings در Backend
-3. بررسی اینکه API Gateway در حال اجرا است
+**Solution:**
+1. Check `VITE_API_BASE_URL` in `.env`
+2. Check the CORS settings in the Backend
+3. Check that the API Gateway is running
 
-### مشکل: خطای Database Connection
+### Problem: Database Connection error
 
-**راه‌حل:**
-1. بررسی `DATABASE_URL` در `.env`
-2. بررسی اینکه PostgreSQL در حال اجرا است
-3. بررسی credentials و permissions
+**Solution:**
+1. Check `DATABASE_URL` in `.env`
+2. Check that PostgreSQL is running
+3. Check the credentials and permissions
 
-### مشکل: Kafka Connection Error
+### Problem: Kafka Connection Error
 
-**راه‌حل:**
-1. بررسی اینکه Zookeeper و Kafka در حال اجرا هستند
-2. بررسی `KAFKA_BOOTSTRAP_SERVERS` در `.env`
-3. بررسی network connectivity
+**Solution:**
+1. Check that Zookeeper and Kafka are running
+2. Check `KAFKA_BOOTSTRAP_SERVERS` in `.env`
+3. Check network connectivity
 
 ---
 
-## 📚 منابع بیشتر
+## 📚 More resources
 
 - [Architecture Documentation](./docs/ARCHITECTURE.md)
 - [Installation Guide](./docs/INSTALLATION.md)
@@ -456,9 +456,9 @@ curl -X POST http://localhost:8000/api/data-ingestion/ingest \
 
 ---
 
-## 🚀 دسترسی سریع
+## 🚀 Quick access
 
-### راه‌اندازی کامل با یک دستور (Docker)
+### Complete startup with one command (Docker)
 
 ```bash
 # Backend
@@ -468,7 +468,7 @@ docker-compose -f docker-compose.dev.yml up -d
 cd frontend/web && npm install && npm run dev
 ```
 
-### آدرس‌های مهم
+### Important addresses
 
 - **Dashboard**: http://localhost:5173
 - **API Gateway**: http://localhost:8000
@@ -477,6 +477,6 @@ cd frontend/web && npm install && npm run dev
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

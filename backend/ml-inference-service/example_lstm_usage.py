@@ -1,7 +1,7 @@
 """
-مثال استفاده از مدل LSTM برای پیش‌بینی سری‌های زمانی
+Example of using the LSTM model for time-series forecasting
 
-این فایل نشان می‌دهد چگونه می‌توان از مدل LSTM برای پیش‌بینی مقادیر آینده استفاده کرد.
+This file shows how the LSTM model can be used to predict future values.
 """
 
 import numpy as np
@@ -17,17 +17,17 @@ from mlflow_integration import get_mlflow_manager
 
 def generate_sample_time_series_data(length: int = 2000) -> np.ndarray:
     """
-    تولید داده نمونه برای آموزش مدل
+    Generate sample data for training the model
 
     Args:
-        length: طول سری زمانی
+        length: length of the time series
 
     Returns:
-        آرایه numpy با شکل (length, 1)
+        numpy array with shape (length, 1)
     """
     np.random.seed(42)
     t = np.arange(0, length, 0.1)
-    # ترکیب چند موج سینوسی با نویز
+    # Combine several sine waves with noise
     data = (
         np.sin(0.1 * t)
         + 0.5 * np.sin(0.3 * t)
@@ -38,104 +38,104 @@ def generate_sample_time_series_data(length: int = 2000) -> np.ndarray:
 
 
 def example_train_and_predict():
-    """مثال کامل: آموزش مدل و پیش‌بینی"""
+    """Complete example: train the model and forecast"""
 
     print("=" * 60)
-    print("مثال استفاده از مدل LSTM برای پیش‌بینی سری‌های زمانی")
+    print("Example of using the LSTM model for time-series forecasting")
     print("=" * 60)
 
-    # 1. ایجاد MLflow Manager
-    print("\n1. ایجاد MLflow Manager...")
+    # 1. Create the MLflow Manager
+    print("\n1. Creating the MLflow Manager...")
     manager = get_mlflow_manager(model_path="./models", tracking_uri="file:./mlruns")
 
-    # 2. تولید داده نمونه
-    print("\n2. تولید داده نمونه برای آموزش...")
+    # 2. Generate sample data
+    print("\n2. Generating sample data for training...")
     training_data = generate_sample_time_series_data(length=2000)
-    print(f"   تعداد نقاط داده: {len(training_data)}")
+    print(f"   Number of data points: {len(training_data)}")
 
-    # 3. آموزش مدل
-    print("\n3. آموزش مدل LSTM...")
-    print("   این مرحله ممکن است چند دقیقه طول بکشد...")
+    # 3. Train the model
+    print("\n3. Training the LSTM model...")
+    print("   This step may take a few minutes...")
     manager.train_time_series_model(
         time_series_data=training_data,
-        seq_length=60,  # استفاده از 60 نقطه قبلی
-        forecast_horizon=1,  # پیش‌بینی 1 گام آینده
-        epochs=30,  # 30 دوره آموزش (برای مثال سریع)
+        seq_length=60,  # use the previous 60 points
+        forecast_horizon=1,  # forecast 1 step ahead
+        epochs=30,  # 30 training epochs (for a quick example)
         batch_size=32,
         validation_split=0.2,
     )
-    print("   ✓ مدل با موفقیت آموزش داده شد!")
+    print("   ✓ Model trained successfully!")
 
-    # 4. تولید داده تاریخی برای پیش‌بینی
-    print("\n4. آماده‌سازی داده تاریخی برای پیش‌بینی...")
-    # استفاده از آخرین 100 نقطه از داده آموزشی
+    # 4. Generate historical data for forecasting
+    print("\n4. Preparing historical data for forecasting...")
+    # Use the last 100 points of the training data
     historical_data = training_data[-100:].flatten().tolist()
-    print(f"   تعداد نقاط تاریخی: {len(historical_data)}")
+    print(f"   Number of historical points: {len(historical_data)}")
 
-    # 5. انجام پیش‌بینی
-    print("\n5. انجام پیش‌بینی...")
+    # 5. Run the forecast
+    print("\n5. Running the forecast...")
     result = manager.predict_time_series(
-        historical_data=historical_data, forecast_steps=10  # پیش‌بینی 10 گام آینده
+        historical_data=historical_data, forecast_steps=10  # forecast 10 steps ahead
     )
 
     print("\n" + "=" * 60)
-    print("نتایج پیش‌بینی:")
+    print("Forecast results:")
     print("=" * 60)
-    print(f"تعداد گام‌های پیش‌بینی: {result['forecast_steps']}")
-    print(f"طول دنباله ورودی: {result['sequence_length']}")
-    print(f"سطح اطمینان: {result['confidence']:.2%}")
-    print("\nمقادیر پیش‌بینی شده:")
+    print(f"Number of forecast steps: {result['forecast_steps']}")
+    print(f"Input sequence length: {result['sequence_length']}")
+    print(f"Confidence level: {result['confidence']:.2%}")
+    print("\nForecast values:")
     for i, pred in enumerate(result["predictions"], 1):
-        print(f"  گام {i}: {pred:.4f}")
+        print(f"  Step {i}: {pred:.4f}")
 
     print("\n" + "=" * 60)
-    print("✓ مثال با موفقیت اجرا شد!")
+    print("✓ Example ran successfully!")
     print("=" * 60)
 
 
 def example_load_and_predict():
-    """مثال: بارگذاری مدل از MLflow و پیش‌بینی"""
+    """Example: load the model from MLflow and forecast"""
 
     print("\n" + "=" * 60)
-    print("مثال: بارگذاری مدل از MLflow")
+    print("Example: loading the model from MLflow")
     print("=" * 60)
 
-    # 1. ایجاد Manager
+    # 1. Create the Manager
     manager = get_mlflow_manager(model_path="./models", tracking_uri="file:./mlruns")
 
-    # 2. بارگذاری مدل
-    print("\nبارگذاری مدل از MLflow...")
+    # 2. Load the model
+    print("\nLoading the model from MLflow...")
     model = manager.load_model("time-series-forecast")
 
     if model is None:
-        print("❌ مدل یافت نشد. لطفاً ابتدا مدل را آموزش دهید.")
+        print("❌ Model not found. Please train the model first.")
         return
 
-    print("✓ مدل با موفقیت بارگذاری شد!")
+    print("✓ Model loaded successfully!")
 
-    # 3. تولید داده نمونه برای پیش‌بینی
-    print("\nتولید داده تاریخی نمونه...")
-    # تولید یک سری زمانی ساده
+    # 3. Generate sample data for forecasting
+    print("\nGenerating sample historical data...")
+    # Generate a simple time series
     historical_data = [np.sin(i * 0.1) + np.random.normal(0, 0.1) for i in range(100)]
 
-    # 4. پیش‌بینی
-    print("انجام پیش‌بینی...")
+    # 4. Forecast
+    print("Running the forecast...")
     result = manager.predict_time_series(
         historical_data=historical_data, forecast_steps=5
     )
 
-    print(f"\nمقادیر پیش‌بینی شده: {result['predictions']}")
+    print(f"\nForecast values: {result['predictions']}")
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="مثال استفاده از مدل LSTM")
+    parser = argparse.ArgumentParser(description="Example of using the LSTM model")
     parser.add_argument(
         "--mode",
         choices=["train", "predict", "both"],
         default="both",
-        help="حالت اجرا: train (آموزش), predict (پیش‌بینی), both (هر دو)",
+        help="Run mode: train (training), predict (forecasting), both (both)",
     )
 
     args = parser.parse_args()

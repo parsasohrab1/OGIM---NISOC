@@ -1,71 +1,71 @@
-# راهنمای کاربر OGIM (Updated)
+# OGIM User Guide (Updated)
 
-این راهنما برای کاربر نهایی (اپراتور/مهندس) تهیه شده است.
+This guide is prepared for the end user (operator/engineer).
 
-## 1) شروع سریع
+## 1) Quick start
 
-1. وارد پرتال شوید (`Dashboard`).
-2. وضعیت اتصال Stream را بررسی کنید:
+1. Log in to the portal (`Dashboard`).
+2. Check the Stream connection status:
    - `WebSocket`
    - `SSE (fallback)`
    - `Polling fallback`
-3. برای هشدارها به صفحه `Alerts` بروید.
+3. Go to the `Alerts` page for alerts.
 
-## 2) مدیریت هشدارها
+## 2) Alert management
 
-- مشاهده هشدارهای باز/حل‌شده
-- تایید هشدار (`Acknowledge`)
-- تحلیل همبستگی:
-  - گروه‌بندی هشدارها در Correlation
+- View open/resolved alerts
+- Acknowledge an alert (`Acknowledge`)
+- Correlation analysis:
+  - Grouping alerts in Correlation
 - RCA:
-  - اجرای تحلیل ریشه‌ای روی هشدار انتخابی
+  - Run root cause analysis on a selected alert
 
-## 3) کیفیت داده و Lineage
+## 3) Data quality and Lineage
 
-صفحه `Data Quality`:
-- شاخص‌ها:
+The `Data Quality` page:
+- Indicators:
   - `overall_score`, `completeness`, `validity`, `timeliness`, `consistency`
-- نمایش lineage:
-  - تعداد node/edge و اجزای مسیر داده
-- گزارش خودکار:
+- Displaying lineage:
+  - Number of nodes/edges and the components of the data path
+- Automatic report:
   - `Generate Auto Report`
 
-## 4) گزارش‌گیری پیشرفته و BI
+## 4) Advanced reporting and BI
 
-- صفحه `Report Builder` (`/report-builder`):
-  - انتخاب dimensions/measures
-  - نمودار و export CSV
-  - اتصال Power BI / Tableau
-- صفحه `Reports`: گزارش‌های استاندارد daily/weekly/monthly
+- The `Report Builder` page (`/report-builder`):
+  - Select dimensions/measures
+  - Chart and CSV export
+  - Power BI / Tableau connection
+- The `Reports` page: Standard daily/weekly/monthly reports
 
 ## 5) Workflow Automation
 
-صفحه `Workflow`:
-- ساخت workflow مرحله‌ای
-- تعریف dependency بین stepها
-- اجرای دستی (`Run Now`)
-- مشاهده تاریخچه اجراها
+The `Workflow` page:
+- Build a step-by-step workflow
+- Define dependencies between steps
+- Manual run (`Run Now`)
+- View the run history
 
 ## 6) Digital Twin / 3D / AR
 
-- صفحه `3D Visualization`:
-  - مشاهده چاه، تجهیزات، Risk Zone
-- صفحه `AR Integration`:
-  - payload واقعی AR overlay
-  - اجرای سناریوی What-if و مشاهده KPIهای پیش‌بینی
+- The `3D Visualization` page:
+  - View the well, equipment, Risk Zone
+- The `AR Integration` page:
+  - Real AR overlay payload
+  - Run a What-if scenario and view the predicted KPIs
 
-## 7) اپ موبایل
+## 7) Mobile app
 
 `mobile/app`:
-- Login با JWT
-- Push Notification برای هشدارهای critical
+- Login with JWT
+- Push Notification for critical alerts
 - Offline mode (Alerts + Wells)
-- Queue عملیات و sync بعد از اتصال
+- Operation queue and sync after the connection is restored
 
-## 8) امنیت و KPIهای اجرایی
+## 8) Security and executive KPIs
 
-- صفحه `Security` (`/security`): رویدادهای SIEM، Zero Trust، threat detection
-- صفحه `APM` (`/performance`): داشبورد عملکرد + KPIهای اجرایی
-- KPIها: Latency P95، Uptime، Adoption، False Positive Rate
+- The `Security` page (`/security`): SIEM events, Zero Trust, threat detection
+- The `APM` page (`/performance`): Performance dashboard + executive KPIs
+- KPIs: Latency P95, Uptime, Adoption, False Positive Rate
 - API: `GET /kpi/summary`
 

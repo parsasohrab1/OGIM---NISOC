@@ -5,10 +5,10 @@ import { generateMockProductionStatus, SubsidiaryProductionStatus } from '../dat
 import './Operations.css'
 
 const STATUS_LABEL_FA: Record<string, string> = {
-  ahead: 'جلوتر از هدف',
-  behind: 'عقب‌تر از هدف',
-  on_target: 'مطابق هدف',
-  unknown: 'نامشخص',
+  ahead: 'Ahead of target',
+  behind: 'Behind target',
+  on_target: 'On target',
+  unknown: 'Unknown',
 }
 
 export default function SubsidiaryProduction() {
@@ -27,8 +27,8 @@ export default function SubsidiaryProduction() {
   const rows = data || []
   const chartData = rows.map((r) => ({
     name: r.code,
-    هدف: r.target_bopd,
-    واقعی: r.actual_bopd,
+    Target: r.target_bopd,
+    Actual: r.actual_bopd,
   }))
 
   const aheadCount = rows.filter((r) => r.status === 'ahead').length
@@ -36,40 +36,40 @@ export default function SubsidiaryProduction() {
 
   return (
     <div className="ops-page">
-      <h2>وضعیت تولید شرکت‌های تابعه</h2>
+      <h2>Subsidiary production status</h2>
       <p className="ops-subtitle">
-        دبی چاه‌های تولیدی، بکارگیری تجهیزات (کویل تیوبینگ، تراک، دکل) و میزان جلو/عقب بودن از هدف تعریف‌شده به
-        تفکیک هر یک از ۵ شرکت تابعه.
+        Production well flow rate, equipment utilization (coiled tubing, truck, rig) and the amount ahead/behind the defined target for
+        each of the 5 subsidiary companies.
       </p>
 
       <div className="ops-overview">
         <div className="ops-stat-card">
-          <h3>شرکت‌های جلوتر از هدف</h3>
+          <h3>Companies ahead of target</h3>
           <div className="ops-stat-value" style={{ color: '#1e7e34' }}>
             {aheadCount}
           </div>
         </div>
         <div className="ops-stat-card">
-          <h3>شرکت‌های عقب‌تر از هدف</h3>
+          <h3>Companies behind target</h3>
           <div className="ops-stat-value" style={{ color: '#c62828' }}>
             {behindCount}
           </div>
         </div>
         <div className="ops-stat-card">
-          <h3>مجموع تولید واقعی (bopd)</h3>
+          <h3>Total actual production (bopd)</h3>
           <div className="ops-stat-value">{rows.reduce((sum, r) => sum + (r.actual_bopd || 0), 0).toLocaleString('fa-IR')}</div>
         </div>
         <div className="ops-stat-card">
-          <h3>مجموع هدف تولید (bopd)</h3>
+          <h3>Total production target (bopd)</h3>
           <div className="ops-stat-value">{rows.reduce((sum, r) => sum + (r.target_bopd || 0), 0).toLocaleString('fa-IR')}</div>
         </div>
       </div>
 
       <div className="ops-grid">
         <div className="ops-card full">
-          <h3>هدف در برابر تولید واقعی به تفکیک شرکت تابعه</h3>
+          <h3>Target versus actual production by subsidiary</h3>
           {isLoading ? (
-            <div className="loading">در حال بارگذاری...</div>
+            <div className="loading">Loading...</div>
           ) : (
             <ResponsiveContainer width="100%" height={340}>
               <BarChart data={chartData}>
@@ -78,28 +78,28 @@ export default function SubsidiaryProduction() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="هدف" fill="#f9a825" />
-                <Bar dataKey="واقعی" fill="#007bff" />
+                <Bar dataKey="Target" fill="#f9a825" />
+                <Bar dataKey="Actual" fill="#007bff" />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
 
         <div className="ops-card full">
-          <h3>جزئیات وضعیت هر شرکت تابعه</h3>
+          <h3>Status details of each subsidiary</h3>
           <div className="ops-table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>شرکت تابعه</th>
-                  <th>چاه فعال</th>
-                  <th>هدف (bopd)</th>
-                  <th>واقعی (bopd)</th>
-                  <th>انحراف</th>
-                  <th>وضعیت</th>
-                  <th>کویل تیوبینگ</th>
-                  <th>تراک</th>
-                  <th>دکل</th>
+                  <th>Subsidiary</th>
+                  <th>Active wells</th>
+                  <th>Target (bopd)</th>
+                  <th>Actual (bopd)</th>
+                  <th>Deviation</th>
+                  <th>Status</th>
+                  <th>Coiled tubing</th>
+                  <th>Truck</th>
+                  <th>Rig</th>
                 </tr>
               </thead>
               <tbody>

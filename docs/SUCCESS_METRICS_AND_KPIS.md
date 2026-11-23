@@ -1,34 +1,34 @@
-# 📊 معیارهای موفقیت و KPIها - OGIM
+# 📊 Success Metrics and KPIs - OGIM
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** تعریف و اندازه‌گیری معیارهای موفقیت برای به‌روزرسانی‌های محصول
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** Define and measure success metrics for product updates
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
+1. [Overview](#overview)
 2. [Performance Metrics](#performance-metrics)
 3. [User Experience Metrics](#ux-metrics)
 4. [Business Metrics](#business-metrics)
 5. [Technical Metrics](#technical-metrics)
 6. [Measurement Framework](#measurement)
-7. [Dashboard و Reporting](#dashboard)
-8. [Targets و Thresholds](#targets)
+7. [Dashboard and Reporting](#dashboard)
+8. [Targets and Thresholds](#targets)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-این سند معیارهای موفقیت (Success Metrics) و شاخص‌های کلیدی عملکرد (KPIs) را برای ارزیابی موفقیت به‌روزرسانی‌های محصول OGIM تعریف می‌کند.
+This document defines the success metrics and key performance indicators (KPIs) for evaluating the success of OGIM product updates.
 
-### دسته‌بندی معیارها
+### Metric categories
 
-1. **Performance Metrics**: عملکرد سیستم
-2. **User Experience Metrics**: تجربه کاربری
-3. **Business Metrics**: معیارهای کسب‌وکار
-4. **Technical Metrics**: معیارهای فنی
+1. **Performance Metrics**: System performance
+2. **User Experience Metrics**: User experience
+3. **Business Metrics**: Business metrics
+4. **Technical Metrics**: Technical metrics
 
 ---
 
@@ -39,7 +39,7 @@
 #### Real-Time Data Latency
 ```yaml
 Metric: real_time_data_latency
-Description: زمان تاخیر از تولید داده تا نمایش در dashboard
+Description: Delay from data generation to display on the dashboard
 Target: < 100ms (P95)
 Current: 1-10 seconds
 Measurement: 
@@ -53,7 +53,7 @@ Unit: milliseconds
 #### API Response Time
 ```yaml
 Metric: api_response_time
-Description: زمان پاسخ API endpoints
+Description: API endpoint response time
 Target: < 50ms (P95)
 Current: ~50ms
 Measurement:
@@ -67,7 +67,7 @@ Unit: milliseconds
 #### Database Query Time
 ```yaml
 Metric: database_query_time
-Description: زمان اجرای queryهای database
+Description: Database query execution time
 Target: < 10ms (P95)
 Current: ~5ms
 Measurement:
@@ -82,7 +82,7 @@ Unit: milliseconds
 #### Data Ingestion Rate
 ```yaml
 Metric: data_ingestion_rate
-Description: تعداد داده‌های دریافت شده در ثانیه
+Description: Number of records received per second
 Target: 10,000+ events/second
 Current: 8,000 events/second
 Measurement:
@@ -95,7 +95,7 @@ Unit: events/second
 #### API Request Rate
 ```yaml
 Metric: api_request_rate
-Description: تعداد درخواست‌های API در ثانیه
+Description: Number of API requests per second
 Target: 10,000+ req/sec
 Current: 8,000 req/sec
 Measurement:
@@ -108,7 +108,7 @@ Unit: requests/second
 #### Concurrent Users
 ```yaml
 Metric: concurrent_users
-Description: تعداد کاربران همزمان
+Description: Number of concurrent users
 Target: 500+ concurrent users
 Current: 300 concurrent users
 Measurement:
@@ -123,7 +123,7 @@ Unit: users
 #### CPU Usage
 ```yaml
 Metric: cpu_usage
-Description: استفاده از CPU
+Description: CPU usage
 Target: < 70% average
 Current: ~60%
 Measurement:
@@ -136,7 +136,7 @@ Unit: percentage
 #### Memory Usage
 ```yaml
 Metric: memory_usage
-Description: استفاده از حافظه
+Description: Memory usage
 Target: < 80% average
 Current: ~65%
 Measurement:
@@ -149,7 +149,7 @@ Unit: percentage
 #### Database Connection Pool
 ```yaml
 Metric: db_connection_pool_usage
-Description: استفاده از connection pool
+Description: Connection pool usage
 Target: < 80% average
 Current: ~50%
 Measurement:
@@ -163,7 +163,7 @@ Unit: percentage
 #### System Uptime
 ```yaml
 Metric: system_uptime
-Description: زمان در دسترس بودن سیستم
+Description: System uptime
 Target: > 99.9% (SLA)
 Current: 99.95%
 Measurement:
@@ -177,7 +177,7 @@ Unit: percentage
 #### Service Availability
 ```yaml
 Metric: service_availability
-Description: در دسترس بودن هر سرویس
+Description: Availability of each service
 Target: > 99.9% per service
 Measurement:
   - Service health checks
@@ -195,7 +195,7 @@ Unit: percentage
 #### User Satisfaction Score (USS)
 ```yaml
 Metric: user_satisfaction_score
-Description: نمره رضایت کاربران
+Description: User satisfaction score
 Target: > 4.0 / 5.0
 Current: 3.5 / 5.0
 Measurement:
@@ -209,7 +209,7 @@ Frequency: Monthly
 #### Net Promoter Score (NPS)
 ```yaml
 Metric: net_promoter_score
-Description: احتمال توصیه سیستم به دیگران
+Description: Likelihood of recommending the system to others
 Target: > 50
 Current: 35
 Measurement:
@@ -224,7 +224,7 @@ Frequency: Quarterly
 #### Feature Adoption Rate
 ```yaml
 Metric: feature_adoption_rate
-Description: درصد کاربرانی که از feature جدید استفاده می‌کنند
+Description: Percentage of users who use the new feature
 Target: > 60% within 3 months
 Measurement:
   - Feature usage tracking
@@ -237,7 +237,7 @@ Unit: percentage
 #### Mobile App Adoption
 ```yaml
 Metric: mobile_app_adoption
-Description: درصد کاربرانی که از mobile app استفاده می‌کنند
+Description: Percentage of users who use the mobile app
 Target: > 50% of users
 Measurement:
   - Mobile app installs
@@ -250,7 +250,7 @@ Unit: percentage
 #### Daily Active Users (DAU)
 ```yaml
 Metric: daily_active_users
-Description: تعداد کاربران فعال روزانه
+Description: Number of daily active users
 Target: > 70% of total users
 Current: 60%
 Measurement:
@@ -265,7 +265,7 @@ Unit: users
 #### Time to Complete Task
 ```yaml
 Metric: task_completion_time
-Description: زمان لازم برای تکمیل یک task
+Description: Time required to complete a task
 Target: -30% reduction
 Measurement:
   - User session tracking
@@ -281,7 +281,7 @@ Unit: seconds/minutes
 #### Task Success Rate
 ```yaml
 Metric: task_success_rate
-Description: درصد موفقیت در تکمیل tasks
+Description: Task completion success rate
 Target: > 90%
 Current: 85%
 Measurement:
@@ -295,7 +295,7 @@ Unit: percentage
 #### Error Rate
 ```yaml
 Metric: user_error_rate
-Description: درصد خطاهای کاربری
+Description: User error rate
 Target: < 5%
 Current: 8%
 Measurement:
@@ -315,7 +315,7 @@ Unit: percentage
 #### Operational Cost Reduction
 ```yaml
 Metric: operational_cost_reduction
-Description: کاهش هزینه‌های عملیاتی
+Description: Reduction in operating costs
 Target: -25% within 12 months
 Measurement:
   - Infrastructure costs
@@ -328,7 +328,7 @@ Unit: percentage
 #### Maintenance Cost Reduction
 ```yaml
 Metric: maintenance_cost_reduction
-Description: کاهش هزینه‌های maintenance
+Description: Reduction in maintenance costs
 Target: -30% (from SRS)
 Current: Baseline
 Measurement:
@@ -343,7 +343,7 @@ Unit: percentage
 #### Production Efficiency
 ```yaml
 Metric: production_efficiency
-Description: بهبود کارایی تولید
+Description: Improvement in production efficiency
 Target: +15% (from SRS)
 Current: Baseline
 Measurement:
@@ -356,7 +356,7 @@ Unit: percentage
 #### Unplanned Downtime Reduction
 ```yaml
 Metric: unplanned_downtime_reduction
-Description: کاهش downtime غیرمنتظره
+Description: Reduction in unexpected downtime
 Target: -40% (from SRS)
 Current: Baseline
 Measurement:
@@ -371,7 +371,7 @@ Unit: percentage
 #### Revenue Impact
 ```yaml
 Metric: revenue_impact
-Description: تاثیر بر revenue
+Description: Impact on revenue
 Target: Positive ROI within 18 months
 Measurement:
   - Production increase value
@@ -384,7 +384,7 @@ Unit: currency
 #### ROI (Return on Investment)
 ```yaml
 Metric: roi
-Description: بازگشت سرمایه
+Description: Return on investment
 Target: > 200% within 24 months
 Measurement:
   - Total investment
@@ -402,7 +402,7 @@ Unit: percentage
 #### Test Coverage
 ```yaml
 Metric: test_coverage
-Description: پوشش تست‌ها
+Description: Test coverage
 Target: > 85%
 Current: ~70%
 Measurement:
@@ -416,7 +416,7 @@ Unit: percentage
 #### Code Quality Score
 ```yaml
 Metric: code_quality_score
-Description: نمره کیفیت کد
+Description: Code quality score
 Target: > 8.0 / 10.0
 Measurement:
   - SonarQube analysis
@@ -435,7 +435,7 @@ Unit: score (0-10)
 #### Documentation Completeness
 ```yaml
 Metric: documentation_completeness
-Description: کامل بودن مستندات
+Description: Documentation completeness
 Target: > 90%
 Measurement:
   - API documentation coverage
@@ -449,7 +449,7 @@ Unit: percentage
 #### Documentation Quality
 ```yaml
 Metric: documentation_quality
-Description: کیفیت مستندات
+Description: Documentation quality
 Target: > 4.0 / 5.0
 Measurement:
   - User feedback
@@ -463,7 +463,7 @@ Unit: score (1-5)
 #### Security Vulnerabilities
 ```yaml
 Metric: security_vulnerabilities
-Description: تعداد آسیب‌پذیری‌های امنیتی
+Description: Number of security vulnerabilities
 Target: 0 critical, < 5 high
 Current: 2 critical, 8 high
 Measurement:
@@ -477,7 +477,7 @@ Unit: count
 #### Security Audit Score
 ```yaml
 Metric: security_audit_score
-Description: نمره audit امنیتی
+Description: Security audit score
 Target: > 90 / 100
 Measurement:
   - Security audits
@@ -592,7 +592,7 @@ class AnalyticsService {
 }
 ```
 
-### 3. Survey و Feedback
+### 3. Survey and Feedback
 
 #### User Satisfaction Survey
 ```python
@@ -632,7 +632,7 @@ class UserSatisfactionSurvey:
 
 ---
 
-## <a name="dashboard"></a>📊 Dashboard و Reporting
+## <a name="dashboard"></a>📊 Dashboard and Reporting
 
 ### 1. Metrics Dashboard
 
@@ -724,7 +724,7 @@ class MetricsReportGenerator:
 
 ---
 
-## <a name="targets"></a>🎯 Targets و Thresholds
+## <a name="targets"></a>🎯 Targets and Thresholds
 
 ### Performance Targets
 
@@ -764,7 +764,7 @@ class MetricsReportGenerator:
 
 ---
 
-## 📈 Tracking و Monitoring
+## 📈 Tracking and Monitoring
 
 ### 1. Real-time Monitoring
 
@@ -791,6 +791,6 @@ Alert Rules:
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

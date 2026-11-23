@@ -1,32 +1,32 @@
-# امنیت لایه Gateway
+# Gateway Layer Security
 
-## 📋 خلاصه
+## 📋 Summary
 
-این مستندات نحوه پیاده‌سازی امنیت پیشرفته در لایه Gateway را توضیح می‌دهد:
-- Rate Limiting سخت‌گیرانه‌تر
-- mTLS (Mutual TLS) برای ارتباطات بین میکروسرویس‌ها
+This documentation explains how advanced security is implemented in the Gateway layer:
+- Stricter Rate Limiting
+- mTLS (Mutual TLS) for communication between microservices
 
 ## 🛡️ Rate Limiting
 
-### استراتژی‌های پیاده‌سازی شده
+### Implemented strategies
 
-#### 1. Sliding Window (پیش‌فرض)
-- استفاده از Redis sorted set
-- حذف خودکار درخواست‌های قدیمی
-- دقیق‌تر از fixed window
+#### 1. Sliding Window (default)
+- Uses a Redis sorted set
+- Automatic removal of old requests
+- More accurate than a fixed window
 
 #### 2. Token Bucket
-- Refill rate قابل تنظیم
-- پشتیبانی از burst
-- مناسب برای ترافیک متغیر
+- Configurable refill rate
+- Burst support
+- Suitable for variable traffic
 
-### پیکربندی Rate Limits
+### Configuring Rate Limits
 
 #### Per-Service Limits
 ```python
 DEFAULT_LIMITS = {
     "default": {"max_requests": 100, "window_seconds": 60},
-    "auth": {"max_requests": 10, "window_seconds": 60},  # سخت‌گیرانه‌تر
+    "auth": {"max_requests": 10, "window_seconds": 60},  # stricter
     "command-control": {"max_requests": 50, "window_seconds": 60},
     "ml-inference": {"max_requests": 200, "window_seconds": 60},
     "data-ingestion": {"max_requests": 1000, "window_seconds": 60},
@@ -45,7 +45,7 @@ USER_LIMITS = {
 
 ### Response Headers
 
-Rate limit headers در response:
+Rate limit headers in the response:
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 95
@@ -53,10 +53,10 @@ X-RateLimit-Reset: 1633024800
 Retry-After: 60
 ```
 
-### استفاده
+### Usage
 
 ```python
-# در API Gateway
+# In the API Gateway
 from advanced_rate_limiter import get_rate_limiter, RateLimitConfig
 
 rate_limiter = get_rate_limiter(redis_url=settings.RATE_LIMIT_REDIS_URL)
@@ -73,14 +73,14 @@ allowed, info = await rate_limiter.check_rate_limit(
 
 ## 🔐 mTLS (Mutual TLS)
 
-### نمای کلی
+### Overview
 
-mTLS برای امنیت ارتباطات بین میکروسرویس‌ها:
-- هر سرویس باید certificate خود را ارائه دهد
-- CA certificate برای verification
-- جلوگیری از نفوذ در شبکه داخلی
+mTLS for securing communication between microservices:
+- Each service must present its own certificate
+- CA certificate for verification
+- Prevents intrusion into the internal network
 
-### معماری
+### Architecture
 
 ```
 ┌─────────────┐                    ┌─────────────┐
@@ -94,7 +94,7 @@ mTLS برای امنیت ارتباطات بین میکروسرویس‌ها:
      └────────────────────────────────────┘
 ```
 
-### تولید گواهینامه‌ها
+### Generating certificates
 
 #### Linux/Mac
 ```bash
@@ -131,7 +131,7 @@ openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca.key \
     -extfile <(echo "[v3_req]"; echo "extendedKeyUsage = serverAuth")
 ```
 
-### پیکربندی
+### Configuration
 
 #### Environment Variables
 ```bash
@@ -148,7 +148,7 @@ MTLS_CLIENT_KEY_PATH=./backend/certs/client.key
 MTLS_VERIFY_SERVER=true
 ```
 
-#### در کد
+#### In code
 ```python
 from mtls_manager import get_mtls_manager
 
@@ -169,7 +169,7 @@ async with httpx.AsyncClient(**client_kwargs) as client:
     response = await client.get("https://service:port/endpoint")
 ```
 
-### ساختار گواهینامه‌ها
+### Certificate structure
 
 ```
 backend/certs/
@@ -181,7 +181,7 @@ backend/certs/
 └── server.key      # Server Private Key
 ```
 
-## ⚙️ پیکربندی کامل
+## ⚙️ Complete configuration
 
 ### Rate Limiting
 ```python
@@ -202,9 +202,9 @@ MTLS_CLIENT_KEY_PATH: Optional[str] = None
 MTLS_VERIFY_SERVER: bool = True
 ```
 
-## 🚀 راه‌اندازی
+## 🚀 Setup
 
-### 1. تولید گواهینامه‌ها
+### 1. Generating certificates
 ```bash
 # Linux/Mac
 ./scripts/generate_mtls_certs.sh
@@ -213,7 +213,7 @@ MTLS_VERIFY_SERVER: bool = True
 .\scripts\generate_mtls_certs.ps1
 ```
 
-### 2. تنظیم Environment Variables
+### 2. Set Environment Variables
 ```bash
 export MTLS_ENABLED=true
 export MTLS_CERT_DIR=./backend/certs
@@ -226,12 +226,12 @@ export RATE_LIMIT_REDIS_URL=redis://localhost:6379
 export RATE_LIMIT_STRATEGY=sliding_window
 ```
 
-### 3. راه‌اندازی Redis (برای Rate Limiting)
+### 3. Setting up Redis (for Rate Limiting)
 ```bash
 docker run -d -p 6379:6379 redis:7-alpine
 ```
 
-### 4. راه‌اندازی API Gateway
+### 4. Setting up the API Gateway
 ```bash
 cd backend/api-gateway
 python -m uvicorn main:app --host 0.0.0.0 --port 8000
@@ -279,8 +279,8 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 ## 📝 Notes
 
-- Rate limiting در production باید با Redis باشد
-- mTLS در development می‌تواند غیرفعال باشد
-- Certificates باید در secrets management ذخیره شوند
-- Regular certificate rotation ضروری است
+- Rate limiting in production must use Redis
+- mTLS can be disabled in development
+- Certificates must be stored in secrets management
+- Regular certificate rotation is essential
 

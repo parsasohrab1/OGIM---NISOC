@@ -1,6 +1,6 @@
 """
 MQTT Client for Wireless Sensor Integration
-پشتیبانی از MQTT برای سنسورهای بی‌سیم
+MQTT support for wireless sensors
 """
 
 import asyncio

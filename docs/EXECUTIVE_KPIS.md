@@ -1,14 +1,14 @@
 # Executive KPIs — OGIM
 
-**هدف:** شاخص‌های اجرایی برای پایش Latency، Uptime، Adoption و False Positive Rate.
+**Goal:** Executive indicators for monitoring Latency, Uptime, Adoption and False Positive Rate.
 
-## KPIهای اصلی
+## Main KPIs
 
-| KPI | هدف | منبع اندازه‌گیری |
+| KPI | Target | Measurement source |
 |-----|------|------------------|
 | **Latency (P95)** | < 100ms | `GET /kpi/summary` → `latency.p95_ms` |
 | **Uptime** | ≥ 99.9% | `GET /kpi/summary` → `uptime.ratio` |
-| **Adoption** | ≥ 5 feature فعال/ماه | `GET /kpi/summary` → `adoption.feature_hits` |
+| **Adoption** | ≥ 5 active features/month | `GET /kpi/summary` → `adoption.feature_hits` |
 | **False Positive Rate** | ≤ 30% | `GET /kpi/summary` → `alert_quality.false_positive_rate` |
 
 ## Prometheus Metrics
@@ -20,18 +20,18 @@
 
 ## Alert Rules
 
-فایل: `infrastructure/prometheus/rules/executive-kpis.yml`
+File: `infrastructure/prometheus/rules/executive-kpis.yml`
 
 - `KPILatencyP95High` — P95 > 100ms
 - `KPIUptimeLow` — uptime < 99.9%
 - `KPIFalsePositiveRateHigh` — FP rate > 30%
 
-## داشبورد
+## Dashboard
 
 - Grafana: **OGIM APM Overview**
-- Web UI: صفحه **APM** (`/performance`)
+- Web UI: **APM** page (`/performance`)
 
-## API نمونه
+## Sample API
 
 ```bash
 curl http://localhost:8000/kpi/summary
@@ -40,6 +40,6 @@ curl -X POST http://localhost:8000/kpi/feature-usage -H "Content-Type: applicati
 curl -X POST http://localhost:8000/kpi/cache/invalidate -H "Content-Type: application/json" -d "{}"
 ```
 
-Web UI صفحه **APM** (`/performance`) adoption را از مسیرهای بازدیدشده (Layout → `feature-usage`) نیز تغذیه می‌کند.
+The Web UI **APM** page (`/performance`) also feeds adoption from the visited routes (Layout → `feature-usage`).
 
-جزئیات hardening: [PHASE3_HARDENING.md](PHASE3_HARDENING.md)
+Hardening details: [PHASE3_HARDENING.md](PHASE3_HARDENING.md)

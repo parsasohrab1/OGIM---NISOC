@@ -1,12 +1,12 @@
-# 🧪 راهنمای Testing, Documentation و Deployment - Phase 1
+# 🧪 Testing, Documentation and Deployment Guide - Phase 1
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** راهنمای جامع برای Integration Testing، Performance Testing، User Acceptance Testing، Documentation، و Deployment
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** A comprehensive guide for Integration Testing, Performance Testing, User Acceptance Testing, Documentation, and Deployment
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
 1. [Integration Testing](#integration-testing)
 2. [Performance Testing](#performance-testing)
@@ -19,10 +19,10 @@
 
 ## <a name="integration-testing"></a>1️⃣ Integration Testing
 
-### هدف
-تست کردن تعامل بین سرویس‌های مختلف و اطمینان از صحت عملکرد end-to-end
+### Goal
+Test the interaction between different services and ensure end-to-end correctness
 
-### معماری Testing
+### Testing architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -497,8 +497,8 @@ pytest backend/tests/integration/ -v --cov=backend --cov-report=html
 
 ## <a name="performance-testing"></a>2️⃣ Performance Testing
 
-### هدف
-اطمینان از عملکرد سیستم در شرایط بار بالا و شناسایی bottlenecks
+### Goal
+Ensure system performance under high load and identify bottlenecks
 
 ### Performance Test Plan
 
@@ -760,8 +760,8 @@ locust -f backend/tests/performance/test_api_performance.py \
 
 ## <a name="uat"></a>3️⃣ User Acceptance Testing (UAT)
 
-### هدف
-اطمینان از رضایت کاربران و عملکرد صحیح سیستم از دیدگاه business
+### Goal
+Ensure user satisfaction and correct system behavior from a business perspective
 
 ### UAT Test Scenarios
 
@@ -911,8 +911,8 @@ class UATTestRunner:
 
 ## <a name="documentation"></a>4️⃣ Documentation
 
-### هدف
-ایجاد مستندات جامع برای توسعه‌دهندگان، کاربران، و مدیران
+### Goal
+Create comprehensive documentation for developers, users, and managers
 
 ### Documentation Structure
 
@@ -1125,8 +1125,8 @@ if __name__ == "__main__":
 
 ## <a name="deployment"></a>5️⃣ Deployment Plan
 
-### هدف
-استقرار ایمن و قابل اعتماد سیستم در محیط production
+### Goal
+Safe and reliable deployment of the system in the production environment
 
 ### Deployment Phases
 
@@ -1389,6 +1389,6 @@ spec:
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

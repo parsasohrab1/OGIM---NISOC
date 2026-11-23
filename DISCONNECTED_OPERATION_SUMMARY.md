@@ -1,55 +1,55 @@
-# ✅ عملیات در حالت قطع ارتباط (Disconnected Operation)
+# ✅ Disconnected Operation
 
-## 📊 خلاصه پیاده‌سازی
+## 📊 Implementation summary
 
-لایه Edge Computing با قابلیت عملیات در حالت قطع ارتباط با موفقیت پیاده‌سازی شد.
+The Edge Computing layer with disconnected operation capability was implemented successfully.
 
-## 🎯 ویژگی‌های پیاده‌سازی شده
+## 🎯 Implemented features
 
 ### 1. Local Processing
-- ✅ پردازش داده‌ها در محل بدون نیاز به سرور مرکزی
-- ✅ Anomaly Detection محلی
-- ✅ Threshold Checking محلی
-- ✅ Trend Analysis محلی
-- ✅ Aggregation محلی
+- ✅ Processing data on site without needing a central server
+- ✅ Local Anomaly Detection
+- ✅ Local Threshold Checking
+- ✅ Local Trend Analysis
+- ✅ Local Aggregation
 
 ### 2. Critical Alerts
-- ✅ ذخیره alertهای حیاتی در local storage
-- ✅ ارسال فوری هنگام برقراری ارتباط
+- ✅ Storing critical alerts in local storage
+- ✅ Immediate sending when connectivity is restored
 - ✅ Priority-based sync
 
 ### 3. Local Decisions
-- ✅ ثبت تصمیم‌گیری‌های محلی
-- ✅ Sync به سرور مرکزی
-- ✅ Audit trail کامل
+- ✅ Recording local decisions
+- ✅ Sync to the central server
+- ✅ Complete audit trail
 
 ### 4. Data Caching
-- ✅ Cache نتایج پردازش
+- ✅ Caching processing results
 - ✅ TTL-based expiration
 - ✅ Storage management
 
 ### 5. Connection Monitoring
-- ✅ نظارت مداوم بر وضعیت ارتباط
-- ✅ Callback برای تغییر وضعیت
+- ✅ Continuous monitoring of connection status
+- ✅ Callback for status changes
 - ✅ Automatic sync trigger
 
 ### 6. Offline Buffer
-- ✅ ذخیره داده‌ها در حالت offline
+- ✅ Storing data in offline mode
 - ✅ Retry mechanism
 - ✅ Automatic cleanup
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Backend
-- `backend/shared/disconnected_operation.py` - مدیریت عملیات در حالت قطع ارتباط
-- `backend/edge-computing-service/main.py` - به‌روزرسانی شده با disconnected operation
+- `backend/shared/disconnected_operation.py` - Disconnected operation management
+- `backend/edge-computing-service/main.py` - updated with disconnected operation
 
 ### Documentation
-- `docs/DISCONNECTED_OPERATION.md` - مستندات کامل
+- `docs/DISCONNECTED_OPERATION.md` - Complete documentation
 
-## 🔌 API Endpoints جدید
+## 🔌 New API Endpoints
 
-### Health Check (بهبود یافته)
+### Health Check (improved)
 ```
 GET /health
 ```
@@ -75,7 +75,7 @@ GET /disconnected/pending-decisions?limit=100
 POST /disconnected/sync
 ```
 
-## 🏗️ معماری
+## 🏗️ Architecture
 
 ```
 Edge Device
@@ -99,27 +99,27 @@ Edge Device
 ## 📊 Local Storage
 
 ### Tables
-- **critical_alerts**: Alertهای حیاتی
-- **local_decisions**: تصمیم‌گیری‌های محلی
-- **processed_data_cache**: Cache داده‌های پردازش شده
+- **critical_alerts**: Critical alerts
+- **local_decisions**: Local decisions
+- **processed_data_cache**: Processed data cache
 
 ## 🔄 Sync Mechanism
 
 ### Automatic Sync
-- هر `sync_interval` ثانیه (پیش‌فرض: 60)
-- فقط در حالت online
-- اولویت با critical alerts
+- Every `sync_interval` seconds (default: 60)
+- Only in online mode
+- Critical alerts take priority
 
 ### Manual Sync
-- Trigger دستی از طریق API
-- فوری و کامل
+- Manual trigger through the API
+- Immediate and complete
 
 ### Connection Restoration
 - Automatic sync trigger
 - Callback notifications
 - Status updates
 
-## ⚙️ پیکربندی
+## ⚙️ Configuration
 
 ```python
 disconnected_op = get_disconnected_op_manager(
@@ -129,7 +129,7 @@ disconnected_op = get_disconnected_op_manager(
 )
 ```
 
-## 🚀 استفاده
+## 🚀 Usage
 
 ### Add Critical Alert
 ```python
@@ -161,25 +161,25 @@ disconnected_op.cache_processed_data(
 )
 ```
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ Disconnected Operation Manager ایجاد شد
-- ✅ Local Storage (SQLite) پیاده‌سازی شد
-- ✅ Critical Alerts storage اضافه شد
-- ✅ Local Decisions recording اضافه شد
-- ✅ Data Caching اضافه شد
-- ✅ Automatic Sync mechanism پیاده‌سازی شد
-- ✅ Connection Monitoring یکپارچه شد
-- ✅ API endpoints اضافه شدند
-- ✅ مستندات کامل نوشته شد
+- ✅ Disconnected Operation Manager created
+- ✅ Local Storage (SQLite) implemented
+- ✅ Critical Alerts storage added
+- ✅ Local Decisions recording added
+- ✅ Data Caching added
+- ✅ Automatic Sync mechanism implemented
+- ✅ Connection Monitoring integrated
+- ✅ API endpoints added
+- ✅ Complete documentation written
 
-## 📝 نکات
+## 📝 Notes
 
-- تمام عملیات در هر دو حالت online و offline کار می‌کند
-- Critical alerts همیشه ذخیره می‌شوند
-- Sync خودکار هنگام برقراری ارتباط
-- Storage management خودکار
-- Cleanup خودکار داده‌های قدیمی
+- All operations work in both online and offline modes
+- Critical alerts are always stored
+- Automatic sync when connectivity is restored
+- Automatic storage management
+- Automatic cleanup of old data
 
 ## 🔍 Monitoring
 

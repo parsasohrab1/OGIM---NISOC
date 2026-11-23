@@ -83,48 +83,48 @@ export default function ARIntegration() {
       <header className="deh-ar-hero">
         <div>
           <p className="deh-ar-client">{FIELD.clientFa}</p>
-          <h1>واقعیت افزوده میدان — {FIELD.nameFa}</h1>
+          <h1>Field augmented reality — {FIELD.nameFa}</h1>
           <p className="deh-ar-meta">
-            پوشش بصری ۲۴ حلقه · نمایشگر سربلند سرچاهی · مدل اطلاعات تأسیسات قطعات · دبی‌سنج مجازی و درصد آب تولیدی روی لنگرهای واقعیت افزوده
+            Overlay of 24 wells · wellhead head-up display · facility information model components · virtual flow meter and produced water cut on augmented-reality anchors
           </p>
         </div>
         <label className="deh-ar-lock">
           <input type="checkbox" checked={hudLocked} onChange={(e) => setHudLocked(e.target.checked)} />
-          قفل نمایشگر سربلند روی لنگر
+          Head-up display locked on anchor
         </label>
       </header>
 
       <div className="ar-stats-grid">
         <div className="stat-card">
-          <h3>دستگاه‌های آنلاین</h3>
+          <h3>Online devices</h3>
           <div className="stat-value">
             {devices.filter((d) => d.connectionStatus === 'connected').length}
           </div>
-          <div className="stat-label">از {devices.length} دستگاه میدان</div>
+          <div className="stat-label">of {devices.length} field devices</div>
         </div>
         <div className="stat-card">
-          <h3>نشست‌های فعال</h3>
+          <h3>Active sessions</h3>
           <div className="stat-value">{sessions.length}</div>
-          <div className="stat-label">تکنسین در میدان مارون</div>
+          <div className="stat-label">technicians in the Maroun field</div>
         </div>
         <div className="stat-card">
-          <h3>لنگرهای واقعیت افزوده</h3>
+          <h3>Augmented reality anchors</h3>
           <div className="stat-value">{anchors.length}</div>
-          <div className="stat-label">چاه + تأسیسات</div>
+          <div className="stat-label">wells + facilities</div>
         </div>
         <div className="stat-card">
-          <h3>نقاط داده در نشست</h3>
+          <h3>Data points in session</h3>
           <div className="stat-value">
             {sessions.reduce((s, x) => s + x.dataPointsAccessed, 0)}
           </div>
-          <div className="stat-label">تله‌متری زنده پوشش بصری</div>
+          <div className="stat-label">Live overlay telemetry</div>
         </div>
       </div>
 
       {/* —— Visual AR viewport —— */}
       <section className="deh-ar-viewport-wrap">
         <div className="deh-ar-viewport-head">
-          <h2>نمای واقعیت افزوده (شبیه‌سازی فیلدی)</h2>
+          <h2>Augmented reality view (field simulation)</h2>
           <select
             value={selectedWell}
             onChange={(e) => {
@@ -162,7 +162,7 @@ export default function ARIntegration() {
               title={a.labelFa}
             >
               <i style={{ background: STATUS_COLOR[a.status] }} />
-              <span className="anc-label">{a.labelFa.replace('چاه مارون ', 'D')}</span>
+              <span className="anc-label">{a.labelFa.replace('Maroun well ', 'D')}</span>
             </button>
           ))}
 
@@ -184,52 +184,52 @@ export default function ARIntegration() {
               <div className="hud-grid">
                 {focused.hud.thp != null && (
                   <div>
-                    <span>فشار سرچاهی</span>
+                    <span>Wellhead pressure</span>
                     <b>{focused.hud.thp} psi</b>
                   </div>
                 )}
                 {focused.hud.tht != null && (
                   <div>
-                    <span>دمای سرچاهی</span>
+                    <span>Wellhead temperature</span>
                     <b>{focused.hud.tht} °C</b>
                   </div>
                 )}
                 {focused.hud.oil != null && (
                   <div>
-                    <span>نفت</span>
+                    <span>Oil</span>
                     <b>{focused.hud.oil} bbl/d</b>
                   </div>
                 )}
                 {focused.hud.waterCut != null && (
                   <div>
-                    <span>درصد آب تولیدی</span>
+                    <span>Produced water cut</span>
                     <b>{focused.hud.waterCut}%</b>
                   </div>
                 )}
                 {focused.hud.vfm != null && (
                   <div className="accent">
-                    <span>دبی‌سنج مجازی</span>
+                    <span>Virtual flow meter</span>
                     <b>{focused.hud.vfm} bbl/d</b>
                   </div>
                 )}
                 {focused.hud.pumpOnline != null && (
                   <div>
-                    <span>پمپ</span>
-                    <b>{focused.hud.pumpOnline ? 'آنلاین' : 'آفلاین'}</b>
+                    <span>Pump</span>
+                    <b>{focused.hud.pumpOnline ? 'Online' : 'Offline'}</b>
                   </div>
                 )}
               </div>
-              <p className="hud-hint">لنگر قفل شد · داده زنده میدان مارون</p>
+              <p className="hud-hint">Anchor locked · live Maroun field data</p>
             </div>
           )}
 
-          <div className="deh-ar-compass">N · میدان مارون</div>
+          <div className="deh-ar-compass">N · Maroun field</div>
         </div>
       </section>
 
       <div className="ar-content-grid">
         <div className="devices-section">
-          <h2>دستگاه‌های واقعیت افزوده میدان</h2>
+          <h2>Field augmented reality devices</h2>
           <div className="devices-list">
             {devices.map((device) => (
               <div
@@ -242,27 +242,27 @@ export default function ARIntegration() {
                 <div className="device-header">
                   <span className="device-id">{device.deviceId}</span>
                   <span className={`connection-status ${device.connectionStatus}`}>
-                    {device.connectionStatus === 'connected' ? 'متصل' : 'قطع'}
+                    {device.connectionStatus === 'connected' ? 'Connected' : 'Disconnected'}
                   </span>
                 </div>
                 <div className="device-info">
                   <p>
-                    <strong>نوع:</strong> {device.deviceType}
+                    <strong>Type:</strong> {device.deviceType}
                   </p>
                   <p>
-                    <strong>کاربر:</strong> {device.userFa} ({device.roleFa})
+                    <strong>User:</strong> {device.userFa} ({device.roleFa})
                   </p>
                   <p>
-                    <strong>موقعیت:</strong> {device.locationFa}
+                    <strong>Location:</strong> {device.locationFa}
                   </p>
                   <p>
-                    <strong>چاه:</strong> {device.wellId}
+                    <strong>Well:</strong> {device.wellId}
                   </p>
                   <p>
-                    <strong>سیگنال:</strong> {device.signalDbm} dBm
+                    <strong>Signal:</strong> {device.signalDbm} dBm
                   </p>
                   <p>
-                    <strong>آخرین به‌روزرسانی:</strong> {device.lastUpdateFa}
+                    <strong>Last update:</strong> {device.lastUpdateFa}
                   </p>
                 </div>
                 <div className="battery-indicator">
@@ -282,37 +282,37 @@ export default function ARIntegration() {
         </div>
 
         <div className="sessions-section">
-          <h2>نشست‌های فعال فیلدی</h2>
+          <h2>Active field sessions</h2>
           {sessions.length > 0 ? (
             <div className="sessions-list">
               {sessions.map((session) => (
                 <div key={session.sessionId} className="session-card">
                   <div className="session-header">
                     <h3>{session.userFa}</h3>
-                    <span className="session-duration">{session.durationMin} دقیقه</span>
+                    <span className="session-duration">{session.durationMin} min</span>
                   </div>
                   <div className="session-info">
                     <p>
-                      <strong>ماموریت:</strong> {session.taskFa}
+                      <strong>Mission:</strong> {session.taskFa}
                     </p>
                     <p>
-                      <strong>دستگاه:</strong> {session.deviceId}
+                      <strong>Device:</strong> {session.deviceId}
                     </p>
                     <p>
-                      <strong>چاه:</strong> {session.wellId}
+                      <strong>Well:</strong> {session.wellId}
                     </p>
                     <p>
-                      <strong>شروع:</strong> {session.startTimeFa}
+                      <strong>Start:</strong> {session.startTimeFa}
                     </p>
                     <p>
-                      <strong>چک‌لیست:</strong> {session.checklistDone}/{session.checklistTotal}
+                      <strong>Checklist:</strong> {session.checklistDone}/{session.checklistTotal}
                     </p>
                     <p>
-                      <strong>حاشیه نویسی:</strong> {session.annotationsCreated}
+                      <strong>Annotations:</strong> {session.annotationsCreated}
                     </p>
                   </div>
                   <div className="components-list">
-                    <strong>قطعات دیده‌شده در واقعیت افزوده:</strong>
+                    <strong>Components seen in augmented reality:</strong>
                     <div className="components-tags">
                       {session.componentsViewed.map((comp) => (
                         <span key={comp} className="component-tag">
@@ -326,16 +326,16 @@ export default function ARIntegration() {
             </div>
           ) : (
             <div className="no-sessions">
-              <p>نشست فعالی نیست</p>
+              <p>No active session</p>
             </div>
           )}
         </div>
       </div>
 
       <div className="bim-components-section">
-        <h2>قطعات مدل اطلاعات تأسیسات قابل‌نمایش در واقعیت افزوده — {selectedWell}</h2>
+        <h2>Facility information model components displayable in augmented reality — {selectedWell}</h2>
         <p className="section-sub">
-          هر قطعه با داده زنده و راهنمای بصری برای تکنسین هدست / تبلت
+          Each component with live data and a visual guide for the headset / tablet technician
         </p>
         <div className="components-grid">
           {bim.map((component) => (
@@ -344,48 +344,48 @@ export default function ARIntegration() {
                 <h3>{component.nameFa}</h3>
                 <span className={`status-badge ${component.status}`}>
                   {component.status === 'normal'
-                    ? 'عادی'
+                    ? 'Normal'
                     : component.status === 'warning'
-                      ? 'هشدار'
-                      : 'بحرانی'}
+                      ? 'Warning'
+                      : 'Critical'}
                 </span>
               </div>
               <div className="component-info">
                 <p>
-                  <strong>شناسه:</strong> {component.componentId}
+                  <strong>ID:</strong> {component.componentId}
                 </p>
                 <p>
-                  <strong>نوع:</strong> {component.type}
+                  <strong>Type:</strong> {component.type}
                 </p>
                 <p>
-                  <strong>محل:</strong> {component.locationFa}
+                  <strong>Location:</strong> {component.locationFa}
                 </p>
               </div>
               <div className="realtime-data">
-                <h4>داده زنده روی نمایشگر سربلند</h4>
+                <h4>Live data on the head-up display</h4>
                 {component.realTimeData.pressure != null && (
                   <p>
-                    فشار: <strong>{component.realTimeData.pressure} psi</strong>
+                    Pressure: <strong>{component.realTimeData.pressure} psi</strong>
                   </p>
                 )}
                 {component.realTimeData.temperature != null && (
                   <p>
-                    دما: <strong>{component.realTimeData.temperature} °C</strong>
+                    Temperature: <strong>{component.realTimeData.temperature} °C</strong>
                   </p>
                 )}
                 {component.realTimeData.flowRate != null && (
                   <p>
-                    دبی: <strong>{component.realTimeData.flowRate} bbl/d</strong>
+                    Flow rate: <strong>{component.realTimeData.flowRate} bbl/d</strong>
                   </p>
                 )}
                 {component.realTimeData.waterCut != null && (
                   <p>
-                    درصد آب تولیدی: <strong>{component.realTimeData.waterCut}%</strong>
+                    Produced water cut: <strong>{component.realTimeData.waterCut}%</strong>
                   </p>
                 )}
                 {component.realTimeData.currentA != null && (
                   <p>
-                    جریان پمپ درون‌چاهی الکتریکی: <strong>{component.realTimeData.currentA} A</strong>
+                    Electric submersible pump current: <strong>{component.realTimeData.currentA} A</strong>
                   </p>
                 )}
               </div>
@@ -396,7 +396,7 @@ export default function ARIntegration() {
       </div>
 
       <div className="realtime-chart-section">
-        <h2>روند تله‌متری روی پوشش بصری واقعیت افزوده — {selectedWell}</h2>
+        <h2>Telemetry trend on the augmented reality overlay — {selectedWell}</h2>
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={series}>
@@ -406,18 +406,18 @@ export default function ARIntegration() {
               <YAxis yAxisId="right" orientation="right" stroke="#888" />
               <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #ccc', color: '#111' }} />
               <Legend />
-              <Line yAxisId="left" type="monotone" dataKey="pressure" stroke="#ef5350" name="فشار (psi)" dot={false} />
-              <Line yAxisId="left" type="monotone" dataKey="temperature" stroke="#ffa726" name="دما (°C)" dot={false} />
-              <Line yAxisId="right" type="monotone" dataKey="oil" stroke="#42a5f5" name="نفت (bbl/d)" dot={false} />
-              <Line yAxisId="right" type="monotone" dataKey="vfm" stroke="#66bb6a" name="دبی‌سنج مجازی" strokeDasharray="4 3" dot={false} />
-              <Line yAxisId="right" type="monotone" dataKey="waterCut" stroke="#ab47bc" name="درصد آب تولیدی %" dot={false} />
+              <Line yAxisId="left" type="monotone" dataKey="pressure" stroke="#ef5350" name="Pressure (psi)" dot={false} />
+              <Line yAxisId="left" type="monotone" dataKey="temperature" stroke="#ffa726" name="Temperature (°C)" dot={false} />
+              <Line yAxisId="right" type="monotone" dataKey="oil" stroke="#42a5f5" name="Oil (bbl/d)" dot={false} />
+              <Line yAxisId="right" type="monotone" dataKey="vfm" stroke="#66bb6a" name="Virtual flow meter" strokeDasharray="4 3" dot={false} />
+              <Line yAxisId="right" type="monotone" dataKey="waterCut" stroke="#ab47bc" name="Produced water cut %" dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       <div className="bim-components-section overlay-panel">
-        <h2>بسته پوشش بصری ارسالی به هدست</h2>
+        <h2>Overlay package sent to the headset</h2>
         <pre>{JSON.stringify(overlay, null, 2)}</pre>
       </div>
     </div>

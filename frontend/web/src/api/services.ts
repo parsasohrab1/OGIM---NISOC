@@ -579,7 +579,7 @@ export const well3DAPI = {
       const data = response.data
       const list = Array.isArray(data) ? data : data?.wells
       if (Array.isArray(list) && list.length >= 8) return list
-      // Fallback / enrich: میدان مارون — ۲۴ حلقه
+      // Fallback / enrich: Maroun field — 24 well loops
       return Array.from({ length: 24 }, (_, i) => `MN-${String(i + 1).padStart(2, '0')}`)
     } catch (error: any) {
       if (error.code === 'ERR_NETWORK' || error.code === 'ERR_EMPTY_RESPONSE' || error.message?.includes('Failed to fetch') || error.isNetworkError) {

@@ -31,7 +31,7 @@ self.addEventListener('fetch', (event) => {
     url.pathname.startsWith('/security/')
 
   if (isApi) {
-    // API: شبکه اول؛ در خطا پاسخ خالی/کش
+    // API: network first; on error return an empty response/cache
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -55,7 +55,7 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // استاتیک / اپ: کش اول، سپس شبکه و ذخیره برای آفلاین بعدی
+  // Static / app: cache first, then network and store for the next offline use
   event.respondWith(
     caches.match(request).then((cached) => {
       const networkFetch = fetch(request)
@@ -74,17 +74,17 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {}
-  const title = data.title || 'هشدار میدان دهلران'
+  const title = data.title || 'Dehloran field alert'
   const options = {
-    body: data.body || 'هشدار جدید',
+    body: data.body || 'New alert',
     icon: '/icons/icon-192.png',
     badge: '/icons/icon-192.png',
     tag: data.tag || 'ogim-alert',
     data: { url: data.url || '/alerts' },
     vibrate: [200, 100, 200],
     actions: [
-      { action: 'view', title: 'مشاهده' },
-      { action: 'dismiss', title: 'بستن' },
+      { action: 'view', title: 'View' },
+      { action: 'dismiss', title: 'Dismiss' },
     ],
   }
   event.waitUntil(self.registration.showNotification(title, options))

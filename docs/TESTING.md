@@ -26,14 +26,14 @@ This command runs unit and integration tests and collects coverage. The configur
 - Ensure new migrations or models are compatible with the sqlite-based fixtures.
 
 ## Smoke Tests
-- تست‌های سریع برای مسیرهای حیاتی در `backend/tests/smoke/` قرار دارد.
-- اجرای smoke در CI (`smoke-tests.yml`) و به صورت دستی:
+- Quick tests for critical paths are in `backend/tests/smoke/`.
+- Run smoke tests in CI (`smoke-tests.yml`) and manually:
   ```bash
   cd backend
   pytest tests/smoke/test_smoke.py
   ```
 
 ## Contract / API Tests
-- برای اطمینان از عدم شکستن قرارداد API، توصیه می‌شود `openapi.json` سرویس‌ها استخراج و بررسی شود.
-- ابزار پیشنهادی: `schemathesis` یا `pact` (در TODO).
-- در CI می‌توان مرحله‌ای برای diff نسخه‌های OpenAPI یا اجرای تست قرارداد اضافه کرد.
+- To ensure the API contract is not broken, it is recommended to extract and review the services' `openapi.json`.
+- Recommended tool: `schemathesis` or `pact` (in the TODO).
+- In CI you can add a step to diff OpenAPI versions or run contract tests.

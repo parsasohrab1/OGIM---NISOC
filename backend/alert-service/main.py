@@ -137,7 +137,7 @@ class PushDeviceRegisterRequest(BaseModel):
 
 class SmsRegisterRequest(BaseModel):
     phone: str
-    label: Optional[str] = "اپراتور میدان"
+    label: Optional[str] = "Field operator"
     enabled: bool = True
     severities: Optional[List[str]] = None
 
@@ -847,14 +847,14 @@ async def register_sms_phone(
     try:
         recipient = register_sms_recipient(
             request.phone,
-            label=request.label or "اپراتور میدان",
+            label=request.label or "Field operator",
             enabled=request.enabled,
             severities=request.severities,
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return {
-        "message": "شماره موبایل برای پیامک هشدار ثبت شد",
+        "message": "Mobile number registered for alert SMS",
         "recipient": recipient,
         "status": sms_provider_status(),
     }
@@ -871,8 +871,8 @@ async def unregister_sms_phone(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     if not removed:
-        raise HTTPException(status_code=404, detail="شماره یافت نشد")
-    return {"message": "شماره حذف شد", "status": sms_provider_status()}
+        raise HTTPException(status_code=404, detail="Number not found")
+    return {"message": "Number removed", "status": sms_provider_status()}
 
 
 @app.post("/notifications/sms/test")
@@ -887,20 +887,20 @@ async def send_test_sms(
         if not recipients:
             raise HTTPException(
                 status_code=400,
-                detail="ابتدا یک شماره موبایل ثبت کنید",
+                detail="Register a mobile number first",
             )
         phone = recipients[0]["phone"]
     message = request.message or (
-        "SOGF پیامک آزمایشی\n"
-        "سامانه هوشمندسازی میدان مارون\n"
-        "اگر این پیام را دریافت کردید، اعلان SMS فعال است."
+        "SOGF test SMS\n"
+        "Maroun Field Smartification System\n"
+        "If you received this message, SMS notification is active."
     )
     try:
         entry = await send_sms(phone, message, meta={"type": "test"})
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return {
-        "message": "پیامک آزمایشی ارسال/صف‌بندی شد",
+        "message": "Test SMS sent/queued",
         "entry": entry,
         "status": sms_provider_status(),
     }
@@ -934,7 +934,7 @@ async def send_alert_sms_manual(
     if result.get("sent", 0) == 0 and result.get("reason") == "no_recipients":
         raise HTTPException(
             status_code=400,
-            detail="هیچ شماره موبایلی برای پیامک ثبت نشده است",
+            detail="No mobile number is registered for SMS",
         )
     return {"alert_id": alert_id, **result}
 

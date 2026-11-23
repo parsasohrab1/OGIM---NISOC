@@ -1,20 +1,20 @@
-# 🎯 Tracking Dashboard: اهداف فاز 1
+# 🎯 Tracking Dashboard: Phase 1 Goals
 
-**تاریخ شروع:** دسامبر 2025  
-**مدت زمان:** 3 ماه  
-**وضعیت:** در حال پیاده‌سازی
+**Start date:** December 2025
+**Duration:** 3 months
+**Status:** Being implemented
 
 ---
 
-## 📊 نمای کلی پیشرفت
+## 📊 Progress overview
 
-| هدف | وضعیت | پیشرفت | Target | Current |
+| Goal | Status | Progress | Target | Current |
 |-----|-------|--------|--------|---------|
-| کاهش Latency | 🟡 In Progress | 40% | < 100ms | 1-10s |
-| بهبود دقت ML | 🟡 In Progress | 30% | +5% | Baseline |
-| کاهش False Positives | 🔴 Not Started | 0% | -30% | Baseline |
-| بهبود Data Quality | 🔴 Not Started | 0% | +40% | Baseline |
-| شناسایی Bottlenecks | 🔴 Not Started | 0% | Real-time | Manual |
+| Reduce Latency | 🟡 In Progress | 40% | < 100ms | 1-10s |
+| Improve ML accuracy | 🟡 In Progress | 30% | +5% | Baseline |
+| Reduce False Positives | 🔴 Not Started | 0% | -30% | Baseline |
+| Improve Data Quality | 🔴 Not Started | 0% | +40% | Baseline |
+| Identify Bottlenecks | 🔴 Not Started | 0% | Real-time | Manual |
 
 **Legend:**
 - 🟢 Completed
@@ -24,9 +24,9 @@
 
 ---
 
-## 🎯 هدف 1: کاهش Latency از 1-10 ثانیه به < 100ms
+## 🎯 Goal 1: Reduce Latency from 1-10 seconds to < 100ms
 
-### جزئیات هدف
+### Goal details
 
 ```yaml
 Metric: real_time_data_latency
@@ -36,7 +36,7 @@ Improvement: 99% reduction
 Priority: Critical
 ```
 
-### نحوه اندازه‌گیری
+### How to measure
 
 ```python
 # Measurement implementation
@@ -60,15 +60,15 @@ def measure_latency(data_source: str, generation_time: float):
     return latency
 ```
 
-### Milestones مرتبط
+### Related Milestones
 
-- [x] هفته 1: طراحی معماری WebSocket
-- [x] هفته 2: پیاده‌سازی Backend WebSocket handler
-- [ ] هفته 2: پیاده‌سازی Frontend WebSocket client
-- [ ] هفته 2: Testing و optimization
-- [ ] هفته 2: Performance validation (< 100ms)
+- [x] Week 1: Design the WebSocket architecture
+- [x] Week 2: Implement the Backend WebSocket handler
+- [ ] Week 2: Implement the Frontend WebSocket client
+- [ ] Week 2: Testing and optimization
+- [ ] Week 2: Performance validation (< 100ms)
 
-### پیشرفت
+### Progress
 
 ```
 Week 1: ████████░░░░░░░░░░░░ 40%
@@ -108,19 +108,19 @@ export function LatencyDashboard() {
 }
 ```
 
-### ریسک‌ها و Mitigation
+### Risks and Mitigation
 
-| ریسک | احتمال | تاثیر | Mitigation |
+| Risk | Probability | Impact | Mitigation |
 |------|--------|------|------------|
-| WebSocket connection issues | Medium | High | Fallback به SSE |
-| Network latency | Low | Medium | CDN و edge caching |
-| Backend processing delay | Medium | High | Optimization و caching |
+| WebSocket connection issues | Medium | High | Fallback to SSE |
+| Network latency | Low | Medium | CDN and edge caching |
+| Backend processing delay | Medium | High | Optimization and caching |
 
 ---
 
-## 🎯 هدف 2: بهبود دقت پیش‌بینی‌های ML
+## 🎯 Goal 2: Improve the accuracy of ML predictions
 
-### جزئیات هدف
+### Goal details
 
 ```yaml
 Metric: ml_model_accuracy
@@ -133,7 +133,7 @@ Models:
   - Time Series Forecasting (LSTM)
 ```
 
-### نحوه اندازه‌گیری
+### How to measure
 
 ```python
 # ML Model Accuracy Tracking
@@ -173,15 +173,15 @@ class MLAccuracyTracker:
         }
 ```
 
-### Milestones مرتبط
+### Related Milestones
 
-- [x] هفته 3: طراحی UI برای ML Model Management
-- [ ] هفته 3: پیاده‌سازی Model Registry API
-- [ ] هفته 4: پیاده‌سازی Model Comparison
-- [ ] هفته 4: A/B Testing Framework
-- [ ] هفته 4: Model retraining pipeline
+- [x] Week 3: Design the UI for ML Model Management
+- [ ] Week 3: Implement the Model Registry API
+- [ ] Week 4: Implement Model Comparison
+- [ ] Week 4: A/B Testing Framework
+- [ ] Week 4: Model retraining pipeline
 
-### پیشرفت
+### Progress
 
 ```
 Week 3: ████░░░░░░░░░░░░░░░░ 20%
@@ -221,19 +221,19 @@ export function MLAccuracyDashboard() {
 }
 ```
 
-### ریسک‌ها و Mitigation
+### Risks and Mitigation
 
-| ریسک | احتمال | تاثیر | Mitigation |
+| Risk | Probability | Impact | Mitigation |
 |------|--------|------|------------|
-| کمبود داده برای training | Medium | High | Data augmentation |
+| Insufficient data for training | Medium | High | Data augmentation |
 | Model overfitting | Low | Medium | Cross-validation |
-| A/B testing complexity | Medium | Medium | Start با simple tests |
+| A/B testing complexity | Medium | Medium | Start with simple tests |
 
 ---
 
-## 🎯 هدف 3: کاهش 30% در False Positive Alerts
+## 🎯 Goal 3: 30% reduction in False Positive Alerts
 
-### جزئیات هدف
+### Goal details
 
 ```yaml
 Metric: false_positive_alerts
@@ -242,7 +242,7 @@ Target: -30% reduction
 Priority: High
 ```
 
-### نحوه اندازه‌گیری
+### How to measure
 
 ```python
 # False Positive Alert Tracking
@@ -286,15 +286,15 @@ class AlertQualityTracker:
         }
 ```
 
-### Milestones مرتبط
+### Related Milestones
 
-- [ ] هفته 5: Alert Correlation Engine
-- [ ] هفته 5: پیاده‌سازی Correlation Rules
-- [ ] هفته 6: Root Cause Analysis
-- [ ] هفته 6: Alert Fatigue Detection
-- [ ] هفته 6: UI برای Alert Timeline
+- [ ] Week 5: Alert Correlation Engine
+- [ ] Week 5: Implement Correlation Rules
+- [ ] Week 6: Root Cause Analysis
+- [ ] Week 6: Alert Fatigue Detection
+- [ ] Week 6: UI for the Alert Timeline
 
-### پیشرفت
+### Progress
 
 ```
 Week 5: ░░░░░░░░░░░░░░░░░░░░  0%
@@ -323,19 +323,19 @@ export function AlertQualityDashboard() {
 }
 ```
 
-### ریسک‌ها و Mitigation
+### Risks and Mitigation
 
-| ریسک | احتمال | تاثیر | Mitigation |
+| Risk | Probability | Impact | Mitigation |
 |------|--------|------|------------|
-| Correlation rules پیچیده | Medium | Medium | Start با simple rules |
-| RCA accuracy | Medium | High | Machine learning برای RCA |
-| User feedback کم | Low | Medium | Automated feedback collection |
+| Complex correlation rules | Medium | Medium | Start with simple rules |
+| RCA accuracy | Medium | High | Machine learning for RCA |
+| Little user feedback | Low | Medium | Automated feedback collection |
 
 ---
 
-## 🎯 هدف 4: بهبود 40% در Data Quality Score
+## 🎯 Goal 4: 40% improvement in Data Quality Score
 
-### جزئیات هدف
+### Goal details
 
 ```yaml
 Metric: data_quality_score
@@ -350,7 +350,7 @@ Components:
   - Validity
 ```
 
-### نحوه اندازه‌گیری
+### How to measure
 
 ```python
 # Data Quality Score Tracking
@@ -396,14 +396,14 @@ class DataQualityTracker:
         }
 ```
 
-### Milestones مرتبط
+### Related Milestones
 
-- [ ] هفته 7: Real-time Data Quality Dashboard
-- [ ] هفته 7: پیاده‌سازی Real-time Quality Metrics
-- [ ] هفته 8: Automated Quality Reports
-- [ ] هفته 8: Data Lineage Tracking
+- [ ] Week 7: Real-time Data Quality Dashboard
+- [ ] Week 7: Implement Real-time Quality Metrics
+- [ ] Week 8: Automated Quality Reports
+- [ ] Week 8: Data Lineage Tracking
 
-### پیشرفت
+### Progress
 
 ```
 Week 7: ░░░░░░░░░░░░░░░░░░░░  0%
@@ -439,9 +439,9 @@ export function DataQualityDashboard() {
 }
 ```
 
-### ریسک‌ها و Mitigation
+### Risks and Mitigation
 
-| ریسک | احتمال | تاثیر | Mitigation |
+| Risk | Probability | Impact | Mitigation |
 |------|--------|------|------------|
 | Sensor calibration issues | Medium | High | Automated calibration alerts |
 | Data validation rules | Low | Medium | Continuous rule refinement |
@@ -449,9 +449,9 @@ export function DataQualityDashboard() {
 
 ---
 
-## 🎯 هدف 5: شناسایی سریع‌تر Bottlenecks عملکردی
+## 🎯 Goal 5: Faster identification of performance Bottlenecks
 
-### جزئیات هدف
+### Goal details
 
 ```yaml
 Metric: bottleneck_detection_time
@@ -460,7 +460,7 @@ Target: Real-time detection (< 1 minute)
 Priority: Medium
 ```
 
-### نحوه اندازه‌گیری
+### How to measure
 
 ```python
 # Bottleneck Detection Tracking
@@ -514,15 +514,15 @@ class BottleneckDetector:
         return detection_time
 ```
 
-### Milestones مرتبط
+### Related Milestones
 
-- [ ] هفته 9: Performance Dashboard
-- [ ] هفته 9: Setup OpenTelemetry
-- [ ] هفته 10: Instrumentation تمام services
-- [ ] هفته 10: Service Dependency Map
-- [ ] هفته 10: Automated bottleneck alerts
+- [ ] Week 9: Performance Dashboard
+- [ ] Week 9: Setup OpenTelemetry
+- [ ] Week 10: Instrumentation of all services
+- [ ] Week 10: Service Dependency Map
+- [ ] Week 10: Automated bottleneck alerts
 
-### پیشرفت
+### Progress
 
 ```
 Week 9: ░░░░░░░░░░░░░░░░░░░░  0%
@@ -554,9 +554,9 @@ export function BottleneckDashboard() {
 }
 ```
 
-### ریسک‌ها و Mitigation
+### Risks and Mitigation
 
-| ریسک | احتمال | تاثیر | Mitigation |
+| Risk | Probability | Impact | Mitigation |
 |------|--------|------|------------|
 | OpenTelemetry overhead | Low | Low | Sampling strategy |
 | False positives | Medium | Medium | Threshold tuning |
@@ -564,9 +564,9 @@ export function BottleneckDashboard() {
 
 ---
 
-## 📈 Tracking Dashboard کلی
+## 📈 Overall Tracking Dashboard
 
-### پیشرفت کلی فاز 1
+### Overall Phase 1 progress
 
 ```
 Overall Progress: ████░░░░░░░░░░░░░░░░ 20%
@@ -636,23 +636,23 @@ Month 3: ░░░░░░░░░░░░░░░░░░░░  0% (Week 
 
 ## 🎯 Success Criteria
 
-هر هدف زمانی موفق محسوب می‌شود که:
+Each goal is considered successful when:
 
 1. **Latency Reduction:**
-   - ✅ P95 latency < 100ms برای 95% از requests
-   - ✅ Sustained برای 1 هفته
+   - ✅ P95 latency < 100ms for 95% of requests
+   - ✅ Sustained for 1 week
 
 2. **ML Accuracy:**
-   - ✅ +5% improvement در accuracy
-   - ✅ Validated با test dataset
+   - ✅ +5% improvement in accuracy
+   - ✅ Validated with a test dataset
 
 3. **False Positives:**
-   - ✅ -30% reduction در false positive rate
-   - ✅ Validated با user feedback
+   - ✅ -30% reduction in the false positive rate
+   - ✅ Validated with user feedback
 
 4. **Data Quality:**
-   - ✅ +40% improvement در quality score
-   - ✅ Sustained برای 2 هفته
+   - ✅ +40% improvement in the quality score
+   - ✅ Sustained for 2 weeks
 
 5. **Bottleneck Detection:**
    - ✅ Real-time detection (< 1 minute)
@@ -660,6 +660,6 @@ Month 3: ░░░░░░░░░░░░░░░░░░░░  0% (Week 
 
 ---
 
-**آخرین به‌روزرسانی:** دسامبر 2025  
-**مسئول Tracking:** Development Team
+**Last updated:** December 2025
+**Tracking owner:** Development Team
 

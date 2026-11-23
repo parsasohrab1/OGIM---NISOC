@@ -1,48 +1,48 @@
-# آدرس‌های سرویس‌های OGIM
+# OGIM Service Addresses
 
-این فایل شامل تمام آدرس‌های سرویس‌های OGIM برای دسترسی و تست است.
+This file contains all OGIM service addresses for access and testing.
 
 ## 🌐 Frontend
 
-| محیط | آدرس | توضیحات |
+| Environment | Address | Description |
 |------|------|---------|
-| Development | http://localhost:3000 | Vite Dev Server (پورت پیش‌فرض) |
-| Development (Vite) | http://localhost:5173 | Vite Dev Server (پورت جایگزین) |
-| Production | http://localhost:3000 | Build شده |
+| Development | http://localhost:3000 | Vite Dev Server (default port) |
+| Development (Vite) | http://localhost:5173 | Vite Dev Server (alternative port) |
+| Production | http://localhost:3000 | Built |
 
 ## 🔌 Backend Services
 
-### API Gateway (نقطه ورود اصلی)
+### API Gateway (main entry point)
 
-| آدرس | توضیحات |
+| Address | Description |
 |------|---------|
-| http://localhost:8000 | API Gateway اصلی |
+| http://localhost:8000 | Main API Gateway |
 | http://localhost:8000/docs | Swagger UI Documentation |
 | http://localhost:8000/redoc | ReDoc Documentation |
 | http://localhost:8000/health | Health Check |
 
 ### Microservices
 
-| سرویس | پورت | آدرس Base | Health Check | توضیحات |
+| Service | Port | Base address | Health Check | Description |
 |-------|------|-----------|--------------|---------|
-| **Auth Service** | 8001 | http://localhost:8001 | http://localhost:8001/health | احراز هویت و مدیریت کاربران |
-| **Data Ingestion** | 8002 | http://localhost:8002 | http://localhost:8002/health | دریافت داده از سنسورها |
-| **ML Inference** | 8003 | http://localhost:8003 | http://localhost:8003/health | مدل‌های ML و پیش‌بینی |
-| **Alert Service** | 8004 | http://localhost:8004 | http://localhost:8004/health | مدیریت هشدارها |
-| **Reporting** | 8005 | http://localhost:8005 | http://localhost:8005/health | گزارش‌گیری |
-| **Command Control** | 8006 | http://localhost:8006 | http://localhost:8006/health | کنترل و فرمان‌ها |
-| **Tag Catalog** | 8007 | http://localhost:8007 | http://localhost:8007/health | کاتالوگ تگ‌ها |
-| **Digital Twin** | 8008 | http://localhost:8008 | http://localhost:8008/health | شبیه‌سازی و 3D BIM |
-| **Edge Computing** | 8009 | http://localhost:8009 | http://localhost:8009/health | پردازش لبه |
-| **ERP Integration** | 8010 | http://localhost:8010 | http://localhost:8010/health | یکپارچگی ERP |
+| **Auth Service** | 8001 | http://localhost:8001 | http://localhost:8001/health | Authentication and user management |
+| **Data Ingestion** | 8002 | http://localhost:8002 | http://localhost:8002/health | Receiving data from sensors |
+| **ML Inference** | 8003 | http://localhost:8003 | http://localhost:8003/health | ML models and forecasting |
+| **Alert Service** | 8004 | http://localhost:8004 | http://localhost:8004/health | Alert management |
+| **Reporting** | 8005 | http://localhost:8005 | http://localhost:8005/health | Reporting |
+| **Command Control** | 8006 | http://localhost:8006 | http://localhost:8006/health | Control and commands |
+| **Tag Catalog** | 8007 | http://localhost:8007 | http://localhost:8007/health | Tag catalog |
+| **Digital Twin** | 8008 | http://localhost:8008 | http://localhost:8008/health | Simulation and 3D BIM |
+| **Edge Computing** | 8009 | http://localhost:8009 | http://localhost:8009/health | Edge processing |
+| **ERP Integration** | 8010 | http://localhost:8010 | http://localhost:8010/health | ERP integration |
 
 ## 🗄️ Infrastructure Services
 
-| سرویس | پورت | آدرس | توضیحات |
+| Service | Port | Address | Description |
 |-------|------|------|---------|
-| **PostgreSQL** | 5432 | localhost:5432 | دیتابیس اصلی (ogim) |
-| **TimescaleDB** | 5433 | localhost:5433 | دیتابیس سری زمانی (ogim_tsdb) |
-| **Redis** | 6379 | localhost:6379 | Cache و Session Management |
+| **PostgreSQL** | 5432 | localhost:5432 | Main database (ogim) |
+| **TimescaleDB** | 5433 | localhost:5433 | Time-series database (ogim_tsdb) |
+| **Redis** | 6379 | localhost:6379 | Cache and Session Management |
 | **Kafka** | 9092 | localhost:9092 | Message Broker |
 | **Zookeeper** | 2181 | localhost:2181 | Kafka Coordination |
 
@@ -51,117 +51,117 @@
 ### Authentication
 
 ```
-POST   /api/auth/register      - ثبت‌نام کاربر جدید
-POST   /api/auth/login          - ورود به سیستم
-POST   /api/auth/refresh        - تازه‌سازی Token
-POST   /api/auth/logout         - خروج از سیستم
-GET    /api/auth/me             - اطلاعات کاربر فعلی
+POST   /api/auth/register      - Register a new user
+POST   /api/auth/login          - Log in
+POST   /api/auth/refresh        - Refresh Token
+POST   /api/auth/logout         - Log out
+GET    /api/auth/me             - Current user information
 ```
 
 ### Data Ingestion
 
 ```
-POST   /api/data-ingestion/ingest           - ارسال داده سنسور
-POST   /api/data-ingestion/stream/opcua     - Stream از OPC UA
-POST   /api/data-ingestion/stream/modbus    - Stream از Modbus
-GET    /api/data-ingestion/sensor-health    - سلامت سنسورها
-GET    /api/data-ingestion/edge-stream/stats - آمار Edge-to-Stream
+POST   /api/data-ingestion/ingest           - Send sensor data
+POST   /api/data-ingestion/stream/opcua     - Stream from OPC UA
+POST   /api/data-ingestion/stream/modbus    - Stream from Modbus
+GET    /api/data-ingestion/sensor-health    - Sensor health
+GET    /api/data-ingestion/edge-stream/stats - Edge-to-Stream statistics
 ```
 
 ### ML Inference
 
 ```
-POST   /api/ml-inference/infer              - Inference مدل
-POST   /api/ml-inference/forecast           - پیش‌بینی سری زمانی
-POST   /api/ml-inference/rul/predict        - پیش‌بینی RUL
-GET    /api/ml-inference/models             - لیست مدل‌ها
-POST   /api/ml-inference/models/{type}/train - آموزش مدل
+POST   /api/ml-inference/infer              - Model Inference
+POST   /api/ml-inference/forecast           - Time-series forecast
+POST   /api/ml-inference/rul/predict        - RUL prediction
+GET    /api/ml-inference/models             - List models
+POST   /api/ml-inference/models/{type}/train - Train model
 ```
 
 ### Alerts
 
 ```
-GET    /api/alert/alerts                    - لیست هشدارها
-POST   /api/alert/alerts                    - ایجاد هشدار
-POST   /api/alert/alerts/{id}/acknowledge   - تایید هشدار
-POST   /api/alert/alerts/{id}/resolve       - حل هشدار
-GET    /api/alert/rules                     - قوانین هشدار
+GET    /api/alert/alerts                    - List alerts
+POST   /api/alert/alerts                    - Create alert
+POST   /api/alert/alerts/{id}/acknowledge   - Acknowledge alert
+POST   /api/alert/alerts/{id}/resolve       - Resolve alert
+GET    /api/alert/rules                     - Alert rules
 ```
 
 ### Command Control
 
 ```
-POST   /api/command-control/commands        - ایجاد فرمان
-POST   /api/command-control/commands/secure - ایجاد فرمان امن
-POST   /api/command-control/commands/{id}/approve - تایید فرمان
-POST   /api/command-control/commands/{id}/execute - اجرای فرمان
-GET    /api/command-control/commands       - لیست فرمان‌ها
+POST   /api/command-control/commands        - Create command
+POST   /api/command-control/commands/secure - Create secure command
+POST   /api/command-control/commands/{id}/approve - Approve command
+POST   /api/command-control/commands/{id}/execute - Execute command
+GET    /api/command-control/commands       - List commands
 ```
 
 ### Digital Twin
 
 ```
-POST   /api/digital-twin/simulate          - اجرای شبیه‌سازی
-GET    /api/digital-twin/simulations       - لیست شبیه‌سازی‌ها
-GET    /api/digital-twin/bim3d/scene/{well} - صحنه 3D BIM
-GET    /api/digital-twin/bim3d/model/{id}/state - وضعیت مدل 3D
-GET    /api/digital-twin/well/{well}/3d    - داده 3D چاه با trajectory و risk zone
-POST   /api/digital-twin/what-if           - اجرای سناریوی What-if
-GET    /api/digital-twin/ar/overlay/{well} - payload آماده AR overlay
+POST   /api/digital-twin/simulate          - Run simulation
+GET    /api/digital-twin/simulations       - List simulations
+GET    /api/digital-twin/bim3d/scene/{well} - 3D BIM scene
+GET    /api/digital-twin/bim3d/model/{id}/state - 3D model state
+GET    /api/digital-twin/well/{well}/3d    - Well 3D data with trajectory and risk zone
+POST   /api/digital-twin/what-if           - Run a What-if scenario
+GET    /api/digital-twin/ar/overlay/{well} - Ready AR overlay payload
 ```
 
 ### Reporting
 
 ```
-GET    /api/reporting/reports              - لیست گزارش‌ها
-POST   /api/reporting/reports/generate     - ایجاد گزارش پایه
-GET    /api/reporting/reports/{id}         - دریافت گزارش
-POST   /api/reporting/reports/data-quality-lineage - گزارش کیفیت داده + lineage
-POST   /api/reporting/reports/data-quality-lineage/auto - ایجاد گزارش خودکار
-GET    /api/reporting/reports/data-quality-lineage/auto - لیست گزارش‌های خودکار
+GET    /api/reporting/reports              - List reports
+POST   /api/reporting/reports/generate     - Create a basic report
+GET    /api/reporting/reports/{id}         - Get report
+POST   /api/reporting/reports/data-quality-lineage - Data quality + lineage report
+POST   /api/reporting/reports/data-quality-lineage/auto - Create an automatic report
+GET    /api/reporting/reports/data-quality-lineage/auto - List automatic reports
 POST   /api/reporting/reports/builder      - Advanced BI Report Builder
-GET    /api/reporting/bi/metadata          - متادیتای BI برای Power BI/Tableau
-POST   /api/reporting/bi/query             - endpoint query برای BI
-GET    /api/reporting/bi/connectors        - template اتصال BI
-POST   /api/reporting/workflows            - ایجاد workflow
-GET    /api/reporting/workflows            - لیست workflowها
-GET    /api/reporting/workflows/{id}       - جزئیات workflow
-POST   /api/reporting/workflows/{id}/run   - اجرای workflow
-GET    /api/reporting/workflows/{id}/runs  - تاریخچه اجرا
-GET    /api/reporting/workflows/visual-builder/step-types - کاتالوگ stepها
+GET    /api/reporting/bi/metadata          - BI metadata for Power BI/Tableau
+POST   /api/reporting/bi/query             - Query endpoint for BI
+GET    /api/reporting/bi/connectors        - BI connection template
+POST   /api/reporting/workflows            - Create workflow
+GET    /api/reporting/workflows            - List workflows
+GET    /api/reporting/workflows/{id}       - Workflow details
+POST   /api/reporting/workflows/{id}/run   - Run workflow
+GET    /api/reporting/workflows/{id}/runs  - Run history
+GET    /api/reporting/workflows/visual-builder/step-types - Step catalog
 ```
 
 ### Realtime Streaming (Gateway)
 
 ```
-WS     /stream/realtime/ws?token=...       - استریم real-time با WebSocket
-GET    /stream/realtime/sse?token=...      - fallback به SSE
+WS     /stream/realtime/ws?token=...       - Real-time stream with WebSocket
+GET    /stream/realtime/sse?token=...      - Fallback to SSE
 ```
 
 ### Alert Advanced
 
 ```
-GET    /api/alert/alerts/correlations      - گروه‌بندی همبستگی هشدارها
-POST   /api/alert/alerts/{id}/rca          - تحلیل ریشه‌ای (RCA)
-POST   /api/alert/notifications/devices/register   - ثبت توکن Push
-POST   /api/alert/notifications/devices/unregister - حذف توکن Push
-GET    /api/alert/notifications/devices            - لیست دستگاه‌ها (admin)
+GET    /api/alert/alerts/correlations      - Alert correlation grouping
+POST   /api/alert/alerts/{id}/rca          - Root cause analysis (RCA)
+POST   /api/alert/notifications/devices/register   - Register Push token
+POST   /api/alert/notifications/devices/unregister - Remove Push token
+GET    /api/alert/notifications/devices            - List devices (admin)
 ```
 
 ### ML Model Management Advanced
 
 ```
-GET    /api/ml-inference/models/{type}/versions           - نسخه‌های مدل
-POST   /api/ml-inference/models/{type}/compare            - مقایسه baseline/candidate
-POST   /api/ml-inference/models/{type}/ab-test            - پیکربندی A/B test
-GET    /api/ml-inference/models/{type}/ab-test            - وضعیت A/B test
+GET    /api/ml-inference/models/{type}/versions           - Model versions
+POST   /api/ml-inference/models/{type}/compare            - Compare baseline/candidate
+POST   /api/ml-inference/models/{type}/ab-test            - Configure A/B test
+GET    /api/ml-inference/models/{type}/ab-test            - A/B test status
 POST   /api/ml-inference/models/{type}/drift/baseline     - baseline drift
-POST   /api/ml-inference/models/{type}/drift/detect       - تشخیص drift
+POST   /api/ml-inference/models/{type}/drift/detect       - Drift detection
 ```
 
-## 🔐 Credentials پیش‌فرض
+## 🔐 Default Credentials
 
-### کاربران پیش‌فرض
+### Default users
 
 | Username | Password | Role |
 |----------|----------|------|
@@ -182,15 +182,15 @@ Username: ogim_user
 Password: ogim_password
 ```
 
-## 🧪 تست سریع
+## 🧪 Quick test
 
-### بررسی سلامت سرویس‌ها
+### Checking service health
 
 ```bash
 # API Gateway
 curl http://localhost:8000/health
 
-# سایر سرویس‌ها
+# Other services
 curl http://localhost:8001/health
 curl http://localhost:8002/health
 curl http://localhost:8003/health
@@ -201,19 +201,19 @@ curl http://localhost:8007/health
 curl http://localhost:8008/health
 ```
 
-### تست احراز هویت
+### Testing authentication
 
 ```bash
-# ورود
+# Login
 curl -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"Admin@123"}'
 ```
 
-### تست Data Ingestion
+### Testing Data Ingestion
 
 ```bash
-# ارسال داده (نیاز به Token)
+# Send data (requires a Token)
 curl -X POST http://localhost:8000/api/data-ingestion/ingest \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -234,5 +234,5 @@ curl -X POST http://localhost:8000/api/data-ingestion/ingest \
 
 ---
 
-**نکته**: تمام آدرس‌ها برای محیط Development هستند. برای Production، آدرس‌ها باید تغییر کنند.
+**Note**: All addresses are for the Development environment. For Production, the addresses must be changed.
 

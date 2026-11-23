@@ -1,33 +1,33 @@
-# 🔗 Integration Hub - راهنمای پیاده‌سازی
+# 🔗 Integration Hub - Implementation Guide
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
 3. [Pre-built Connectors](#pre-built-connectors)
 4. [Custom Connector Builder](#custom-connector-builder)
 5. [Integration Marketplace](#integration-marketplace)
 6. [API Documentation](#api-documentation)
 7. [Integration Testing Tools](#testing-tools)
-8. [پیاده‌سازی](#implementation)
+8. [Implementation](#implementation)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-Integration Hub یک پلتفرم مرکزی برای مدیریت و یکپارچه‌سازی سیستم OGIM با سیستم‌های خارجی است. این Hub امکان اتصال سریع و آسان به سیستم‌های مختلف را فراهم می‌کند.
+The Integration Hub is a central platform for managing and integrating the OGIM system with external systems. This Hub makes it possible to connect quickly and easily to various systems.
 
-### ویژگی‌های کلیدی
+### Key features
 
-- ✅ **Pre-built Connectors**: اتصال آماده به سیستم‌های رایج
-- ✅ **Custom Connector Builder**: ساخت connector سفارشی
-- ✅ **Integration Marketplace**: اشتراک‌گذاری connectorها
-- ✅ **API Documentation**: مستندات کامل API
-- ✅ **Testing Tools**: ابزارهای تست integration
+- ✅ **Pre-built Connectors**: Ready-made connections to common systems
+- ✅ **Custom Connector Builder**: Build custom connectors
+- ✅ **Integration Marketplace**: Sharing connectors
+- ✅ **API Documentation**: Complete API documentation
+- ✅ **Testing Tools**: Integration testing tools
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -53,20 +53,20 @@ Integration Hub یک پلتفرم مرکزی برای مدیریت و یکپار
 └──────────────┘    └──────────────┘    └──────────────┘
 ```
 
-### اجزای اصلی
+### Main components
 
-1. **Connector Manager**: مدیریت connectorها
-2. **Connector Builder**: ساخت connectorهای سفارشی
-3. **Connector Registry**: ثبت و نگهداری connectorها
-4. **Connector Runtime**: اجرای connectorها
-5. **Connector Testing**: تست connectorها
-6. **Marketplace**: اشتراک‌گذاری connectorها
+1. **Connector Manager**: Managing connectors
+2. **Connector Builder**: Building custom connectors
+3. **Connector Registry**: Registering and maintaining connectors
+4. **Connector Runtime**: Running connectors
+5. **Connector Testing**: Testing connectors
+6. **Marketplace**: Sharing connectors
 
 ---
 
 ## <a name="pre-built-connectors"></a>🔌 Pre-built Connectors
 
-### سیستم‌های پشتیبانی شده
+### Supported systems
 
 #### 1. ERP Systems
 
@@ -83,7 +83,7 @@ connector = SAPConnector(
     password="pass"
 )
 
-# ایجاد Work Order
+# Create a Work Order
 work_order = await connector.create_work_order({
     "equipment_id": "PUMP-001",
     "description": "Maintenance required",
@@ -91,7 +91,7 @@ work_order = await connector.create_work_order({
 })
 ```
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Work Order Management
 - Equipment Data Sync
 - Maintenance Scheduling
@@ -276,9 +276,9 @@ connector = OpenWeatherMapConnector(
 
 ## <a name="custom-connector-builder"></a>🛠️ Custom Connector Builder
 
-### ساخت Connector سفارشی
+### Building a custom Connector
 
-#### 1. تعریف Connector Schema
+#### 1. Defining the Connector Schema
 
 ```python
 from integration_hub.builder import ConnectorBuilder, ConnectorSchema
@@ -335,7 +335,7 @@ schema = ConnectorSchema(
 )
 ```
 
-#### 2. پیاده‌سازی Connector
+#### 2. Implementing the Connector
 
 ```python
 from integration_hub.builder import BaseConnector
@@ -390,7 +390,7 @@ class CustomSystemConnector(BaseConnector):
             return False
 ```
 
-#### 3. ثبت Connector
+#### 3. Registering the Connector
 
 ```python
 from integration_hub.registry import ConnectorRegistry
@@ -405,7 +405,7 @@ registry.register(
 )
 ```
 
-#### 4. استفاده از Connector Builder UI
+#### 4. Using the Connector Builder UI
 
 ```typescript
 // Frontend: Connector Builder Component
@@ -423,18 +423,18 @@ import { ConnectorBuilder } from '@/components/ConnectorBuilder';
 
 ## <a name="integration-marketplace"></a>🛒 Integration Marketplace
 
-### ویژگی‌های Marketplace
+### Marketplace features
 
-1. **Connector Discovery**: جستجو و کشف connectorها
-2. **Rating & Reviews**: امتیازدهی و نظرات
-3. **Version Management**: مدیریت نسخه‌ها
-4. **Installation**: نصب آسان connectorها
-5. **Updates**: به‌روزرسانی خودکار
+1. **Connector Discovery**: Searching and discovering connectors
+2. **Rating & Reviews**: Ratings and reviews
+3. **Version Management**: Version management
+4. **Installation**: Easy connector installation
+5. **Updates**: Automatic updates
 
 ### API Endpoints
 
 ```python
-# لیست connectorهای موجود
+# List the available connectors
 GET /integration-hub/marketplace/connectors
 Query Parameters:
   - category: Filter by category
@@ -443,13 +443,13 @@ Query Parameters:
   - page: Page number
   - limit: Items per page
 
-# جزئیات connector
+# Connector details
 GET /integration-hub/marketplace/connectors/{connector_id}
 
-# نصب connector
+# Install a connector
 POST /integration-hub/marketplace/connectors/{connector_id}/install
 
-# ارسال connector به marketplace
+# Submit a connector to the marketplace
 POST /integration-hub/marketplace/connectors
 Body: {
   "connector_id": "...",
@@ -460,7 +460,7 @@ Body: {
   "public": true
 }
 
-# امتیازدهی
+# Rating
 POST /integration-hub/marketplace/connectors/{connector_id}/rate
 Body: {
   "rating": 5,
@@ -511,13 +511,13 @@ def custom_openapi():
         description="""
         ## Integration Hub API
         
-        این API امکان مدیریت connectorها و integrations را فراهم می‌کند.
+        This API makes it possible to manage connectors and integrations.
         
-        ### ویژگی‌ها:
-        - مدیریت connectorها
-        - ساخت connectorهای سفارشی
-        - تست integrations
-        - مدیریت marketplace
+        ### Features:
+        - Managing connectors
+        - Building custom connectors
+        - Testing integrations
+        - Managing the marketplace
         """,
         routes=app.routes,
     )
@@ -681,7 +681,7 @@ import { IntegrationTester } from '@/pages/IntegrationTester';
 />
 ```
 
-### 3. Mock Server برای Testing
+### 3. Mock Server for Testing
 
 ```python
 from integration_hub.testing import MockServer
@@ -712,9 +712,9 @@ async with mock_server:
 
 ---
 
-## <a name="implementation"></a>🚀 پیاده‌سازی
+## <a name="implementation"></a>🚀 Implementation
 
-### ساختار فایل‌ها
+### File structure
 
 ```
 backend/
@@ -810,22 +810,22 @@ export function IntegrationHub() {
 
 ---
 
-## 📊 معیارهای موفقیت
+## 📊 Success criteria
 
-### معیارهای فنی
-- ✅ پشتیبانی از 20+ pre-built connector
-- ✅ زمان ساخت connector سفارشی < 1 ساعت
+### Technical criteria
+- ✅ Support for 20+ pre-built connectors
+- ✅ Custom connector build time < 1 hour
 - ✅ Test coverage > 90%
 - ✅ API response time < 100ms
 
-### معیارهای کسب‌وکار
-- ✅ کاهش 50% در زمان integration
-- ✅ افزایش 30% در تعداد integrations
-- ✅ بهبود 40% در developer experience
+### Business criteria
+- ✅ 50% reduction in integration time
+- ✅ 30% increase in the number of integrations
+- ✅ 40% improvement in developer experience
 
 ---
 
-## 🔗 منابع مرتبط
+## 🔗 Related resources
 
 - [OGIM Architecture](./ARCHITECTURE.md)
 - [API Gateway](./GATEWAY_SECURITY.md)
@@ -833,6 +833,6 @@ export function IntegrationHub() {
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

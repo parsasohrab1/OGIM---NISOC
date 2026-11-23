@@ -1,11 +1,11 @@
-/** داده و منطق محلی پیش‌بینی سری‌زمانی LSTM (بدون نیاز به بک‌اند) */
+/** Local data and logic for LSTM time-series forecasting (no backend needed) */
 
 import { MARUN_WELLS } from './marunField'
 
 export const LSTM_MODEL_TYPES: { id: string; labelFa: string }[] = [
-  { id: 'stacked_lstm', labelFa: 'LSTM چندلایه' },
-  { id: 'bidirectional', labelFa: 'LSTM دوطرفه' },
-  { id: 'attention', labelFa: 'LSTM با توجه (Attention)' },
+  { id: 'stacked_lstm', labelFa: 'Stacked LSTM' },
+  { id: 'bidirectional', labelFa: 'Bidirectional LSTM' },
+  { id: 'attention', labelFa: 'LSTM with Attention' },
 ]
 
 interface LocalLstmModel {
@@ -42,7 +42,7 @@ export function trainLocalLstmModel(data: { well_name: string; model_type: strin
   }
 }
 
-/** یک سری زمانی نمایشی و واقع‌گرایانه (روند + نوسان + نویز) برای پرکردن سریع فرم‌ها تولید می‌کند */
+/** Generates a realistic demonstration time series (trend + oscillation + noise) to quickly fill the forms */
 export function generateDemoSeries(count: number, mean: number, amplitude: number): number[] {
   const points: number[] = []
   for (let i = 0; i < count; i++) {
@@ -66,7 +66,7 @@ export interface LocalForecastResult {
   model_type: string
 }
 
-/** برون‌یابی روند + نویز میراشونده از انتهای سری زمانی ورودی؛ شبیه‌سازی محلی جایگزین استنتاج واقعی مدل LSTM */
+/** Extrapolates the trend + damped noise from the end of the input time series; a local simulation replacing real LSTM model inference */
 export function forecastLocalTimeSeries(data: {
   sensor_id: string
   historical_data: number[]
@@ -100,6 +100,6 @@ export function forecastLocalTimeSeries(data: {
     timestamp: new Date().toISOString(),
     confidence_lower,
     confidence_upper,
-    model_type: 'stacked_lstm (شبیه‌سازی محلی)',
+    model_type: 'stacked_lstm (local simulation)',
   }
 }

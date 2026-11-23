@@ -1,12 +1,12 @@
-# 🎯 راهنمای Best Practices پیاده‌سازی - OGIM
+# 🎯 Implementation Best Practices Guide - OGIM
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** راهنمای جامع برای Testing، Documentation، Training، Migration، و Monitoring
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** A comprehensive guide for Testing, Documentation, Training, Migration, and Monitoring
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
 1. [Testing Strategy](#testing)
 2. [Documentation Standards](#documentation)
@@ -286,11 +286,11 @@ def test_xss_protection(client: TestClient):
 
 ### Testing Checklist
 
-- [ ] Unit tests برای تمام functions/methods
-- [ ] Integration tests برای API endpoints
-- [ ] E2E tests برای critical workflows
-- [ ] Performance tests برای load scenarios
-- [ ] Security tests برای vulnerabilities
+- [ ] Unit tests for all functions/methods
+- [ ] Integration tests for API endpoints
+- [ ] E2E tests for critical workflows
+- [ ] Performance tests for load scenarios
+- [ ] Security tests for vulnerabilities
 - [ ] Test coverage > 85%
 - [ ] CI/CD pipeline integration
 - [ ] Automated test execution
@@ -413,21 +413,21 @@ async def create_alert(alert: AlertCreate):
 #### Architecture Decision Records (ADR)
 
 ```markdown
-# ADR-001: استفاده از WebSocket برای Real-Time Updates
+# ADR-001: Use WebSocket for Real-Time Updates
 
-## وضعیت
-قبول شده
+## Status
+Accepted
 
 ## Context
-نیاز به به‌روزرسانی لحظه‌ای داده‌ها در dashboard
+Need for real-time data updates on the dashboard
 
 ## Decision
-استفاده از WebSocket به جای polling
+Use WebSocket instead of polling
 
 ## Consequences
-- ✅ کاهش latency
-- ✅ کاهش بار سرور
-- ❌ پیچیدگی بیشتر در پیاده‌سازی
+- ✅ Reduced latency
+- ✅ Reduced server load
+- ❌ More implementation complexity
 ```
 
 ### 4. User Documentation
@@ -438,10 +438,10 @@ async def create_alert(alert: AlertCreate):
 # User Guide: [Feature Name]
 
 ## Overview
-[توضیح کلی feature]
+[General description of the feature]
 
 ## Getting Started
-[مراحل شروع کار]
+[Getting started steps]
 
 ## Common Tasks
 ### Task 1: [Description]
@@ -460,7 +460,7 @@ async def create_alert(alert: AlertCreate):
 
 ### Documentation Checklist
 
-- [ ] Code comments و docstrings
+- [ ] Code comments and docstrings
 - [ ] API documentation (OpenAPI/Swagger)
 - [ ] Architecture documentation
 - [ ] User guides
@@ -931,6 +931,6 @@ Communication:
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

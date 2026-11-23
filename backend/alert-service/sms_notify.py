@@ -38,7 +38,7 @@ def normalize_iran_mobile(phone: str) -> str:
         national = digits
 
     if not re.fullmatch(r"9\d{9}", national):
-        raise ValueError("شماره موبایل نامعتبر است. مثال: 09121234567 یا +989121234567")
+        raise ValueError("Invalid mobile number. Example: 09121234567 or +989121234567")
     return f"+98{national}"
 
 
@@ -58,7 +58,7 @@ def register_sms_recipient(
     SMS_RECIPIENTS[e164] = {
         "phone": e164,
         "phone_display": to_kavenegar_receptor(e164),
-        "label": label or "اپراتور میدان",
+        "label": label or "Field operator",
         "enabled": enabled,
         "severities": [s.lower() for s in (severities or ["critical", "warning"])],
         "registered_at": datetime.utcnow().isoformat(),
@@ -84,13 +84,13 @@ def _record_outbox(entry: Dict[str, Any]) -> None:
 def sms_provider_status() -> Dict[str, Any]:
     provider = (settings.SMS_PROVIDER or "mock").lower()
     ready = True
-    detail = "mock outbox (پیامک واقعی ارسال نمی‌شود تا کلید API تنظیم شود)"
+    detail = "mock outbox (real SMS is not sent until an API key is set)"
     if provider == "kavenegar":
         ready = bool(settings.KAVENEGAR_API_KEY)
         detail = (
-            "Kavenegar آماده"
+            "Kavenegar ready"
             if ready
-            else "KAVENEGAR_API_KEY تنظیم نشده — به mock می‌افتد"
+            else "KAVENEGAR_API_KEY is not set — falls back to mock"
         )
     elif provider == "twilio":
         ready = bool(
@@ -98,7 +98,7 @@ def sms_provider_status() -> Dict[str, Any]:
             and settings.TWILIO_AUTH_TOKEN
             and settings.TWILIO_FROM_NUMBER
         )
-        detail = "Twilio آماده" if ready else "اعتبارنامه Twilio ناقص — به mock می‌افتد"
+        detail = "Twilio ready" if ready else "Twilio credentials incomplete — falls back to mock"
     return {
         "enabled": bool(settings.SMS_ENABLED),
         "provider": provider,
@@ -233,11 +233,11 @@ async def send_sms(
 def build_alert_sms(well_name: str, severity: str, message: str, alert_id: str) -> str:
     sev = (severity or "").upper()
     return (
-        f"SOGF هشدار {sev}\n"
-        f"چاه: {well_name}\n"
+        f"SOGF alert {sev}\n"
+        f"Well: {well_name}\n"
         f"{message}\n"
-        f"کد: {alert_id}\n"
-        f"میدان مارون"
+        f"Code: {alert_id}\n"
+        f"Maroun field"
     )
 
 

@@ -1,6 +1,6 @@
 # API Reference (Updated)
 
-این سند خلاصه endpointهای کلیدی نسخه فعلی OGIM را پوشش می‌دهد.
+This document covers the key endpoints of the current OGIM version.
 
 ## Base Gateway
 

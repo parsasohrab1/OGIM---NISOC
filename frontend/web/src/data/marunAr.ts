@@ -1,6 +1,6 @@
 /**
- * AR / واقعیت افزوده — داده هدفمند میدان مارون
- * پوشش: دستگاه‌های فیلدی، نشست‌ها، لنگرهای AR، BIM overlays، تله‌متری زنده
+ * AR / Augmented reality — targeted Maroun field data
+ * Coverage: field devices, sessions, AR anchors, BIM overlays, live telemetry
  */
 import {
   MARUN_WELLS,
@@ -16,7 +16,7 @@ function seeded(n: number) {
   return x - Math.floor(x)
 }
 
-export type ArDeviceType = 'HoloLens 2' | 'RealWear Navigator' | 'تبلت واقعیت افزوده میدان'
+export type ArDeviceType = 'HoloLens 2' | 'RealWear Navigator' | 'Field AR tablet'
 
 export type ArDevice = {
   deviceId: string
@@ -83,16 +83,16 @@ export type ArBimComponent = {
 }
 
 const TECHNICIANS = [
-  { name: 'مهندس رضایی', role: 'تکنسین سرچاهی' },
-  { name: 'مهندس کریمی', role: 'متخصص پمپ درون‌چاهی الکتریکی' },
-  { name: 'مهندس احمدی', role: 'بازرس ایمنی' },
-  { name: 'مهندس موسوی', role: 'اپراتور تولید' },
-  { name: 'مهندس نوری', role: 'پشتیبان میدان' },
+  { name: 'Eng. Rezaei', role: 'Wellhead technician' },
+  { name: 'Eng. Karimi', role: 'Electric submersible pump specialist' },
+  { name: 'Eng. Ahmadi', role: 'Safety inspector' },
+  { name: 'Eng. Mousavi', role: 'Production operator' },
+  { name: 'Eng. Nouri', role: 'Field support' },
 ]
 
 export function buildMarunArDevices(tick = Date.now()): ArDevice[] {
   const live = getMarunLiveState(tick)
-  const types: ArDeviceType[] = ['HoloLens 2', 'RealWear Navigator', 'تبلت واقعیت افزوده میدان']
+  const types: ArDeviceType[] = ['HoloLens 2', 'RealWear Navigator', 'Field AR tablet']
   return Array.from({ length: 5 }, (_, i) => {
     const well = MARUN_WELLS[i * 3]
     const lw = live.find((w) => w.id === well.id) || live[i]
@@ -104,13 +104,13 @@ export function buildMarunArDevices(tick = Date.now()): ArDevice[] {
       deviceType: types[i % 3],
       userFa: tech.name,
       roleFa: tech.role,
-      locationFa: `پلتفرم ${well.nameFa}`,
+      locationFa: `Platform ${well.nameFa}`,
       wellId: well.id,
       connectionStatus: connected ? 'connected' : 'disconnected',
       batteryLevel: connected ? Math.round(35 + r * 60) : 0,
       activeSession: connected && i < 3,
       signalDbm: connected ? Math.round(-55 - r * 25) : -110,
-      lastUpdateFa: connected ? 'همین الان' : `${10 + Math.floor(r * 20)} دقیقه پیش`,
+      lastUpdateFa: connected ? 'Just now' : `${10 + Math.floor(r * 20)} minutes ago`,
     }
   })
 }
@@ -121,11 +121,11 @@ export function buildMarunArSessions(devices: ArDevice[], tick = Date.now()): Ar
     .map((d, i) => {
       const r = seeded(i + 30)
       const comps = [
-        `درخت کریسمس ${d.wellId}`,
-        `پمپ درون‌چاهی الکتریکی ${d.wellId}`,
-        `شیر اصلی ${d.wellId}`,
-        `سنسور فشار سرچاهی ${d.wellId}`,
-        `منیفولد جریان`,
+        `Christmas tree ${d.wellId}`,
+        `Electric submersible pump ${d.wellId}`,
+        `Master valve ${d.wellId}`,
+        `Wellhead pressure sensor ${d.wellId}`,
+        `Flow manifold`,
       ].slice(0, 3 + Math.floor(r * 2))
       return {
         sessionId: `SES-MN-${String(i + 1).padStart(3, '0')}`,
@@ -136,10 +136,10 @@ export function buildMarunArSessions(devices: ArDevice[], tick = Date.now()): Ar
         durationMin: Math.round(12 + r * 40),
         taskFa:
           i === 0
-            ? 'بازرسی سرچاهی و ثبت درصد آب تولیدی'
+            ? 'Wellhead inspection and recording of produced water cut'
             : i === 1
-              ? 'عیب‌یابی لرزش پمپ درون‌چاهی الکتریکی'
-              : 'تأیید هم‌خوانی دبی‌سنج مجازی با اندازه‌گیری',
+              ? 'Electric submersible pump vibration troubleshooting'
+              : 'Confirm the virtual flow meter matches the measurement',
         componentsViewed: comps,
         annotationsCreated: Math.round(1 + r * 5),
         dataPointsAccessed: Math.round(20 + r * 80),
@@ -149,7 +149,7 @@ export function buildMarunArSessions(devices: ArDevice[], tick = Date.now()): Ar
     })
 }
 
-/** لنگرهای بصری AR روی نقشه میدان (۲۴ چاه + چند تأسیسات) */
+/** Visual AR anchors on the field map (24 wells + several facilities) */
 export function buildMarunArAnchors(tick = Date.now()): ArAnchor[] {
   const live = getMarunLiveState(tick)
   const wellAnchors: ArAnchor[] = MARUN_WELLS.map((w) => {
@@ -176,7 +176,7 @@ export function buildMarunArAnchors(tick = Date.now()): ArAnchor[] {
   const facilities: ArAnchor[] = [
     {
       id: 'ANC-MANIFOLD',
-      labelFa: 'منیفولد تولید مارون',
+      labelFa: 'Maroun production manifold',
       kind: 'manifold',
       x: 78,
       y: 42,
@@ -186,7 +186,7 @@ export function buildMarunArAnchors(tick = Date.now()): ArAnchor[] {
     },
     {
       id: 'ANC-SEP',
-      labelFa: 'جداکننده سه‌فازی',
+      labelFa: 'Three-phase separator',
       kind: 'separator',
       x: 88,
       y: 58,
@@ -207,19 +207,19 @@ export function buildMarunArBim(wellId: string, tick = Date.now()): ArBimCompone
   return [
     {
       componentId: `${wellId}-TREE`,
-      nameFa: 'درخت کریسمس / Christmas Tree',
+      nameFa: 'Christmas Tree',
       type: 'tree',
-      locationFa: 'سرچاه',
+      locationFa: 'Wellhead',
       wellId,
       status: st,
       realTimeData: { pressure: lw.thp, temperature: lw.tht, flowRate: lw.oilRate },
-      arHintFa: 'شیر اصلی و بال را در واقعیت افزوده هایلایت کنید — وضعیت باز/بسته روی نمایشگر سربلند',
+      arHintFa: 'Highlight the master and wing valves in augmented reality — open/closed status on the head-up display',
     },
     {
       componentId: `${wellId}-ESP`,
-      nameFa: 'پمپ درون‌چاهی الکتریکی',
+      nameFa: 'Electric submersible pump',
       type: 'pump',
-      locationFa: 'لوله مغزی',
+      locationFa: 'Tubing',
       wellId,
       status: lw.equipmentRisk > 50 ? 'warning' : lw.pumpOnline ? 'normal' : 'critical',
       realTimeData: {
@@ -227,43 +227,43 @@ export function buildMarunArBim(wellId: string, tick = Date.now()): ArBimCompone
         temperature: lw.pumpOnline ? Math.round(62 + lw.equipmentRisk * 0.2) : undefined,
         flowRate: lw.oilRate,
       },
-      arHintFa: 'لرزش و آمپر را روی پلاک پمپ نشان دهید — هشدار خرابی پیش‌بینانه',
+      arHintFa: 'Show vibration and amperage on the pump nameplate — predictive failure alert',
     },
     {
       componentId: `${wellId}-MV`,
-      nameFa: 'شیر اصلی (Master Valve)',
+      nameFa: 'Master Valve',
       type: 'valve',
-      locationFa: 'درخت کریسمس',
+      locationFa: 'Christmas tree',
       wellId,
       status: lw.status === 'offline' ? 'critical' : 'normal',
       realTimeData: { pressure: Math.round(lw.thp * 0.92) },
-      arHintFa: 'درصد باز بودن شیر را به‌صورت گیج مجازی روی قطعه نشان دهید',
+      arHintFa: 'Show the valve open percentage as a virtual gauge on the component',
     },
     {
       componentId: `${wellId}-THP`,
-      nameFa: 'سنسور فشار سرچاهی',
+      nameFa: 'Wellhead pressure sensor',
       type: 'sensor',
       locationFa: 'Tubing Head',
       wellId,
       status: 'normal',
       realTimeData: { pressure: lw.thp, temperature: lw.tht },
-      arHintFa: 'روند ۱۵ دقیقه‌ای فشار را به‌صورت اسپارک‌لاین واقعیت افزوده نمایش دهید',
+      arHintFa: 'Display the 15-minute pressure trend as an augmented-reality sparkline',
     },
     {
       componentId: `${wellId}-VFM`,
-      nameFa: 'دبی‌سنج مجازی با پوشش بصری',
+      nameFa: 'Virtual flow meter with visual overlay',
       type: 'sensor',
-      locationFa: 'مدل نرم‌افزاری',
+      locationFa: 'Software model',
       wellId,
       status: Math.abs(lw.oilRate - lw.vfmOilRate) / Math.max(1, lw.oilRate) > 0.08 ? 'warning' : 'normal',
       realTimeData: { flowRate: lw.vfmOilRate, waterCut: lw.waterCut },
-      arHintFa: 'مقایسه دبی‌سنج مجازی با دبی مرجع — بدون نیاز به دبی‌سنج فیزیکی جداگانه',
+      arHintFa: 'Compare the virtual flow meter with the reference rate — no separate physical flow meter needed',
     },
     {
       componentId: `${wellId}-FL`,
-      nameFa: 'خط جریان تولید',
+      nameFa: 'Production flowline',
       type: 'pipeline',
-      locationFa: 'Flowline به منیفولد',
+      locationFa: 'Flowline to manifold',
       wellId,
       status: 'normal',
       realTimeData: {
@@ -271,7 +271,7 @@ export function buildMarunArBim(wellId: string, tick = Date.now()): ArBimCompone
         temperature: Math.round(lw.tht - 4),
         pressure: Math.round(lw.thp * 0.88),
       },
-      arHintFa: 'مسیر لوله را روی زمین با رنگ وضعیت سلامت کدگذاری کنید',
+      arHintFa: 'Color-code the pipe path on the ground with its health status',
     },
   ]
 }
@@ -304,11 +304,11 @@ export function buildArOverlayPayload(wellId: string, tick = Date.now()) {
     status_fa: STATUS_LABEL_FA[lw.status],
     status_color: STATUS_COLOR[lw.status],
     anchors: [
-      { id: 'hud-thp', label: 'فشار سرچاهی', value: lw.thp, unit: 'psi' },
-      { id: 'hud-tht', label: 'دمای سرچاهی', value: lw.tht, unit: '°C' },
-      { id: 'hud-oil', label: 'نفت', value: lw.oilRate, unit: 'bbl/d' },
-      { id: 'hud-wc', label: 'درصد آب تولیدی', value: lw.waterCut, unit: '%' },
-      { id: 'hud-vfm', label: 'دبی‌سنج مجازی', value: lw.vfmOilRate, unit: 'bbl/d' },
+      { id: 'hud-thp', label: 'Wellhead pressure', value: lw.thp, unit: 'psi' },
+      { id: 'hud-tht', label: 'Wellhead temperature', value: lw.tht, unit: '°C' },
+      { id: 'hud-oil', label: 'Oil', value: lw.oilRate, unit: 'bbl/d' },
+      { id: 'hud-wc', label: 'Produced water cut', value: lw.waterCut, unit: '%' },
+      { id: 'hud-vfm', label: 'Virtual flow meter', value: lw.vfmOilRate, unit: 'bbl/d' },
     ],
     equipment: {
       pump_online: lw.pumpOnline,
@@ -316,9 +316,9 @@ export function buildArOverlayPayload(wellId: string, tick = Date.now()) {
       health_score: lw.healthScore,
     },
     guidance_fa: [
-      'هدست را به سمت درخت کریسمس بگیرید تا لنگر قفل شود',
-      'برای پمپ درون‌چاهی الکتریکی روی پلاک موتور فوکوس کنید',
-      'در صورت درصد آب تولیدی بالا، چک‌لیست جداکننده را باز کنید',
+      'Point the headset at the Christmas tree to lock the anchor',
+      'For the electric submersible pump, focus on the motor nameplate',
+      'If the produced water cut is high, open the separator checklist',
     ],
     timestamp: new Date(tick).toISOString(),
   }

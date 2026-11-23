@@ -1,45 +1,45 @@
-# ✅ بهینه‌سازی لایه ذخیره‌سازی
+# ✅ Storage Layer Optimization
 
-## 📊 خلاصه پیاده‌سازی
+## 📊 Implementation summary
 
-بهینه‌سازی کامل لایه ذخیره‌سازی برای مدیریت حجم داده 10 گیگابایت در روز با موفقیت پیاده‌سازی شد.
+Complete optimization of the storage layer to handle a data volume of 10 GB per day was implemented successfully.
 
-## 🎯 ویژگی‌های پیاده‌سازی شده
+## 🎯 Implemented features
 
-### 1. Compression Policy (90 روز)
-- ✅ فشرده‌سازی خودکار داده‌های قدیمی‌تر از 90 روز
-- ✅ Compression Manager برای مدیریت سیاست‌ها
-- ✅ Segment by tag_id برای compression بهتر
+### 1. Compression Policy (90 days)
+- ✅ Automatic compression of data older than 90 days
+- ✅ Compression Manager for managing policies
+- ✅ Segment by tag_id for better compression
 - ✅ Order by timestamp DESC
 
 ### 2. Multi-node TimescaleDB
-- ✅ توزیع داده‌ها در چندین node
+- ✅ Distributing data across multiple nodes
 - ✅ Distributed hypertables
 - ✅ Load balancing
 
 ### 3. Data Partitioning
 - ✅ Chunk interval: 1 day
 - ✅ Partitioning by tag_id (optional)
-- ✅ بهینه‌سازی برای 10GB/day
+- ✅ Optimization for 10GB/day
 
 ### 4. Storage Optimization Service
-- ✅ API endpoints برای مدیریت compression
-- ✅ Monitoring و statistics
+- ✅ API endpoints for managing compression
+- ✅ Monitoring and statistics
 - ✅ Manual compression
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Backend
-- `backend/shared/compression_manager.py` - مدیریت Compression Policy
-- `backend/storage-optimization-service/main.py` - سرویس بهینه‌سازی
+- `backend/shared/compression_manager.py` - Compression Policy management
+- `backend/storage-optimization-service/main.py` - Optimization service
 - `backend/storage-optimization-service/requirements.txt` - Dependencies
 
 ### Frontend
-- `frontend/web/src/pages/StorageOptimization.tsx` - صفحه مدیریت
-- `frontend/web/src/pages/StorageOptimization.css` - استایل‌ها
+- `frontend/web/src/pages/StorageOptimization.tsx` - Management page
+- `frontend/web/src/pages/StorageOptimization.css` - Styles
 
 ### Documentation
-- `docs/STORAGE_OPTIMIZATION.md` - مستندات کامل
+- `docs/STORAGE_OPTIMIZATION.md` - Complete documentation
 
 ## 🔌 API Endpoints
 
@@ -59,17 +59,17 @@ GET /api/storage-optimization/cluster/status
 
 ## 📊 Frontend
 
-صفحه **Storage Optimization** در Navigation Bar برای:
-- مشاهده آمار ذخیره‌سازی
-- مدیریت Compression Policy
-- مشاهده وضعیت chunks
-- فشرده‌سازی دستی
-- نمایش نمودارها
+The **Storage Optimization** page in the Navigation Bar is for:
+- Viewing storage statistics
+- Managing the Compression Policy
+- Viewing chunk status
+- Manual compression
+- Displaying charts
 
-## ⚙️ پیکربندی
+## ⚙️ Configuration
 
 ### Compression Policy
-- **Threshold**: 90 روز
+- **Threshold**: 90 days
 - **Segment By**: tag_id
 - **Order By**: timestamp DESC
 - **Expected Ratio**: ~90% space savings
@@ -79,42 +79,42 @@ GET /api/storage-optimization/cluster/status
 - **Size**: ~1GB per chunk
 - **Partitioning**: By time and tag_id
 
-## 🚀 استفاده
+## 🚀 Usage
 
-### از Frontend
-1. به تب "Storage" بروید
-2. مشاهده آمار و وضعیت compression
-3. فعال‌سازی یا مدیریت compression policy
+### From the Frontend
+1. Go to the "Storage" tab
+2. View the statistics and compression status
+3. Enable or manage the compression policy
 
-### از API
+### From the API
 ```python
 from backend.shared.compression_manager import compression_manager
 
-# فعال‌سازی compression
+# Enable compression
 compression_manager.enable_compression('sensor_data', segmentby_column='tag_id')
 
-# اضافه کردن policy
+# Add a policy
 compression_manager.add_compression_policy('sensor_data', compress_after_days=90)
 ```
 
-### از Script
+### From a Script
 ```bash
 python scripts/manage_timescale_cluster.py optimize
 ```
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ Compression Policy (90 روز) پیاده‌سازی شد
-- ✅ Compression Manager ایجاد شد
-- ✅ Storage Optimization Service اضافه شد
-- ✅ Frontend page ایجاد شد
-- ✅ API endpoints اضافه شدند
-- ✅ مستندات کامل نوشته شد
+- ✅ Compression Policy (90 days) implemented
+- ✅ Compression Manager created
+- ✅ Storage Optimization Service added
+- ✅ Frontend page created
+- ✅ API endpoints added
+- ✅ Complete documentation written
 
-## 📝 نکات
+## 📝 Notes
 
-- Compression policy به صورت خودکار اجرا می‌شود
-- Query performance روی compressed data حفظ می‌شود
-- Multi-node cluster برای مقیاس‌پذیری بیشتر
-- Monitoring و statistics در Frontend قابل مشاهده است
+- The compression policy runs automatically
+- Query performance is preserved on compressed data
+- Multi-node cluster for further scalability
+- Monitoring and statistics are visible in the Frontend
 

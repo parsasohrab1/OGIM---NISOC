@@ -1,44 +1,44 @@
-# 📋 راهنمای اجرای OGIM Dashboard
+# 📋 OGIM Dashboard Execution Guide
 
-## 🚀 اجرای سریع (Quick Start)
+## 🚀 Quick Start
 
-### روش 1: استفاده از اسکریپت PowerShell (توصیه می‌شود)
+### Method 1: Using the PowerShell script (recommended)
 
 ```powershell
-# در ریشه پروژه
+# In the project root
 .\start_dashboard.ps1
 ```
 
-این اسکریپت به صورت خودکار:
-- تمام سرویس‌های Backend را راه‌اندازی می‌کند
-- Frontend را نصب و اجرا می‌کند
-- همه چیز را در پنجره‌های جداگانه باز می‌کند
+This script automatically:
+- Starts all Backend services
+- Installs and runs the Frontend
+- Opens everything in separate windows
 
 ---
 
-## 📦 اجرای دستی (Manual Setup)
+## 📦 Manual Setup
 
-### پیش‌نیازها
+### Prerequisites
 
 ```powershell
-# بررسی Python
-python --version  # باید Python 3.8+ باشد
+# Check Python
+python --version  # must be Python 3.8+
 
-# بررسی Node.js
-node --version    # باید Node.js 16+ باشد
+# Check Node.js
+node --version    # must be Node.js 16+
 
-# بررسی npm
+# Check npm
 npm --version
 ```
 
 ---
 
-## 🔧 اجرای Backend Services
+## 🔧 Running Backend Services
 
-### 1. نصب Dependencies
+### 1. Installing Dependencies
 
 ```powershell
-# نصب dependencies برای هر سرویس
+# Install dependencies for each service
 cd backend/api-gateway
 pip install -r requirements.txt
 cd ../..
@@ -47,106 +47,106 @@ cd backend/auth-service
 pip install -r requirements.txt
 cd ../..
 
-# تکرار برای سایر سرویس‌ها...
+# Repeat for the other services...
 ```
 
-**یا به صورت یکجا:**
+**Or all at once:**
 
 ```powershell
-# نصب dependencies برای همه سرویس‌ها
+# Install dependencies for all services
 Get-ChildItem -Path backend -Recurse -Filter "requirements.txt" | ForEach-Object {
     Write-Host "Installing dependencies for $($_.DirectoryName)" -ForegroundColor Yellow
     pip install -r $_.FullName
 }
 ```
 
-### 2. راه‌اندازی سرویس‌ها
+### 2. Starting the services
 
-#### API Gateway (پورت 8000)
+#### API Gateway (port 8000)
 ```powershell
 cd backend/api-gateway
 python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### Auth Service (پورت 8001)
+#### Auth Service (port 8001)
 ```powershell
 cd backend/auth-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-#### Data Ingestion Service (پورت 8002)
+#### Data Ingestion Service (port 8002)
 ```powershell
 cd backend/data-ingestion-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8002 --reload
 ```
 
-#### ML Inference Service (پورت 8003)
+#### ML Inference Service (port 8003)
 ```powershell
 cd backend/ml-inference-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8003 --reload
 ```
 
-#### Alert Service (پورت 8004)
+#### Alert Service (port 8004)
 ```powershell
 cd backend/alert-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8004 --reload
 ```
 
-#### Reporting Service (پورت 8005)
+#### Reporting Service (port 8005)
 ```powershell
 cd backend/reporting-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8005 --reload
 ```
 
-#### Command Control Service (پورت 8006)
+#### Command Control Service (port 8006)
 ```powershell
 cd backend/command-control-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8006 --reload
 ```
 
-#### Tag Catalog Service (پورت 8007)
+#### Tag Catalog Service (port 8007)
 ```powershell
 cd backend/tag-catalog-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8007 --reload
 ```
 
-#### Digital Twin Service (پورت 8008)
+#### Digital Twin Service (port 8008)
 ```powershell
 cd backend/digital-twin-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8008 --reload
 ```
 
-#### Edge Computing Service (پورت 8009)
+#### Edge Computing Service (port 8009)
 ```powershell
 cd backend/edge-computing-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8009 --reload
 ```
 
-#### ERP Integration Service (پورت 8010)
+#### ERP Integration Service (port 8010)
 ```powershell
 cd backend/erp-integration-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8010 --reload
 ```
 
-#### DVR Service (پورت 8011)
+#### DVR Service (port 8011)
 ```powershell
 cd backend/dvr-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8011 --reload
 ```
 
-#### Remote Operations Service (پورت 8012)
+#### Remote Operations Service (port 8012)
 ```powershell
 cd backend/remote-operations-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8012 --reload
 ```
 
-#### Data Variables Service (پورت 8013)
+#### Data Variables Service (port 8013)
 ```powershell
 cd backend/data-variables-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8013 --reload
 ```
 
-#### Storage Optimization Service (پورت 8014)
+#### Storage Optimization Service (port 8014)
 ```powershell
 cd backend/storage-optimization-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8014 --reload
@@ -154,26 +154,26 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8014 --reload
 
 ---
 
-## 🎨 اجرای Frontend
+## 🎨 Running the Frontend
 
-### 1. نصب Dependencies
+### 1. Installing Dependencies
 
 ```powershell
 cd frontend/web
 npm install
 ```
 
-### 2. راه‌اندازی Development Server
+### 2. Starting the Development Server
 
 ```powershell
 npm run dev
 ```
 
-Frontend روی پورت **5173** اجرا می‌شود.
+The Frontend runs on port **5173**.
 
 ---
 
-## 📍 آدرس‌های دسترسی
+## 📍 Access addresses
 
 ### Frontend
 - **Dashboard**: http://localhost:5173
@@ -199,7 +199,7 @@ Frontend روی پورت **5173** اجرا می‌شود.
 
 ---
 
-## 🔐 اطلاعات ورود پیش‌فرض
+## 🔐 Default login credentials
 
 ```
 Username: admin
@@ -208,11 +208,11 @@ Password: Admin@123
 
 ---
 
-## 🗂️ ساختار پروژه
+## 🗂️ Project structure
 
 ```
 OGIM/
-├── backend/                    # سرویس‌های Backend
+├── backend/                    # Backend services
 │   ├── api-gateway/           # API Gateway (8000)
 │   ├── auth-service/          # Authentication (8001)
 │   ├── data-ingestion-service/ # Data Ingestion (8002)
@@ -228,19 +228,19 @@ OGIM/
 │   ├── remote-operations-service/ # Remote Operations (8012)
 │   ├── data-variables-service/ # Data Variables (8013)
 │   ├── storage-optimization-service/ # Storage Optimization (8014)
-│   └── shared/                # کدهای مشترک
+│   └── shared/                # Shared code
 ├── frontend/                   # Frontend Application
 │   └── web/                   # React/Vite Application
-├── scripts/                   # اسکریپت‌های کمکی
-├── docs/                      # مستندات
-└── start_dashboard.ps1        # اسکریپت راه‌اندازی
+├── scripts/                   # Helper scripts
+├── docs/                      # Documentation
+└── start_dashboard.ps1        # Startup script
 ```
 
 ---
 
-## ⚙️ تنظیمات Environment Variables
+## ⚙️ Environment Variables settings
 
-### فایل `.env` (در ریشه پروژه)
+### The `.env` file (in the project root)
 
 ```env
 # Database
@@ -250,7 +250,7 @@ TIMESCALE_URL=postgresql://ogim_user:ogim_password@localhost:5432/ogim_tsdb
 # Kafka
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092
 
-# Service URLs (برای local development)
+# Service URLs (for local development)
 SERVICE_HOST=localhost
 
 # ERP Integration
@@ -259,88 +259,88 @@ ERP_SERVICE_URL=http://localhost:8010
 ERP_DEFAULT_SYSTEM=sap
 ERP_AUTO_CREATE_WORK_ORDERS=false
 
-# MQTT (اختیاری)
+# MQTT (optional)
 MQTT_ENABLED=false
 MQTT_BROKER_HOST=localhost
 MQTT_BROKER_PORT=1883
 
-# LoRaWAN (اختیاری)
+# LoRaWAN (optional)
 LORAWAN_ENABLED=false
 LORAWAN_NETWORK_TYPE=ttn
 ```
 
 ---
 
-## 🛠️ دستورات مفید
+## 🛠️ Useful commands
 
-### بررسی وضعیت سرویس‌ها
+### Checking service status
 
 ```powershell
-# بررسی پورت‌های در حال استفاده
+# Check the ports in use
 netstat -ano | findstr ":8000 :8001 :8002 :5173"
 
-# بررسی فرآیندهای Python
+# Check Python processes
 Get-Process | Where-Object {$_.ProcessName -like "*python*"}
 
-# بررسی فرآیندهای Node
+# Check Node processes
 Get-Process | Where-Object {$_.ProcessName -eq "node"}
 ```
 
-### توقف سرویس‌ها
+### Stopping the services
 
 ```powershell
-# توقف تمام فرآیندهای Python (Backend)
+# Stop all Python processes (Backend)
 Get-Process python | Stop-Process
 
-# توقف تمام فرآیندهای Node (Frontend)
+# Stop all Node processes (Frontend)
 Get-Process node | Stop-Process
 
-# یا توقف بر اساس پورت
+# Or stop by port
 netstat -ano | findstr ":8000" | ForEach-Object {
     $pid = ($_ -split '\s+')[-1]
     Stop-Process -Id $pid -Force
 }
 ```
 
-### پاکسازی و نصب مجدد
+### Cleanup and reinstall
 
 ```powershell
-# پاکسازی node_modules
+# Clean node_modules
 cd frontend/web
 Remove-Item -Recurse -Force node_modules
 npm install
 
-# پاکسازی Python cache
+# Clean Python cache
 Get-ChildItem -Path backend -Recurse -Filter "__pycache__" | Remove-Item -Recurse -Force
 Get-ChildItem -Path backend -Recurse -Filter "*.pyc" | Remove-Item -Force
 ```
 
 ---
 
-## 📝 ترتیب راه‌اندازی (Manual)
+## 📝 Startup order (Manual)
 
-### 1. راه‌اندازی Database (اگر استفاده می‌کنید)
+### 1. Starting the Database (if you use it)
 ```powershell
-# PostgreSQL و TimescaleDB باید در حال اجرا باشند
-# یا از Docker Compose استفاده کنید
+# PostgreSQL and TimescaleDB must be running
+# Or use Docker Compose
 docker-compose up -d postgres timescaledb
 ```
 
-### 2. راه‌اندازی Kafka (اگر استفاده می‌کنید)
+### 2. Starting Kafka (if you use it)
 ```powershell
-# یا از Docker Compose
+# Or Docker Compose
 docker-compose up -d kafka zookeeper
 ```
 
-### 3. راه‌اندازی Backend Services
+### 3. Starting the Backend Services
 ```powershell
-# استفاده از اسکریپت (توصیه می‌شود)
+# Use the script (recommended)
 .\start_dashboard.ps1
 
-# یا به صورت دستی (هر سرویس در ترمینال جداگانه)
+# Or manually (each service in a separate terminal)
 ```
 
-### 4. راه‌اندازی Frontend
+### 4. Starting the Frontend
 ```powershell
 cd frontend/web
 npm install
@@ -351,70 +351,70 @@ npm run dev
 
 ## 🔍 Troubleshooting
 
-### مشکل: پورت در حال استفاده است
+### Problem: Port is in use
 ```powershell
-# پیدا کردن فرآیند استفاده‌کننده از پورت
+# Find the process using the port
 netstat -ano | findstr ":8000"
 
-# توقف فرآیند
+# Stop the process
 Stop-Process -Id <PID> -Force
 ```
 
-### مشکل: Dependencies نصب نشده
+### Problem: Dependencies not installed
 ```powershell
-# نصب مجدد
+# Reinstall
 pip install -r requirements.txt
 npm install
 ```
 
-### مشکل: Database Connection Error
-- بررسی کنید PostgreSQL/TimescaleDB در حال اجرا است
-- بررسی کنید DATABASE_URL درست است
-- بررسی کنید migrations اجرا شده‌اند
+### Problem: Database Connection Error
+- Check that PostgreSQL/TimescaleDB is running
+- Check that DATABASE_URL is correct
+- Check that migrations have been run
 
-### مشکل: Frontend به Backend متصل نمی‌شود
-- بررسی کنید API Gateway روی پورت 8000 در حال اجرا است
-- بررسی کنید CORS settings درست است
-- بررسی کنید SERVICE_HOST درست تنظیم شده است
-
----
-
-## 📚 مستندات بیشتر
-
-- `SETUP_GUIDE.md` - راهنمای کامل نصب
-- `QUICK_START.md` - راهنمای سریع
-- `SERVICE_URLS.md` - لیست کامل URLهای سرویس‌ها
-- `docs/` - مستندات تفصیلی
+### Problem: The Frontend does not connect to the Backend
+- Check that the API Gateway is running on port 8000
+- Check that the CORS settings are correct
+- Check that SERVICE_HOST is set correctly
 
 ---
 
-## ✅ چک‌لیست راه‌اندازی
+## 📚 More documentation
 
-- [ ] Python 3.8+ نصب شده
-- [ ] Node.js 16+ نصب شده
-- [ ] Dependencies Backend نصب شده
-- [ ] Dependencies Frontend نصب شده
-- [ ] Database در حال اجرا (اگر استفاده می‌کنید)
-- [ ] Kafka در حال اجرا (اگر استفاده می‌کنید)
-- [ ] Backend Services راه‌اندازی شده
-- [ ] Frontend راه‌اندازی شده
-- [ ] دسترسی به http://localhost:5173
+- `SETUP_GUIDE.md` - Complete installation guide
+- `QUICK_START.md` - Quick guide
+- `SERVICE_URLS.md` - Complete list of service URLs
+- `docs/` - Detailed documentation
 
 ---
 
-## 🎯 دستورات خلاصه
+## ✅ Setup Checklist
+
+- [ ] Python 3.8+ installed
+- [ ] Node.js 16+ installed
+- [ ] Backend dependencies installed
+- [ ] Frontend dependencies installed
+- [ ] Database running (if you use it)
+- [ ] Kafka running (if you use it)
+- [ ] Backend Services started
+- [ ] Frontend started
+- [ ] Access to http://localhost:5173
+
+---
+
+## 🎯 Summary commands
 
 ```powershell
-# راه‌اندازی کامل (توصیه می‌شود)
+# Complete startup (recommended)
 .\start_dashboard.ps1
 
-# یا به صورت دستی:
+# Or manually:
 
-# Backend (در ترمینال جداگانه)
+# Backend (in a separate terminal)
 cd backend/api-gateway
 python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
-# Frontend (در ترمینال جداگانه)
+# Frontend (in a separate terminal)
 cd frontend/web
 npm install
 npm run dev
@@ -422,5 +422,5 @@ npm run dev
 
 ---
 
-**آدرس دسترسی:** http://localhost:5173
+**Access address:** http://localhost:5173
 

@@ -1,120 +1,120 @@
 # 📊 OGIM Data Directory
 
-این پوشه برای ذخیره داده‌های تولید شده توسط data generators استفاده می‌شود.
+This folder is used to store the data produced by the data generators.
 
-## 📁 محتویات
+## 📁 Contents
 
-این پوشه شامل:
-- 📊 داده‌های تولید شده برای 4 چاه
-- 🐍 اسکریپت‌های تولید داده (Python)
-- 📋 فایل CSV لیست متغیرها
+This folder contains:
+- 📊 Generated data for 4 wells
+- 🐍 Data generation scripts (Python)
+- 📋 Variables list CSV file
 
-### 🐍 اسکریپت‌های موجود در این پوشه
-- ✅ `advanced_data_generator.py` - تولید داده 6 ماهه (1 ثانیه تایم لپس)
-- ✅ `generate_sample_data.py` - تولید داده نمونه 1 هفته (1 دقیقه تایم لپس)
-- ✅ `variables_list.csv` - لیست کامل 65+ متغیر در فرمت CSV
+### 🐍 Scripts in this folder
+- ✅ `advanced_data_generator.py` - 6-month data generation (1-second time lapse)
+- ✅ `generate_sample_data.py` - 1-week sample data generation (1-minute time lapse)
+- ✅ `variables_list.csv` - Complete list of 65+ variables in CSV format
 
-### 📊 داده‌های چاه‌ها
+### 📊 Well data
 
-### داده‌های نمونه (1 هفته) ✅ موجود
-- `PROD-001_sample_1week.json` - داده JSON چاه تولیدی 1 (~20 MB)
-- `PROD-001_sample_1week.csv` - داده CSV چاه تولیدی 1 (~4 MB)
-- `PROD-002_sample_1week.json` - داده JSON چاه تولیدی 2 (~20 MB)
-- `PROD-002_sample_1week.csv` - داده CSV چاه تولیدی 2 (~4 MB)
-- `DEV-001_sample_1week.json` - داده JSON چاه توسعه‌ای (~20 MB)
-- `DEV-001_sample_1week.csv` - داده CSV چاه توسعه‌ای (~4 MB)
-- `OBS-001_sample_1week.json` - داده JSON چاه مشاهده‌ای (~20 MB)
-- `OBS-001_sample_1week.csv` - داده CSV چاه مشاهده‌ای (~4 MB)
+### Sample data (1 week) ✅ Available
+- `PROD-001_sample_1week.json` - JSON data of production well 1 (~20 MB)
+- `PROD-001_sample_1week.csv` - CSV data of production well 1 (~4 MB)
+- `PROD-002_sample_1week.json` - JSON data of production well 2 (~20 MB)
+- `PROD-002_sample_1week.csv` - CSV data of production well 2 (~4 MB)
+- `DEV-001_sample_1week.json` - JSON data of the development well (~20 MB)
+- `DEV-001_sample_1week.csv` - CSV data of the development well (~4 MB)
+- `OBS-001_sample_1week.json` - JSON data of the observation well (~20 MB)
+- `OBS-001_sample_1week.csv` - CSV data of the observation well (~4 MB)
 
-**مجموع حجم نمونه:** ~81 MB (JSON) + ~17 MB (CSV) = ~98 MB
+**Total sample size:** ~81 MB (JSON) + ~17 MB (CSV) = ~98 MB
 
-### داده‌های کامل (6 ماه) - برای تولید
-برای تولید داده‌های 6 ماهه با تایم لپس 1 ثانیه:
+### Full data (6 months) - for production
+To generate 6 months of data with a 1-second time lapse:
 ```bash
 python scripts/advanced_data_generator.py
 ```
 
-فایل‌های خروجی (compressed):
+Output files (compressed):
 - `PROD-001_6months_data.jsonl.gz`
 - `PROD-002_6months_data.jsonl.gz`
 - `DEV-001_6months_data.jsonl.gz`
 - `OBS-001_6months_data.jsonl.gz`
 
-**حجم تخمینی:** ~12-15 GB (compressed)
+**Estimated size:** ~12-15 GB (compressed)
 
-## 🚀 تولید داده
+## 🚀 Data generation
 
-### روش 1: اجرا از پوشه data (مستقیم)
+### Method 1: Run from the data folder (direct)
 ```bash
-# داده نمونه (سریع)
+# Sample data (fast)
 cd OGIM---Oil-Gas-Intelligent-Monitoring/data
 python generate_sample_data.py
 
-# داده کامل (6 ماه)
+# Full data (6 months)
 python advanced_data_generator.py
 ```
 
-### روش 2: اجرا از پوشه scripts (اصلی)
+### Method 2: Run from the scripts folder (main)
 ```bash
-# داده نمونه (سریع - ✅ اجرا شده)
+# Sample data (fast - ✅ already run)
 cd OGIM---Oil-Gas-Intelligent-Monitoring
 python scripts/generate_sample_data.py
 ```
-- مدت: 1 هفته
-- تایم لپس: 1 دقیقه
-- رکورد: 10,080 × 4 چاه = 40,320 رکورد
-- زمان: ~3-5 دقیقه
+- Duration: 1 week
+- Time lapse: 1 minute
+- Records: 10,080 × 4 wells = 40,320 records
+- Time: ~3-5 minutes
 
 ```bash
-# داده کامل (طبق SRS)
+# Full data (per SRS)
 python scripts/advanced_data_generator.py
 ```
-- مدت: 6 ماه (180 روز)
-- تایم لپس: 1 ثانیه
-- رکورد: 15,552,000 × 4 چاه = 62,208,000 رکورد
-- زمان: ~4-8 ساعت
-- حجم: ~12-15 GB
+- Duration: 6 months (180 days)
+- Time lapse: 1 second
+- Records: 15,552,000 × 4 wells = 62,208,000 records
+- Time: ~4-8 hours
+- Size: ~12-15 GB
 
-## 📖 مستندات
+## 📖 Documentation
 
-برای اطلاعات کامل، نگاه کنید به:
-- [DATA_GENERATION_GUIDE.md](../DATA_GENERATION_GUIDE.md) - راهنمای کامل تولید داده
-- [VARIABLES_LIST.md](../VARIABLES_LIST.md) - لیست 65+ متغیر
+For complete information, see:
+- [DATA_GENERATION_GUIDE.md](../DATA_GENERATION_GUIDE.md) - Complete data generation guide
+- [VARIABLES_LIST.md](../VARIABLES_LIST.md) - List of 65+ variables
 
-## 📊 آمار داده‌های موجود
+## 📊 Available data statistics
 
-### چاه PROD-001 (تولیدی)
-- نرخ تولید پایه: 800-1500 bbl/day
-- فشار پایه: 2000-3500 psi
-- Water cut: 10-95% (افزایش تدریجی)
+### Well PROD-001 (production)
+- Base production rate: 800-1500 bbl/day
+- Base pressure: 2000-3500 psi
+- Water cut: 10-95% (gradual increase)
 
-### چاه PROD-002 (تولیدی)
-- نرخ تولید پایه: 800-1500 bbl/day
-- فشار پایه: 2000-3500 psi
-- Water cut: 10-95% (افزایش تدریجی)
+### Well PROD-002 (production)
+- Base production rate: 800-1500 bbl/day
+- Base pressure: 2000-3500 psi
+- Water cut: 10-95% (gradual increase)
 
-### چاه DEV-001 (توسعه‌ای)
-- نرخ تولید پایه: 500-1000 bbl/day
-- فشار پایه: 1500-3000 psi
-- در حال تست و توسعه
+### Well DEV-001 (development)
+- Base production rate: 500-1000 bbl/day
+- Base pressure: 1500-3000 psi
+- Under test and development
 
-### چاه OBS-001 (مشاهده‌ای)
-- بدون تولید (monitoring only)
-- فشار پایه: 1000-2500 psi
-- فقط monitoring فشار و سطح
+### Well OBS-001 (observation)
+- No production (monitoring only)
+- Base pressure: 1000-2500 psi
+- Pressure and level monitoring only
 
-## ⚠️ توجه
+## ⚠️ Note
 
-- ⚠️ فایل‌های بزرگ داده از Git ignore شده‌اند (*.json, *.csv, *.gz)
-- ✅ فقط README.md در Git commit می‌شود
-- 🗜️ فایل‌های 6 ماهه با gzip فشرده شده‌اند
-- 💾 حجم کل (full): ~12-15 GB
+- ⚠️ Large data files are Git-ignored (*.json, *.csv, *.gz)
+- ✅ Only README.md is committed to Git
+- 🗜️ The 6-month files are compressed with gzip
+- 💾 Total size (full): ~12-15 GB
 
-## 📋 استفاده از فایل Variables CSV
+## 📋 Using the Variables CSV file
 
-فایل `variables_list.csv` شامل تمام 65+ متغیر با جزئیات کامل است.
+The `variables_list.csv` file contains all 65+ variables with complete details.
 
-### خواندن با Python
+### Reading with Python
 ```python
 import pandas as pd
 
@@ -132,21 +132,21 @@ for _, var in temp_vars.iterrows():
     print(f"{var['Variable_Name']}: {var['Min_Range']}-{var['Max_Range']} {var['Unit']}")
 ```
 
-### باز کردن با Excel
-فایل را مستقیماً با Microsoft Excel، Google Sheets یا LibreOffice باز کنید.
+### Opening with Excel
+Open the file directly with Microsoft Excel, Google Sheets or LibreOffice.
 
-### ساختار فایل CSV
-- `Category`: دسته‌بندی متغیر (Pressure, Temperature, etc.)
-- `Variable_Name`: نام انگلیسی متغیر
-- `Unit`: واحد اندازه‌گیری
-- `Min_Range`: حداقل محدوده
-- `Max_Range`: حداکثر محدوده
-- `Description`: توضیحات انگلیسی
-- `Arabic_Name`: نام فارسی/عربی متغیر
+### CSV file structure
+- `Category`: Variable category (Pressure, Temperature, etc.)
+- `Variable_Name`: English variable name
+- `Unit`: Unit of measurement
+- `Min_Range`: Minimum range
+- `Max_Range`: Maximum range
+- `Description`: English description
+- `Arabic_Name`: Localized (Persian/Arabic) variable name, given here in English
 
 ---
 
-## 🔍 نحوه خواندن داده‌ها
+## 🔍 How to read the data
 
 ### Python
 ```python
@@ -189,7 +189,7 @@ with gzip.open('PROD-001_6months_data.jsonl.gz', 'rt') as f:
 
 ---
 
-**نسخه:** 1.0  
-**تاریخ:** نوامبر 2025  
-**وضعیت:** ✅ داده‌های نمونه تولید شده
+**Version:** 1.0
+**Date:** November 2025
+**Status:** ✅ Sample data generated
 

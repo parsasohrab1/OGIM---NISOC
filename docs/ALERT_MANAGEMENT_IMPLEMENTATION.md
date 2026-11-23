@@ -1,15 +1,15 @@
-# 🚨 راهنمای پیاده‌سازی Alert Management پیشرفته
+# 🚨 Advanced Alert Management Implementation Guide
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** کاهش 30% در false positive alerts با Alert Correlation و Root Cause Analysis
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** 30% reduction in false positive alerts with Alert Correlation and Root Cause Analysis
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
 3. [Alert Correlation Engine](#correlation)
 4. [Root Cause Analysis (RCA)](#rca)
 5. [Alert Fatigue Detection](#fatigue)
@@ -19,21 +19,21 @@
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-این سند راهنمای کامل پیاده‌سازی سیستم پیشرفته مدیریت هشدارها است که شامل Alert Correlation، Root Cause Analysis، Alert Fatigue Detection، و Timeline Visualization می‌شود.
+This document is the complete implementation guide for the advanced alert management system, which includes Alert Correlation, Root Cause Analysis, Alert Fatigue Detection, and Timeline Visualization.
 
-### اهداف
+### Goals
 
-- ✅ کاهش 30% در false positive alerts
-- ✅ بهبود response time با correlation
-- ✅ کاهش alert fatigue
-- ✅ بهبود root cause identification
-- ✅ Timeline visualization برای analysis
+- ✅ 30% reduction in false positive alerts
+- ✅ Improved response time with correlation
+- ✅ Reduced alert fatigue
+- ✅ Improved root cause identification
+- ✅ Timeline visualization for analysis
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -1159,6 +1159,6 @@ def test_correlation_time_window():
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

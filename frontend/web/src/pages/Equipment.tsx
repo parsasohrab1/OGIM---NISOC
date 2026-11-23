@@ -18,7 +18,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'mot', label: EQUIPMENT_TYPE_LABEL_FA.mot },
   { key: 'rig', label: EQUIPMENT_TYPE_LABEL_FA.rig },
   { key: 'pipeline', label: EQUIPMENT_TYPE_LABEL_FA.pipeline },
-  { key: 'wells_flowrate', label: 'دبی چاه‌های تولیدی' },
+  { key: 'wells_flowrate', label: 'Production well flow rate' },
   { key: 'truck', label: EQUIPMENT_TYPE_LABEL_FA.truck },
   { key: 'vfm', label: EQUIPMENT_TYPE_LABEL_FA.vfm },
   { key: 'coiled_tubing', label: EQUIPMENT_TYPE_LABEL_FA.coiled_tubing },
@@ -83,9 +83,9 @@ export default function Equipment() {
 
   return (
     <div className="ops-page">
-      <h2>مدیریت تجهیزات</h2>
+      <h2>Equipment management</h2>
       <p className="ops-subtitle">
-        تجهیزات MOT، دکل‌های حفاری/تعمیر، خطوط لوله، دبی چاه‌های تولیدی، تراک‌ها، دبی‌سنج مجازی و کویل تیوبینگ.
+        MOT equipment, drilling/workover rigs, pipelines, production well flow rates, trucks, virtual flow meters and coiled tubing.
       </p>
 
       <div className="ops-overview">
@@ -111,17 +111,17 @@ export default function Equipment() {
 
       {tab === 'wells_flowrate' ? (
         <div className="ops-card full">
-          <h3>وضعیت دبی چاه‌های تولیدی (بر مبنای آخرین ثبت دستی)</h3>
+          <h3>Production well flow rate status (based on the latest manual entry)</h3>
           <div className="ops-table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>چاه</th>
-                  <th>شرکت تابعه</th>
-                  <th>تاریخ ثبت</th>
-                  <th>دبی تولید (bopd)</th>
-                  <th>درصد آب</th>
-                  <th>دبی گاز (Mscf/d)</th>
+                  <th>Well</th>
+                  <th>Subsidiary</th>
+                  <th>Entry date</th>
+                  <th>Production rate (bopd)</th>
+                  <th>Water cut</th>
+                  <th>Gas rate (Mscf/d)</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,12 +148,12 @@ export default function Equipment() {
             <table>
               <thead>
                 <tr>
-                  <th>شناسه تجهیز</th>
-                  <th>نام</th>
-                  <th>شرکت تابعه</th>
-                  <th>چاه مرتبط</th>
-                  <th>وضعیت</th>
-                  <th>فاز</th>
+                  <th>Equipment ID</th>
+                  <th>Name</th>
+                  <th>Subsidiary</th>
+                  <th>Related well</th>
+                  <th>Status</th>
+                  <th>Phase</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,14 +166,14 @@ export default function Equipment() {
                     <td>{EQUIPMENT_STATUS_LABEL_FA[e.status] || e.status}</td>
                     <td>
                       <span className={`ops-badge ${e.phase === 2 ? 'phase2' : 'phase1'}`}>
-                        {e.phase === 2 ? 'فاز ۲ (سنسور)' : 'فاز ۱ (دستی)'}
+                        {e.phase === 2 ? 'Phase 2 (sensor)' : 'Phase 1 (manual)'}
                       </span>
                     </td>
                   </tr>
                 ))}
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6}>موردی ثبت نشده است.</td>
+                    <td colSpan={6}>No items recorded.</td>
                   </tr>
                 )}
               </tbody>

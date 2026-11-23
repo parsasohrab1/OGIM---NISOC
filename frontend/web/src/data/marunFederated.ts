@@ -1,4 +1,4 @@
-/** داده و منطق محلی یادگیری فدرال: رگرسیون لجستیک واقعی + تجمیع FedAvg واقعی، هر دو در مرورگر (بدون نیاز به بک‌اند) */
+/** Local federated learning data and logic: real logistic regression + real FedAvg aggregation, both in the browser (no backend needed) */
 
 const FEATURES = ['pressure', 'temperature', 'flow_rate', 'vibration']
 
@@ -24,7 +24,7 @@ let localGlobalModel: {
 } = {
   global_weights: null,
   global_accuracy: null,
-  convergence_status: 'در انتظار اولین دورهٔ تجمیع',
+  convergence_status: 'Awaiting the first aggregation round',
   round: 0,
   participating_nodes: 0,
 }
@@ -34,7 +34,7 @@ function sigmoid(z: number) {
   return 1 / (1 + Math.exp(-z))
 }
 
-/** یک رگرسیون لجستیک واقعی را با گرادیان کاهشی روی دستهٔ داده محلی برازش می‌دهد */
+/** Fits a real logistic regression with gradient descent on the local data batch */
 function trainLogisticRegression(samples: Record<string, number>[], labels: number[]) {
   const featureMeans = FEATURES.map((f) => samples.reduce((s, r) => s + r[f], 0) / samples.length)
   const featureStds = FEATURES.map((f, i) => {
@@ -43,7 +43,7 @@ function trainLogisticRegression(samples: Record<string, number>[], labels: numb
   })
   const norm = (row: Record<string, number>) => FEATURES.map((f, i) => (row[f] - featureMeans[i]) / featureStds[i])
 
-  const weights = new Array(FEATURES.length + 1).fill(0) // آخرین عنصر = بایاس
+  const weights = new Array(FEATURES.length + 1).fill(0) // last element = bias
   const lr = 0.5
   const epochs = 200
   for (let e = 0; e < epochs; e++) {
@@ -109,7 +109,7 @@ export function trainAndSubmitLocal(
 
 export function aggregateLocalFedAvg(minNodes = 2) {
   if (localNodes.length < minNodes) {
-    throw new Error(`حداقل ${minNodes} گره برای تجمیع لازم است`)
+    throw new Error(`At least ${minNodes} nodes are required for aggregation`)
   }
   const totalData = localNodes.reduce((s, n) => s + n.data_size, 0)
   const dim = localNodes[0].weights.length
@@ -125,7 +125,7 @@ export function aggregateLocalFedAvg(minNodes = 2) {
   localGlobalModel = {
     global_weights: avgWeights,
     global_accuracy: globalAccuracy,
-    convergence_status: localRound >= 3 ? 'همگرا شده' : 'در حال همگرایی',
+    convergence_status: localRound >= 3 ? 'Converged' : 'Converging',
     round: localRound,
     participating_nodes: localNodes.length,
   }

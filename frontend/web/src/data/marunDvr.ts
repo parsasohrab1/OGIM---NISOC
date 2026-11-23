@@ -1,6 +1,6 @@
 /**
- * DVR (Data Validation & Reconciliation) datasets for میدان مارون
- * هدفمند: کیفیت داده سنسورهای سرچاهی/تولید/تجهیزات، outlier، mass-balance
+ * DVR (Data Validation & Reconciliation) datasets for the Maroun field
+ * Targeted: wellhead/production/equipment sensor data quality, outliers, mass balance
  */
 import { MARUN_WELLS, FIELD, getMarunLiveState, SENSOR_VARIABLES } from './marunField'
 
@@ -59,7 +59,7 @@ export type DvrReconciliationRow = {
   status: 'balanced' | 'minor' | 'material'
 }
 
-/** کلید سنسور: MN-01.thp */
+/** Sensor key: MN-01.thp */
 export function dvrSensorId(wellId: string, varKey: string) {
   return `${wellId}.${varKey}`
 }
@@ -80,7 +80,7 @@ const PRIMARY_VARS = [
   'esp_vibration',
 ] as const
 
-/** کیفیت داده برای سنسورهای کلیدی همه ۲۴ چاه */
+/** Data quality for the key sensors of all 24 wells */
 export function buildMarunDvrQuality(tick = Date.now()): DvrQualityScore[] {
   const now = new Date(tick).toISOString()
   const live = getMarunLiveState(tick)
@@ -103,25 +103,25 @@ export function buildMarunDvrQuality(tick = Date.now()): DvrQualityScore[] {
       if (lw.status === 'offline') {
         completeness = 0.35 + r * 0.1
         timeliness = 0.2 + r * 0.15
-        issues.push('قطع ارتباط / داده دیرهنگام')
+        issues.push('Disconnected / late data')
       } else if (lw.status === 'critical') {
         accuracy -= 0.12
         consistency -= 0.1
-        issues.push('نوسان غیرعادی نسبت به baseline میدان')
+        issues.push('Abnormal fluctuation versus the field baseline')
       }
       if (key === 'water_cut' && lw.waterCut > 55) {
         consistency -= 0.08
-        issues.push('درصد آب تولیدی بالا — نیاز به اعتبارسنجی با تست جداکننده')
+        issues.push('High produced water cut — needs validation with a separator test')
       }
       if (key === 'esp_vibration' && lw.equipmentRisk > 50) {
         validity -= 0.1
-        issues.push('لرزش پمپ خارج از باند عملیاتی')
+        issues.push('Pump vibration outside the operating band')
       }
       if (key === 'oil_rate') {
         const delta = Math.abs(lw.oilRate - lw.vfmOilRate) / Math.max(1, lw.oilRate)
         if (delta > 0.08) {
           consistency -= 0.15
-          issues.push(`اختلاف اندازه‌گیری با دبی‌سنج مجازی ${(delta * 100).toFixed(1)}%`)
+          issues.push(`Measurement differs from the virtual flow meter by ${(delta * 100).toFixed(1)}%`)
         }
       }
 
@@ -184,22 +184,22 @@ export function buildMarunValidation(
   rule_checks.push({
     rule: 'physical_range',
     passed: inRange,
-    detail: `بازه مجاز مارون [${lo}, ${hi}] ${unit}`,
+    detail: `Maroun allowed range [${lo}, ${hi}] ${unit}`,
   })
-  if (!inRange) violations.push(`مقدار خارج از بازه فیزیکی مجاز میدان مارون`)
+  if (!inRange) violations.push(`Value outside the permitted physical range of the Maroun field`)
 
   if (varKey === 'water_cut' && live && live.waterCut > 70) {
     rule_checks.push({
       rule: 'high_water_cut_alert',
       passed: false,
-      detail: 'درصد آب تولیدی > 70% — تأیید با تست جداکننده پیشنهادی است',
+      detail: 'Produced water cut > 70% — confirmation with a separator test is recommended',
     })
-    violations.push('درصد آب تولیدی بحرانی برای نفت سبک-میانه ترش درجه سنگینی ۳۴٫۵')
+    violations.push('Critical produced water cut for sour light-to-medium crude with 34.5 API gravity')
   } else {
     rule_checks.push({
       rule: 'high_water_cut_alert',
       passed: true,
-      detail: 'درصد آب تولیدی در محدوده قابل‌قبول عملیاتی',
+      detail: 'Produced water cut within the acceptable operating range',
     })
   }
 
@@ -209,23 +209,23 @@ export function buildMarunValidation(
     rule_checks.push({
       rule: 'vfm_consistency',
       passed: ok,
-      detail: `اختلاف با دبی‌سنج مجازی ${(delta * 100).toFixed(1)}% (آستانه ۱۰%)`,
+      detail: `Difference from the virtual flow meter ${(delta * 100).toFixed(1)}% (threshold 10%)`,
     })
-    if (!ok) violations.push('ناسازگاری دبی اندازه‌گیری‌شده با دبی‌سنج مجازی')
+    if (!ok) violations.push('Measured rate is inconsistent with the virtual flow meter rate')
   }
 
   if (live?.status === 'offline') {
     rule_checks.push({
       rule: 'freshness',
       passed: false,
-      detail: `آخرین داده ${live.lastSeenMin} دقیقه پیش`,
+      detail: `Last data ${live.lastSeenMin} minutes ago`,
     })
-    violations.push('داده غیرفعال / تازگی ناکافی')
+    violations.push('Inactive data / insufficient freshness')
   } else {
     rule_checks.push({
       rule: 'freshness',
       passed: true,
-      detail: 'داده در پنجره زمانی قابل‌قبول',
+      detail: 'Data within the acceptable time window',
     })
   }
 
@@ -273,14 +273,14 @@ export function buildMarunOutliers(sensorId: string, tick = Date.now()): DvrOutl
       severity,
       reason_fa:
         severity === 'high'
-          ? 'انحراف شدید از میانگین متحرک ۲۴ساعته چاه'
-          : 'نقطه پرت نسبت به الگوی تولید مارون',
+          ? 'Severe deviation from the well 24-hour moving average'
+          : 'Outlier relative to the Maroun production pattern',
     })
   }
   return out.sort((a, b) => b.outlier_score - a.outlier_score)
 }
 
-/** موازنه جرمی نفت: اندازه‌گیری vs VFM در سطح چاه و میدان */
+/** Oil mass balance: measurement vs VFM at the well and field level */
 export function buildMarunReconciliation(tick = Date.now()): {
   field: {
     name: string

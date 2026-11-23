@@ -1,24 +1,24 @@
-# پروتکل‌های بی‌سیم (MQTT & LoRaWAN)
+# Wireless protocols (MQTT & LoRaWAN)
 
-## 📋 خلاصه
+## 📋 Summary
 
-این مستندات نحوه استفاده از پروتکل‌های بی‌سیم MQTT و LoRaWAN برای دریافت داده از سنسورهای بی‌سیم را توضیح می‌دهد.
+This documentation explains how to use the MQTT and LoRaWAN wireless protocols to receive data from wireless sensors.
 
 ## 📡 MQTT
 
-### نمای کلی
+### Overview
 
-MQTT (Message Queuing Telemetry Transport) یک پروتکل سبک برای ارتباطات IoT است.
+MQTT (Message Queuing Telemetry Transport) is a lightweight protocol for IoT communication.
 
-### ویژگی‌ها
+### Features
 
-- ✅ **Lightweight**: پروتکل سبک و کم‌مصرف
-- ✅ **Publish/Subscribe**: مدل publish/subscribe
-- ✅ **QoS Levels**: سطوح مختلف کیفیت سرویس (0, 1, 2)
-- ✅ **Retain Messages**: امکان retain کردن پیام‌ها
-- ✅ **Wildcard Topics**: پشتیبانی از wildcards (+ و #)
+- ✅ **Lightweight**: A lightweight, low-power protocol
+- ✅ **Publish/Subscribe**: The publish/subscribe model
+- ✅ **QoS Levels**: Different quality-of-service levels (0, 1, 2)
+- ✅ **Retain Messages**: Ability to retain messages
+- ✅ **Wildcard Topics**: Support for wildcards (+ and #)
 
-### معماری
+### Architecture
 
 ```
 ┌─────────────┐                    ┌─────────────┐
@@ -37,7 +37,7 @@ MQTT (Message Queuing Telemetry Transport) یک پروتکل سبک برای ا�
 └─────────────┘
 ```
 
-### پیکربندی
+### Configuration
 
 ```bash
 # Enable MQTT
@@ -76,7 +76,7 @@ alerts/{severity}/#           # Alerts (wildcard)
 }
 ```
 
-### استفاده
+### Usage
 
 #### Subscribe to Topics
 ```python
@@ -116,19 +116,19 @@ mqtt_client.publish(
 
 ## 📻 LoRaWAN
 
-### نمای کلی
+### Overview
 
-LoRaWAN (Long Range Wide Area Network) یک پروتکل کم‌مصرف برای سنسورهای دوربرد است.
+LoRaWAN (Long Range Wide Area Network) is a low-power protocol for long-range sensors.
 
-### ویژگی‌ها
+### Features
 
-- ✅ **Low Power**: مصرف انرژی بسیار کم
-- ✅ **Long Range**: برد تا 15 کیلومتر
-- ✅ **Network Support**: پشتیبانی از TTN و ChirpStack
-- ✅ **Payload Decoding**: Decode خودکار payload
-- ✅ **RSSI/SNR**: دریافت اطلاعات سیگنال
+- ✅ **Low Power**: Very low energy consumption
+- ✅ **Long Range**: Range of up to 15 kilometers
+- ✅ **Network Support**: Support for TTN and ChirpStack
+- ✅ **Payload Decoding**: Automatic payload decoding
+- ✅ **RSSI/SNR**: Receiving signal information
 
-### معماری
+### Architecture
 
 ```
 ┌─────────────┐                    ┌─────────────┐
@@ -155,7 +155,7 @@ LoRaWAN (Long Range Wide Area Network) یک پروتکل کم‌مصرف برا�
 └─────────────┘
 ```
 
-### پیکربندی
+### Configuration
 
 #### TTN (The Things Network)
 ```bash
@@ -246,7 +246,7 @@ lorawan_client.decode_payload(payload_base64, decoder=custom_decoder)
 }
 ```
 
-### استفاده
+### Usage
 
 ```python
 from lorawan_client import get_lorawan_client
@@ -295,9 +295,9 @@ POST /data-ingestion/lorawan/webhook
 GET /data-ingestion/wireless/status
 ```
 
-## 🚀 راه‌اندازی
+## 🚀 Setup
 
-### 1. راه‌اندازی MQTT Broker (Mosquitto)
+### 1. Setting up the MQTT Broker (Mosquitto)
 
 ```bash
 # Docker
@@ -311,7 +311,7 @@ sudo apt-get install mosquitto mosquitto-clients
 sudo systemctl start mosquitto
 ```
 
-### 2. پیکربندی MQTT
+### 2. Configuring MQTT
 
 ```bash
 # Create mosquitto.conf
@@ -323,7 +323,7 @@ password_file /etc/mosquitto/passwd
 mosquitto_passwd -c /etc/mosquitto/passwd ogim_user
 ```
 
-### 3. راه‌اندازی LoRaWAN Network Server
+### 3. Setting up the LoRaWAN Network Server
 
 #### TTN
 1. Create account at https://www.thethingsnetwork.org/
@@ -337,7 +337,7 @@ mosquitto_passwd -c /etc/mosquitto/passwd ogim_user
 docker-compose -f docker-compose.chirpstack.yml up -d
 ```
 
-### 4. پیکربندی Environment Variables
+### 4. Configuring Environment Variables
 
 ```bash
 # MQTT
@@ -372,16 +372,16 @@ export LORAWAN_APP_ID=ogim-app
 ## ✅ Best Practices
 
 ### MQTT
-1. **Use QoS 1**: برای اطمینان از delivery
-2. **Topic Structure**: استفاده از ساختار منظم
-3. **Authentication**: همیشه از username/password استفاده کنید
-4. **TLS**: در production از MQTT over TLS استفاده کنید
+1. **Use QoS 1**: To ensure delivery
+2. **Topic Structure**: Use a regular structure
+3. **Authentication**: Always use username/password
+4. **TLS**: Use MQTT over TLS in production
 
 ### LoRaWAN
-1. **Payload Size**: محدودیت 51 bytes (LoRaWAN Class A)
-2. **Duty Cycle**: رعایت محدودیت‌های duty cycle
-3. **Battery Management**: مدیریت مصرف باتری
-4. **Decoder Configuration**: تنظیم decoder در network server
+1. **Payload Size**: Limit of 51 bytes (LoRaWAN Class A)
+2. **Duty Cycle**: Observe the duty cycle limits
+3. **Battery Management**: Battery consumption management
+4. **Decoder Configuration**: Configure the decoder on the network server
 
 ## 🔍 Troubleshooting
 
@@ -397,8 +397,8 @@ export LORAWAN_APP_ID=ogim-app
 
 ## 📝 Notes
 
-- MQTT برای سنسورهای نزدیک و با برق مناسب است
-- LoRaWAN برای سنسورهای دور و کم‌مصرف مناسب است
-- هر دو پروتکل به صورت خودکار با Data Ingestion Service یکپارچه می‌شوند
-- داده‌ها به Kafka و TimescaleDB ارسال می‌شوند
+- MQTT is suitable for nearby, mains-powered sensors
+- LoRaWAN is suitable for remote, low-power sensors
+- Both protocols integrate with the Data Ingestion Service automatically
+- Data is sent to Kafka and TimescaleDB
 

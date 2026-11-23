@@ -1,4 +1,4 @@
-/** هشدارهای زنده میدان مارون برای تب هشدارها و ارسال پیامک */
+/** Live Maroun field alerts for the alerts tab and SMS sending */
 
 import { FIELD, getMarunLiveState, type WellLiveState } from './marunField'
 
@@ -35,7 +35,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-OFF`,
       severity: 'critical',
-      message: `قطع ارتباط چاه ${w.nameFa} — آخرین مشاهده ${w.lastSeenMin} دقیقه پیش`,
+      message: `Well ${w.nameFa} disconnected — last seen ${w.lastSeenMin} minutes ago`,
       timestamp: minutesAgoIso(w.lastSeenMin),
       metadata_json: { sensor: 'comm', category: 'connectivity', sms_priority: 1 },
     })
@@ -46,7 +46,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-ESP`,
       severity: 'critical',
-      message: `توقف پمپ درون‌چاهی الکتریکی در ${w.nameFa} — ریسک تجهیزات ${w.equipmentRisk}٪`,
+      message: `Electric submersible pump stopped at ${w.nameFa} — equipment risk ${w.equipmentRisk}%`,
       timestamp: minutesAgoIso(8 + (w.equipmentRisk % 20)),
       metadata_json: { sensor: 'esp', category: 'equipment', sms_priority: 1 },
     })
@@ -57,7 +57,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-WC`,
       severity: w.waterCut >= 70 ? 'critical' : 'warning',
-      message: `افزایش درصد آب تولیدی در ${w.nameFa}: ${w.waterCut}٪ (آستانه ۵۵٪)`,
+      message: `Increase in produced water cut at ${w.nameFa}: ${w.waterCut}% (threshold 55%)`,
       timestamp: minutesAgoIso(15 + Math.round(w.waterCut / 5)),
       metadata_json: { sensor: 'water_cut', category: 'production', value: w.waterCut },
     })
@@ -68,7 +68,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-EQ`,
       severity: w.equipmentRisk >= 65 ? 'critical' : 'warning',
-      message: `ریسک خرابی تجهیزات در ${w.nameFa}: ${w.equipmentRisk}٪ — لرزش/جریان پمپ خارج از محدوده`,
+      message: `Equipment failure risk at ${w.nameFa}: ${w.equipmentRisk}% — pump vibration/current out of range`,
       timestamp: minutesAgoIso(22),
       metadata_json: { sensor: 'esp_vibration', category: 'equipment', value: w.equipmentRisk },
     })
@@ -79,7 +79,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-DEC`,
       severity: 'warning',
-      message: `افت تولید ۳۰روزه ${w.nameFa}: ${w.declinePct30d}٪ — بررسی شیر کنترل جریان و فشار سرچاهی`,
+      message: `30-day production decline of ${w.nameFa}: ${w.declinePct30d}% — check the choke valve and wellhead pressure`,
       timestamp: minutesAgoIso(40),
       metadata_json: { sensor: 'oil_rate', category: 'production', value: w.declinePct30d },
     })
@@ -90,7 +90,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-THP`,
       severity: 'warning',
-      message: `فشار سرچاهی بالا در ${w.nameFa}: ${w.thp} psi`,
+      message: `High wellhead pressure at ${w.nameFa}: ${w.thp} psi`,
       timestamp: minutesAgoIso(12),
       metadata_json: { sensor: 'thp', category: 'wellhead', value: w.thp },
     })
@@ -101,7 +101,7 @@ function wellAlerts(w: WellLiveState): MarunAlert[] {
       ...base,
       alert_id: `ALT-${w.id}-HLTH`,
       severity: w.healthScore < 40 ? 'critical' : 'warning',
-      message: `کاهش امتیاز سلامت ${w.nameFa} به ${w.healthScore}`,
+      message: `${w.nameFa} health score dropped to ${w.healthScore}`,
       timestamp: minutesAgoIso(18),
       metadata_json: { sensor: 'health', category: 'integrity', value: w.healthScore },
     })
@@ -114,36 +114,36 @@ function facilityAlerts(): MarunAlert[] {
   return [
     {
       alert_id: 'ALT-SEP-MN-01-LEVEL',
-      well_name: 'تسهیلات / جداکننده',
+      well_name: 'Facilities / Separator',
       severity: 'warning',
-      message: 'سطح مایع جداکننده سه‌فازی نزدیک حد بالا — کنترل شیر خروجی',
+      message: 'Three-phase separator liquid level near the upper limit — check the outlet valve',
       status: 'open',
       timestamp: minutesAgoIso(25),
       metadata_json: { sensor: 'separator_l', category: 'facility' },
     },
     {
       alert_id: 'ALT-COMP-MN-02-VIB',
-      well_name: 'تسهیلات / کمپرسور',
+      well_name: 'Facilities / Compressor',
       severity: 'critical',
-      message: 'لرزش غیرعادی کمپرسور گاز — احتمال خرابی یاتاقان',
+      message: 'Abnormal gas compressor vibration — possible bearing failure',
       status: 'open',
       timestamp: minutesAgoIso(9),
       metadata_json: { sensor: 'comp_vibration', category: 'facility', sms_priority: 1 },
     },
     {
       alert_id: 'ALT-PIPE-MN-MAIN-P',
-      well_name: 'تسهیلات / خط لوله',
+      well_name: 'Facilities / Pipeline',
       severity: 'warning',
-      message: 'افت فشار خط لوله صادرات نسبت به ست‌پوینت — بررسی نشتی/شیر',
+      message: 'Export pipeline pressure drop versus setpoint — check for leak/valve',
       status: 'open',
       timestamp: minutesAgoIso(33),
       metadata_json: { sensor: 'pipeline_p', category: 'facility' },
     },
     {
       alert_id: 'ALT-GL-MN-COMP',
-      well_name: 'تسهیلات / گازرانی',
+      well_name: 'Facilities / Gas lift',
       severity: 'info',
-      message: 'کاهش ظرفیت کمپرسور گازرانی — برنامه‌ریزی سرویس پیشگیرانه',
+      message: 'Gas lift compressor capacity reduced — plan preventive service',
       status: 'acknowledged',
       timestamp: minutesAgoIso(120),
       metadata_json: { sensor: 'gas_lift', category: 'facility' },
@@ -151,7 +151,7 @@ function facilityAlerts(): MarunAlert[] {
   ]
 }
 
-/** فهرست هشدارهای میدان برای نمایش و ارسال پیامک */
+/** List of field alerts for display and SMS sending */
 export function getMarunAlerts(tick = Date.now()): MarunAlert[] {
   const wells = getMarunLiveState(tick)
   const fromWells = wells.flatMap(wellAlerts)
@@ -171,12 +171,12 @@ export function buildAlertSmsText(alert: {
   message: string
 }) {
   const sev =
-    alert.severity === 'critical' ? 'بحرانی' : alert.severity === 'warning' ? 'هشدار' : 'اطلاع'
+    alert.severity === 'critical' ? 'Critical' : alert.severity === 'warning' ? 'Warning' : 'Info'
   return (
-    `هوشمندسازی میادین — هشدار ${sev}\n` +
-    `چاه/محل: ${alert.well_name}\n` +
+    `Field Smartification — ${sev} alert\n` +
+    `Well/location: ${alert.well_name}\n` +
     `${alert.message}\n` +
-    `کد: ${alert.alert_id}\n` +
+    `Code: ${alert.alert_id}\n` +
     `${FIELD.nameFa}`
   )
 }
@@ -218,7 +218,7 @@ export function saveLocalSmsRecipient(phone: string, label: string): LocalSmsRec
   const entry: LocalSmsRecipient = {
     phone,
     phone_display: displayPhone(phone),
-    label: label || 'اپراتور',
+    label: label || 'Operator',
     enabled: true,
     severities: ['critical', 'warning'],
   }
@@ -258,13 +258,13 @@ export function getLocalSmsStatus(phoneFallback?: string) {
   if (recipients.length === 0 && phoneFallback) {
     return {
       provider: 'local-mock',
-      detail: 'حالت محلی — شماره هنوز ثبت نشده؛ پس از ثبت، پیامک در صف مرورگر ذخیره می‌شود',
+      detail: 'Local mode — number not yet registered; after registration, the SMS is stored in the browser queue',
       recipients: [],
     }
   }
   return {
     provider: 'local-mock',
-    detail: 'حالت محلی (بدون درگاه) — پیامک‌ها در صف مرورگر ذخیره می‌شوند',
+    detail: 'Local mode (no gateway) — SMS messages are stored in the browser queue',
     recipients,
   }
 }

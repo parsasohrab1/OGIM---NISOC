@@ -1,6 +1,6 @@
 """
 Storage Optimization Service
-مدیریت بهینه‌سازی ذخیره‌سازی: Compression, Partitioning, Retention
+Storage optimization management: Compression, Partitioning, Retention
 """
 
 import os

@@ -25,7 +25,7 @@ const OFFLINE_USER: AuthUser = {
 const DEV_USERNAME = 'admin'
 const DEV_PASSWORD = 'Admin@123'
 
-/** توکن ساختگی محلی فقط برای عبور از گیت‌های کلاینت — در سرور اعتبار ندارد */
+/** Local mock token only to pass the client gates — not valid on the server */
 function ensureOfflineToken() {
   if (!localStorage.getItem('access_token')) {
     localStorage.setItem('access_token', 'offline-live-token')

@@ -50,14 +50,14 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="navbar-top">
           <div className="nav-brand">
-            <h1>هوشمندسازی میادین</h1>
-            <span>میدان مارون · شرکت ملی مناطق نفت‌خیز جنوب</span>
+            <h1>Field Smartification</h1>
+            <span>Maroun field · National Iranian South Oil Company</span>
           </div>
           {user && (
             <div className="nav-user">
               {(offlineLive || isOfflineLiveForced()) && (
-                <span className="offline-live-badge" title="اجرای زنده بدون نیاز به اینترنت یا بک‌اند">
-                  زنده آفلاین
+                <span className="offline-live-badge" title="Live run without needing internet or a backend">
+                  Live offline
                 </span>
               )}
               <span>
@@ -67,23 +67,23 @@ export default function Layout({ children }: LayoutProps) {
           )}
         </div>
         <div className="nav-links">
-          {link('/', 'داشبورد')}
-          {link('/wells', 'چاه‌ها')}
-          {link('/alerts', 'هشدارها')}
-          {link('/production-forecast', 'پیش‌بینی تولید')}
-          {link('/dvr', 'اعتبارسنجی داده')}
-          {link('/maintenance', 'نگهداری پیش‌بینانه')}
-          {link('/scada', 'اسکادا و کنترل‌گر منطقی')}
-          {link('/well3d', 'نمایش سه‌بعدی')}
-          {link('/ar-integration', 'واقعیت افزوده')}
-          {link('/report-builder', 'گزارش‌ساز')}
-          {link('/subsidiaries', 'شرکت‌های تابعه')}
-          {link('/subsidiary-production', 'وضعیت تولید شرکت‌های تابعه')}
-          {link('/equipment', 'تجهیزات')}
-          {link('/manual-data-entry', 'ثبت دستی اطلاعات چاه')}
-          {link('/vfm-decline', 'دبی‌سنج مجازی و منحنی افت')}
-          {link('/access-control', 'سطوح دسترسی')}
-          {link('/system', 'سیستم')}
+          {link('/', 'Dashboard')}
+          {link('/wells', 'Wells')}
+          {link('/alerts', 'Alerts')}
+          {link('/production-forecast', 'Production forecast')}
+          {link('/dvr', 'Data validation')}
+          {link('/maintenance', 'Predictive maintenance')}
+          {link('/scada', 'SCADA and PLC')}
+          {link('/well3d', '3D view')}
+          {link('/ar-integration', 'Augmented reality')}
+          {link('/report-builder', 'Report builder')}
+          {link('/subsidiaries', 'Subsidiary companies')}
+          {link('/subsidiary-production', 'Subsidiary production status')}
+          {link('/equipment', 'Equipment')}
+          {link('/manual-data-entry', 'Manual well data entry')}
+          {link('/vfm-decline', 'Virtual flow meter and decline curve')}
+          {link('/access-control', 'Access levels')}
+          {link('/system', 'System')}
         </div>
       </nav>
       <main className="main-content">{children}</main>
@@ -93,17 +93,17 @@ export default function Layout({ children }: LayoutProps) {
 
 function roleFa(role: string) {
   const map: Record<string, string> = {
-    system_admin: 'مدیر سیستم',
-    hq_operations_chief: 'رئیس مهندسی بهره‌برداری ستاد',
-    subsidiary_ops_manager: 'مدیر بهره‌برداری شرکت تابعه',
-    field_supervisor: 'سرپرست عملیات میدان',
-    field_operator: 'اپراتور میدان',
-    data_engineer: 'مهندس داده',
-    data_entry_operator: 'متصدی ثبت اطلاعات چاه',
-    viewer: 'بازدیدکننده',
-    admin: 'مدیر',
-    offline_operator: 'اپراتور آفلاین',
-    guest: 'مهمان',
+    system_admin: 'System administrator',
+    hq_operations_chief: 'Head of Operations Engineering (HQ)',
+    subsidiary_ops_manager: 'Subsidiary operations manager',
+    field_supervisor: 'Field operations supervisor',
+    field_operator: 'Field operator',
+    data_engineer: 'Data engineer',
+    data_entry_operator: 'Well data entry clerk',
+    viewer: 'Viewer',
+    admin: 'Admin',
+    offline_operator: 'Offline operator',
+    guest: 'Guest',
   }
   return map[role] || role
 }

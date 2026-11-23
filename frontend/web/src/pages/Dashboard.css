@@ -192,9 +192,9 @@
   overflow-x: hidden;
 }
 
-/* تعداد چاه‌های میدان مارون (۵۰۰) در یک ارتفاع بلندتر از دیدگاه ثابت رسم و
-   قابل اسکرول می‌شود؛ ارتفاع دقیق این لایه بر مبنای MAP_ROWS در Dashboard.tsx
-   محاسبه و به‌صورت inline تنظیم می‌شود. */
+/* The number of Maroun field wells (500) is drawn at a taller height from a fixed viewpoint and
+   is scrollable; the exact height of this layer is computed based on MAP_ROWS in Dashboard.tsx
+   and set inline. */
 .deh-map-inner {
   position: relative;
   width: 100%;
@@ -556,7 +556,7 @@
   min-height: 260px;
 }
 
-/* —— اپراتور هوشمند —— */
+/* —— Smart operator —— */
 .ap-badge {
   color: #558b2f;
   font-weight: 700;

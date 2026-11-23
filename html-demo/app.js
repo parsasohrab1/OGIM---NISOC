@@ -40,7 +40,7 @@ async function checkConnection() {
         
         if (isConnected) {
             statusEl.className = 'connection-status connected';
-            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>متصل به سرور</span>';
+            statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Connected to server</span>';
             useMockData = false;
             console.log('Connected to backend');
         } else {
@@ -50,7 +50,7 @@ async function checkConnection() {
         isConnected = false;
         useMockData = true;
         statusEl.className = 'connection-status disconnected';
-        statusEl.innerHTML = '<i class="fas fa-circle"></i><span>حالت آفلاین (داده نمونه)</span>';
+        statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline mode (sample data)</span>';
         console.warn('Using mock data');
     }
 }
@@ -156,7 +156,7 @@ async function loadWellsData() {
         });
     } catch (error) {
         console.error('Error loading wells data:', error);
-        tbody.innerHTML = '<tr><td colspan="7" class="loading">خطا در بارگذاری داده‌ها</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="loading">Error loading data</td></tr>';
     }
 }
 
@@ -177,7 +177,7 @@ async function loadAlertsData() {
         alertsContainer.innerHTML = '';
         
         if (alerts.length === 0) {
-            alertsContainer.innerHTML = '<div class="alert-item"><div class="loading">هشداری وجود ندارد</div></div>';
+            alertsContainer.innerHTML = '<div class="alert-item"><div class="loading">No alerts</div></div>';
             return;
         }
         
@@ -195,7 +195,7 @@ async function loadAlertsData() {
         });
     } catch (error) {
         console.error('Error loading alerts:', error);
-        alertsContainer.innerHTML = '<div class="alert-item"><div class="loading">خطا در بارگذاری هشدارها</div></div>';
+        alertsContainer.innerHTML = '<div class="alert-item"><div class="loading">Error loading alerts</div></div>';
     }
 }
 
@@ -239,7 +239,7 @@ function initCharts() {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'تولید (bbl/day)'
+                            text: 'Production (bbl/day)'
                         }
                     }
                 }
@@ -253,12 +253,12 @@ function initCharts() {
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'فشار (psi)',
+                    label: 'Pressure (psi)',
                     data: [],
                     backgroundColor: '#f59e0b',
                     yAxisID: 'y'
                 }, {
-                    label: 'دما (°C)',
+                    label: 'Temperature (°C)',
                     data: [],
                     backgroundColor: '#ef4444',
                     yAxisID: 'y1'
@@ -279,7 +279,7 @@ function initCharts() {
                         position: 'right',
                         title: {
                             display: true,
-                            text: 'فشار (psi)'
+                            text: 'Pressure (psi)'
                         }
                     },
                     y1: {
@@ -288,7 +288,7 @@ function initCharts() {
                         position: 'left',
                         title: {
                             display: true,
-                            text: 'دما (°C)'
+                            text: 'Temperature (°C)'
                         },
                         grid: {
                             drawOnChartArea: false
@@ -396,28 +396,28 @@ function formatTime(timestamp) {
 
 function translateStatus(status) {
     const translations = {
-        'running': 'در حال کار',
-        'stopped': 'متوقف',
-        'maintenance': 'تعمیرات'
+        'running': 'Running',
+        'stopped': 'Stopped',
+        'maintenance': 'Maintenance'
     };
     return translations[status] || status;
 }
 
 function translateWellType(type) {
     const translations = {
-        'production': 'تولیدی',
-        'development': 'توسعه‌ای',
-        'observation': 'مشاهده‌ای',
-        'injection': 'تزریقی'
+        'production': 'Production',
+        'development': 'Development',
+        'observation': 'Observation',
+        'injection': 'Injection'
     };
     return translations[type] || type;
 }
 
 function translateSeverity(severity) {
     const translations = {
-        'critical': 'بحرانی',
-        'warning': 'هشدار',
-        'info': 'اطلاع'
+        'critical': 'Critical',
+        'warning': 'Warning',
+        'info': 'Info'
     };
     return translations[severity] || severity;
 }
@@ -445,7 +445,7 @@ function saveSettings() {
     
     closeSettings();
     
-    alert('تنظیمات ذخیره شد');
+    alert('Settings saved');
     refreshData();
 }
 

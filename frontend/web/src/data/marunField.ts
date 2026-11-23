@@ -1,26 +1,26 @@
-/** میدان مارون — NISOC field configuration (داده‌های این ماژول سنتتیک/نمایشی است، نه دادهٔ واقعی میدان) */
+/** Maroun field — NISOC field configuration (the data in this module is synthetic/demonstration, not real field data) */
 
 export const FIELD = {
-  nameFa: 'میدان مارون',
+  nameFa: 'Maroun field',
   nameEn: 'Marun Field',
   code: 'MN',
-  clientFa: 'شرکت ملی مناطق نفت‌خیز جنوب',
+  clientFa: 'National Iranian South Oil Company',
   clientEn: 'National Iranian South Oil Company (NISOC)',
-  // تعداد چاه کل میدان مارون: ۵۰۰ حلقه؛ نمایش سه‌بعدی/اسکادا در همین فایل همچنان
-  // فقط زیرمجموعه‌ای نمونه (۲۴ چاه) را به‌صورت مصور نشان می‌دهد.
+  // Total number of wells in the Maroun field: 500; the 3D/SCADA display in this same file still
+  // shows only a sample subset (24 wells) visually.
   wellCount: 500,
-  oilTypeFa: 'نفت سبک-میانه ترش',
+  oilTypeFa: 'Sour light-to-medium crude',
   oilTypeEn: 'Light-Medium Sour Crude',
   apiGravity: 34.5,
-  regionFa: 'خوزستان، جنوب ایران',
-  reservoirFa: 'آسماری–بنگستان',
+  regionFa: 'Khuzestan, southern Iran',
+  reservoirFa: 'Asmari–Bangestan',
 } as const
 
-/** تعداد چاه‌های نمایش داده‌شده در نقشه/فهرست میدان مارون، برابر با FIELD.wellCount */
+/** Number of wells displayed on the Maroun field map/list, equal to FIELD.wellCount */
 export const MAP_COLUMNS = 20
 export const MAP_ROWS = Math.ceil(FIELD.wellCount / MAP_COLUMNS)
 
-/** فهرست چاه‌های مارون؛ مختصات x/y درصدی (۰ تا ۱۰۰) نسبت به یک شبکهٔ MAP_COLUMNS×MAP_ROWS هستند */
+/** List of Maroun wells; x/y coordinates are percentages (0 to 100) of a MAP_COLUMNS×MAP_ROWS grid */
 export const MARUN_WELLS = Array.from({ length: FIELD.wellCount }, (_, i) => {
   // padStart(2, '0') keeps well #1 as "MN-01" (matching hardcoded references
   // elsewhere) while still allowing 3-digit IDs past well #99 unclipped
@@ -29,7 +29,7 @@ export const MARUN_WELLS = Array.from({ length: FIELD.wellCount }, (_, i) => {
   const row = Math.floor(i / MAP_COLUMNS)
   return {
     id: `MN-${n}`,
-    nameFa: `چاه مارون ${n}`,
+    nameFa: `Maroun well ${n}`,
     nameEn: `Marun Well ${n}`,
     x: ((col + 0.5) / MAP_COLUMNS) * 100,
     y: ((row + 0.5) / MAP_ROWS) * 100,
@@ -39,10 +39,10 @@ export const MARUN_WELLS = Array.from({ length: FIELD.wellCount }, (_, i) => {
 export type WellHealthStatus = 'healthy' | 'warning' | 'critical' | 'offline'
 
 export const STATUS_LABEL_FA: Record<WellHealthStatus, string> = {
-  healthy: 'سالم',
-  warning: 'هشدار',
-  critical: 'مشکل',
-  offline: 'آفلاین',
+  healthy: 'Healthy',
+  warning: 'Warning',
+  critical: 'Problem',
+  offline: 'Offline',
 }
 
 export const STATUS_COLOR: Record<WellHealthStatus, string> = {
@@ -52,23 +52,23 @@ export const STATUS_COLOR: Record<WellHealthStatus, string> = {
   offline: '#616161',
 }
 
-/** متغیرهای اندازه‌گیری‌شده توسط سنسورهای چاه و تاسیسات */
+/** Variables measured by the well and facility sensors */
 export const SENSOR_VARIABLES = [
-  { key: 'thp', nameFa: 'فشار سرچاهی', unit: 'psi', category: 'wellhead' },
-  { key: 'tht', nameFa: 'دمای سرچاهی', unit: '°C', category: 'wellhead' },
-  { key: 'chp', nameFa: 'فشار دالیز', unit: 'psi', category: 'wellhead' },
-  { key: 'oil_rate', nameFa: 'دبی نفت', unit: 'bbl/d', category: 'production' },
-  { key: 'gas_rate', nameFa: 'دبی گاز', unit: 'Mscf/d', category: 'production' },
-  { key: 'water_rate', nameFa: 'دبی آب', unit: 'bbl/d', category: 'production' },
-  { key: 'water_cut', nameFa: 'درصد آب تولیدی', unit: '%', category: 'production' },
-  { key: 'gor', nameFa: 'نسبت گاز به نفت', unit: 'scf/bbl', category: 'production' },
-  { key: 'esp_current', nameFa: 'جریان پمپ درون‌چاهی الکتریکی', unit: 'A', category: 'equipment' },
-  { key: 'esp_vibration', nameFa: 'لرزش پمپ', unit: 'mm/s', category: 'equipment' },
-  { key: 'esp_temp', nameFa: 'دمای موتور پمپ', unit: '°C', category: 'equipment' },
-  { key: 'manifold_p', nameFa: 'فشار منیفولد', unit: 'psi', category: 'facility' },
-  { key: 'separator_p', nameFa: 'فشار جداکننده', unit: 'psi', category: 'facility' },
-  { key: 'separator_l', nameFa: 'سطح مایع جداکننده', unit: '%', category: 'facility' },
-  { key: 'pipeline_p', nameFa: 'فشار خط لوله', unit: 'psi', category: 'facility' },
+  { key: 'thp', nameFa: 'Wellhead pressure', unit: 'psi', category: 'wellhead' },
+  { key: 'tht', nameFa: 'Wellhead temperature', unit: '°C', category: 'wellhead' },
+  { key: 'chp', nameFa: 'Annulus pressure', unit: 'psi', category: 'wellhead' },
+  { key: 'oil_rate', nameFa: 'Oil rate', unit: 'bbl/d', category: 'production' },
+  { key: 'gas_rate', nameFa: 'Gas rate', unit: 'Mscf/d', category: 'production' },
+  { key: 'water_rate', nameFa: 'Water rate', unit: 'bbl/d', category: 'production' },
+  { key: 'water_cut', nameFa: 'Produced water cut', unit: '%', category: 'production' },
+  { key: 'gor', nameFa: 'Gas-to-oil ratio', unit: 'scf/bbl', category: 'production' },
+  { key: 'esp_current', nameFa: 'Electric submersible pump current', unit: 'A', category: 'equipment' },
+  { key: 'esp_vibration', nameFa: 'Pump vibration', unit: 'mm/s', category: 'equipment' },
+  { key: 'esp_temp', nameFa: 'Pump motor temperature', unit: '°C', category: 'equipment' },
+  { key: 'manifold_p', nameFa: 'Manifold pressure', unit: 'psi', category: 'facility' },
+  { key: 'separator_p', nameFa: 'Separator pressure', unit: 'psi', category: 'facility' },
+  { key: 'separator_l', nameFa: 'Separator liquid level', unit: '%', category: 'facility' },
+  { key: 'pipeline_p', nameFa: 'Pipeline pressure', unit: 'psi', category: 'facility' },
 ] as const
 
 function seeded(n: number) {
@@ -192,7 +192,7 @@ export type WellProductionForecast = {
   status: WellHealthStatus
 }
 
-/** پیش‌بینی افت تولید و Water Cut برای هر چاه مارون (۱۲ ماه) */
+/** Production decline and Water Cut forecast for each Maroun well (12 months) */
 export function buildWellProductionForecasts(tick = Date.now()): WellProductionForecast[] {
   const live = getMarunLiveState(tick)
   return MARUN_WELLS.map((w, i) => {
@@ -206,7 +206,7 @@ export function buildWellProductionForecasts(tick = Date.now()): WellProductionF
       const waterCut = Math.min(92, lw.waterCut + wcRisePerMonth * m)
       const water = (oil * waterCut) / Math.max(1, 100 - waterCut)
       return {
-        month: m === 0 ? 'اکنون' : `M+${m}`,
+        month: m === 0 ? 'Now' : `M+${m}`,
         oil: Math.round(oil),
         waterCut: Math.round(waterCut * 10) / 10,
         water: Math.round(water),
@@ -327,7 +327,7 @@ export function buildMarunWell3DData(wellId: string, tick = Date.now()): MarunWe
       r > 0.55
         ? [
             {
-              name: 'لایه فشار بالا / High-pressure zone',
+              name: 'High-pressure zone',
               fromDepth: Math.round(totalDepth * 0.72),
               toDepth: Math.round(totalDepth * 0.82),
               severity: r > 0.8 ? 'critical' : 'warning',
@@ -335,7 +335,7 @@ export function buildMarunWell3DData(wellId: string, tick = Date.now()): MarunWe
           ]
         : [],
     bop: {
-      type: 'جلوگیری‌کننده حلقوی و رام (۱۵ هزار psi)',
+      type: 'Annular and ram preventer (15K psi)',
       pressureRating: 15000,
       stackHeight: 3.5,
       status: live?.pumpOnline === false ? 'maintenance' : 'open',
@@ -352,9 +352,9 @@ export function buildMarunWell3DData(wellId: string, tick = Date.now()): MarunWe
       wingValve: { position: 70 + Math.round(r * 20), status: 'open' },
       chokeValve: { position: 40 + Math.round(r * 35), status: 'open' },
       pressureGauges: [
-        { name: 'فشار سرچاهی', value: thp, unit: 'psi' },
-        { name: 'فشار لوله مغزی', value: Math.round(thp * 0.92), unit: 'psi' },
-        { name: 'فشار دالیز', value: Math.round(thp * 0.35), unit: 'psi' },
+        { name: 'Wellhead pressure', value: thp, unit: 'psi' },
+        { name: 'Tubing pressure', value: Math.round(thp * 0.92), unit: 'psi' },
+        { name: 'Annulus pressure', value: Math.round(thp * 0.35), unit: 'psi' },
       ],
       flowMeter: {
         flowRate: live?.vfmOilRate ?? oil,

@@ -1,52 +1,52 @@
-# راهنمای مهاجرت دیتابیس با Alembic
+# Database Migration Guide with Alembic
 
-این سند فرآیند اعمال تغییرات بانک اطلاعاتی از توسعه تا تولید را مشخص می‌کند.
+This document describes the process of applying database changes from development to production.
 
-## محیط‌ها
-- **Development (local/dev cluster)**: جایی که تغییرات مدل و migration جدید تولید می‌شود.
-- **Staging**: محیط تست یکپارچه با داده‌های شبه‌واقعی؛ migration تولیدشده باید ابتدا اینجا اعمال و تأیید شود.
-- **Production**: محیط عملیاتی. هیچ تغییری بدون عبور از staging اجرا نمی‌شود.
+## Environments
+- **Development (local/dev cluster)**: Where model changes and new migrations are produced.
+- **Staging**: An integrated test environment with semi-realistic data; the generated migration must first be applied and verified here.
+- **Production**: The operational environment. No change is applied without passing through staging.
 
-## گردش‌کار مهاجرت
-1. **توسعه migration**
+## Migration workflow
+1. **Developing a migration**
    ```bash
    cd backend
    alembic revision --autogenerate -m "describe change"
    ```
-   - فایل جدید در `backend/migrations/versions/` را بازبینی کنید؛ فقط تغییرات لازم باید وجود داشته باشد.
-   - تست‌ها:  
+   - Review the new file in `backend/migrations/versions/`; only the necessary changes should be present.
+   - Tests:
      ```bash
      pytest backend/tests
-     alembic upgrade head  # روی دیتابیس محلی
-     alembic downgrade -1  # برای اطمینان از قابلیت rollback
+     alembic upgrade head  # on the local database
+     alembic downgrade -1  # to make sure rollback works
      ```
 
-2. **استقرار به Staging**
-   - در Pipeline CI/CD:  
+2. **Deploying to Staging**
+   - In the CI/CD Pipeline:
      ```bash
-     alembic upgrade head --sql > migrations.sql  # تولید اسکریپت
-     # پس از تأیید، روی دیتابیس staging اعمال کنید:
+     alembic upgrade head --sql > migrations.sql  # generate the script
+     # After approval, apply it to the staging database:
      alembic -x db_url=<STAGING_DB_URL> upgrade head
      ```
-   - صحت سرویس‌ها را بررسی کنید (health check، smoke test).
+   - Check the health of the services (health check, smoke test).
 
-3. **استقرار Production**
-   - پس از تأیید QA، همان اسکریپت SQL یا دستور `alembic upgrade head` با URL تولید اجرا می‌شود.
-   - در صورت خطا، دستور `alembic downgrade -1` آماده است اما توصیه می‌شود اسکریپت‌های migration قابلیت rollback داشته باشند.
+3. **Deploying to Production**
+   - After QA approval, the same SQL script or the `alembic upgrade head` command is run with the production URL.
+   - In case of an error, the `alembic downgrade -1` command is ready, but it is recommended that migration scripts support rollback.
 
-## متغیرها و تنظیمات
-- فایل `backend/alembic.ini` از متغیر محیطی `SQLALCHEMY_DATABASE_URL` یا `DATABASE_URL` استفاده می‌کند.
-- برای TimescaleDB یا پایگاه‌های دیگر، در صورت نیاز بخش‌های محیطی جدا (مثلاً `alembic_ts.ini`) تعریف کنید.
+## Variables and settings
+- The file `backend/alembic.ini` uses the environment variable `SQLALCHEMY_DATABASE_URL` or `DATABASE_URL`.
+- For TimescaleDB or other databases, define separate environment sections if needed (e.g. `alembic_ts.ini`).
 
-## نکات:
-- Migration تولید‌شده باید توسط Peer Review بررسی شود.
-- از اجرای `alembic revision --autogenerate` روی دیتابیس production یا staging خودداری کنید؛ فقط در محیط dev.
-- اسکریپت SQL تولید‌شده برای production باید در سیستم کنترل نسخه ذخیره شود (یا به Release مکتوب ضمیمه گردد).
+## Notes:
+- The generated migration must be reviewed by Peer Review.
+- Avoid running `alembic revision --autogenerate` on the production or staging database; only in the dev environment.
+- The SQL script generated for production must be stored in version control (or attached to a written Release).
 
-## دستورات مفید
-- مشاهده وضعیت migration‌ها: `alembic current`
-- مشاهده تاریخچه: `alembic history`
-- اجرای migration خاص: `alembic upgrade <revision>`
+## Useful Commands
+- View the migration status: `alembic current`
+- View the history: `alembic history`
+- Run a specific migration: `alembic upgrade <revision>`
 
-با رعایت این گردش‌کار، تیم می‌تواند تغییرات دیتابیس را کنترل‌شده و قابل ردیابی بین محیط‌ها منتقل کند.*** End Patch
+By following this workflow, the team can move database changes between environments in a controlled and traceable way.*** End Patch
 

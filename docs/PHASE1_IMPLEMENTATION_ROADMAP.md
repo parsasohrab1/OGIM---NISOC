@@ -1,63 +1,63 @@
-# 🚀 فاز 1: راهنمای پیاده‌سازی - پیشنهادات بحرانی
+# 🚀 Phase 1: Implementation Guide - Critical Recommendations
 
-**تاریخ:** دسامبر 2025  
-**مدت زمان:** 3 ماه  
-**اولویت:** Critical  
-**وضعیت:** Planning
+**Date:** December 2025
+**Duration:** 3 months
+**Priority:** Critical
+**Status:** Planning
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [Timeline و Milestones](#timeline)
-3. [1. بهبود Real-Time Data Streaming](#realtime-streaming)
-4. [2. بهبود ML Model Management](#ml-management)
-5. [3. بهبود Alert Management](#alert-management)
-6. [4. بهبود Data Quality & Validation](#data-quality)
-7. [5. بهبود Performance Monitoring](#performance)
-8. [Dependencies و Risks](#dependencies)
+1. [Overview](#overview)
+2. [Timeline and Milestones](#timeline)
+3. [1. Improving Real-Time Data Streaming](#realtime-streaming)
+4. [2. Improving ML Model Management](#ml-management)
+5. [3. Improving Alert Management](#alert-management)
+6. [4. Improving Data Quality & Validation](#data-quality)
+7. [5. Improving Performance Monitoring](#performance)
+8. [Dependencies and Risks](#dependencies)
 9. [Testing Strategy](#testing)
 10. [Deployment Plan](#deployment)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-فاز 1 شامل 5 پیشنهاد بحرانی است که باید در 3 ماه آینده پیاده‌سازی شوند. این پیشنهادات پایه و اساس بهبودهای بعدی را فراهم می‌کنند.
+Phase 1 includes 5 critical recommendations that must be implemented over the next 3 months. These recommendations provide the foundation for later improvements.
 
-### اهداف کلی فاز 1
+### Overall Phase 1 goals
 
-**📊 Tracking Dashboard:** برای tracking دقیق پیشرفت این اهداف، به [`PHASE1_GOALS_TRACKING.md`](./PHASE1_GOALS_TRACKING.md) مراجعه کنید.
+**📊 Tracking Dashboard:** For precise tracking of the progress of these goals, see [`PHASE1_GOALS_TRACKING.md`](./PHASE1_GOALS_TRACKING.md).
 
-1. **کاهش Latency از 1-10 ثانیه به < 100ms**
+1. **Reduce Latency from 1-10 seconds to < 100ms**
    - Baseline: 1-10 seconds (P95)
    - Target: < 100ms (P95)
    - Improvement: 99% reduction
    - Priority: Critical
    - Status: 🟡 In Progress (40%)
 
-2. **بهبود دقت پیش‌بینی‌های ML**
+2. **Improve the accuracy of ML predictions**
    - Baseline: Current accuracy (to be measured)
    - Target: +5% improvement
    - Models: Anomaly Detection, Failure Prediction, Time Series Forecast
    - Priority: High
    - Status: 🟡 In Progress (30%)
 
-3. **کاهش 30% در False Positive Alerts**
+3. **30% reduction in False Positive Alerts**
    - Baseline: Current false positive rate (to be measured)
    - Target: -30% reduction
    - Priority: High
    - Status: 🔴 Not Started (0%)
 
-4. **بهبود 40% در Data Quality Score**
+4. **40% improvement in Data Quality Score**
    - Baseline: Current quality score (to be measured)
    - Target: +40% improvement
    - Components: Completeness, Accuracy, Timeliness, Consistency, Validity
    - Priority: High
    - Status: 🔴 Not Started (0%)
 
-5. **شناسایی سریع‌تر Bottlenecks عملکردی**
+5. **Faster identification of performance Bottlenecks**
    - Baseline: Manual detection (hours/days)
    - Target: Real-time detection (< 1 minute)
    - Priority: Medium
@@ -65,57 +65,57 @@
 
 ---
 
-## <a name="timeline"></a>📅 Timeline و Milestones
+## <a name="timeline"></a>📅 Timeline and Milestones
 
-### ماه 1: Real-Time Streaming + ML Management
+### Month 1: Real-Time Streaming + ML Management
 
-**هفته 1-2: Real-Time Streaming (WebSocket)**
+**Weeks 1-2: Real-Time Streaming (WebSocket)**
 
-**📚 راهنمای کامل پیاده‌سازی:** برای جزئیات کامل معماری، کدهای نمونه، testing، و optimization، به [`WEBSOCKET_IMPLEMENTATION_GUIDE.md`](./WEBSOCKET_IMPLEMENTATION_GUIDE.md) مراجعه کنید.
+**📚 Complete implementation guide:** For full details on the architecture, sample code, testing, and optimization, see [`WEBSOCKET_IMPLEMENTATION_GUIDE.md`](./WEBSOCKET_IMPLEMENTATION_GUIDE.md).
 
-- ✅ طراحی معماری WebSocket
-  - معماری با Kafka و Redis integration
+- ✅ Design the WebSocket architecture
+  - Architecture with Kafka and Redis integration
   - Connection management strategy
   - Message routing design
   
-- ✅ پیاده‌سازی Backend WebSocket handler
+- ✅ Implement the Backend WebSocket handler
   - WebSocketManager class
   - Kafka consumer integration
   - Redis pub/sub integration
-  - Authentication و authorization
-  - Message queuing برای offline clients
+  - Authentication and authorization
+  - Message queuing for offline clients
   
-- ✅ پیاده‌سازی Frontend WebSocket client
+- ✅ Implement the Frontend WebSocket client
   - useWebSocket hook
-  - Auto-reconnection با exponential backoff
+  - Auto-reconnection with exponential backoff
   - Message handling
   - Connection status management
   
-- ✅ Testing و optimization
+- ✅ Testing and optimization
   - Unit tests
   - Integration tests
   - Performance tests (latency < 100ms)
   - Message compression
   - Connection pooling
 
-**هفته 3-4: ML Model Management**
+**Weeks 3-4: ML Model Management**
 
-**📚 راهنمای کامل پیاده‌سازی:** برای جزئیات کامل UI design، Model Registry API، Model Comparison، و A/B Testing Framework، به [`ML_MODEL_MANAGEMENT_IMPLEMENTATION.md`](./ML_MODEL_MANAGEMENT_IMPLEMENTATION.md) مراجعه کنید.
+**📚 Complete implementation guide:** For full details on the UI design, Model Registry API, Model Comparison, and A/B Testing Framework, see [`ML_MODEL_MANAGEMENT_IMPLEMENTATION.md`](./ML_MODEL_MANAGEMENT_IMPLEMENTATION.md).
 
-- ✅ طراحی UI برای ML Model Management
-  - Model List Page با filtering و search
-  - Model Card Component با metrics display
+- ✅ Design the UI for ML Model Management
+  - Model List Page with filtering and search
+  - Model Card Component with metrics display
   - Model Details Modal
   - Responsive design
   
-- ✅ پیاده‌سازی Model Registry API
-  - ModelManager class با MLflow integration
+- ✅ Implement the Model Registry API
+  - ModelManager class with MLflow integration
   - List models endpoint
   - Get model details endpoint
   - Model versions endpoint
   - Deploy/Archive endpoints
   
-- ✅ پیاده‌سازی Model Comparison
+- ✅ Implement Model Comparison
   - ModelComparisonEngine class
   - Metrics comparison (accuracy, precision, recall, F1)
   - Performance comparison
@@ -125,19 +125,19 @@
   - ABTestingManager class
   - Traffic splitting
   - Statistical significance testing
-  - Results tracking و visualization
+  - Results tracking and visualization
 
-### ماه 2: Alert Management + Data Quality
+### Month 2: Alert Management + Data Quality
 
-**هفته 5-6: Alert Management**
+**Weeks 5-6: Alert Management**
 
-**📚 راهنمای کامل پیاده‌سازی:** برای جزئیات کامل Alert Correlation، Root Cause Analysis، Alert Fatigue Detection، و Timeline Visualization، به [`ALERT_MANAGEMENT_IMPLEMENTATION.md`](./ALERT_MANAGEMENT_IMPLEMENTATION.md) مراجعه کنید.
+**📚 Complete implementation guide:** For full details on Alert Correlation, Root Cause Analysis, Alert Fatigue Detection, and Timeline Visualization, see [`ALERT_MANAGEMENT_IMPLEMENTATION.md`](./ALERT_MANAGEMENT_IMPLEMENTATION.md).
 
 - ✅ Alert Correlation Engine
   - Time-based correlation (5-minute window)
   - Equipment-based correlation
   - Pattern-based correlation
-  - Alert grouping و deduplication
+  - Alert grouping and deduplication
   
 - ✅ Root Cause Analysis (RCA)
   - Historical pattern analysis
@@ -153,42 +153,42 @@
   - Fatigue statistics tracking
   
 - ✅ Alert Timeline Visualization
-  - Timeline API با correlation
+  - Timeline API with correlation
   - Interactive timeline component
   - Alert group visualization
   - Root cause display
 
-**هفته 7-8: Data Quality & Validation**
+**Weeks 7-8: Data Quality & Validation**
 - ✅ Real-time Data Quality Dashboard
 - ✅ Automated Data Quality Reports
 - ✅ Data Lineage Tracking
 - ✅ Quality Score Trends
 
-### ماه 3: Performance Monitoring + Integration
+### Month 3: Performance Monitoring + Integration
 
-**هفته 9-10: Performance Monitoring**
+**Weeks 9-10: Performance Monitoring**
 - ✅ Performance Dashboard
 - ✅ APM Integration (OpenTelemetry)
 - ✅ End-to-end Latency Tracking
 - ✅ Service Dependency Map
 
-**هفته 11-12: Integration و Testing**
+**Weeks 11-12: Integration and Testing**
 - ✅ Integration testing
 - ✅ Performance testing
 - ✅ User acceptance testing
 - ✅ Documentation
 - ✅ Deployment
 
-> 📖 **راهنمای کامل Testing, Documentation و Deployment:** برای جزئیات کامل Integration Testing، Performance Testing، UAT، Documentation Standards، و Deployment Plan، به [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md) مراجعه کنید.
+> 📖 **Complete Testing, Documentation and Deployment guide:** For full details on Integration Testing, Performance Testing, UAT, Documentation Standards, and the Deployment Plan, see [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md).
 
 ---
 
-## <a name="realtime-streaming"></a>1️⃣ بهبود Real-Time Data Streaming
+## <a name="realtime-streaming"></a>1️⃣ Improving Real-Time Data Streaming
 
-### هدف
-کاهش latency از 1-10 ثانیه به < 100ms با استفاده از WebSocket
+### Goal
+Reduce latency from 1-10 seconds to < 100ms using WebSocket
 
-### معماری
+### Architecture
 
 ```
 Frontend (React)
@@ -202,7 +202,7 @@ API Gateway (WebSocket Handler)
     └─── Direct Service Connection (Critical data)
 ```
 
-### پیاده‌سازی Backend
+### Backend implementation
 
 ```python
 # backend/api-gateway/websocket_handler.py
@@ -330,7 +330,7 @@ async def websocket_endpoint(
         await manager.disconnect(websocket, client_id)
 ```
 
-### پیاده‌سازی Frontend
+### Frontend implementation
 
 ```typescript
 // frontend/web/src/hooks/useWebSocket.ts
@@ -452,20 +452,20 @@ function Dashboard() {
 
 ### Milestones
 
-- [ ] هفته 1: طراحی معماری و API specification
-- [ ] هفته 2: پیاده‌سازی Backend WebSocket handler
-- [ ] هفته 2: پیاده‌سازی Frontend WebSocket client
-- [ ] هفته 2: Integration testing
-- [ ] هفته 2: Performance testing (latency < 100ms)
+- [ ] Week 1: Design the architecture and API specification
+- [ ] Week 2: Implement the Backend WebSocket handler
+- [ ] Week 2: Implement the Frontend WebSocket client
+- [ ] Week 2: Integration testing
+- [ ] Week 2: Performance testing (latency < 100ms)
 
 ---
 
-## <a name="ml-management"></a>2️⃣ بهبود ML Model Management
+## <a name="ml-management"></a>2️⃣ Improving ML Model Management
 
-### هدف
-ایجاد UI جامع برای مدیریت مدل‌های ML با قابلیت A/B testing و model comparison
+### Goal
+Create a comprehensive UI for managing ML models with A/B testing and model comparison capabilities
 
-### معماری
+### Architecture
 
 ```
 ML Model Management UI
@@ -476,7 +476,7 @@ ML Model Management UI
     └─── Model Metrics Dashboard
 ```
 
-### پیاده‌سازی Backend
+### Backend implementation
 
 ```python
 # backend/ml-inference-service/model_management.py
@@ -618,7 +618,7 @@ class ModelManager:
         }
 ```
 
-### پیاده‌سازی Frontend
+### Frontend implementation
 
 ```typescript
 // frontend/web/src/pages/MLModels.tsx
@@ -685,20 +685,20 @@ export function MLModels() {
 
 ### Milestones
 
-- [ ] هفته 3: طراحی UI/UX برای Model Management
-- [ ] هفته 3: پیاده‌سازی Model Registry API
-- [ ] هفته 4: پیاده‌سازی Model Comparison
-- [ ] هفته 4: پیاده‌سازی A/B Testing Framework
-- [ ] هفته 4: Integration testing
+- [ ] Week 3: Design the UI/UX for Model Management
+- [ ] Week 3: Implement the Model Registry API
+- [ ] Week 4: Implement Model Comparison
+- [ ] Week 4: Implement the A/B Testing Framework
+- [ ] Week 4: Integration testing
 
 ---
 
-## <a name="alert-management"></a>3️⃣ بهبود Alert Management
+## <a name="alert-management"></a>3️⃣ Improving Alert Management
 
-### هدف
-کاهش 30% در false positive alerts با Alert Correlation و Root Cause Analysis
+### Goal
+30% reduction in false positive alerts with Alert Correlation and Root Cause Analysis
 
-### معماری
+### Architecture
 
 ```
 Alert Stream
@@ -709,7 +709,7 @@ Alert Stream
     └─── Alert Timeline
 ```
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/alert-service/alert_correlation.py
@@ -838,20 +838,20 @@ class RootCauseAnalysisEngine:
 
 ### Milestones
 
-- [ ] هفته 5: طراحی Alert Correlation Engine
-- [ ] هفته 5: پیاده‌سازی Correlation Rules
-- [ ] هفته 6: پیاده‌سازی Root Cause Analysis
-- [ ] هفته 6: پیاده‌سازی Alert Fatigue Detection
-- [ ] هفته 6: UI برای Alert Timeline
+- [ ] Week 5: Design the Alert Correlation Engine
+- [ ] Week 5: Implement Correlation Rules
+- [ ] Week 6: Implement Root Cause Analysis
+- [ ] Week 6: Implement Alert Fatigue Detection
+- [ ] Week 6: UI for the Alert Timeline
 
 ---
 
-## <a name="data-quality"></a>4️⃣ بهبود Data Quality & Validation
+## <a name="data-quality"></a>4️⃣ Improving Data Quality & Validation
 
-### هدف
-بهبود 40% در data quality score با real-time monitoring و automated reports
+### Goal
+40% improvement in the data quality score with real-time monitoring and automated reports
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/dvr-service/data_quality_dashboard.py
@@ -902,21 +902,21 @@ class DataQualityDashboard:
 
 ### Milestones
 
-- [ ] هفته 7: طراحی Data Quality Dashboard
-- [ ] هفته 7: پیاده‌سازی Real-time Quality Metrics
-- [ ] هفته 8: پیاده‌سازی Automated Reports
-- [ ] هفته 8: پیاده‌سازی Data Lineage Tracking
+- [ ] Week 7: Design the Data Quality Dashboard
+- [ ] Week 7: Implement Real-time Quality Metrics
+- [ ] Week 8: Implement Automated Reports
+- [ ] Week 8: Implement Data Lineage Tracking
 
 ---
 
-## <a name="performance"></a>5️⃣ بهبود Performance Monitoring
+## <a name="performance"></a>5️⃣ Improving Performance Monitoring
 
-> 📖 **راهنمای کامل پیاده‌سازی:** [`docs/PERFORMANCE_MONITORING_IMPLEMENTATION.md`](PERFORMANCE_MONITORING_IMPLEMENTATION.md)
+> 📖 **Complete implementation guide:** [`docs/PERFORMANCE_MONITORING_IMPLEMENTATION.md`](PERFORMANCE_MONITORING_IMPLEMENTATION.md)
 
-### هدف
-شناسایی سریع‌تر bottlenecks با APM و end-to-end latency tracking
+### Goal
+Faster identification of bottlenecks with APM and end-to-end latency tracking
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/shared/opentelemetry_instrumentation.py
@@ -958,54 +958,54 @@ async def get_data():
 
 ### Milestones
 
-- [ ] هفته 9: Setup OpenTelemetry
-- [ ] هفته 9: Instrumentation تمام services
-- [ ] هفته 10: Performance Dashboard
-- [ ] هفته 10: End-to-end Latency Tracking
-- [ ] هفته 10: Service Dependency Map
-- [ ] هفته 11: Bottleneck Detection
+- [ ] Week 9: Setup OpenTelemetry
+- [ ] Week 9: Instrumentation of all services
+- [ ] Week 10: Performance Dashboard
+- [ ] Week 10: End-to-end Latency Tracking
+- [ ] Week 10: Service Dependency Map
+- [ ] Week 11: Bottleneck Detection
 
 ---
 
-## <a name="dependencies"></a>🔗 Dependencies و Risks
+## <a name="dependencies"></a>🔗 Dependencies and Risks
 
 ### Dependencies
 
 1. **Infrastructure:**
-   - Redis برای WebSocket pub/sub
-   - Kafka برای real-time data streaming
-   - Jaeger/Zipkin برای distributed tracing
-   - Prometheus برای metrics
+   - Redis for WebSocket pub/sub
+   - Kafka for real-time data streaming
+   - Jaeger/Zipkin for distributed tracing
+   - Prometheus for metrics
 
 2. **Libraries:**
-   - `websockets` برای Python WebSocket
-   - `opentelemetry` برای APM
-   - `mlflow` برای ML model management
+   - `websockets` for Python WebSocket
+   - `opentelemetry` for APM
+   - `mlflow` for ML model management
 
 ### Risks
 
-1. **Performance:** WebSocket ممکن است بار اضافی ایجاد کند
-   - **Mitigation:** Load testing و optimization
+1. **Performance:** WebSocket may add extra load
+   - **Mitigation:** Load testing and optimization
 
-2. **Complexity:** A/B testing framework پیچیده است
-   - **Mitigation:** شروع با MVP و iterate
+2. **Complexity:** The A/B testing framework is complex
+   - **Mitigation:** Start with an MVP and iterate
 
-3. **Integration:** Integration با سیستم‌های موجود
-   - **Mitigation:** Backward compatibility و gradual rollout
+3. **Integration:** Integration with existing systems
+   - **Mitigation:** Backward compatibility and gradual rollout
 
 ---
 
 ## <a name="testing"></a>🧪 Testing Strategy
 
-> 📖 **راهنمای کامل Testing:** برای جزئیات کامل Integration Testing، Performance Testing، و UAT، به [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md) مراجعه کنید.
+> 📖 **Complete Testing guide:** For full details on Integration Testing, Performance Testing, and UAT, see [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md).
 
 ### Unit Tests
-- Coverage > 80% برای تمام modules جدید
+- Coverage > 80% for all new modules
 - Mock external dependencies
 
 ### Integration Tests
 - WebSocket connection/disconnection
-- ML model loading و inference
+- ML model loading and inference
 - Alert correlation accuracy
 - Data quality calculations
 
@@ -1023,20 +1023,20 @@ async def get_data():
 
 ## <a name="deployment"></a>🚀 Deployment Plan
 
-> 📖 **راهنمای کامل Deployment:** برای جزئیات کامل Deployment Plan، Documentation Standards، و Checklists، به [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md) مراجعه کنید.
+> 📖 **Complete Deployment guide:** For full details on the Deployment Plan, Documentation Standards, and Checklists, see [`TESTING_DOCUMENTATION_DEPLOYMENT.md`](./TESTING_DOCUMENTATION_DEPLOYMENT.md).
 
 ### Phase 1: Staging Deployment
-- Deploy به staging environment
+- Deploy to the staging environment
 - User acceptance testing
 - Performance validation
 
 ### Phase 2: Gradual Rollout
-- 10% traffic برای 1 هفته
-- 50% traffic برای 1 هفته
+- 10% traffic for 1 week
+- 50% traffic for 1 week
 - 100% traffic
 
 ### Phase 3: Monitoring
-- Monitor metrics و errors
+- Monitor metrics and errors
 - Collect user feedback
 - Iterate based on feedback
 
@@ -1054,6 +1054,6 @@ async def get_data():
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

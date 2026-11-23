@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main", "master"]
   schedule:
-    - cron: "0 6 * * *"  # روزانه ساعت ۶ UTC
+    - cron: "0 6 * * *"  # daily at 06:00 UTC
 
 jobs:
   smoke:

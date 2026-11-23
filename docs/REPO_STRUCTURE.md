@@ -14,10 +14,10 @@ OGIM---Oil-Gas-Intelligent-Monitoring/
 └── README.md               # SRS and high-level overview
 ```
 
-> Note: پوشه‌ی تکراری `OGIM---Oil-Gas-Intelligent-Monitoring/OGIM---Oil-Gas-Intelligent-Monitoring/` دیگر استفاده نمی‌شود و برای سازگاری نگه داشته شده است؛ در نسخه‌های بعدی حذف خواهد شد.
+> Note: The duplicate folder `OGIM---Oil-Gas-Intelligent-Monitoring/OGIM---Oil-Gas-Intelligent-Monitoring/` is no longer used and has been kept for compatibility; it will be removed in future versions.
 
 ## Guidelines
-- همه‌ی سرویس‌های backend در `backend/` قرار دارند؛ هر سرویس پوشه‌ی مستقل و فایل `requirements.txt` خود را دارد.
-- مستندات رسمی در `docs/` نگهداری می‌شوند و از README اصلی پیوند دارند.
-- فایل‌های زیرساخت (Prometheus، logging، docker-compose) در `infrastructure/` گروه‌بندی شده‌اند.
-- داده‌های نمونه و generatorها داخل `data/` هستند؛ حاوی نمونه CSV/JSON برای سناریوهای توسعه است.
+- All backend services are in `backend/`; each service has its own independent folder and its own `requirements.txt` file.
+- The official documentation is kept in `docs/` and linked from the main README.
+- Infrastructure files (Prometheus, logging, docker-compose) are grouped in `infrastructure/`.
+- Sample data and generators are inside `data/`; it contains CSV/JSON samples for development scenarios.

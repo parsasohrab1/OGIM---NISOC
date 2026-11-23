@@ -1,42 +1,42 @@
-# بهینه‌سازی تاخیر (Latency Optimization)
+# Latency Optimization
 
-این مستند راهنمای بهینه‌سازی تاخیر سیستم OGIM برای کنترل‌های بحرانی است که نیاز به زمان‌های میلی‌ثانیه‌ای دارند.
+This document is a guide to optimizing the latency of the OGIM system for critical controls that require millisecond response times.
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [بهینه‌سازی Kafka](#kafka-optimization)
-3. [بهینه‌سازی Flink](#flink-optimization)
-4. [استفاده از Low-Latency Mode](#usage)
-5. [تنظیمات پیشنهادی](#recommended-settings)
-6. [نظارت و متریک‌ها](#monitoring)
+1. [Overview](#overview)
+2. [Kafka optimization](#kafka-optimization)
+3. [Flink optimization](#flink-optimization)
+4. [Using Low-Latency Mode](#usage)
+5. [Recommended settings](#recommended-settings)
+6. [Monitoring and metrics](#monitoring)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-برای کنترل‌های بحرانی که نیاز به زمان‌های میلی‌ثانیه‌ای دارند، سیستم OGIM از حالت **Low-Latency Mode** پشتیبانی می‌کند که شامل بهینه‌سازی‌های زیر است:
+For critical controls that require millisecond response times, the OGIM system supports **Low-Latency Mode**, which includes the following optimizations:
 
-- ✅ **Kafka Producer**: ارسال فوری بدون batching
-- ✅ **Kafka Consumer**: دریافت فوری با کمترین تاخیر
-- ✅ **Flink Processing**: پردازش بدون checkpointing برای کمترین تاخیر
-- ✅ **Command Control**: مسیر جداگانه برای کنترل‌های بحرانی
+- ✅ **Kafka Producer**: Immediate send without batching
+- ✅ **Kafka Consumer**: Immediate receive with minimum latency
+- ✅ **Flink Processing**: Processing without checkpointing for minimum latency
+- ✅ **Command Control**: A separate path for critical controls
 
-### اهداف عملکردی
+### Performance goals
 
-| سناریو | هدف تاخیر | حالت |
+| Scenario | Latency target | Mode |
 |--------|-----------|------|
-| کنترل‌های بحرانی | < 10ms | Low-Latency |
-| کنترل‌های عادی | < 100ms | Standard |
-| پردازش داده | < 1s | Standard |
+| Critical controls | < 10ms | Low-Latency |
+| Normal controls | < 100ms | Standard |
+| Data processing | < 1s | Standard |
 
 ---
 
-## <a name="kafka-optimization"></a>⚡ بهینه‌سازی Kafka
+## <a name="kafka-optimization"></a>⚡ Kafka optimization
 
 ### Producer Settings (Low-Latency)
 
-برای کنترل‌های بحرانی، تنظیمات زیر استفاده می‌شود:
+For critical controls, the following settings are used:
 
 ```python
 # Low-Latency Producer Configuration
@@ -67,21 +67,21 @@
 }
 ```
 
-### مقایسه تنظیمات
+### Settings comparison
 
-| پارامتر | Standard Mode | Low-Latency Mode | تاثیر |
+| Parameter | Standard Mode | Low-Latency Mode | Impact |
 |---------|---------------|------------------|-------|
-| `acks` | `all` | `1` | کاهش 50-70% تاخیر |
-| `linger.ms` | 10ms | 0ms | حذف تاخیر batching |
-| `batch.size` | 16KB | 1 byte | ارسال فوری |
-| `compression.type` | `snappy` | `none` | حذف overhead فشرده‌سازی |
-| `fetch.max.wait.ms` | 500ms | 0ms | دریافت فوری |
+| `acks` | `all` | `1` | 50-70% latency reduction |
+| `linger.ms` | 10ms | 0ms | Removes batching delay |
+| `batch.size` | 16KB | 1 byte | Immediate send |
+| `compression.type` | `snappy` | `none` | Removes compression overhead |
+| `fetch.max.wait.ms` | 500ms | 0ms | Immediate receive |
 
 ---
 
-## <a name="flink-optimization"></a>🔄 بهینه‌سازی Flink
+## <a name="flink-optimization"></a>🔄 Flink optimization
 
-### تنظیمات Low-Latency Flink Job
+### Low-Latency Flink Job settings
 
 ```python
 # Low-Latency Flink Configuration
@@ -90,9 +90,9 @@ env.set_buffer_timeout(0)           # No buffering - immediate processing
 # Checkpointing disabled            # No checkpoint overhead
 ```
 
-### مقایسه Flink Modes
+### Flink Modes comparison
 
-| ویژگی | Standard Mode | Low-Latency Mode |
+| Feature | Standard Mode | Low-Latency Mode |
 |--------|---------------|------------------|
 | Checkpointing | 60s interval | Disabled |
 | Buffer Timeout | 100ms | 0ms |
@@ -100,16 +100,16 @@ env.set_buffer_timeout(0)           # No buffering - immediate processing
 | Processing Time | Event Time | Processing Time |
 | Semantics | Exactly-once | At-most-once |
 
-**نکته مهم**: در Low-Latency Mode، exactly-once semantics قربانی می‌شود برای دستیابی به کمترین تاخیر. این برای کنترل‌های بحرانی که نیاز به سرعت دارند قابل قبول است.
+**Important note**: In Low-Latency Mode, exactly-once semantics is sacrificed to achieve the lowest latency. This is acceptable for critical controls that require speed.
 
 ---
 
-## <a name="usage"></a>🚀 استفاده از Low-Latency Mode
+## <a name="usage"></a>🚀 Using Low-Latency Mode
 
-### 1. فعال‌سازی در Config
+### 1. Enabling it in Config
 
 ```bash
-# در فایل .env یا environment variables
+# In the .env file or environment variables
 KAFKA_LOW_LATENCY_MODE=true
 KAFKA_PRODUCER_ACKS=1
 KAFKA_PRODUCER_LINGER_MS=0
@@ -119,27 +119,27 @@ KAFKA_CONSUMER_FETCH_MIN_BYTES=1
 KAFKA_CONSUMER_FETCH_MAX_WAIT_MS=0
 ```
 
-### 2. استفاده در Command Control Service
+### 2. Using it in the Command Control Service
 
 ```python
 from kafka_utils import create_low_latency_producer
 
-# ایجاد producer با low-latency mode
+# Create a producer with low-latency mode
 producer = create_low_latency_producer("critical-control-commands")
 
-# ارسال command بحرانی
+# Send a critical command
 producer.send(command_id, command_data, flush_immediately=False)
-# توجه: flush() صدا زده نمی‌شود برای جلوگیری از blocking
+# Note: flush() is not called to avoid blocking
 ```
 
-### 3. استفاده در Flink Job
+### 3. Using it in a Flink Job
 
 ```bash
-# اجرای Flink job با low-latency mode
+# Run the Flink job with low-latency mode
 python flink-job-example.py --low-latency
 ```
 
-یا در کد:
+Or in code:
 
 ```python
 from flink_job_example import create_critical_control_job
@@ -148,25 +148,25 @@ env = create_critical_control_job()
 env.execute("Critical Control Processing Job")
 ```
 
-### 4. علامت‌گذاری Commands بحرانی
+### 4. Marking critical Commands
 
 ```python
-# در API request
+# In the API request
 POST /commands
 {
     "well_name": "WELL-001",
     "equipment_id": "VALVE-001",
     "command_type": "emergency_shutdown",
     "parameters": {...},
-    "critical": true  # علامت‌گذاری به عنوان بحرانی
+    "critical": true  # mark as critical
 }
 ```
 
 ---
 
-## <a name="recommended-settings"></a>⚙️ تنظیمات پیشنهادی
+## <a name="recommended-settings"></a>⚙️ Recommended settings
 
-### برای کنترل‌های بحرانی (Critical Controls)
+### For critical controls (Critical Controls)
 
 ```yaml
 KAFKA_LOW_LATENCY_MODE: true
@@ -183,7 +183,7 @@ FLINK_BUFFER_TIMEOUT: 0
 FLINK_CHECKPOINTING_ENABLED: false
 ```
 
-### برای کنترل‌های عادی (Standard Controls)
+### For normal controls (Standard Controls)
 
 ```yaml
 KAFKA_LOW_LATENCY_MODE: false
@@ -203,9 +203,9 @@ FLINK_CHECKPOINT_INTERVAL: 60000
 
 ---
 
-## <a name="monitoring"></a>📊 نظارت و متریک‌ها
+## <a name="monitoring"></a>📊 Monitoring and metrics
 
-### متریک‌های کلیدی
+### Key metrics
 
 1. **Kafka Producer Latency**
    ```promql
@@ -227,15 +227,15 @@ FLINK_CHECKPOINT_INTERVAL: 60000
    command_control_latency_seconds{critical="true"}
    ```
 
-### داشبورد Grafana
+### Grafana dashboard
 
-پنل‌های پیشنهادی:
+Recommended panels:
 - **Critical Control Latency**: p50, p95, p99
 - **Kafka Producer/Consumer Metrics**
 - **Flink Processing Time**
-- **Error Rate** برای low-latency path
+- **Error Rate** for the low-latency path
 
-### هشدارها
+### Alerts
 
 ```yaml
 # Prometheus Alert Rules
@@ -254,9 +254,9 @@ FLINK_CHECKPOINT_INTERVAL: 60000
 
 ---
 
-## 🔧 تنظیمات Kafka Broker
+## 🔧 Kafka Broker settings
 
-برای دستیابی به کمترین تاخیر در سطح broker:
+To achieve the lowest latency at the broker level:
 
 ```properties
 # Kafka Broker Settings (server.properties)
@@ -266,48 +266,48 @@ socket.send.buffer.bytes=102400
 socket.receive.buffer.bytes=102400
 socket.request.max.bytes=104857600
 
-# برای low-latency topics
+# For low-latency topics
 log.flush.interval.messages=1
 log.flush.interval.ms=0
 ```
 
 ---
 
-## ⚠️ ملاحظات و Trade-offs
+## ⚠️ Considerations and trade-offs
 
-### مزایای Low-Latency Mode
+### Benefits of Low-Latency Mode
 
-- ✅ تاخیر بسیار پایین (< 10ms)
-- ✅ مناسب برای کنترل‌های بحرانی
-- ✅ پردازش فوری
+- ✅ Very low latency (< 10ms)
+- ✅ Suitable for critical controls
+- ✅ Immediate processing
 
-### معایب و Trade-offs
+### Drawbacks and trade-offs
 
-- ❌ **Exactly-once semantics**: در Low-Latency Mode، at-most-once semantics استفاده می‌شود
-- ❌ **Durability**: با `acks=1`، احتمال از دست رفتن داده در صورت crash broker وجود دارد
-- ❌ **Throughput**: بدون batching، throughput کاهش می‌یابد
-- ❌ **Resource Usage**: parallelism بالاتر نیاز به منابع بیشتر دارد
+- ❌ **Exactly-once semantics**: In Low-Latency Mode, at-most-once semantics is used
+- ❌ **Durability**: With `acks=1`, there is a chance of data loss if the broker crashes
+- ❌ **Throughput**: Without batching, throughput decreases
+- ❌ **Resource Usage**: Higher parallelism needs more resources
 
-### توصیه‌ها
+### Recommendations
 
-1. **استفاده انتخابی**: فقط برای کنترل‌های واقعاً بحرانی از Low-Latency Mode استفاده کنید
-2. **نظارت مداوم**: متریک‌های latency و error rate را به دقت نظارت کنید
-3. **تست عملکرد**: قبل از استقرار در production، تست‌های load و latency انجام دهید
-4. **Backup Strategy**: برای کنترل‌های بحرانی، استراتژی backup و retry داشته باشید
+1. **Selective use**: Use Low-Latency Mode only for truly critical controls
+2. **Continuous monitoring**: Monitor the latency and error rate metrics closely
+3. **Performance testing**: Run load and latency tests before deploying to production
+4. **Backup Strategy**: Have a backup and retry strategy for critical controls
 
 ---
 
-## 📝 مثال‌های استفاده
+## 📝 Usage examples
 
-### مثال 1: ارسال Command بحرانی
+### Example 1: Sending a critical Command
 
 ```python
 from kafka_utils import create_low_latency_producer, KAFKA_TOPICS
 
-# ایجاد producer
+# Create a producer
 producer = create_low_latency_producer(KAFKA_TOPICS["CRITICAL_CONTROL_COMMANDS"])
 
-# ارسال command
+# Send a command
 command_data = {
     "command_id": "CMD-001",
     "well_name": "WELL-001",
@@ -317,24 +317,24 @@ command_data = {
 }
 
 producer.send("CMD-001", command_data)
-# توجه: flush() صدا زده نمی‌شود
+# Note: flush() is not called
 ```
 
-### مثال 2: Consumer برای کنترل‌های بحرانی
+### Example 2: Consumer for critical controls
 
 ```python
 from kafka_utils import create_low_latency_consumer, KAFKA_TOPICS
 
-# ایجاد consumer
+# Create a consumer
 consumer = create_low_latency_consumer(
     topics=[KAFKA_TOPICS["CRITICAL_CONTROL_COMMANDS"]],
     group_id="critical-control-executor",
     auto_offset_reset="latest"
 )
 
-# پردازش messages
+# Process messages
 def process_critical_command(key, value):
-    # پردازش فوری command
+    # Process the command immediately
     execute_command(value)
 
 consumer.consume_messages(process_critical_command, timeout=0.0)
@@ -342,7 +342,7 @@ consumer.consume_messages(process_critical_command, timeout=0.0)
 
 ---
 
-## 🔗 منابع بیشتر
+## 🔗 More resources
 
 - [Kafka Performance Tuning](https://kafka.apache.org/documentation/#performance)
 - [Flink Latency Tuning](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/execution/performance/)
@@ -351,6 +351,6 @@ consumer.consume_messages(process_critical_command, timeout=0.0)
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

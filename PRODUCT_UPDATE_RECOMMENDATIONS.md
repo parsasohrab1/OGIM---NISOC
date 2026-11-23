@@ -1,261 +1,261 @@
-# 🚀 پیشنهادات به‌روزرسانی محصول OGIM
+# 🚀 OGIM Product Update Recommendations
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 2.1.0  
-**وضعیت:** پیشنهادات اولویت‌بندی شده
-
----
-
-## 📋 فهرست مطالب
-
-1. [پیشنهادات با اولویت بالا](#high-priority)
-2. [پیشنهادات با اولویت متوسط](#medium-priority)
-3. [پیشنهادات با اولویت پایین](#low-priority)
-4. [بهبودهای UX/UI](#ux-improvements)
-5. [بهبودهای عملکردی](#performance-improvements)
-6. [بهبودهای امنیتی](#security-improvements)
-7. [قابلیت‌های جدید](#new-features)
+**Date:** December 2025
+**Version:** 2.1.0
+**Status:** Prioritized recommendations
 
 ---
 
-## <a name="high-priority"></a>🔥 پیشنهادات با اولویت بالا
+## 📋 Table of Contents
 
-### 1. بهبود Real-Time Data Streaming
+1. [High-priority recommendations](#high-priority)
+2. [Medium-priority recommendations](#medium-priority)
+3. [Low-priority recommendations](#low-priority)
+4. [UX/UI improvements](#ux-improvements)
+5. [Performance improvements](#performance-improvements)
+6. [Security improvements](#security-improvements)
+7. [New capabilities](#new-features)
 
-**مشکل فعلی:**
-- به‌روزرسانی داده‌ها در Frontend ممکن است با تاخیر باشد
-- عدم استفاده از WebSocket برای اتصال real-time
+---
 
-**پیشنهادات:**
-- ✅ پیاده‌سازی WebSocket connection برای به‌روزرسانی لحظه‌ای
-- ✅ استفاده از Server-Sent Events (SSE) برای fallback
-- ✅ پیاده‌سازی WebSocket Gateway در API Gateway
-- ✅ Optimistic UI updates برای بهبود تجربه کاربری
-- ✅ Connection retry mechanism با exponential backoff
+## <a name="high-priority"></a>🔥 High-priority recommendations
 
-**فایل‌های مورد نیاز:**
+### 1. Improving Real-Time Data Streaming
+
+**Current problem:**
+- Data updates in the Frontend may be delayed
+- WebSocket is not used for the real-time connection
+
+**Recommendations:**
+- ✅ Implement a WebSocket connection for instant updates
+- ✅ Use Server-Sent Events (SSE) as a fallback
+- ✅ Implement a WebSocket Gateway in the API Gateway
+- ✅ Optimistic UI updates to improve user experience
+- ✅ Connection retry mechanism with exponential backoff
+
+**Required files:**
 ```
 backend/api-gateway/websocket_handler.py
 frontend/web/src/hooks/useWebSocket.ts
 frontend/web/src/services/websocket.ts
 ```
 
-**مزایا:**
-- کاهش latency از 1-10 ثانیه به < 100ms
-- کاهش بار سرور (push-based به جای polling)
-- بهبود تجربه کاربری
+**Benefits:**
+- Reduce latency from 1-10 seconds to < 100ms
+- Reduce server load (push-based instead of polling)
+- Improve user experience
 
 ---
 
-### 2. بهبود ML Model Management
+### 2. Improving ML Model Management
 
-**مشکل فعلی:**
-- عدم وجود UI برای مدیریت مدل‌ها
-- عدم وجود A/B testing interface
-- عدم وجود model versioning visualization
+**Current problem:**
+- There is no UI for managing models
+- There is no A/B testing interface
+- There is no model versioning visualization
 
-**پیشنهادات:**
-- ✅ ایجاد صفحه ML Model Management در Frontend
-- ✅ نمایش model metrics و performance
-- ✅ امکان مقایسه نسخه‌های مختلف مدل
+**Recommendations:**
+- ✅ Create an ML Model Management page in the Frontend
+- ✅ Display model metrics and performance
+- ✅ Ability to compare different model versions
 - ✅ A/B testing interface
 - ✅ Model deployment workflow
-- ✅ Alert برای model drift detection
+- ✅ Alert for model drift detection
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 frontend/web/src/pages/MLModels.tsx
 backend/ml-inference-service/model_management.py
 backend/ml-inference-service/model_comparison.py
 ```
 
-**مزایا:**
-- مدیریت بهتر مدل‌های ML
-- بهبود دقت پیش‌بینی‌ها
-- کاهش false positives در alerts
+**Benefits:**
+- Better management of ML models
+- Improved prediction accuracy
+- Fewer false positives in alerts
 
 ---
 
-### 3. بهبود Alert Management
+### 3. Improving Alert Management
 
-**مشکل فعلی:**
-- عدم وجود alert correlation
-- عدم وجود root cause analysis
-- عدم وجود alert fatigue management
+**Current problem:**
+- There is no alert correlation
+- There is no root cause analysis
+- There is no alert fatigue management
 
-**پیشنهادات:**
-- ✅ پیاده‌سازی Alert Correlation Engine
+**Recommendations:**
+- ✅ Implement an Alert Correlation Engine
 - ✅ Root Cause Analysis (RCA) automation
-- ✅ Alert Fatigue Detection و suppression
-- ✅ Alert grouping و deduplication پیشرفته
+- ✅ Alert Fatigue Detection and suppression
+- ✅ Advanced alert grouping and deduplication
 - ✅ Alert timeline visualization
-- ✅ Integration با incident management systems
+- ✅ Integration with incident management systems
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/alert-service/alert_correlation.py
 backend/alert-service/rca_engine.py
 frontend/web/src/pages/AlertAnalysis.tsx
 ```
 
-**مزایا:**
-- کاهش تعداد alertهای غیرضروری
-- تشخیص سریع‌تر مشکلات
-- بهبود response time
+**Benefits:**
+- Reduce the number of unnecessary alerts
+- Faster problem detection
+- Improve response time
 
 ---
 
-### 4. بهبود Data Quality & Validation
+### 4. Improving Data Quality & Validation
 
-**مشکل فعلی:**
-- عدم وجود real-time data quality dashboard
-- عدم وجود automated data quality reports
-- عدم وجود data lineage tracking
+**Current problem:**
+- There is no real-time data quality dashboard
+- There are no automated data quality reports
+- There is no data lineage tracking
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Real-time Data Quality Dashboard
 - ✅ Automated Data Quality Reports (PDF/Excel)
 - ✅ Data Lineage Visualization
 - ✅ Data Quality Score Trends
-- ✅ Automated alerts برای data quality issues
+- ✅ Automated alerts for data quality issues
 - ✅ Data Quality SLA tracking
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 frontend/web/src/pages/DataQuality.tsx
 backend/dvr-service/data_quality_reports.py
 backend/dvr-service/data_lineage.py
 ```
 
-**مزایا:**
-- بهبود کیفیت داده‌ها
-- کاهش خطاهای تصمیم‌گیری
-- افزایش اعتماد به داده‌ها
+**Benefits:**
+- Improve data quality
+- Reduce decision-making errors
+- Increase trust in the data
 
 ---
 
-### 5. بهبود Performance Monitoring
+### 5. Improving Performance Monitoring
 
-**مشکل فعلی:**
-- عدم وجود comprehensive performance dashboard
-- عدم وجود APM (Application Performance Monitoring)
-- عدم وجود end-to-end latency tracking
+**Current problem:**
+- There is no comprehensive performance dashboard
+- There is no APM (Application Performance Monitoring)
+- There is no end-to-end latency tracking
 
-**پیشنهادات:**
-- ✅ Performance Dashboard با Grafana integration
-- ✅ APM با OpenTelemetry
+**Recommendations:**
+- ✅ Performance Dashboard with Grafana integration
+- ✅ APM with OpenTelemetry
 - ✅ End-to-end latency tracking
 - ✅ Service dependency map
 - ✅ Performance bottleneck identification
 - ✅ Automated performance alerts
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 infrastructure/prometheus/performance_rules.yml
 backend/shared/opentelemetry_instrumentation.py
 frontend/web/src/pages/Performance.tsx
 ```
 
-**مزایا:**
-- شناسایی سریع‌تر مشکلات عملکردی
-- بهبود overall system performance
-- کاهش downtime
+**Benefits:**
+- Faster identification of performance problems
+- Improve overall system performance
+- Reduce downtime
 
 ---
 
-## <a name="medium-priority"></a>⚡ پیشنهادات با اولویت متوسط
+## <a name="medium-priority"></a>⚡ Medium-priority recommendations
 
 ### 6. Mobile Application
 
-**پیشنهادات:**
-- ✅ توسعه Mobile App (React Native یا Flutter)
-- ✅ Push notifications برای alerts
-- ✅ Offline mode برای viewing data
+**Recommendations:**
+- ✅ Develop a Mobile App (React Native or Flutter)
+- ✅ Push notifications for alerts
+- ✅ Offline mode for viewing data
 - ✅ Mobile-optimized dashboards
-- ✅ QR code scanning برای equipment identification
-- ✅ Voice commands برای hands-free operation
+- ✅ QR code scanning for equipment identification
+- ✅ Voice commands for hands-free operation
 
-**مزایا:**
-- دسترسی به سیستم از هر مکان
-- بهبود response time برای field operators
-- افزایش adoption rate
+**Benefits:**
+- Access the system from anywhere
+- Improve response time for field operators
+- Increase adoption rate
 
 ---
 
 ### 7. Advanced Analytics & BI
 
-**پیشنهادات:**
-- ✅ Integration با BI tools (Tableau, Power BI)
+**Recommendations:**
+- ✅ Integration with BI tools (Tableau, Power BI)
 - ✅ Custom report builder
 - ✅ Ad-hoc query interface
-- ✅ Data export در فرمت‌های مختلف
+- ✅ Data export in various formats
 - ✅ Scheduled reports
-- ✅ Report sharing و collaboration
+- ✅ Report sharing and collaboration
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/reporting-service/report_builder.py
 backend/reporting-service/bi_integration.py
 frontend/web/src/pages/ReportBuilder.tsx
 ```
 
-**مزایا:**
-- بهبود decision-making
-- کاهش زمان تولید گزارش‌ها
-- افزایش flexibility در تحلیل داده‌ها
+**Benefits:**
+- Improve decision-making
+- Reduce report generation time
+- Increase flexibility in data analysis
 
 ---
 
 ### 8. Workflow Automation
 
-**پیشنهادات:**
-- ✅ Workflow engine (مثل Apache Airflow)
+**Recommendations:**
+- ✅ Workflow engine (such as Apache Airflow)
 - ✅ Visual workflow builder
 - ✅ Automated maintenance scheduling
 - ✅ Automated report generation
 - ✅ Event-driven workflows
 - ✅ Workflow templates library
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/workflow-service/
 infrastructure/airflow/
 frontend/web/src/pages/Workflows.tsx
 ```
 
-**مزایا:**
-- کاهش manual work
-- بهبود consistency
-- افزایش efficiency
+**Benefits:**
+- Reduce manual work
+- Improve consistency
+- Increase efficiency
 
 ---
 
 ### 9. Enhanced Digital Twin
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ 3D visualization improvements
-- ✅ AR integration برای field operations
+- ✅ AR integration for field operations
 - ✅ Virtual reality (VR) training mode
 - ✅ Physics-based simulation
 - ✅ What-if scenario analysis
 - ✅ Real-time synchronization improvements
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 frontend/web/src/pages/DigitalTwin3D.tsx (enhanced)
 backend/digital-twin-service/physics_engine.py
 ```
 
-**مزایا:**
-- بهبود visualization
-- کاهش training time
-- بهبود decision-making
+**Benefits:**
+- Improve visualization
+- Reduce training time
+- Improve decision-making
 
 ---
 
 ### 10. Advanced Security Features
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Zero Trust Architecture
 - ✅ Multi-factor authentication (MFA) improvements
 - ✅ Security Information and Event Management (SIEM) integration
@@ -263,184 +263,184 @@ backend/digital-twin-service/physics_engine.py
 - ✅ Security audit automation
 - ✅ Penetration testing automation
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/shared/zero_trust.py
 backend/shared/siem_integration.py
 infrastructure/security/
 ```
 
-**مزایا:**
-- بهبود امنیت سیستم
-- Compliance با استانداردهای امنیتی
-- کاهش ریسک حملات
+**Benefits:**
+- Improve system security
+- Compliance with security standards
+- Reduce attack risk
 
 ---
 
-## <a name="low-priority"></a>💡 پیشنهادات با اولویت پایین
+## <a name="low-priority"></a>💡 Low-priority recommendations
 
 ### 11. AI-Powered Chatbot
 
-**پیشنهادات:**
-- ✅ Integration با LLM (GPT-4, Claude)
+**Recommendations:**
+- ✅ Integration with LLMs (GPT-4, Claude)
 - ✅ Natural language query interface
 - ✅ Automated troubleshooting suggestions
 - ✅ Knowledge base integration
 - ✅ Multi-language support
 
-**مزایا:**
-- بهبود user experience
-- کاهش support burden
-- دسترسی سریع‌تر به اطلاعات
+**Benefits:**
+- Improve user experience
+- Reduce support burden
+- Faster access to information
 
 ---
 
 ### 12. Blockchain Integration
 
-**پیشنهادات:**
-- ✅ Immutable audit logs با blockchain
-- ✅ Smart contracts برای automated workflows
+**Recommendations:**
+- ✅ Immutable audit logs with blockchain
+- ✅ Smart contracts for automated workflows
 - ✅ Supply chain tracking
 - ✅ Equipment provenance tracking
 
-**مزایا:**
-- افزایش trust و transparency
-- بهبود compliance
-- کاهش fraud
+**Benefits:**
+- Increase trust and transparency
+- Improve compliance
+- Reduce fraud
 
 ---
 
 ### 13. Federated Learning
 
-**پیشنهادات:**
-- ✅ Federated learning برای privacy-preserving ML
+**Recommendations:**
+- ✅ Federated learning for privacy-preserving ML
 - ✅ Distributed model training
 - ✅ Edge device collaboration
 
-**مزایا:**
-- حفظ privacy داده‌ها
-- بهبود model accuracy
-- کاهش bandwidth usage
+**Benefits:**
+- Preserve data privacy
+- Improve model accuracy
+- Reduce bandwidth usage
 
 ---
 
-## <a name="ux-improvements"></a>🎨 بهبودهای UX/UI
+## <a name="ux-improvements"></a>🎨 UX/UI improvements
 
 ### 14. Design System & Component Library
 
-**پیشنهادات:**
-- ✅ ایجاد Design System کامل
-- ✅ Component library با Storybook
+**Recommendations:**
+- ✅ Create a complete Design System
+- ✅ Component library with Storybook
 - ✅ Dark mode support
 - ✅ Responsive design improvements
 - ✅ Accessibility improvements (WCAG 2.1 AA)
 - ✅ Multi-language UI support
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 frontend/web/src/components/design-system/
 .storybook/
 frontend/web/src/themes/
 ```
 
-**مزایا:**
-- بهبود consistency در UI
-- کاهش development time
-- بهبود accessibility
+**Benefits:**
+- Improve consistency in the UI
+- Reduce development time
+- Improve accessibility
 
 ---
 
 ### 15. User Experience Enhancements
 
-**پیشنهادات:**
-- ✅ Onboarding wizard برای کاربران جدید
+**Recommendations:**
+- ✅ Onboarding wizard for new users
 - ✅ Interactive tutorials
 - ✅ Contextual help system
 - ✅ Keyboard shortcuts
 - ✅ Customizable dashboards
 - ✅ User preferences management
 
-**مزایا:**
-- کاهش learning curve
-- بهبود user satisfaction
-- افزایش adoption rate
+**Benefits:**
+- Reduce the learning curve
+- Improve user satisfaction
+- Increase adoption rate
 
 ---
 
 ### 16. Data Visualization Improvements
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Advanced chart types (heatmaps, treemaps, sankey)
 - ✅ Interactive data exploration
 - ✅ Custom visualization builder
-- ✅ Export charts به PDF/PNG
+- ✅ Export charts to PDF/PNG
 - ✅ Chart annotations
 - ✅ Real-time chart updates
 
-**مزایا:**
-- بهبود data insights
-- کاهش time to insight
-- بهبود decision-making
+**Benefits:**
+- Improve data insights
+- Reduce time to insight
+- Improve decision-making
 
 ---
 
-## <a name="performance-improvements"></a>⚡ بهبودهای عملکردی
+## <a name="performance-improvements"></a>⚡ Performance improvements
 
 ### 17. Caching Strategy
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Multi-level caching (Redis, CDN, Browser)
 - ✅ Cache invalidation strategy
-- ✅ Cache warming برای frequently accessed data
+- ✅ Cache warming for frequently accessed data
 - ✅ Query result caching
 - ✅ API response caching
 
-**مزایا:**
-- کاهش latency
-- کاهش load بر روی database
-- بهبود scalability
+**Benefits:**
+- Reduce latency
+- Reduce load on the database
+- Improve scalability
 
 ---
 
 ### 18. Database Optimization
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Query optimization
 - ✅ Index optimization
 - ✅ Partitioning strategy improvements
-- ✅ Read replicas برای analytics
+- ✅ Read replicas for analytics
 - ✅ Connection pooling improvements
 - ✅ Database query monitoring
 
-**مزایا:**
-- بهبود query performance
-- کاهش database load
-- بهبود scalability
+**Benefits:**
+- Improve query performance
+- Reduce database load
+- Improve scalability
 
 ---
 
 ### 19. API Optimization
 
-**پیشنهادات:**
-- ✅ GraphQL API برای flexible queries
+**Recommendations:**
+- ✅ GraphQL API for flexible queries
 - ✅ API versioning strategy
 - ✅ Response compression
 - ✅ Pagination improvements
 - ✅ Field selection (sparse fieldsets)
 - ✅ Batch operations
 
-**مزایا:**
-- کاهش bandwidth usage
-- بهبود API performance
-- بهبود developer experience
+**Benefits:**
+- Reduce bandwidth usage
+- Improve API performance
+- Improve developer experience
 
 ---
 
-## <a name="security-improvements"></a>🔐 بهبودهای امنیتی
+## <a name="security-improvements"></a>🔐 Security improvements
 
 ### 20. Security Enhancements
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Rate limiting improvements
 - ✅ DDoS protection
 - ✅ API security hardening
@@ -448,44 +448,44 @@ frontend/web/src/themes/
 - ✅ SQL injection prevention
 - ✅ XSS prevention
 
-**مزایا:**
-- بهبود امنیت سیستم
-- کاهش ریسک حملات
-- Compliance با استانداردهای امنیتی
+**Benefits:**
+- Improve system security
+- Reduce attack risk
+- Compliance with security standards
 
 ---
 
-## <a name="new-features"></a>✨ قابلیت‌های جدید
+## <a name="new-features"></a>✨ New capabilities
 
 ### 21. Predictive Analytics Dashboard
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Predictive maintenance timeline
 - ✅ Equipment health scoring
 - ✅ Production forecasting
 - ✅ Cost optimization recommendations
 - ✅ Risk assessment dashboard
 
-**مزایا:**
-- بهبود decision-making
-- کاهش costs
-- افزایش efficiency
+**Benefits:**
+- Improve decision-making
+- Reduce costs
+- Increase efficiency
 
 ---
 
 ### 22. Integration Hub
 
-**پیشنهادات:**
-- ✅ Pre-built connectors برای سیستم‌های رایج
+**Recommendations:**
+- ✅ Pre-built connectors for common systems
 - ✅ Custom connector builder
 - ✅ Integration marketplace
 - ✅ API documentation improvements
 - ✅ Integration testing tools
 
-**جزئیات پیاده‌سازی:**
-برای جزئیات کامل پیاده‌سازی، به [`docs/INTEGRATION_HUB_IMPLEMENTATION.md`](./docs/INTEGRATION_HUB_IMPLEMENTATION.md) مراجعه کنید.
+**Implementation details:**
+For complete implementation details, see [`docs/INTEGRATION_HUB_IMPLEMENTATION.md`](./docs/INTEGRATION_HUB_IMPLEMENTATION.md).
 
-**Pre-built Connectors شامل:**
+**Pre-built Connectors include:**
 - ERP Systems: SAP, Oracle ERP, Microsoft Dynamics
 - CMMS Systems: Maximo, SAP PM
 - SCADA/PLC: OPC UA, Modbus TCP
@@ -494,7 +494,7 @@ frontend/web/src/themes/
 - Communication: Email, SMS (Twilio), Slack, Microsoft Teams
 - Weather Services: OpenWeatherMap
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/integration-hub-service/
 ├── main.py
@@ -514,44 +514,44 @@ frontend/web/src/
 │   └── IntegrationTester.tsx
 ```
 
-**مزایا:**
-- کاهش 50% در زمان integration
-- افزایش 30% در تعداد integrations
-- بهبود 40% در developer experience
-- کاهش integration time از هفته‌ها به ساعت‌ها
-- افزایش flexibility در اتصال به سیستم‌های مختلف
+**Benefits:**
+- 50% reduction in integration time
+- 30% increase in the number of integrations
+- 40% improvement in developer experience
+- Reduce integration time from weeks to hours
+- Increase flexibility in connecting to different systems
 
 ---
 
 ### 23. Compliance & Reporting
 
-**پیشنهادات:**
+**Recommendations:**
 - ✅ Automated compliance reporting
 - ✅ Regulatory compliance dashboard
 - ✅ Audit trail improvements
 - ✅ Compliance alerts
 - ✅ Compliance templates
 
-**جزئیات پیاده‌سازی:**
-برای جزئیات کامل پیاده‌سازی، به [`docs/COMPLIANCE_REPORTING_IMPLEMENTATION.md`](./docs/COMPLIANCE_REPORTING_IMPLEMENTATION.md) مراجعه کنید.
+**Implementation details:**
+For complete implementation details, see [`docs/COMPLIANCE_REPORTING_IMPLEMENTATION.md`](./docs/COMPLIANCE_REPORTING_IMPLEMENTATION.md).
 
-**استانداردهای پشتیبانی شده:**
-- NORSOK: استانداردهای نروژی برای صنعت نفت و گاز
-- ISO 14224: داده‌های قابلیت اطمینان پتروشیمی
-- ISA-95: یکپارچگی سیستم‌های کنترل و سازمانی
-- ISO 27001: مدیریت امنیت اطلاعات
-- GDPR: حفاظت از داده‌های شخصی
-- OSHA: ایمنی و بهداشت شغلی
-- API Standards: استانداردهای انجمن نفت آمریکا
+**Supported standards:**
+- NORSOK: Norwegian standards for the oil and gas industry
+- ISO 14224: Petrochemical reliability data
+- ISA-95: Integration of control and enterprise systems
+- ISO 27001: Information security management
+- GDPR: Personal data protection
+- OSHA: Occupational safety and health
+- API Standards: American Petroleum Institute standards
 
-**ویژگی‌های کلیدی:**
-- Automated Report Generation: گزارش‌دهی خودکار برای تمام استانداردها
-- Compliance Score Tracking: ردیابی نمره compliance به صورت real-time
-- Immutable Audit Trail: Audit trail غیرقابل تغییر با cryptographic hashing
-- Smart Alerting: هشدارهای هوشمند برای violations و audit deadlines
-- Template Library: کتابخانه قالب‌های آماده برای گزارش‌ها و audits
+**Key features:**
+- Automated Report Generation: Automated reporting for all standards
+- Compliance Score Tracking: Real-time tracking of the compliance score
+- Immutable Audit Trail: Immutable audit trail with cryptographic hashing
+- Smart Alerting: Smart alerts for violations and audit deadlines
+- Template Library: A library of ready-made templates for reports and audits
 
-**فایل‌های مورد نیاز:**
+**Required files:**
 ```
 backend/compliance-service/
 ├── main.py
@@ -582,91 +582,91 @@ frontend/web/src/
 │   └── ComplianceTemplates.tsx
 ```
 
-**مزایا:**
-- کاهش 60% در زمان تولید گزارش‌های compliance
-- افزایش 40% در compliance score
-- کاهش 50% در violations
-- بهبود 100% در audit trail completeness
-- کاهش manual work از روزها به ساعت‌ها
-- کاهش ریسک non-compliance با automated monitoring
+**Benefits:**
+- 60% reduction in compliance report generation time
+- 40% increase in compliance score
+- 50% reduction in violations
+- 100% improvement in audit trail completeness
+- Reduce manual work from days to hours
+- Reduce non-compliance risk with automated monitoring
 
 ---
 
-## 📊 اولویت‌بندی کلی
+## 📊 Overall prioritization
 
-### فاز 1 (3 ماه آینده) - Critical
+### Phase 1 (next 3 months) - Critical
 
-**📋 راهنمای پیاده‌سازی کامل:** برای جزئیات کامل timeline، milestones، و کدهای نمونه، به [`docs/PHASE1_IMPLEMENTATION_ROADMAP.md`](./docs/PHASE1_IMPLEMENTATION_ROADMAP.md) مراجعه کنید.
+**📋 Complete implementation guide:** For full details on the timeline, milestones and sample code, see [`docs/PHASE1_IMPLEMENTATION_ROADMAP.md`](./docs/PHASE1_IMPLEMENTATION_ROADMAP.md).
 
-1. **بهبود Real-Time Data Streaming**
-   - پیاده‌سازی WebSocket برای کاهش latency به < 100ms
-   - Timeline: هفته 1-2
-   - Milestones: طراحی، پیاده‌سازی Backend/Frontend، Testing
+1. **Improving Real-Time Data Streaming**
+   - Implement WebSocket to reduce latency to < 100ms
+   - Timeline: weeks 1-2
+   - Milestones: Design, Backend/Frontend implementation, Testing
 
-2. **بهبود ML Model Management**
-   - UI جامع برای مدیریت مدل‌ها با A/B testing
-   - Timeline: هفته 3-4
-   - Milestones: طراحی UI، Model Registry API، Comparison Engine
+2. **Improving ML Model Management**
+   - Comprehensive UI for model management with A/B testing
+   - Timeline: weeks 3-4
+   - Milestones: UI design, Model Registry API, Comparison Engine
 
-3. **بهبود Alert Management**
-   - Alert Correlation و Root Cause Analysis
-   - Timeline: هفته 5-6
-   - Milestones: Correlation Engine، RCA، Fatigue Detection
+3. **Improving Alert Management**
+   - Alert Correlation and Root Cause Analysis
+   - Timeline: weeks 5-6
+   - Milestones: Correlation Engine, RCA, Fatigue Detection
 
-4. **بهبود Data Quality & Validation**
-   - Real-time Dashboard و Automated Reports
-   - Timeline: هفته 7-8
-   - Milestones: Quality Dashboard، Reports، Lineage Tracking
+4. **Improving Data Quality & Validation**
+   - Real-time Dashboard and Automated Reports
+   - Timeline: weeks 7-8
+   - Milestones: Quality Dashboard, Reports, Lineage Tracking
 
-5. **بهبود Performance Monitoring**
-   - APM با OpenTelemetry و End-to-end Tracking
-   - Timeline: هفته 9-10
-   - Milestones: OpenTelemetry Setup، Dashboard، Dependency Map
+5. **Improving Performance Monitoring**
+   - APM with OpenTelemetry and End-to-end Tracking
+   - Timeline: weeks 9-10
+   - Milestones: OpenTelemetry Setup, Dashboard, Dependency Map
 
-### فاز 2 (6 ماه آینده) - Important
+### Phase 2 (next 6 months) - Important
 
-**📋 راهنمای پیاده‌سازی کامل:** برای جزئیات کامل timeline، milestones، و کدهای نمونه، به [`docs/PHASE2_IMPLEMENTATION_ROADMAP.md`](./docs/PHASE2_IMPLEMENTATION_ROADMAP.md) مراجعه کنید.
+**📋 Complete implementation guide:** For full details on the timeline, milestones and sample code, see [`docs/PHASE2_IMPLEMENTATION_ROADMAP.md`](./docs/PHASE2_IMPLEMENTATION_ROADMAP.md).
 
 6. **Mobile Application**
-   - React Native/Flutter app با offline mode و push notifications
-   - Timeline: هفته 13-16
-   - Milestones: انتخاب تکنولوژی، Core features، Offline mode، Push notifications
+   - React Native/Flutter app with offline mode and push notifications
+   - Timeline: weeks 13-16
+   - Milestones: Technology selection, Core features, Offline mode, Push notifications
 
 7. **Advanced Analytics & BI**
-   - Integration با Tableau/Power BI و Custom Report Builder
-   - Timeline: هفته 17-20
-   - Milestones: BI Integration، Report Builder، Ad-hoc Queries
+   - Integration with Tableau/Power BI and Custom Report Builder
+   - Timeline: weeks 17-20
+   - Milestones: BI Integration, Report Builder, Ad-hoc Queries
 
 8. **Workflow Automation**
-   - Apache Airflow با Visual Builder
-   - Timeline: هفته 21-24
-   - Milestones: Airflow Setup، Visual Builder، Templates Library
+   - Apache Airflow with Visual Builder
+   - Timeline: weeks 21-24
+   - Milestones: Airflow Setup, Visual Builder, Templates Library
 
 9. **Enhanced Digital Twin**
-   - 3D پیشرفته، AR Integration، Physics Simulation
-   - Timeline: هفته 25-28
-   - Milestones: 3D Improvements، AR Integration، What-if Analysis
+   - Advanced 3D, AR Integration, Physics Simulation
+   - Timeline: weeks 25-28
+   - Milestones: 3D Improvements, AR Integration, What-if Analysis
 
 10. **Advanced Security Features**
-    - Zero Trust Architecture و SIEM Integration
-    - Timeline: هفته 29-32
-    - Milestones: Zero Trust Design، SIEM Integration، Threat Detection
+    - Zero Trust Architecture and SIEM Integration
+    - Timeline: weeks 29-32
+    - Milestones: Zero Trust Design, SIEM Integration, Threat Detection
 
-### فاز 3 (12 ماه آینده) - Nice to Have
+### Phase 3 (next 12 months) - Nice to Have
 11. AI-Powered Chatbot
 12. Blockchain Integration
 13. Federated Learning
-14-23. سایر بهبودها
+14-23. Other improvements
 
 ---
 
-## 🎯 معیارهای موفقیت
+## 🎯 Success criteria
 
-**📊 سند کامل KPIها و معیارها:** برای جزئیات کامل تمام معیارهای موفقیت، نحوه اندازه‌گیری، targets، و dashboards، به [`docs/SUCCESS_METRICS_AND_KPIS.md`](./docs/SUCCESS_METRICS_AND_KPIS.md) مراجعه کنید.
+**📊 Complete KPI and metrics document:** For full details on all success criteria, how they are measured, targets and dashboards, see [`docs/SUCCESS_METRICS_AND_KPIS.md`](./docs/SUCCESS_METRICS_AND_KPIS.md).
 
-برای هر پیشنهاد، معیارهای موفقیت زیر باید تعریف و اندازه‌گیری شود:
+For each recommendation, the following success criteria must be defined and measured:
 
-### 1. Performance Metrics (معیارهای عملکردی)
+### 1. Performance Metrics
 
 **Real-Time Data Latency:**
 - Target: < 100ms (P95)
@@ -688,7 +688,7 @@ frontend/web/src/
 - Current: 8,000 events/second
 - Measurement: Kafka consumer metrics
 
-### 2. User Experience Metrics (معیارهای تجربه کاربری)
+### 2. User Experience Metrics
 
 **User Satisfaction Score:**
 - Target: > 4.0 / 5.0
@@ -708,7 +708,7 @@ frontend/web/src/
 - Target: -30% reduction
 - Measurement: User session tracking
 
-### 3. Business Metrics (معیارهای کسب‌وکار)
+### 3. Business Metrics
 
 **Operational Cost Reduction:**
 - Target: -25% within 12 months
@@ -726,7 +726,7 @@ frontend/web/src/
 - Target: > 200% within 24 months
 - Measurement: (Benefits - Investment) / Investment
 
-### 4. Technical Metrics (معیارهای فنی)
+### 4. Technical Metrics
 
 **Test Coverage:**
 - Target: > 85%
@@ -748,18 +748,18 @@ frontend/web/src/
 
 ---
 
-## 📝 نکات مهم
+## 📝 Important notes
 
-**📚 راهنمای کامل Best Practices:** برای جزئیات کامل Testing، Documentation، Training، Migration، و Monitoring، به [`docs/IMPLEMENTATION_BEST_PRACTICES.md`](./docs/IMPLEMENTATION_BEST_PRACTICES.md) مراجعه کنید.
+**📚 Complete Best Practices guide:** For full details on Testing, Documentation, Training, Migration and Monitoring, see [`docs/IMPLEMENTATION_BEST_PRACTICES.md`](./docs/IMPLEMENTATION_BEST_PRACTICES.md).
 
-### 1. Testing (تست‌سازی)
+### 1. Testing
 
-**الزامات:**
+**Requirements:**
 - ✅ Unit test coverage > 85%
-- ✅ Integration tests برای تمام API endpoints
-- ✅ E2E tests برای critical workflows
-- ✅ Performance tests برای load scenarios
-- ✅ Security tests برای vulnerabilities
+- ✅ Integration tests for all API endpoints
+- ✅ E2E tests for critical workflows
+- ✅ Performance tests for load scenarios
+- ✅ Security tests for vulnerabilities
 - ✅ CI/CD pipeline integration
 
 **Testing Pyramid:**
@@ -772,13 +772,13 @@ frontend/web/src/
 - Frontend: Jest, React Testing Library
 - E2E: Selenium, Playwright
 
-### 2. Documentation (مستندسازی)
+### 2. Documentation
 
-**الزامات:**
+**Requirements:**
 - ✅ Code documentation (docstrings/comments)
 - ✅ API documentation (OpenAPI/Swagger)
 - ✅ Architecture documentation (ADRs)
-- ✅ User guides و tutorials
+- ✅ User guides and tutorials
 - ✅ Developer guides
 - ✅ Migration guides
 - ✅ Troubleshooting guides
@@ -789,9 +789,9 @@ frontend/web/src/
 - API: OpenAPI 3.0 specification
 - Architecture: ADR format
 
-### 3. Training (آموزش)
+### 3. Training
 
-**برنامه آموزشی:**
+**Training program:**
 - ✅ System Overview (2 hours) - All users
 - ✅ Dashboard Usage (3 hours) - Operators
 - ✅ Advanced Features (4 hours) - Engineers
@@ -799,19 +799,19 @@ frontend/web/src/
 - ✅ Monthly Refresher Sessions
 - ✅ New Feature Training
 
-**مواد آموزشی:**
+**Training materials:**
 - Video tutorials
 - Interactive tutorials (in-app)
 - User guides
 - FAQ section
 - Best practices workshops
 
-### 4. Migration (مهاجرت)
+### 4. Migration
 
 **Migration Strategy:**
-- ✅ Database migrations با Alembic
+- ✅ Database migrations with Alembic
 - ✅ Data migration scripts
-- ✅ API versioning برای backward compatibility
+- ✅ API versioning for backward compatibility
 - ✅ Gradual rollout strategy
 - ✅ Rollback plan
 
@@ -820,7 +820,7 @@ frontend/web/src/
 - During migration: Monitoring, Verification
 - Post-migration: Validation, Documentation update
 
-### 5. Monitoring (نظارت)
+### 5. Monitoring
 
 **Monitoring Stack:**
 - ✅ Metrics: Prometheus
@@ -842,7 +842,7 @@ frontend/web/src/
 
 ---
 
-## 🔗 منابع مرتبط
+## 🔗 Related resources
 
 - [Architecture Documentation](./docs/ARCHITECTURE.md)
 - [Advanced Features](./docs/ADVANCED_FEATURES.md)
@@ -851,7 +851,7 @@ frontend/web/src/
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ به‌روزرسانی:** دسامبر 2025  
-**نویسنده:** OGIM Development Team
+**Version:** 1.0.0
+**Update date:** December 2025
+**Author:** OGIM Development Team
 

@@ -1,34 +1,34 @@
-# ⚡ راهنمای سریع: پیشنهادات به‌روزرسانی OGIM
+# ⚡ Quick Guide: OGIM Update Recommendations
 
-## 🎯 5 پیشنهاد برتر (شروع فوری)
+## 🎯 Top 5 recommendations (start immediately)
 
-| # | پیشنهاد | زمان | اولویت | ROI |
+| # | Recommendation | Time | Priority | ROI |
 |---|---------|------|--------|-----|
-| 1 | **Real-Time Streaming (WebSocket)** | 4-6 هفته | ⭐⭐⭐ | بالا |
-| 2 | **ML Model Management UI** | 5-7 هفته | ⭐⭐⭐ | بالا |
-| 3 | **Alert Correlation & RCA** | 6-8 هفته | ⭐⭐⭐ | بالا |
-| 4 | **Data Quality Dashboard** | 4-6 هفته | ⭐⭐ | متوسط-بالا |
-| 5 | **Performance Monitoring** | 5-7 هفته | ⭐⭐ | متوسط-بالا |
+| 1 | **Real-Time Streaming (WebSocket)** | 4-6 weeks | ⭐⭐⭐ | High |
+| 2 | **ML Model Management UI** | 5-7 weeks | ⭐⭐⭐ | High |
+| 3 | **Alert Correlation & RCA** | 6-8 weeks | ⭐⭐⭐ | High |
+| 4 | **Data Quality Dashboard** | 4-6 weeks | ⭐⭐ | Medium-high |
+| 5 | **Performance Monitoring** | 5-7 weeks | ⭐⭐ | Medium-high |
 
 ---
 
-## 📋 چک‌لیست سریع
+## 📋 Quick checklist
 
-### فاز 1 (3 ماه) - Critical
+### Phase 1 (3 months) - Critical
 - [ ] WebSocket implementation
 - [ ] ML Model Management UI
 - [ ] Alert Correlation Engine
 - [ ] Data Quality Dashboard
 - [ ] Performance Monitoring Dashboard
 
-### فاز 2 (6 ماه) - Important
+### Phase 2 (6 months) - Important
 - [ ] Mobile Application
 - [ ] BI Integration
 - [ ] Workflow Automation
 - [ ] Enhanced Digital Twin
 - [ ] Advanced Security
 
-### فاز 3 (12 ماه) - Nice to Have
+### Phase 3 (12 months) - Nice to Have
 - [ ] AI Chatbot
 - [ ] Blockchain Integration
 - [ ] Federated Learning
@@ -37,7 +37,7 @@
 
 ---
 
-## 🚀 شروع سریع
+## 🚀 Quick start
 
 ### 1. Real-Time Streaming
 ```bash
@@ -68,9 +68,9 @@ frontend/web/src/pages/AlertAnalysis.tsx
 
 ---
 
-## 📊 معیارهای موفقیت
+## 📊 Success criteria
 
-| معیار | هدف | وضعیت فعلی |
+| Metric | Target | Current status |
 |-------|-----|------------|
 | Real-time Latency | < 100ms | 1-10s |
 | API Response | < 50ms | ~50ms |
@@ -79,23 +79,23 @@ frontend/web/src/pages/AlertAnalysis.tsx
 
 ---
 
-## 💡 نکات کلیدی
+## 💡 Key points
 
-1. **شروع با Real-Time Streaming** - بیشترین تاثیر
-2. **ML Management** - بهبود دقت پیش‌بینی‌ها
-3. **Alert Correlation** - کاهش noise
-4. **Data Quality** - افزایش اعتماد
-5. **Performance** - شناسایی bottlenecks
-
----
-
-## 📞 منابع
-
-- [پیشنهادات کامل](./PRODUCT_UPDATE_RECOMMENDATIONS.md)
-- [خلاصه اجرایی](./EXECUTIVE_SUMMARY_RECOMMENDATIONS.md)
-- [معماری سیستم](./docs/ARCHITECTURE.md)
+1. **Start with Real-Time Streaming** - Highest impact
+2. **ML Management** - Improves prediction accuracy
+3. **Alert Correlation** - Reduces noise
+4. **Data Quality** - Increases trust
+5. **Performance** - Identifies bottlenecks
 
 ---
 
-**آخرین به‌روزرسانی:** دسامبر 2025
+## 📞 Resources
+
+- [Full recommendations](./PRODUCT_UPDATE_RECOMMENDATIONS.md)
+- [Executive summary](./EXECUTIVE_SUMMARY_RECOMMENDATIONS.md)
+- [System architecture](./docs/ARCHITECTURE.md)
+
+---
+
+**Last updated:** December 2025
 

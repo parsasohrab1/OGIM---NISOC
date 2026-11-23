@@ -1,47 +1,47 @@
-# 📥 راهنمای نصب و راه‌اندازی OGIM
+# 📥 OGIM Installation and Setup Guide
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [پیش‌نیازها](#prerequisites)
-2. [نصب با Docker Compose](#docker-compose)
-3. [نصب دستی](#manual-installation)
-4. [تنظیمات اولیه](#initial-configuration)
-5. [راه‌اندازی سرویس‌ها](#starting-services)
-6. [تست نصب](#testing-installation)
-7. [عیب‌یابی](#troubleshooting)
+1. [Prerequisites](#prerequisites)
+2. [Installation with Docker Compose](#docker-compose)
+3. [Manual installation](#manual-installation)
+4. [Initial configuration](#initial-configuration)
+5. [Starting the services](#starting-services)
+6. [Testing the installation](#testing-installation)
+7. [Troubleshooting](#troubleshooting)
 
 ---
 
-## <a name="prerequisites"></a>🔧 پیش‌نیازها
+## <a name="prerequisites"></a>🔧 Prerequisites
 
-### نرم‌افزارهای مورد نیاز
+### Required software
 
 #### Backend
-- **Python** 3.10 یا بالاتر
+- **Python** 3.10 or higher
 - **pip** (Python package manager)
 - **PostgreSQL** 14+
 - **Redis** 7+
 - **Apache Kafka** 3.0+
-- **Docker** (اختیاری اما توصیه می‌شود)
-- **Docker Compose** (اختیاری)
+- **Docker** (optional but recommended)
+- **Docker Compose** (optional)
 
 #### Frontend
 - **Node.js** 18+ (LTS)
-- **npm** 9+ یا **yarn** 1.22+
+- **npm** 9+ or **yarn** 1.22+
 
-#### Infrastructure (برای Production)
+#### Infrastructure (for Production)
 - **Kubernetes** 1.25+
 - **Helm** 3.0+
 - **kubectl**
 
-### بررسی نصب پیش‌نیازها
+### Verifying the prerequisites
 
 ```bash
 # Python
-python --version  # باید 3.10+ باشد
+python --version  # must be 3.10+
 
 # Node.js
-node --version    # باید 18+ باشد
+node --version    # must be 18+
 npm --version
 
 # Docker
@@ -57,26 +57,26 @@ redis-cli --version
 
 ---
 
-## <a name="docker-compose"></a>🐳 نصب با Docker Compose (توصیه شده)
+## <a name="docker-compose"></a>🐳 Installation with Docker Compose (recommended)
 
-### 1️⃣ کلون کردن پروژه
+### 1️⃣ Cloning the project
 
 ```bash
 git clone https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring.git
 cd OGIM---Oil-Gas-Intelligent-Monitoring
 ```
 
-### 2️⃣ ایجاد فایل تنظیمات
+### 2️⃣ Creating the configuration file
 
 ```bash
-# کپی فایل نمونه
+# Copy the sample file
 cp .env.example .env
 
-# ویرایش تنظیمات
-nano .env  # یا vim .env
+# Edit the settings
+nano .env  # or vim .env
 ```
 
-**محتوای `.env` نمونه:**
+**Sample `.env` contents:**
 ```bash
 # Database
 DATABASE_URL=postgresql://ogim_user:ogim_password@postgres:5432/ogim
@@ -107,33 +107,33 @@ OPCUA_SERVER_URL=opc.tcp://localhost:4840
 MODEL_STORAGE_PATH=/app/models
 ```
 
-### 3️⃣ راه‌اندازی سرویس‌ها
+### 3️⃣ Starting the services
 
 ```bash
-# ساخت و اجرای تمام سرویس‌ها
+# Build and run all services
 docker-compose -f docker-compose.dev.yml up -d
 
-# مشاهده logs
+# View logs
 docker-compose -f docker-compose.dev.yml logs -f
 
-# بررسی وضعیت
+# Check the status
 docker-compose -f docker-compose.dev.yml ps
 ```
 
-### 4️⃣ مقداردهی اولیه دیتابیس
+### 4️⃣ Initializing the database
 
 ```bash
-# ورود به container backend
+# Enter the backend container
 docker-compose exec auth-service bash
 
-# اجرای script مقداردهی
+# Run the initialization script
 python -m backend.shared.init_db
 
-# خروج
+# Exit
 exit
 ```
 
-### 5️⃣ دسترسی به سرویس‌ها
+### 5️⃣ Accessing the services
 
 - **Web Portal**: http://localhost:3000
 - **API Gateway**: http://localhost:8000
@@ -142,11 +142,11 @@ exit
 
 ---
 
-## <a name="manual-installation"></a>🛠️ نصب دستی (Development)
+## <a name="manual-installation"></a>🛠️ Manual installation (Development)
 
 ### Backend
 
-#### 1️⃣ نصب PostgreSQL
+#### 1️⃣ Installing PostgreSQL
 
 **Ubuntu/Debian:**
 ```bash
@@ -157,7 +157,7 @@ sudo systemctl enable postgresql
 ```
 
 **Windows:**
-از [postgresql.org](https://www.postgresql.org/download/windows/) دانلود و نصب کنید.
+Download and install from [postgresql.org](https://www.postgresql.org/download/windows/).
 
 **macOS:**
 ```bash
@@ -165,13 +165,13 @@ brew install postgresql@14
 brew services start postgresql@14
 ```
 
-#### 2️⃣ ایجاد Database
+#### 2️⃣ Creating the Database
 
 ```bash
-# ورود به PostgreSQL
+# Log in to PostgreSQL
 sudo -u postgres psql
 
-# ایجاد کاربر و database
+# Create the user and database
 CREATE USER ogim_user WITH PASSWORD 'ogim_password';
 CREATE DATABASE ogim OWNER ogim_user;
 CREATE DATABASE ogim_test OWNER ogim_user;
@@ -180,7 +180,7 @@ GRANT ALL PRIVILEGES ON DATABASE ogim_test TO ogim_user;
 \q
 ```
 
-#### 3️⃣ نصب TimescaleDB (اختیاری)
+#### 3️⃣ Installing TimescaleDB (optional)
 
 ```bash
 # Ubuntu/Debian
@@ -189,13 +189,13 @@ sudo apt install timescaledb-postgresql-14
 # macOS
 brew install timescaledb
 
-# فعال‌سازی extension
+# Enable the extension
 sudo -u postgres psql -d ogim
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 \q
 ```
 
-#### 4️⃣ نصب Redis
+#### 4️⃣ Installing Redis
 
 **Ubuntu/Debian:**
 ```bash
@@ -210,50 +210,50 @@ brew install redis
 brew services start redis
 ```
 
-#### 5️⃣ نصب Kafka (اختیاری برای development)
+#### 5️⃣ Installing Kafka (optional for development)
 
 ```bash
-# دانلود Kafka
+# Download Kafka
 wget https://archive.apache.org/dist/kafka/3.0.0/kafka_2.13-3.0.0.tgz
 tar -xzf kafka_2.13-3.0.0.tgz
 cd kafka_2.13-3.0.0
 
-# راه‌اندازی Zookeeper
+# Start Zookeeper
 bin/zookeeper-server-start.sh config/zookeeper.properties &
 
-# راه‌اندازی Kafka
+# Start Kafka
 bin/kafka-server-start.sh config/server.properties &
 ```
 
-#### 6️⃣ نصب Backend Services
+#### 6️⃣ Installing the Backend Services
 
 ```bash
-# ایجاد محیط مجازی
+# Create a virtual environment
 python -m venv venv
 
-# فعال‌سازی
+# Enable
 source venv/bin/activate  # Linux/macOS
-# یا
+# or
 venv\Scripts\activate     # Windows
 
-# نصب وابستگی‌های shared
+# Install the shared dependencies
 cd backend/shared
 pip install -r requirements.txt
 
-# مقداردهی اولیه database
+# Initialize the database
 python init_db.py
 
-# نصب وابستگی‌های هر سرویس
+# Install the dependencies of each service
 cd ../auth-service
 pip install -r requirements.txt
 
 cd ../data-ingestion-service
 pip install -r requirements.txt
 
-# ... (سایر سرویس‌ها)
+# ... (other services)
 ```
 
-#### 7️⃣ راه‌اندازی Backend Services
+#### 7️⃣ Starting the Backend Services
 
 **Terminal 1 - Auth Service:**
 ```bash
@@ -281,7 +281,7 @@ uvicorn main:app --reload --port 8004
 
 ### Frontend
 
-#### 1️⃣ نصب Node.js
+#### 1️⃣ Installing Node.js
 
 **Ubuntu/Debian:**
 ```bash
@@ -295,65 +295,65 @@ brew install node@18
 ```
 
 **Windows:**
-از [nodejs.org](https://nodejs.org) دانلود و نصب کنید.
+Download and install from [nodejs.org](https://nodejs.org).
 
-#### 2️⃣ نصب وابستگی‌ها
+#### 2️⃣ Installing the dependencies
 
 ```bash
 cd frontend/web
 npm install
 ```
 
-#### 3️⃣ تنظیمات Frontend
+#### 3️⃣ Frontend settings
 
 ```bash
-# ایجاد فایل .env.local
+# Create the .env.local file
 cat > .env.local << EOF
 VITE_API_GATEWAY_URL=http://localhost:8000
 EOF
 ```
 
-#### 4️⃣ راه‌اندازی Development Server
+#### 4️⃣ Starting the Development Server
 
 ```bash
 npm run dev
 ```
 
-Frontend در آدرس http://localhost:3000 در دسترس خواهد بود.
+The Frontend will be available at http://localhost:3000.
 
 ---
 
-## <a name="initial-configuration"></a>⚙️ تنظیمات اولیه
+## <a name="initial-configuration"></a>⚙️ Initial configuration
 
-### پیکربندی محیطی
+### Environment configuration
 
-راهنمای انتخاب فایل‌های env و مدیریت secret ها در [`docs/CONFIGURATION.md`](CONFIGURATION.md) موجود است؛ قبل از اجرای سرویس‌ها، فایل مناسب (development/production) را ایجاد کنید.
+A guide to choosing env files and managing secrets is available in [`docs/CONFIGURATION.md`](CONFIGURATION.md); before running the services, create the appropriate file (development/production).
 
-### راهنمای توسعه‌دهندگان
+### Developer guide
 
-برای فرآیند توسعه محلی، گردش کار Git و اجرای lint/test، به [`docs/DEVELOPER_GUIDE.md`](DEVELOPER_GUIDE.md) مراجعه کنید.
+For the local development process, the Git workflow and running lint/test, see [`docs/DEVELOPER_GUIDE.md`](DEVELOPER_GUIDE.md).
 
-### 1️⃣ کاربران پیش‌فرض
+### 1️⃣ Default users
 
-پس از اجرای `init_db.py`، کاربران زیر ایجاد می‌شوند:
+After running `init_db.py`, the following users are created:
 
-| Username | Password | Role | توضیحات |
+| Username | Password | Role | Description |
 |----------|----------|------|---------|
-| admin | Admin@123 | system_admin | مدیر سیستم |
-| operator1 | Operator@123 | field_operator | اپراتور میدانی |
-| engineer1 | Engineer@123 | data_engineer | مهندس داده |
-| viewer1 | Viewer@123 | viewer | بیننده |
+| admin | Admin@123 | system_admin | System administrator |
+| operator1 | Operator@123 | field_operator | Field operator |
+| engineer1 | Engineer@123 | data_engineer | Data engineer |
+| viewer1 | Viewer@123 | viewer | Viewer |
 
-⚠️ **هشدار امنیتی**: حتماً این رمزهای عبور را در محیط production تغییر دهید!
+⚠️ **Security warning**: Be sure to change these passwords in the production environment!
 
-### 2️⃣ تغییر رمز عبور
+### 2️⃣ Changing the password
 
 ```bash
-# ورود به web portal
+# Log in to the web portal
 # Settings > Change Password
 ```
 
-یا از API:
+Or from the API:
 ```bash
 curl -X POST http://localhost:8001/users/me/change-password \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -361,10 +361,10 @@ curl -X POST http://localhost:8001/users/me/change-password \
   -d '{"old_password": "Admin@123", "new_password": "NewSecurePassword123!"}'
 ```
 
-### 3️⃣ تنظیمات MLflow
+### 3️⃣ MLflow settings
 
 ```bash
-# راه‌اندازی MLflow server
+# Start the MLflow server
 mlflow server \
   --backend-store-uri sqlite:///mlflow.db \
   --default-artifact-root ./mlflow-artifacts \
@@ -372,91 +372,91 @@ mlflow server \
   --port 5000
 ```
 
-### 4️⃣ آموزش مدل‌های ML
+### 4️⃣ Training the ML models
 
-سرویس `ml-inference` دیگر در هنگام راه‌اندازی مدل‌ها را آموزش نمی‌دهد. برای تولید یا به‌روزرسانی مدل‌ها:
+The `ml-inference` service no longer trains models on startup. To generate or update models:
 
 ```bash
-python scripts/train_models.py --model all          # آموزش همه مدل‌ها
+python scripts/train_models.py --model all          # train all models
 python scripts/train_models.py --model anomaly_detection
 python scripts/train_models.py --model failure_prediction
 ```
 
-> **نکته:** در محیط‌های Production مقدار `MODEL_STORAGE_PATH` را روی یک Volume پایدار نگاشت کنید تا مدل‌های آموزش‌دیده پس از ری‌استارت از بین نروند.
+> **Note:** In Production environments, map `MODEL_STORAGE_PATH` to a persistent Volume so that the trained models are not lost after a restart.
 
-پس از استقرار، در صورت نیاز می‌توانید با توکن ادمین درخواست زیر را برای بارگذاری مجدد مدل‌های رجیستری اجرا کنید:
+After deployment, if needed, you can run the following request with an admin token to reload the registry models:
 
 ```bash
 curl -X POST http://localhost:8004/models/reload \
   -H "Authorization: Bearer <SYSTEM_ADMIN_TOKEN>"
 ```
 
-### 5️⃣ اجرای مهاجرت‌های پایگاه داده
+### 5️⃣ Running the database migrations
 
-سرویس‌ها دیگر جداول را هنگام استارتاپ ایجاد نمی‌کنند. پیش از اجرای سرویس‌ها، migrationها را با Alembic اعمال کنید:
+The services no longer create the tables at startup. Before running the services, apply the migrations with Alembic:
 
 ```bash
 cd backend
 alembic upgrade head
 ```
 
-> متغیر `SQLALCHEMY_DATABASE_URL` یا `DATABASE_URL` باید به پایگاه داده هدف اشاره کند.
+> The `SQLALCHEMY_DATABASE_URL` or `DATABASE_URL` variable must point to the target database.
 
-### 6️⃣ تولید داده نمونه
+### 6️⃣ Generating sample data
 
 ```bash
 cd data
 python generate_sample_data.py
 ```
 
-### 7️⃣ نقش‌ها و سیاست‌های دسترسی
+### 7️⃣ Roles and access policies
 
-برای آشنایی با نقش‌ها و سطح دسترسی هر سرویس، فایل [`docs/SECURITY_ROLES.md`](SECURITY_ROLES.md) را مطالعه کنید و مطمئن شوید توکن‌های تولیدی با نقش‌های مناسب استفاده می‌شوند.
+To learn about the roles and access level of each service, read [`docs/SECURITY_ROLES.md`](SECURITY_ROLES.md) and make sure production tokens are used with appropriate roles.
 
 ### 8️⃣ Observability (Prometheus/Grafana)
 
-برای راه‌اندازی Prometheus، Grafana و متریک‌های هر سرویس، به راهنمای [`docs/OBSERVABILITY.md`](OBSERVABILITY.md) مراجعه کنید. نمونه پیکربندی Prometheus در `infrastructure/prometheus/prometheus.yml` آماده است. دستورالعمل Tracing نیز در همان راهنما و جزئیات کامل‌تر در [`docs/TRACING.md`](TRACING.md) موجود است.
+To set up Prometheus, Grafana and the metrics of each service, see the guide [`docs/OBSERVABILITY.md`](OBSERVABILITY.md). A sample Prometheus configuration is ready in `infrastructure/prometheus/prometheus.yml`. The Tracing instructions are also in the same guide, with more complete details in [`docs/TRACING.md`](TRACING.md).
 
-### 9️⃣ لاگ‌ها و تجمیع
+### 9️⃣ Logs and aggregation
 
-فرمت JSON و نحوه‌ی ارسال لاگ‌ها به Loki یا ELK در [`docs/LOGGING.md`](LOGGING.md) آمده است. برای Dev می‌توانید از Promtail نمونه (`infrastructure/logging/promtail-config.yaml`) استفاده کنید.
+The JSON format and how to ship logs to Loki or ELK are described in [`docs/LOGGING.md`](LOGGING.md). For Dev you can use the sample Promtail (`infrastructure/logging/promtail-config.yaml`).
 
-### 10️⃣ تست
+### 10️⃣ Testing
 
-برای اجرای تست‌ها و مشاهده گزارش پوشش، به [`docs/TESTING.md`](TESTING.md) مراجعه کنید؛ اجرای `pytest` در پوشه `backend/` حداقل پوشش 60٪ را enforced می‌کند.
+To run the tests and view the coverage report, see [`docs/TESTING.md`](TESTING.md); running `pytest` in the `backend/` folder enforces a minimum coverage of 60%.
 
 ### 11️⃣ CI/CD
 
-برای Pipeline GitHub Actions شامل lint، تست و بررسی migration به [`docs/CI_CD.md`](CI_CD.md) مراجعه کنید. این فایل نحوه‌ی پیکربندی متغیرها و اجرای دستی مراحل را توضیح می‌دهد.
+For the GitHub Actions Pipeline including lint, tests and migration check, see [`docs/CI_CD.md`](CI_CD.md). This file explains how to configure the variables and run the steps manually.
 
 ### 12️⃣ Handoff
 
-برای خلاصهٔ QA/Ops شامل پوشش تست، وضعیت pipeline و گام‌های rollout به [`docs/HANDOFF.md`](HANDOFF.md) مراجعه کنید.
+For a QA/Ops summary including test coverage, pipeline status and rollout steps, see [`docs/HANDOFF.md`](HANDOFF.md).
 
 ---
 
-## <a name="starting-services"></a>🚀 راه‌اندازی سرویس‌ها
+## <a name="starting-services"></a>🚀 Starting the services
 
-### با Docker Compose
+### With Docker Compose
 
 ```bash
-# راه‌اندازی همه سرویس‌ها
+# Start all services
 docker-compose -f docker-compose.dev.yml up -d
 
-# راه‌اندازی یک سرویس خاص
+# Start a specific service
 docker-compose -f docker-compose.dev.yml up -d postgres redis
 
-# توقف سرویس‌ها
+# Stop the services
 docker-compose -f docker-compose.dev.yml down
 
-# توقف و حذف volumes
+# Stop and remove volumes
 docker-compose -f docker-compose.dev.yml down -v
 ```
 
-### راه‌اندازی دستی
+### Manual startup
 
 ```bash
-# استفاده از screen یا tmux برای مدیریت چندین terminal
+# Use screen or tmux to manage multiple terminals
 
 # Terminal 1
 cd backend/auth-service && uvicorn main:app --reload --port 8001
@@ -476,36 +476,36 @@ cd frontend/web && npm run dev
 
 ---
 
-## <a name="testing-installation"></a>✅ تست نصب
+## <a name="testing-installation"></a>✅ Testing the installation
 
-### 1️⃣ بررسی Backend Services
+### 1️⃣ Checking the Backend Services
 
 ```bash
-# Health check برای هر سرویس
+# Health check for each service
 curl http://localhost:8001/health  # Auth Service
 curl http://localhost:8002/health  # Data Ingestion
 curl http://localhost:8003/health  # Alert Service
 curl http://localhost:8004/health  # ML Inference
-curl http://localhost:8004/metrics # متریک‌های Prometheus (در صورت فعال بودن)
+curl http://localhost:8004/metrics # Prometheus metrics (if enabled)
 ```
 
-### 2️⃣ تست Authentication
+### 2️⃣ Testing Authentication
 
 ```bash
-# دریافت token
+# Get a token
 curl -X POST http://localhost:8001/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=admin&password=Admin@123"
 
-# خروجی:
+# Output:
 # {"access_token":"eyJ0eXAiOiJKV1QiLC...","token_type":"bearer"}
 ```
 
-### 3️⃣ تست Frontend
+### 3️⃣ Testing the Frontend
 
-باز کردن مرورگر: http://localhost:3000
+Open the browser: http://localhost:3000
 
-### 4️⃣ اجرای تست‌های واحد
+### 4️⃣ Running the unit tests
 
 ```bash
 cd backend
@@ -514,60 +514,60 @@ pytest tests/ -v
 
 ---
 
-## <a name="troubleshooting"></a>🔧 عیب‌یابی
+## <a name="troubleshooting"></a>🔧 Troubleshooting
 
-### مشکل: Backend start نمی‌شود
+### Problem: The Backend does not start
 
 ```bash
-# بررسی لاگ‌ها
+# Check the logs
 docker-compose logs backend-service-name
 
-# بررسی اتصال به database
+# Check the database connection
 psql -h localhost -U ogim_user -d ogim
 ```
 
-### مشکل: Frontend به Backend متصل نمی‌شود
+### Problem: The Frontend does not connect to the Backend
 
 ```bash
-# بررسی تنظیمات CORS در backend/.../config.py
+# Check the CORS settings in backend/.../config.py
 CORS_ORIGINS = ["http://localhost:3000"]
 
-# بررسی .env.local در frontend
+# Check .env.local in the frontend
 VITE_API_GATEWAY_URL=http://localhost:8000
 ```
 
-### مشکل: Database connection error
+### Problem: Database connection error
 
 ```bash
-# بررسی وضعیت PostgreSQL
+# Check the PostgreSQL status
 sudo systemctl status postgresql
 
-# بررسی اتصال
+# Check the connection
 psql -h localhost -U ogim_user -d ogim -c "SELECT 1"
 ```
 
-### مشکل: Port already in use
+### Problem: Port already in use
 
 ```bash
-# یافتن process که از port استفاده می‌کند
+# Find the process using the port
 # Linux/Mac
 lsof -i :8000
 
 # Windows
 netstat -ano | findstr :8000
 
-# kill کردن process
+# Kill the process
 kill -9 PID  # Linux/Mac
 taskkill /PID <PID> /F  # Windows
 ```
 
-### مشکل: Kafka connection error
+### Problem: Kafka connection error
 
 ```bash
-# بررسی وضعیت Kafka
+# Check the Kafka status
 docker-compose exec kafka kafka-topics.sh --list --bootstrap-server localhost:9092
 
-# ایجاد topic دستی
+# Create the topic manually
 docker-compose exec kafka kafka-topics.sh --create \
   --topic raw-sensor-data \
   --bootstrap-server localhost:9092 \
@@ -577,17 +577,17 @@ docker-compose exec kafka kafka-topics.sh --create \
 
 ---
 
-## 📞 دریافت کمک
+## 📞 Getting Help
 
-اگر با مشکلی مواجه شدید:
+If you run into a problem:
 
-1. لاگ‌ها را بررسی کنید
-2. مستندات API را مطالعه کنید: http://localhost:8000/docs
-3. Issue در GitHub باز کنید
-4. به [README.md](../README.md) مراجعه کنید
+1. Check the logs
+2. Read the API documentation: http://localhost:8000/docs
+3. Open an Issue on GitHub
+4. See [README.md](../README.md)
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** نوامبر 2025
+**Version:** 1.0.0
+**Updated:** November 2025
 

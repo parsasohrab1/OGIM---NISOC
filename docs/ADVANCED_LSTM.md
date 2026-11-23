@@ -1,48 +1,48 @@
-# مدل‌های LSTM پیشرفته برای پیش‌بینی رفتار چاه
+# Advanced LSTM models for predicting well behavior
 
-## 📋 خلاصه
+## 📋 Summary
 
-این مستندات نحوه استفاده از مدل‌های LSTM پیشرفته برای پیش‌بینی دقیق‌تر رفتار چاه‌های نفتی را توضیح می‌دهد.
+This documentation explains how to use advanced LSTM models for more accurate prediction of oil well behavior.
 
-## 🏗️ معماری مدل‌ها
+## 🏗️ Model architectures
 
-### 1. Stacked LSTM (پیش‌فرض)
-- **معماری**: 3 لایه LSTM با 128، 64، و 32 واحد
-- **ویژگی‌ها**:
-  - Batch Normalization برای پایداری آموزش
-  - Dropout برای جلوگیری از overfitting
-  - Dense layers برای خروجی
-- **استفاده**: برای داده‌های تک متغیره و چند متغیره
+### 1. Stacked LSTM (default)
+- **Architecture**: 3 LSTM layers with 128, 64, and 32 units
+- **Features**:
+  - Batch Normalization for training stability
+  - Dropout to prevent overfitting
+  - Dense layers for the output
+- **Use**: For univariate and multivariate data
 
 ### 2. Bidirectional LSTM
-- **معماری**: LSTM دوطرفه برای استفاده از اطلاعات گذشته و آینده
-- **ویژگی‌ها**:
-  - تحلیل بهتر الگوهای زمانی
-  - مناسب برای داده‌های با روندهای پیچیده
-- **استفاده**: برای پیش‌بینی‌های دقیق‌تر
+- **Architecture**: Bidirectional LSTM to use past and future information
+- **Features**:
+  - Better analysis of temporal patterns
+  - Suitable for data with complex trends
+- **Use**: For more accurate predictions
 
 ### 3. LSTM with Attention
-- **معماری**: LSTM با مکانیزم Attention
-- **ویژگی‌ها**:
-  - تمرکز بر نقاط مهم در سری زمانی
-  - بهبود دقت پیش‌بینی
-- **استفاده**: برای داده‌های با الگوهای پیچیده
+- **Architecture**: LSTM with an Attention mechanism
+- **Features**:
+  - Focus on important points in the time series
+  - Improved prediction accuracy
+- **Use**: For data with complex patterns
 
-## 🚀 استفاده
+## 🚀 Usage
 
-### آموزش مدل
+### Training the model
 
-#### روش 1: استفاده از API
+#### Method 1: Using the API
 
 ```python
 import requests
 
-# آموزش مدل برای یک چاه
+# Train the model for a well
 response = requests.post(
     "http://localhost:8003/api/ml-inference/lstm/train",
     json={
         "well_name": "PROD-001",
-        "time_series_data": [100.5, 102.3, 98.7, ...],  # حداقل 200 نقطه
+        "time_series_data": [100.5, 102.3, 98.7, ...],  # at least 200 points
         "model_type": "stacked_lstm",
         "sequence_length": 60,
         "forecast_horizon": 24,
@@ -54,10 +54,10 @@ response = requests.post(
 )
 ```
 
-#### روش 2: استفاده از اسکریپت
+#### Method 2: Using a script
 
 ```bash
-# آموزش مدل Stacked LSTM
+# Train a Stacked LSTM model
 python scripts/train_advanced_lstm.py \
     --well PROD-001 \
     --model-type stacked_lstm \
@@ -66,31 +66,31 @@ python scripts/train_advanced_lstm.py \
     --forecast-horizon 24 \
     --test
 
-# آموزش مدل Bidirectional LSTM
+# Train a Bidirectional LSTM model
 python scripts/train_advanced_lstm.py \
     --well PROD-001 \
     --model-type bidirectional \
     --epochs 100
 
-# آموزش مدل با Attention
+# Train a model with Attention
 python scripts/train_advanced_lstm.py \
     --well PROD-001 \
     --model-type attention \
     --epochs 100
 ```
 
-### پیش‌بینی
+### Prediction
 
 ```python
 import requests
 
-# پیش‌بینی آینده
+# Predict the future
 response = requests.post(
     "http://localhost:8003/api/ml-inference/forecast",
     json={
         "sensor_id": "PROD-001-PRESSURE",
-        "historical_data": [100.5, 102.3, 98.7, ...],  # حداقل 60 نقطه
-        "forecast_steps": 24  # پیش‌بینی 24 گام آینده
+        "historical_data": [100.5, 102.3, 98.7, ...],  # at least 60 points
+        "forecast_steps": 24  # forecast 24 steps ahead
     },
     headers={"Authorization": "Bearer YOUR_TOKEN"}
 )
@@ -102,55 +102,55 @@ print(f"Confidence: {result['confidence']}")
 
 ## 📊 Frontend
 
-صفحه **LSTM Forecast** در Navigation Bar برای:
-- آموزش مدل‌های جدید
-- تولید پیش‌بینی‌ها
-- مشاهده لیست مدل‌های آموزش دیده
-- نمایش نتایج پیش‌بینی با نمودار
+The **LSTM Forecast** page in the Navigation Bar is for:
+- Training new models
+- Generating forecasts
+- Viewing the list of trained models
+- Displaying forecast results with a chart
 
-## ⚙️ پارامترها
+## ⚙️ Parameters
 
 ### Sequence Length
-- **پیش‌فرض**: 60
-- **توضیح**: تعداد نقاط تاریخی که برای پیش‌بینی استفاده می‌شود
-- **توصیه**: 30-120 بسته به فرکانس داده
+- **Default**: 60
+- **Description**: Number of historical points used for prediction
+- **Recommendation**: 30-120 depending on the data frequency
 
 ### Forecast Horizon
-- **پیش‌فرض**: 24
-- **توضیح**: تعداد گام‌های آینده برای پیش‌بینی
-- **توصیه**: 1-48 برای داده‌های ساعتی
+- **Default**: 24
+- **Description**: Number of future steps to predict
+- **Recommendation**: 1-48 for hourly data
 
 ### Epochs
-- **پیش‌فرض**: 100
-- **توضیح**: تعداد دوره‌های آموزش
-- **توصیه**: 50-200 بسته به حجم داده
+- **Default**: 100
+- **Description**: Number of training epochs
+- **Recommendation**: 50-200 depending on the data volume
 
 ## 📈 Metrics
 
-مدل‌ها معیارهای زیر را گزارش می‌دهند:
-- **Loss (MSE)**: خطای مربعات میانگین
-- **MAE**: خطای مطلق میانگین
-- **MAPE**: خطای درصدی مطلق میانگین
+The models report the following metrics:
+- **Loss (MSE)**: Mean squared error
+- **MAE**: Mean absolute error
+- **MAPE**: Mean absolute percentage error
 
-## 🔧 تنظیمات پیشرفته
+## 🔧 Advanced settings
 
 ### Callbacks
-- **Early Stopping**: توقف زودهنگام در صورت عدم بهبود
-- **Reduce LR on Plateau**: کاهش learning rate
-- **Model Checkpoint**: ذخیره بهترین مدل
+- **Early Stopping**: Stops early if there is no improvement
+- **Reduce LR on Plateau**: Reduces the learning rate
+- **Model Checkpoint**: Saves the best model
 
 ### Normalization
-- استفاده از MinMaxScaler برای نرمال‌سازی
-- نرمال‌سازی جداگانه برای هر feature
-- Inverse transform برای بازگشت به مقیاس اصلی
+- Uses MinMaxScaler for normalization
+- Separate normalization for each feature
+- Inverse transform to return to the original scale
 
-## 📝 مثال کامل
+## 📝 Complete example
 
 ```python
 from advanced_lstm_model import AdvancedLSTMModel
 import numpy as np
 
-# ایجاد مدل
+# Create the model
 model = AdvancedLSTMModel(
     sequence_length=60,
     forecast_horizon=24,
@@ -158,10 +158,10 @@ model = AdvancedLSTMModel(
     model_type="stacked_lstm"
 )
 
-# بارگذاری داده
-data = np.load("well_data.npy")  # شکل: (n_samples, 1)
+# Load data
+data = np.load("well_data.npy")  # shape: (n_samples, 1)
 
-# ایجاد sequences
+# Create sequences
 X, y = [], []
 for i in range(len(data) - 60 - 24 + 1):
     X.append(data[i:(i + 60)])
@@ -170,7 +170,7 @@ for i in range(len(data) - 60 - 24 + 1):
 X = np.array(X)
 y = np.array(y)
 
-# آموزش
+# Training
 metrics = model.train(
     X_train=X,
     y_train=y,
@@ -179,7 +179,7 @@ metrics = model.train(
     validation_split=0.2
 )
 
-# پیش‌بینی
+# Prediction
 historical = data[-60:].flatten()
 result = model.predict(historical, forecast_steps=24)
 
@@ -187,32 +187,32 @@ print(f"Predictions: {result['predictions']}")
 print(f"Confidence: {result['confidence']}")
 ```
 
-## 🎯 بهترین روش‌ها
+## 🎯 Best practices
 
-1. **حجم داده**: حداقل 200-500 نقطه برای آموزش مناسب
-2. **Validation Split**: 20% برای validation
-3. **Sequence Length**: باید با الگوهای زمانی داده هماهنگ باشد
-4. **Forecast Horizon**: هرچه بیشتر، دقت کمتر
+1. **Data volume**: At least 200-500 points for proper training
+2. **Validation Split**: 20% for validation
+3. **Sequence Length**: Must match the temporal patterns of the data
+4. **Forecast Horizon**: The longer it is, the lower the accuracy
 5. **Model Selection**: 
-   - Stacked LSTM برای شروع
-   - Bidirectional برای دقت بیشتر
-   - Attention برای الگوهای پیچیده
+   - Stacked LSTM to start
+   - Bidirectional for higher accuracy
+   - Attention for complex patterns
 
-## 🔍 عیب‌یابی
+## 🔍 Troubleshooting
 
-### مشکل: Model not trained
-**راه‌حل**: ابتدا مدل را آموزش دهید
+### Problem: Model not trained
+**Solution**: Train the model first
 
-### مشکل: Not enough data
-**راه‌حل**: حداقل 200 نقطه برای آموزش و 60 نقطه برای پیش‌بینی
+### Problem: Not enough data
+**Solution**: At least 200 points for training and 60 points for prediction
 
-### مشکل: Poor predictions
-**راه‌حل**: 
-- افزایش epochs
-- تنظیم sequence_length
-- استفاده از مدل‌های پیشرفته‌تر
+### Problem: Poor predictions
+**Solution**:
+- Increase epochs
+- Adjust sequence_length
+- Use more advanced models
 
-## 📚 منابع
+## 📚 Resources
 
 - TensorFlow Keras LSTM Documentation
 - Time Series Forecasting with LSTM

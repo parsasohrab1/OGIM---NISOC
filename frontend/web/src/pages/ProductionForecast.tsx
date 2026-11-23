@@ -69,28 +69,28 @@ export default function ProductionForecast() {
       <header className="pf-hero">
         <div>
           <p className="pf-client">{FIELD.clientFa}</p>
-          <h2>پیش‌بینی تولید — {FIELD.nameFa}</h2>
+          <h2>Production forecast — {FIELD.nameFa}</h2>
           <p className="pf-meta">
-            منحنی افت تولید و درصد آب تولیدی برای هر ۲۴ حلقه · افق ۱۲ ماه · نفت سبک-میانه ترش درجه سنگینی {FIELD.apiGravity}°
+            Production decline curve and produced water cut for each of the 24 wells · 12-month horizon · sour light-to-medium crude with API gravity {FIELD.apiGravity}°
           </p>
         </div>
       </header>
 
       <div className="pf-kpis">
         <div className="pf-kpi">
-          <span>میانگین افت سالانه</span>
+          <span>Average annual decline</span>
           <strong>{summary.avgDecline}%</strong>
         </div>
         <div className="pf-kpi">
-          <span>میانگین رشد درصد آب تولیدی در ۹۰ روز</span>
+          <span>Average 90-day produced water cut growth</span>
           <strong>+{summary.avgWcRise}%</strong>
         </div>
         <div className="pf-kpi warn">
-          <span>چاه با افت بالا (&gt;۲۵٪/سال)</span>
+          <span>Wells with high decline (&gt;25%/year)</span>
           <strong>{summary.highDecline}</strong>
         </div>
         <div className="pf-kpi warn">
-          <span>چاه با درصد آب تولیدی پیش‌بینی &gt;۶۰٪</span>
+          <span>Wells with forecast produced water cut &gt;60%</span>
           <strong>{summary.highWc}</strong>
         </div>
       </div>
@@ -101,26 +101,26 @@ export default function ProductionForecast() {
           className={tab === 'decline' ? 'active' : ''}
           onClick={() => setTab('decline')}
         >
-          افت تولید
+          Production decline
         </button>
         <button
           type="button"
           className={tab === 'watercut' ? 'active' : ''}
           onClick={() => setTab('watercut')}
         >
-          آب تولیدی
+          Produced water
         </button>
         <button
           type="button"
           className={tab === 'table' ? 'active' : ''}
           onClick={() => setTab('table')}
         >
-          جدول همه چاه‌ها
+          Table of all wells
         </button>
       </div>
 
       <div className="pf-well-picker">
-        <label>انتخاب چاه:</label>
+        <label>Select well:</label>
         <div className="pf-well-chips">
           {forecasts.map((f) => (
             <button
@@ -147,19 +147,19 @@ export default function ProductionForecast() {
             </h3>
             <div className="pf-detail-stats">
               <span>
-                نفت فعلی: <b>{selected.currentOil} bbl/d</b>
+                Current oil: <b>{selected.currentOil} bbl/d</b>
               </span>
               <span>
-                درصد آب تولیدی فعلی: <b>{selected.currentWaterCut}%</b>
+                Current produced water cut: <b>{selected.currentWaterCut}%</b>
               </span>
               <span>
-                افت ۳۰روزه: <b>{selected.declinePct30d}%</b>
+                30-day decline: <b>{selected.declinePct30d}%</b>
               </span>
               <span>
-                افت سالانه پیش‌بینی: <b>{selected.declineAnnualPct}%</b>
+                Forecast annual decline: <b>{selected.declineAnnualPct}%</b>
               </span>
               <span>
-                درصد آب تولیدی در ۹۰ روز: <b>{selected.waterCutIn90d}%</b> (+{selected.waterCutRise90d})
+                Produced water cut in 90 days: <b>{selected.waterCutIn90d}%</b> (+{selected.waterCutRise90d})
               </span>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function ProductionForecast() {
           {tab === 'decline' && (
             <>
               <div className="pf-chart-card">
-                <h4>منحنی زوال تولید نفت — ۱۲ ماه</h4>
+                <h4>Oil production decline curve — 12 months</h4>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={selected.series}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -178,7 +178,7 @@ export default function ProductionForecast() {
                     <Line
                       type="monotone"
                       dataKey="oil"
-                      name="دبی نفت (bbl/d)"
+                      name="Oil rate (bbl/d)"
                       stroke="#42a5f5"
                       strokeWidth={2}
                       dot={{ r: 3 }}
@@ -187,7 +187,7 @@ export default function ProductionForecast() {
                 </ResponsiveContainer>
               </div>
               <div className="pf-chart-card">
-                <h4>مقایسه افت تولید همه چاه‌ها (اکنون / ۹۰روز / ۱۲ماه)</h4>
+                <h4>Production decline comparison of all wells (now / 90 days / 12 months)</h4>
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={compareOil}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -195,9 +195,9 @@ export default function ProductionForecast() {
                     <YAxis stroke="#888" />
                     <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #ccc', color: '#111' }} />
                     <Legend />
-                    <Bar dataKey="now" name="اکنون" fill="#66bb6a" />
-                    <Bar dataKey="m3" name="۹۰ روز" fill="#42a5f5" />
-                    <Bar dataKey="m12" name="۱۲ ماه" fill="#ffa726" />
+                    <Bar dataKey="now" name="Now" fill="#66bb6a" />
+                    <Bar dataKey="m3" name="90 days" fill="#42a5f5" />
+                    <Bar dataKey="m12" name="12 months" fill="#ffa726" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -207,7 +207,7 @@ export default function ProductionForecast() {
           {tab === 'watercut' && (
             <>
               <div className="pf-chart-card">
-                <h4>پیش‌بینی درصد آب تولیدی — ۱۲ ماه</h4>
+                <h4>Produced water cut forecast — 12 months</h4>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={selected.series}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -218,7 +218,7 @@ export default function ProductionForecast() {
                     <Line
                       type="monotone"
                       dataKey="waterCut"
-                      name="درصد آب تولیدی %"
+                      name="Produced water cut %"
                       stroke="#ab47bc"
                       strokeWidth={2}
                       dot={{ r: 3 }}
@@ -226,7 +226,7 @@ export default function ProductionForecast() {
                     <Line
                       type="monotone"
                       dataKey="water"
-                      name="دبی آب (bbl/d)"
+                      name="Water rate (bbl/d)"
                       stroke="#26c6da"
                       strokeDasharray="4 3"
                     />
@@ -234,7 +234,7 @@ export default function ProductionForecast() {
                 </ResponsiveContainer>
               </div>
               <div className="pf-chart-card">
-                <h4>مقایسه درصد آب تولیدی همه چاه‌ها (اکنون / ۹۰روز / ۱۲ماه)</h4>
+                <h4>Produced water cut comparison of all wells (now / 90 days / 12 months)</h4>
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={compareWc}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -242,9 +242,9 @@ export default function ProductionForecast() {
                     <YAxis stroke="#888" domain={[0, 100]} />
                     <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #ccc', color: '#111' }} />
                     <Legend />
-                    <Bar dataKey="now" name="اکنون %" fill="#7e57c2" />
-                    <Bar dataKey="m3" name="۹۰ روز %" fill="#ab47bc" />
-                    <Bar dataKey="m12" name="۱۲ ماه %" fill="#ec407a" />
+                    <Bar dataKey="now" name="Now %" fill="#7e57c2" />
+                    <Bar dataKey="m3" name="90 days %" fill="#ab47bc" />
+                    <Bar dataKey="m12" name="12 months %" fill="#ec407a" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -267,21 +267,21 @@ function ForecastTable({
 }) {
   return (
     <div className="pf-table-card">
-      <h3>خلاصه پیش‌بینی هر چاه</h3>
+      <h3>Forecast summary of each well</h3>
       <div className="pf-table-wrap">
         <table>
           <thead>
             <tr>
-              <th>چاه</th>
-              <th>وضعیت</th>
-              <th>نفت فعلی</th>
-              <th>نفت ۹۰روز</th>
-              <th>نفت ۱۲ماه</th>
-              <th>افت سالانه</th>
-              <th>درصد آب فعلی</th>
-              <th>درصد آب ۹۰روز</th>
-              <th>درصد آب ۱۲ماه</th>
-              <th>Δ درصد آب ۹۰روز</th>
+              <th>Well</th>
+              <th>Status</th>
+              <th>Current oil</th>
+              <th>Oil 90 days</th>
+              <th>Oil 12 months</th>
+              <th>Annual decline</th>
+              <th>Current water cut</th>
+              <th>Water cut 90 days</th>
+              <th>Water cut 12 months</th>
+              <th>Δ water cut 90 days</th>
             </tr>
           </thead>
           <tbody>

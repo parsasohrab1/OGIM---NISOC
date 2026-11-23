@@ -1,27 +1,27 @@
-# نقش‌ها و دسترسی‌ها در OGIM
+# Roles and permissions in OGIM
 
-| نقش             | توضیح کوتاه                                    | دسترسی‌ها (سرویس‌ها)                                                                                             |
+| Role            | Short description                              | Access (services)                                                                                                |
 |-----------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `system_admin`  | مدیر سامانه با دسترسی کامل                     | همه‌ی سرویس‌ها، مدیریت کاربر، مدیریت فرمان، مدیریت کاتالوگ، مدیریت اتصال‌ها، اجرای migrations                    |
-| `data_engineer` | مسئول داده و آنالیز                            | مشاهده/مدیریت ingestion، مشاهده هشدارها، مدیریت tagها (بدون حذف کامل)، دسترسی به مدل‌های ML                      |
-| `field_operator`| اپراتور میدانی                                 | مشاهده هشدارها، ایجاد فرمان (بدون approve)، استفاده از inference، مشاهده داده‌های ingestion                      |
-| `operator`      | اپراتور کنترل                                 | ایجاد فرمان‌های کنترلی محدود، مشاهده لیست فرمان‌ها                                                               |
-| `viewer`        | دسترسی فقط خواندنی                             | مشاهده داشبورد و گزارش‌ها از طریق API Gateway (صرفاً endpoints read-only)                                       |
+| `system_admin`  | System administrator with full access          | All services, user management, command management, catalog management, connection management, running migrations |
+| `data_engineer` | In charge of data and analysis                 | View/manage ingestion, view alerts, manage tags (without full delete), access to ML models                       |
+| `field_operator`| Field operator                                 | View alerts, create commands (without approve), use inference, view ingestion data                               |
+| `operator`      | Control operator                               | Create limited control commands, view the command list                                                           |
+| `viewer`        | Read-only access                               | View the dashboard and reports through the API Gateway (read-only endpoints only)                                |
 
-## سیاست‌های کلی
-- همه درخواست‌ها باید یک توکن Bearer معتبر ارائه دهند؛ نقش و `sub` از توکن استخراج و در gateway و سرویس‌ها بررسی می‌شود.
-- عملیات حساس (ایجاد/تأیید فرمان، مدیریت Tag، تنظیمات اتصال، تغییر نقش) نیازمند `system_admin` یا نقش مشخص‌شده است.
-- ثبت audit برای عملیات فرمان، ایجاد هشدار، و مدیریت کاربر انجام می‌شود؛ لاگ‌ها در فرمت JSON ذخیره می‌شوند.
-- نرخ تلاش‌های ناموفق ورود محدود شده و در صورت عبور از آستانهٔ ۵ تلاش در ساعت هشدار امنیتی ثبت می‌شود.
+## General policies
+- All requests must present a valid Bearer token; the role and `sub` are extracted from the token and checked in the gateway and services.
+- Sensitive operations (creating/approving commands, Tag management, connection settings, role changes) require `system_admin` or a designated role.
+- Audit records are kept for command operations, alert creation, and user management; logs are stored in JSON format.
+- The rate of failed login attempts is limited, and a security alert is recorded if the threshold of 5 attempts per hour is exceeded.
 
-## مسیرهای مرتبط
-- احراز هویت: `auth-service` (`/token`, `/refresh`, `/users`).  
-- کنترل نقش‌ها در gateway: فایل `backend/api-gateway/main.py` (`SERVICE_ROLE_REQUIREMENTS`).  
-- وابستگی‌های نقش در هر سرویس:  
+## Related paths
+- Authentication: `auth-service` (`/token`, `/refresh`, `/users`).
+- Role control in the gateway: file `backend/api-gateway/main.py` (`SERVICE_ROLE_REQUIREMENTS`).
+- Role dependencies in each service:
   - `alert-service/main.py`: `require_alert_read/write/admin`  
   - `command-control-service/main.py`: `require_command_read/admin`  
   - `tag-catalog-service/main.py`: `require_tag_read/write/admin`  
   - `data-ingestion-service/main.py`: `require_ingest_read/admin`
 
-برای افزودن یا اصلاح نقش‌ها، ابتدا policy را در این سند به‌روزرسانی کنید، سپس mapping را در gateway و سرویس مربوطه اعمال و تست کنید.*** End Patch
+To add or modify roles, first update the policy in this document, then apply and test the mapping in the gateway and the relevant service.*** End Patch
 

@@ -1,18 +1,18 @@
-# راهنمای سریع راه‌اندازی OGIM
+# OGIM Quick Start Guide
 
-## 🚀 راه‌اندازی سریع (Docker)
+## 🚀 Quick start (Docker)
 
-### 1. راه‌اندازی Backend
+### 1. Starting the Backend
 
 ```bash
-# راه‌اندازی تمام سرویس‌ها
+# Start all services
 docker-compose -f docker-compose.dev.yml up -d
 
-# بررسی وضعیت
+# Check the status
 docker-compose -f docker-compose.dev.yml ps
 ```
 
-### 2. راه‌اندازی Frontend
+### 2. Starting the Frontend
 
 ```bash
 cd frontend/web
@@ -20,24 +20,24 @@ npm install
 npm run dev
 ```
 
-### 3. دسترسی به داشبورد
+### 3. Accessing the dashboard
 
 - **Frontend**: http://localhost:3000
 - **API Gateway**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
 
-### 4. ورود به سیستم
+### 4. Logging in
 
 - **Username**: `admin`
 - **Password**: `Admin@123`
 
 ---
 
-## 📍 آدرس‌های مهم
+## 📍 Important addresses
 
 ### Frontend
 - **Development**: http://localhost:3000
-- **Production**: http://localhost:5173 (پس از build)
+- **Production**: http://localhost:5173 (after build)
 
 ### Backend Services
 - **API Gateway**: http://localhost:8000
@@ -60,9 +60,9 @@ npm run dev
 
 ---
 
-## 🔧 راه‌اندازی دستی
+## 🔧 Manual startup
 
-### Backend (هر سرویس در ترمینال جداگانه)
+### Backend (each service in a separate terminal)
 
 ```bash
 # API Gateway
@@ -112,9 +112,9 @@ npm run dev
 
 ---
 
-## 📝 تنظیمات Environment Variables
+## 📝 Environment Variables settings
 
-ایجاد فایل `.env` در ریشه پروژه:
+Create the `.env` file in the project root:
 
 ```bash
 # Database
@@ -136,13 +136,13 @@ CORS_ORIGINS=["http://localhost:3000","http://localhost:5173"]
 
 ---
 
-## ✅ تست
+## ✅ Testing
 
 ```bash
-# بررسی سلامت API Gateway
+# Check the API Gateway health
 curl http://localhost:8000/health
 
-# تست احراز هویت
+# Test authentication
 curl -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"Admin@123"}'
@@ -150,5 +150,5 @@ curl -X POST http://localhost:8000/api/auth/login \
 
 ---
 
-برای راهنمای کامل، به [SETUP_GUIDE.md](./SETUP_GUIDE.md) مراجعه کنید.
+For the complete guide, see [SETUP_GUIDE.md](./SETUP_GUIDE.md).
 

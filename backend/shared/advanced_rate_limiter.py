@@ -1,6 +1,6 @@
 """
 Advanced Rate Limiting with Multiple Strategies
-Rate limiting سخت‌گیرانه‌تر با استراتژی‌های مختلف
+Stricter rate limiting with different strategies
 """
 
 import time

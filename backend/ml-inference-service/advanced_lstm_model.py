@@ -1,6 +1,6 @@
 """
 Advanced LSTM Model for Oil Well Behavior Prediction
-پیشرفته‌ترین مدل LSTM برای پیش‌بینی رفتار چاه نفتی
+The most advanced LSTM model for predicting oil well behavior
 """
 
 import logging
@@ -47,13 +47,13 @@ logger = logging.getLogger(__name__)
 class AdvancedLSTMModel:
     """
     Advanced LSTM model for oil well time series prediction
-    با معماری پیشرفته برای پیش‌بینی دقیق‌تر رفتار چاه
+    With an advanced architecture for more accurate prediction of well behavior
     """
 
     def __init__(
         self,
         sequence_length: int = 60,
-        forecast_horizon: int = 24,  # پیش‌بینی 24 ساعت آینده
+        forecast_horizon: int = 24,  # forecast the next 24 hours
         n_features: int = 1,
         model_type: str = "stacked_lstm",  # stacked_lstm, bidirectional, attention
     ):
@@ -72,7 +72,7 @@ class AdvancedLSTMModel:
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Create sequences for LSTM training
-        ایجاد دنباله‌ها برای آموزش LSTM
+        Create sequences for LSTM training
         """
         X, y = [], []
         for i in range(len(data) - seq_length - forecast_horizon + 1):
@@ -191,7 +191,7 @@ class AdvancedLSTMModel:
     ) -> Dict[str, Any]:
         """
         Train the advanced LSTM model
-        آموزش مدل LSTM پیشرفته
+        Train the advanced LSTM model
         """
         if not TENSORFLOW_AVAILABLE:
             raise RuntimeError("TensorFlow is required for advanced LSTM models.")
@@ -314,7 +314,7 @@ class AdvancedLSTMModel:
     ) -> Dict[str, Any]:
         """
         Predict future values
-        پیش‌بینی مقادیر آینده
+        Predict future values
         """
         if not self.is_trained or self.model is None:
             raise RuntimeError("Model must be trained before prediction.")

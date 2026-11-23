@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>چاه‌ها - OGIM</title>
+    <title>Wells - OGIM</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,30 +17,30 @@
         <nav class="nav-menu">
             <a href="index.html" class="nav-item">
                 <i class="fas fa-home"></i>
-                <span>داشبورد</span>
+                <span>Dashboard</span>
             </a>
             <a href="wells.html" class="nav-item active">
                 <i class="fas fa-oil-well"></i>
-                <span>چاه‌ها</span>
+                <span>Wells</span>
             </a>
             <a href="alerts.html" class="nav-item">
                 <i class="fas fa-bell"></i>
-                <span>هشدارها</span>
+                <span>Alerts</span>
                 <span class="badge" id="alertBadge">0</span>
             </a>
             <a href="analytics.html" class="nav-item">
                 <i class="fas fa-chart-line"></i>
-                <span>تحلیل‌ها</span>
+                <span>Analytics</span>
             </a>
             <a href="#" class="nav-item" onclick="showSettings()">
                 <i class="fas fa-cog"></i>
-                <span>تنظیمات</span>
+                <span>Settings</span>
             </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span id="username">مدیر سیستم</span>
+                <span id="username">System Administrator</span>
             </div>
         </div>
     </div>
@@ -50,20 +50,20 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <h1><i class="fas fa-oil-well"></i> مدیریت چاه‌ها</h1>
-                <p>نظارت و مدیریت چاه‌های تولیدی</p>
+                <h1><i class="fas fa-oil-well"></i> Well Management</h1>
+                <p>Monitor and manage production wells</p>
             </div>
             <div class="header-right">
                 <div class="connection-status" id="connectionStatus">
                     <i class="fas fa-circle"></i>
-                    <span>در حال اتصال...</span>
+                    <span>Connecting...</span>
                 </div>
             </div>
         </header>
 
         <!-- Wells Grid -->
         <div class="wells-grid" id="wellsGrid">
-            <div class="loading">در حال بارگذاری...</div>
+            <div class="loading">Loading...</div>
         </div>
     </div>
 
@@ -90,7 +90,7 @@
                 
                 if (isConnected) {
                     statusEl.className = 'connection-status connected';
-                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>متصل به سرور</span>';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Connected to server</span>';
                     useMockData = false;
                 } else {
                     throw new Error('Backend not available');
@@ -99,7 +99,7 @@
                 isConnected = false;
                 useMockData = true;
                 statusEl.className = 'connection-status disconnected';
-                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>حالت آفلاین (داده نمونه)</span>';
+                statusEl.innerHTML = '<i class="fas fa-circle"></i><span>Offline mode (sample data)</span>';
             }
         }
 
@@ -131,7 +131,7 @@
             } catch (error) {
                 console.error('Error loading wells:', error);
                 const grid = document.getElementById('wellsGrid');
-                grid.innerHTML = '<div class="loading">خطا در بارگذاری داده‌ها</div>';
+                grid.innerHTML = '<div class="loading">Error loading data</div>';
             }
         }
 
@@ -162,48 +162,48 @@
                 </div>
                 
                 <div class="well-type">
-                    نوع: ${translateWellType(well.well_type)}
+                    Type: ${translateWellType(well.well_type)}
                 </div>
                 
                 <div class="well-metrics">
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-droplet"></i> تولید نفت
+                            <i class="fas fa-droplet"></i> Oil production
                         </div>
                         <div class="metric-value">${formatNumber(well.oil_flow_rate)} bbl/day</div>
                     </div>
                     
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-fire"></i> تولید گاز
+                            <i class="fas fa-fire"></i> Gas production
                         </div>
                         <div class="metric-value">${formatNumber(well.gas_flow_rate)} MMSCFD</div>
                     </div>
                     
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-gauge-high"></i> فشار
+                            <i class="fas fa-gauge-high"></i> Pressure
                         </div>
                         <div class="metric-value">${formatNumber(well.wellhead_pressure)} psi</div>
                     </div>
                     
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-temperature-high"></i> دما
+                            <i class="fas fa-temperature-high"></i> Temperature
                         </div>
                         <div class="metric-value">${formatNumber(well.wellhead_temperature)} °C</div>
                     </div>
                     
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-cog"></i> دور پمپ
+                            <i class="fas fa-cog"></i> Pump speed
                         </div>
                         <div class="metric-value">${formatNumber(well.pump_speed)} rpm</div>
                     </div>
                     
                     <div class="metric">
                         <div class="metric-label">
-                            <i class="fas fa-wave-square"></i> لرزش
+                            <i class="fas fa-wave-square"></i> Vibration
                         </div>
                         <div class="metric-value ${well.vibration_overall > 5 ? 'danger' : ''}">${formatNumber(well.vibration_overall)} mm/s</div>
                     </div>
@@ -211,10 +211,10 @@
                 
                 <div class="well-footer">
                     <div class="last-update">
-                        آخرین بروزرسانی: ${formatTime(well.timestamp)}
+                        Last update: ${formatTime(well.timestamp)}
                     </div>
                     <button class="btn btn-small btn-primary" onclick="viewWellDetails('${well.well_name}')">
-                        <i class="fas fa-eye"></i> جزئیات
+                        <i class="fas fa-eye"></i> Details
                     </button>
                 </div>
             `;
@@ -223,24 +223,24 @@
         }
 
         function viewWellDetails(wellName) {
-            alert(`نمایش جزئیات چاه ${wellName}\n(این قابلیت در نسخه کامل موجود است)`);
+            alert(`Showing details of well ${wellName}\n(This feature is available in the full version)`);
         }
 
         function translateStatus(status) {
             const translations = {
-                'running': 'در حال کار',
-                'stopped': 'متوقف',
-                'maintenance': 'تعمیرات'
+                'running': 'Running',
+                'stopped': 'Stopped',
+                'maintenance': 'Maintenance'
             };
             return translations[status] || status;
         }
 
         function translateWellType(type) {
             const translations = {
-                'production': 'تولیدی',
-                'development': 'توسعه‌ای',
-                'observation': 'مشاهده‌ای',
-                'injection': 'تزریقی'
+                'production': 'Production',
+                'development': 'Development',
+                'observation': 'Observation',
+                'injection': 'Injection'
             };
             return translations[type] || type;
         }

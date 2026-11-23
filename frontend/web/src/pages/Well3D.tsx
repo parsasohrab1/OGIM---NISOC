@@ -98,36 +98,36 @@ function SceneBackdrop() {
 }
 
 function valveStatusFa(s: string) {
-  if (s === 'open') return 'باز'
-  if (s === 'closed') return 'بسته'
-  if (s === 'maintenance') return 'در تعمیر'
+  if (s === 'open') return 'Open'
+  if (s === 'closed') return 'Closed'
+  if (s === 'maintenance') return 'Under maintenance'
   return s
 }
 
 function depthStatusFa(s: string) {
-  if (s === 'normal') return 'نرمال'
-  if (s === 'warning') return 'هشدار'
-  if (s === 'critical') return 'بحرانی'
+  if (s === 'normal') return 'Normal'
+  if (s === 'warning') return 'Warning'
+  if (s === 'critical') return 'Critical'
   return s
 }
 
 function casingTypeFa(t: string) {
-  if (t === 'conductor') return 'هادی'
-  if (t === 'surface') return 'سطحی'
-  if (t === 'intermediate') return 'میانی'
-  if (t === 'production') return 'تولیدی'
+  if (t === 'conductor') return 'Conductor'
+  if (t === 'surface') return 'Surface'
+  if (t === 'intermediate') return 'Intermediate'
+  if (t === 'production') return 'Production'
   return t
 }
 
 function riskLevelFa(s: string) {
-  if (s === 'elevated') return 'بالا'
-  if (s === 'normal') return 'عادی'
-  if (s === 'high') return 'بالا'
-  if (s === 'critical') return 'بحرانی'
+  if (s === 'elevated') return 'Elevated'
+  if (s === 'normal') return 'Normal'
+  if (s === 'high') return 'High'
+  if (s === 'critical') return 'Critical'
   return s
 }
 
-// Wellhead Equipment Component - تجهیزات سر چاهی
+// Wellhead Equipment Component
 function WellheadEquipment({ equipment, wellName }: { equipment?: WellheadEquipment; wellName: string }) {
   const [hovered, setHovered] = useState<string | null>(null)
   
@@ -165,7 +165,7 @@ function WellheadEquipment({ equipment, wellName }: { equipment?: WellheadEquipm
 
   return (
     <group position={[0, wellheadBaseY, 0]}>
-      {/* Christmas Tree - درخت کریسمس */}
+      {/* Christmas Tree */}
       <group
         onPointerOver={() => setHovered('christmasTree')}
         onPointerOut={() => setHovered(null)}
@@ -279,11 +279,11 @@ function WellheadEquipment({ equipment, wellName }: { equipment?: WellheadEquipm
         {hovered === 'christmasTree' && (
           <Html distanceFactor={10}>
             <div className="sensor-tooltip" dir="rtl">
-              <h4>درخت کریسمس — {wellName}</h4>
-              <p>شیر اصلی: {valveStatusFa(defaultEquipment.masterValve.status)} ({defaultEquipment.masterValve.position}%)</p>
-              <p>شیر بال: {valveStatusFa(defaultEquipment.wingValve.status)} ({defaultEquipment.wingValve.position}%)</p>
-              <p>شیر کنترل جریان: {valveStatusFa(defaultEquipment.chokeValve.status)} ({defaultEquipment.chokeValve.position}%)</p>
-              <p>دبی: {defaultEquipment.flowMeter.flowRate} {defaultEquipment.flowMeter.unit}</p>
+              <h4>Christmas tree — {wellName}</h4>
+              <p>Master valve: {valveStatusFa(defaultEquipment.masterValve.status)} ({defaultEquipment.masterValve.position}%)</p>
+              <p>Wing valve: {valveStatusFa(defaultEquipment.wingValve.status)} ({defaultEquipment.wingValve.position}%)</p>
+              <p>Choke valve: {valveStatusFa(defaultEquipment.chokeValve.status)} ({defaultEquipment.chokeValve.position}%)</p>
+              <p>Rate: {defaultEquipment.flowMeter.flowRate} {defaultEquipment.flowMeter.unit}</p>
             </div>
           </Html>
         )}
@@ -297,7 +297,7 @@ function BOP({ bopData }: { bopData?: BOPData }) {
   const [hovered, setHovered] = useState(false)
   
   const defaultBOP: BOPData = bopData || {
-    type: 'جلوگیری‌کننده حلقوی از فوران',
+    type: 'Annular blowout preventer',
     pressureRating: 10000,
     stackHeight: 3.5,
     status: 'open'
@@ -364,11 +364,11 @@ function BOP({ bopData }: { bopData?: BOPData }) {
       {hovered && (
         <Html distanceFactor={10}>
           <div className="sensor-tooltip" dir="rtl">
-            <h4>جلوگیری‌کننده از فوران</h4>
-            <p>نوع: {defaultBOP.type}</p>
-            <p>رتبه فشار: {defaultBOP.pressureRating.toLocaleString()} psi</p>
-            <p>ارتفاع مجموعه: {defaultBOP.stackHeight.toFixed(1)} m</p>
-            <p>وضعیت: {valveStatusFa(defaultBOP.status)}</p>
+            <h4>Blowout preventer</h4>
+            <p>Type: {defaultBOP.type}</p>
+            <p>Pressure rating: {defaultBOP.pressureRating.toLocaleString()} psi</p>
+            <p>Stack height: {defaultBOP.stackHeight.toFixed(1)} m</p>
+            <p>Status: {valveStatusFa(defaultBOP.status)}</p>
           </div>
         </Html>
       )}
@@ -376,7 +376,7 @@ function BOP({ bopData }: { bopData?: BOPData }) {
   )
 }
 
-// Casing Component - نمایش لوله‌های Casing
+// Casing Component - displaying the Casing pipes
 function Casing({ casing }: { casing: CasingData }) {
   const [hovered, setHovered] = useState(false)
   const radius = casing.outerDiameter / 24 // Convert inches to meters (approximate)
@@ -466,12 +466,12 @@ function Casing({ casing }: { casing: CasingData }) {
       {hovered && (
         <Html distanceFactor={10}>
           <div className="sensor-tooltip" dir="rtl">
-            <h4>دالیز: {casingTypeFa(casing.type)}</h4>
-            <p>عمق: ۰ – {casing.depth.toFixed(1)} m</p>
-            <p>قطر خارجی: {casing.outerDiameter}" ({casing.outerDiameter * 25.4}mm)</p>
-            <p>قطر داخلی: {casing.innerDiameter}" ({casing.innerDiameter * 25.4}mm)</p>
-            <p>ضخامت سیمان: {casing.cementThickness}" ({casing.cementThickness * 25.4}mm)</p>
-            <p>ضخامت دیواره: {((casing.outerDiameter - casing.innerDiameter) / 2).toFixed(2)}"</p>
+            <h4>Annulus: {casingTypeFa(casing.type)}</h4>
+            <p>Depth: 0 – {casing.depth.toFixed(1)} m</p>
+            <p>Outer diameter: {casing.outerDiameter}" ({casing.outerDiameter * 25.4}mm)</p>
+            <p>Inner diameter: {casing.innerDiameter}" ({casing.innerDiameter * 25.4}mm)</p>
+            <p>Cement thickness: {casing.cementThickness}" ({casing.cementThickness * 25.4}mm)</p>
+            <p>Wall thickness: {((casing.outerDiameter - casing.innerDiameter) / 2).toFixed(2)}"</p>
           </div>
         </Html>
       )}
@@ -479,7 +479,7 @@ function Casing({ casing }: { casing: CasingData }) {
   )
 }
 
-// Wellbore component - نمایش لوله چاه
+// Wellbore component - displaying the wellbore pipe
 function Wellbore({ depth, data, casings }: { depth: number; data: DepthData[]; casings?: CasingData[] }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const segments = 50
@@ -547,7 +547,7 @@ function Wellbore({ depth, data, casings }: { depth: number; data: DepthData[]; 
   )
 }
 
-// Sensor point component - نمایش نقاط سنسور
+// Sensor point component - displaying the sensor points
 function SensorPoint({
   position,
   depth,
@@ -595,11 +595,11 @@ function SensorPoint({
         <Html distanceFactor={10}>
           <div className="sensor-tooltip" dir="rtl">
             <h4>{label}</h4>
-            <p>عمق: {depth.toFixed(1)} m</p>
-            <p>فشار: {data.pressure.toFixed(2)} psi</p>
-            <p>دما: {data.temperature.toFixed(1)} °C</p>
-            <p>دبی: {data.flowRate.toFixed(2)} bbl/day</p>
-            <p>وضعیت: {depthStatusFa(data.status)}</p>
+            <p>Depth: {depth.toFixed(1)} m</p>
+            <p>Pressure: {data.pressure.toFixed(2)} psi</p>
+            <p>Temperature: {data.temperature.toFixed(1)} °C</p>
+            <p>Rate: {data.flowRate.toFixed(2)} bbl/day</p>
+            <p>Status: {depthStatusFa(data.status)}</p>
           </div>
         </Html>
       )}
@@ -607,7 +607,7 @@ function SensorPoint({
   )
 }
 
-// Depth labels - برچسب‌های عمق
+// Depth labels
 function DepthLabels({ depth, segments }: { depth: number; segments: number }) {
   const labels = []
   for (let i = 0; i <= segments; i++) {
@@ -630,10 +630,10 @@ function DepthLabels({ depth, segments }: { depth: number; segments: number }) {
   return <group>{labels}</group>
 }
 
-// Multiple Wells Scene - نمایش چند چاه
+// Multiple Wells Scene - displaying several wells
 function MultipleWellsScene({ wellsData, wells }: { wellsData: Record<string, Well3DData | null>; wells: string[] }) {
   const controlsRef = useRef<any>(null)
-  const spacing = 12 // فاصله بین چاه‌های مارون (۴×۴)
+  const spacing = 12 // spacing between the Maroun wells (4×4)
 
   return (
     <>
@@ -652,13 +652,13 @@ function MultipleWellsScene({ wellsData, wells }: { wellsData: Record<string, We
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <pointLight position={[-10, 10, -10]} intensity={0.5} />
 
-      {/* Ground plane - میدان مارون */}
+      {/* Ground plane - Maroun field */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
         <planeGeometry args={[120, 120]} />
         <meshStandardMaterial color="#3a5f3a" />
       </mesh>
 
-      {/* Render all wells — شبکه ۴×۴ */}
+      {/* Render all wells — 4×4 grid */}
       {wells.map((wellName, index) => {
         const wellData = wellsData[wellName]
 
@@ -772,23 +772,23 @@ function WellScene({ data, autoRotate = false }: { data: Well3DData; autoRotate?
         />
       ))}
 
-      {/* Wellhead Equipment - تجهیزات سر چاهی */}
+      {/* Wellhead Equipment */}
       <WellheadEquipment equipment={data.wellheadEquipment} wellName={data.wellName} />
 
       {/* Surface data display */}
       <Html position={[2, 2, 0]} distanceFactor={5}>
         <div className="surface-data-panel">
-          <h3>{data.wellName} — داده‌های سطحی</h3>
+          <h3>{data.wellName} — surface data</h3>
           <div className="data-row">
-            <span>فشار سرچاهی:</span>
+            <span>Wellhead pressure:</span>
             <span>{data.surfaceData.wellheadPressure.toFixed(2)} psi</span>
           </div>
           <div className="data-row">
-            <span>دمای سرچاهی:</span>
+            <span>Wellhead temperature:</span>
             <span>{data.surfaceData.wellheadTemperature.toFixed(1)} °C</span>
           </div>
           <div className="data-row">
-            <span>دبی / دبی‌سنج مجازی:</span>
+            <span>Rate / virtual flow meter:</span>
             <span>{data.surfaceData.flowRate.toFixed(2)} bbl/day</span>
           </div>
         </div>
@@ -936,21 +936,21 @@ export default function Well3D() {
       <div className="well3d-controls deh-3d-header">
         <div className="deh-3d-brand">
           <strong>{FIELD.nameFa}</strong>
-          <span>{FIELD.clientFa} · نفت سبک-میانه ترش درجه سنگینی {FIELD.apiGravity}°</span>
+          <span>{FIELD.clientFa} · sour light-to-medium crude, API gravity {FIELD.apiGravity}°</span>
         </div>
         <div className="control-group">
-          <label>حالت نمایش:</label>
+          <label>Display mode:</label>
           <select
             value={viewMode}
             onChange={(e) => setViewMode(e.target.value as 'single' | 'multiple')}
           >
-            <option value="single">تک‌چاه</option>
-            <option value="multiple">هر ۲۴ حلقه</option>
+            <option value="single">Single well</option>
+            <option value="multiple">All 24 wells</option>
           </select>
         </div>
         {viewMode === 'single' && (
           <div className="control-group">
-            <label>انتخاب چاه:</label>
+            <label>Select well:</label>
             <select
               value={selectedWell}
               onChange={(e) => setSelectedWell(e.target.value)}
@@ -973,7 +973,7 @@ export default function Well3D() {
               checked={autoRotate}
               onChange={(e) => setAutoRotate(e.target.checked)}
             />
-            چرخش خودکار
+            Auto rotate
           </label>
         </div>
         <div className="well-info">
@@ -991,16 +991,16 @@ export default function Well3D() {
                 )}
               </h2>
               <p>
-                عمق کل: {displayData.totalDepth.toFixed(0)} m · فشار سرچاهی:{' '}
-                {displayData.surfaceData.wellheadPressure} psi · دبی‌سنج مجازی:{' '}
+                Total depth: {displayData.totalDepth.toFixed(0)} m · wellhead pressure:{' '}
+                {displayData.surfaceData.wellheadPressure} psi · virtual flow meter:{' '}
                 {displayData.surfaceData.flowRate} bbl/d
-                {isLoading ? ' · به‌روزرسانی…' : ''}
+                {isLoading ? ' · updating…' : ''}
               </p>
             </>
           ) : (
             <>
-              <h2>نمای سه‌بعدی میدان مارون</h2>
-              <p>{FIELD.wellCount} حلقه چاه · دوقلوی دیجیتال</p>
+              <h2>3D view of the Maroun field</h2>
+              <p>{FIELD.wellCount} wells · digital twin</p>
             </>
           )}
         </div>
@@ -1008,13 +1008,13 @@ export default function Well3D() {
 
       {viewMode === 'single' && liveSelected && (
         <div className="deh-3d-livebar">
-          <span>فشار سرچاهی: <b>{liveSelected.thp} psi</b></span>
-          <span>دما: <b>{liveSelected.tht} °C</b></span>
-          <span>نفت: <b>{liveSelected.oilRate} bbl/d</b></span>
-          <span>گاز: <b>{liveSelected.gasRate} Mscf/d</b></span>
-          <span>آب: <b>{liveSelected.waterRate} bbl/d</b></span>
-          <span>درصد آب تولیدی: <b>{liveSelected.waterCut}%</b></span>
-          <span>پمپ: <b>{liveSelected.pumpOnline ? 'آنلاین' : 'آفلاین'}</b></span>
+          <span>Wellhead pressure: <b>{liveSelected.thp} psi</b></span>
+          <span>Temperature: <b>{liveSelected.tht} °C</b></span>
+          <span>Oil: <b>{liveSelected.oilRate} bbl/d</b></span>
+          <span>Gas: <b>{liveSelected.gasRate} Mscf/d</b></span>
+          <span>Water: <b>{liveSelected.waterRate} bbl/d</b></span>
+          <span>Produced water cut: <b>{liveSelected.waterCut}%</b></span>
+          <span>Pump: <b>{liveSelected.pumpOnline ? 'Online' : 'Offline'}</b></span>
         </div>
       )}
 
@@ -1035,24 +1035,24 @@ export default function Well3D() {
 
       <div className="well3d-legend">
         <div className="legend-section">
-          <h3>وضعیت</h3>
+          <h3>Status</h3>
           <div className="legend-item">
             <div className="legend-color normal"></div>
-            <span>نرمال</span>
+            <span>Normal</span>
           </div>
           <div className="legend-item">
             <div className="legend-color warning"></div>
-            <span>هشدار</span>
+            <span>Warning</span>
           </div>
           <div className="legend-item">
             <div className="legend-color critical"></div>
-            <span>بحرانی</span>
+            <span>Critical</span>
           </div>
         </div>
 
         {displayData.bop && (
           <div className="legend-section">
-            <h3>جلوگیری‌کننده از فوران</h3>
+            <h3>Blowout preventer</h3>
             <div className="legend-item">
               <div
                 className="legend-color"
@@ -1071,7 +1071,7 @@ export default function Well3D() {
             </div>
             <div className="legend-item">
               <span style={{ fontSize: '12px', opacity: 0.8 }}>
-                رتبه فشار: {displayData.bop.pressureRating.toLocaleString()} psi
+                Pressure rating: {displayData.bop.pressureRating.toLocaleString()} psi
               </span>
             </div>
           </div>
@@ -1079,7 +1079,7 @@ export default function Well3D() {
 
         {displayData.casings && displayData.casings.length > 0 && (
           <div className="legend-section">
-            <h3>دالیز‌ها</h3>
+            <h3>Annuli</h3>
             {displayData.casings.map((casing, index) => {
               const getCasingColor = () => {
                 switch (casing.type) {
@@ -1099,7 +1099,7 @@ export default function Well3D() {
                 <div key={index} className="legend-item">
                   <div className="legend-color" style={{ background: getCasingColor() }}></div>
                   <span>
-                    {casingTypeFa(casing.type)}: {casing.outerDiameter}&quot; / {casing.innerDiameter}&quot; (۰–
+                    {casingTypeFa(casing.type)}: {casing.outerDiameter}&quot; / {casing.innerDiameter}&quot; (0–
                     {casing.depth}m)
                   </span>
                 </div>
@@ -1110,7 +1110,7 @@ export default function Well3D() {
 
         {displayData.riskZones && displayData.riskZones.length > 0 && (
           <div className="legend-section">
-            <h3>مناطق ریسک</h3>
+            <h3>Risk zones</h3>
             {displayData.riskZones.map((zone, idx) => (
               <div key={idx} className="legend-item">
                 <div
@@ -1128,10 +1128,10 @@ export default function Well3D() {
 
       {viewMode === 'single' && (
         <div className="well3d-whatif">
-          <h3>تحلیل چه-اگر — دوقلوی دیجیتال مارون</h3>
+          <h3>What-if analysis — Maroun digital twin</h3>
           <div className="whatif-controls">
             <label>
-              تنظیم شیر کنترل جریان (%)
+              Choke valve adjustment (%)
               <input
                 type="range"
                 min={-20}
@@ -1142,7 +1142,7 @@ export default function Well3D() {
               {chokePct}%
             </label>
             <label>
-              سرعت پمپ (%)
+              Pump speed (%)
               <input
                 type="range"
                 min={-20}
@@ -1162,27 +1162,27 @@ export default function Well3D() {
               }
               disabled={whatIfMutation.isPending}
             >
-              {whatIfMutation.isPending ? 'در حال شبیه‌سازی…' : 'اجرای شبیه‌سازی'}
+              {whatIfMutation.isPending ? 'Simulating…' : 'Run simulation'}
             </button>
           </div>
           {whatIfResult && (
             <div className="whatif-results">
               <p>
-                <strong>دبی پیش‌بینی:</strong>{' '}
+                <strong>Forecast rate:</strong>{' '}
                 {whatIfResult.projected?.flow_rate?.toFixed?.(1) ??
                   whatIfResult.projected_flow_rate ??
                   '—'}{' '}
                 bbl/d
               </p>
               <p>
-                <strong>فشار پیش‌بینی:</strong>{' '}
+                <strong>Forecast pressure:</strong>{' '}
                 {whatIfResult.projected?.pressure?.toFixed?.(1) ??
                   whatIfResult.projected_pressure ??
                   '—'}{' '}
                 psi
               </p>
               <p>
-                <strong>سطح ریسک:</strong>{' '}
+                <strong>Risk level:</strong>{' '}
                 {riskLevelFa(String(whatIfResult.risk_level ?? whatIfResult.risk ?? '—'))}
               </p>
             </div>

@@ -1,23 +1,23 @@
 /**
- * داده‌های نمایشی/سنتتیک لایه عملیات: شرکت‌های تابعه NISOC، تجهیزات،
- * سطوح دسترسی و اهداف تولید. این فایل صرفاً به‌عنوان دادهٔ محلی/پشتیبان
- * (fallback) برای زمانی که سرویس operations-service در دسترس نیست استفاده
- * می‌شود؛ در حالت متصل، همین شکل داده از API دریافت خواهد شد.
+ * Demonstration/synthetic data of the operations layer: NISOC subsidiary companies, equipment,
+ * access levels and production targets. This file is used only as local/fallback
+ * data for when the operations-service is unavailable;
+ * in connected mode, this same data shape will be received from the API.
  *
- * تعداد چاه و دبی تولید هر شرکت تابعه، و تعداد کل دکل‌های ۵ شرکت (۴۶ دستگاه)،
- * بر مبنای منابع عمومی (ویکی‌پدیای فارسی، شانا، ایرنا) در شهریور ۱۴۰۵ تخمین زده
- * شده — نه رقم رسمی لحظه‌ای شرکت. تعداد تراک، کویل تیوبینگ و سایر خدمات میدانی
- * چون آماری عمومی/منتشرشده‌ای برایشان یافت نشد، به‌صورت نمایشی/تخمینی باقی مانده‌اند.
+ * The number of wells and production rate of each subsidiary company, and the total number of rigs of the 5 companies (46 units),
+ * are estimated from public sources (Persian Wikipedia, SHANA, IRNA) as of September 2026
+ * — not an official real-time company figure. The number of trucks, coiled tubing and other field services
+ * remained demonstration/estimated, as no public/published statistics were found for them.
  */
 
 export type FluidType = 'oil' | 'gas' | 'gas_cap' | 'associated_gas' | 'water'
 
 export const FLUID_TYPE_LABEL_FA: Record<FluidType, string> = {
-  oil: 'نفت',
-  gas: 'گاز',
-  gas_cap: 'کلاهک گازی',
-  associated_gas: 'گاز همراه',
-  water: 'آب',
+  oil: 'Oil',
+  gas: 'Gas',
+  gas_cap: 'Gas cap',
+  associated_gas: 'Associated gas',
+  water: 'Water',
 }
 
 export interface ReservoirRow {
@@ -37,83 +37,83 @@ export interface SubsidiaryRow {
   reservoirs: ReservoirRow[]
 }
 
-/** ۵ شرکت بهره‌برداری تابعه شرکت ملی مناطق نفت‌خیز جنوب (NISOC) */
+/** The 5 operating subsidiary companies of the National Iranian South Oil Company (NISOC) */
 export const SUBSIDIARIES: SubsidiaryRow[] = [
   {
     id: 1,
     code: 'MIS',
-    name_fa: 'شرکت بهره‌برداری نفت و گاز مسجدسلیمان',
+    name_fa: 'Masjed Soleyman Oil and Gas Exploitation Company',
     name_en: 'Masjed Soleyman Oil & Gas Producing Company',
-    // منبع: ویکی‌پدیای فارسی (شرکت بهره‌برداری نفت و گاز مسجدسلیمان) — ۴۹۲ حلقه چاه نفت،
-    // ۱۶ مجتمع بهره‌برداری، تولید حدود ۱۴۲ هزار بشکه در روز.
+    // Source: Persian Wikipedia (Masjed Soleyman Oil and Gas Exploitation Company) — 492 oil wells,
+    // 16 exploitation complexes, production of about 142 thousand barrels per day.
     active_well_count: 492,
     target_production_bopd: 142000,
     reservoirs: [
-      { id: 'MIS-R1', name: 'مسجدسلیمان', fluid_type: 'oil', well_count: 300 },
-      { id: 'MIS-R2', name: 'هفت‌شهیدان', fluid_type: 'gas', well_count: 92 },
-      { id: 'MIS-R3', name: 'نفت سفید', fluid_type: 'associated_gas', well_count: 100 },
+      { id: 'MIS-R1', name: 'Masjed Soleyman', fluid_type: 'oil', well_count: 300 },
+      { id: 'MIS-R2', name: 'Haft Shahidan', fluid_type: 'gas', well_count: 92 },
+      { id: 'MIS-R3', name: 'Naft Safid', fluid_type: 'associated_gas', well_count: 100 },
     ],
   },
   {
     id: 2,
     code: 'AGJ',
-    name_fa: 'شرکت بهره‌برداری نفت و گاز آغاجاری',
+    name_fa: 'Aghajari Oil and Gas Exploitation Company',
     name_en: 'Aghajari Oil & Gas Producing Company',
-    // منبع: ویکی‌پدیای فارسی (میدان نفتی آغاجاری) — ۲۱۸ حلقه چاه فعال/غیرفعال
-    // (۷۳ چاه نفت، ۳ چاه گاز، ۳۶ چاه مشاهده‌ای/تزریقی/توصیفی و باقی معلق/متروکه).
-    // دبی هدف رسمی منتشرشده‌ای یافت نشد؛ رقم زیر تخمینی است.
+    // Source: Persian Wikipedia (Aghajari oil field) — 218 active/inactive wells
+    // (73 oil wells, 3 gas wells, 36 observation/injection/appraisal wells and the rest suspended/abandoned).
+    // No officially published target rate was found; the figure below is an estimate.
     active_well_count: 218,
     target_production_bopd: 180000,
     reservoirs: [
-      { id: 'AGJ-R1', name: 'آغاجاری', fluid_type: 'oil', well_count: 150 },
-      { id: 'AGJ-R2', name: 'کلاهک گازی آغاجاری (خامی)', fluid_type: 'gas_cap', well_count: 33 },
-      { id: 'AGJ-R3', name: 'رگ سفید', fluid_type: 'oil', well_count: 35 },
+      { id: 'AGJ-R1', name: 'Aghajari', fluid_type: 'oil', well_count: 150 },
+      { id: 'AGJ-R2', name: 'Aghajari gas cap (crude)', fluid_type: 'gas_cap', well_count: 33 },
+      { id: 'AGJ-R3', name: 'Rag Sefid', fluid_type: 'oil', well_count: 35 },
     ],
   },
   {
     id: 3,
     code: 'KRN',
-    name_fa: 'شرکت بهره‌برداری نفت و گاز کارون',
+    name_fa: 'Karun Oil and Gas Exploitation Company',
     name_en: 'Karoun Oil & Gas Producing Company',
-    // منبع رسمی منتشرشده‌ای برای تعداد کل چاه‌ها/دبی هدف کارون یافت نشد؛
-    // مقادیر زیر تخمینی (بر مبنای مقیاس میدان‌های اهواز و منصوری) هستند.
+    // No officially published source was found for the total number of wells / target rate of Karun;
+    // the values below are estimates (based on the scale of the Ahvaz and Mansouri fields).
     active_well_count: 220,
     target_production_bopd: 150000,
     reservoirs: [
-      { id: 'KRN-R1', name: 'اهواز', fluid_type: 'oil', well_count: 110 },
-      { id: 'KRN-R2', name: 'منصوری', fluid_type: 'oil', well_count: 80 },
-      { id: 'KRN-R3', name: 'اهواز - آب همراه', fluid_type: 'water', well_count: 30 },
+      { id: 'KRN-R1', name: 'Ahvaz', fluid_type: 'oil', well_count: 110 },
+      { id: 'KRN-R2', name: 'Mansouri', fluid_type: 'oil', well_count: 80 },
+      { id: 'KRN-R3', name: 'Ahvaz - associated water', fluid_type: 'water', well_count: 30 },
     ],
   },
   {
     id: 4,
     code: 'MN',
-    name_fa: 'شرکت بهره‌برداری نفت و گاز مارون',
+    name_fa: 'Maroun Oil and Gas Exploitation Company',
     name_en: 'Marun Oil & Gas Producing Company',
-    // تعداد چاه: ۵۰۰ حلقه (طبق تأیید کاربر). دبی ~۵۲۰ هزار بشکه/روز مطابق منابع
-    // عمومی (ویکی‌پدیای انگلیسی/Wood Mackenzie) با داده موجود همخوان است.
-    // سه مخزن میدان مارون طبق ویکی‌پدیای فارسی: آسماری، بنگستان، خامی.
+    // Number of wells: 500 (as confirmed by the user). A rate of ~520 thousand barrels/day matches public
+    // sources (English Wikipedia/Wood Mackenzie) with the available data.
+    // The three reservoirs of the Maroun field per Persian Wikipedia: Asmari, Bangestan, Khami.
     active_well_count: 500,
     target_production_bopd: 520000,
     reservoirs: [
-      { id: 'MN-R1', name: 'آسماری مارون', fluid_type: 'oil', well_count: 460 },
-      { id: 'MN-R2', name: 'بنگستان مارون', fluid_type: 'oil', well_count: 30 },
-      { id: 'MN-R3', name: 'خامی مارون', fluid_type: 'associated_gas', well_count: 10 },
+      { id: 'MN-R1', name: 'Asmari Maroun', fluid_type: 'oil', well_count: 460 },
+      { id: 'MN-R2', name: 'Bangestan Maroun', fluid_type: 'oil', well_count: 30 },
+      { id: 'MN-R3', name: 'Khami Maroun', fluid_type: 'associated_gas', well_count: 10 },
     ],
   },
   {
     id: 5,
     code: 'GCH',
-    name_fa: 'شرکت بهره‌برداری نفت و گاز گچساران',
+    name_fa: 'Gachsaran Oil and Gas Exploitation Company',
     name_en: 'Gachsaran Oil & Gas Producing Company',
-    // منبع: ویکی‌پدیای فارسی / ایرنا — ۸۵۳ حلقه چاه نفت در ۲۳ میدان (۱۶ میدان فعال)،
-    // تولید حدود ۵۸۰ هزار بشکه در روز.
+    // Source: Persian Wikipedia / IRNA — 853 oil wells in 23 fields (16 active fields),
+    // production of about 580 thousand barrels per day.
     active_well_count: 853,
     target_production_bopd: 580000,
     reservoirs: [
-      { id: 'GCH-R1', name: 'گچساران', fluid_type: 'oil', well_count: 650 },
-      { id: 'GCH-R2', name: 'بی‌بی حکیمه', fluid_type: 'oil', well_count: 150 },
-      { id: 'GCH-R3', name: 'کلاهک گازی گچساران', fluid_type: 'gas_cap', well_count: 53 },
+      { id: 'GCH-R1', name: 'Gachsaran', fluid_type: 'oil', well_count: 650 },
+      { id: 'GCH-R2', name: 'Bibi Hakimeh', fluid_type: 'oil', well_count: 150 },
+      { id: 'GCH-R3', name: 'Gachsaran gas cap', fluid_type: 'gas_cap', well_count: 53 },
     ],
   },
 ]
@@ -137,29 +137,29 @@ export type EquipmentType =
   | 'development_rig'
 
 export const EQUIPMENT_TYPE_LABEL_FA: Record<EquipmentType, string> = {
-  mot: 'تجهیزات MOT (اندازه‌گیری چند فازی سیار)',
-  rig: 'دکل حفاری/تعمیر (Rig)',
-  pipeline: 'خطوط لوله',
-  truck: 'تراک (خودروی سرویس)',
-  vfm: 'دبی‌سنج مجازی (VFM)',
-  coiled_tubing: 'واحد کویل تیوبینگ (Coiled Tubing)',
-  massive_acidizing: 'عملیات اسیدکاری حجیم (Massive Acidizing)',
-  injectivity: 'آزمون تزریق‌پذیری (Injectivity Test)',
-  fluid_injection: 'تزریق سیال (Fluid Injection)',
-  logging: 'لاگ‌گیری چاه (Logging)',
-  perforating: 'عملیات پرفراسیون (Perforating)',
-  shutoff_isolation: 'مسدودسازی و ایزوله‌سازی (Shut-off / Isolation)',
-  mobile_processing_unit: 'واحد فرآورش سیار (Mobile Processing Unit)',
-  slickline: 'عملیات اسلیک‌لاین (Slickline)',
-  workover_rig: 'دکل تعمیر چاه (Workover Rig)',
-  development_rig: 'دکل حفاری توسعه‌ای (Development Rig)',
+  mot: 'MOT equipment (mobile multiphase measurement)',
+  rig: 'Drilling/workover rig (Rig)',
+  pipeline: 'Pipelines',
+  truck: 'Truck (service vehicle)',
+  vfm: 'Virtual flow meter (VFM)',
+  coiled_tubing: 'Coiled Tubing unit',
+  massive_acidizing: 'Massive Acidizing operation',
+  injectivity: 'Injectivity Test',
+  fluid_injection: 'Fluid Injection',
+  logging: 'Well Logging',
+  perforating: 'Perforating operation',
+  shutoff_isolation: 'Shut-off / Isolation',
+  mobile_processing_unit: 'Mobile Processing Unit',
+  slickline: 'Slickline operation',
+  workover_rig: 'Workover Rig',
+  development_rig: 'Development Rig',
 }
 
 export const EQUIPMENT_STATUS_LABEL_FA: Record<string, string> = {
-  active: 'فعال',
-  idle: 'بلااستفاده',
-  maintenance: 'در تعمیر',
-  retired: 'از رده خارج',
+  active: 'Active',
+  idle: 'Idle',
+  maintenance: 'Under maintenance',
+  retired: 'Retired',
 }
 
 export interface EquipmentRow {
@@ -176,9 +176,9 @@ export interface EquipmentRow {
 function buildEquipment(): EquipmentRow[] {
   const rows: EquipmentRow[] = []
   let id = 1
-  // تعداد کل دکل‌های حفاری/تعمیر شرکت‌های تابعه: ۴۶ دستگاه (از مجموع ۵۱ دکل
-  // مناطق نفت‌خیز جنوب)، طبق منابع عمومی؛ توزیع بین ۵ شرکت متناسب با تعداد
-  // چاه هر شرکت تخمین زده شده چون آمار رسمی تفکیکی یافت نشد.
+  // Total number of drilling/workover rigs of the subsidiary companies: 46 units (out of a total of 51 rigs
+  // in the Southern Oil Fields), per public sources; the distribution among the 5 companies was estimated in proportion to
+  // each company's number of wells since no breakdown official statistics were found.
   const RIG_COUNT_BY_CODE: Record<string, number> = {
     MIS: 10,
     AGJ: 4,
@@ -188,7 +188,7 @@ function buildEquipment(): EquipmentRow[] {
   }
   const perSubsidiaryCounts: Record<EquipmentType, number> = {
     mot: 2,
-    rig: 0, // جایگزین می‌شود؛ نگاه کنید به RIG_COUNT_BY_CODE
+    rig: 0, // replaced; see RIG_COUNT_BY_CODE
     pipeline: 4,
     truck: 5,
     vfm: 4,
@@ -204,7 +204,7 @@ function buildEquipment(): EquipmentRow[] {
     workover_rig: 2,
     development_rig: 2,
   }
-  // انواعی که معمولاً روی یک چاه مشخص انجام می‌شوند (برخلاف تجهیزات ثابت/ناوگان عمومی)
+  // Types usually performed on a specific well (unlike fixed equipment / the general fleet)
   const wellLinkedTypes = new Set<EquipmentType>([
     'vfm',
     'massive_acidizing',
@@ -240,74 +240,74 @@ function buildEquipment(): EquipmentRow[] {
 
 export const EQUIPMENT: EquipmentRow[] = buildEquipment()
 
-/** فهرست نقش‌ها/سطوح دسترسی (پشتیبان محلی – نسخهٔ کامل از سرویس عملیات دریافت می‌شود) */
+/** List of roles/access levels (local backup – the full version is fetched from the operations service) */
 export const ROLE_CATALOG = [
   {
     role: 'system_admin',
     level: 100,
-    title_fa: 'مدیر سیستم',
-    description_fa: 'دسترسی کامل به پیکربندی سامانه، کاربران و سطوح دسترسی.',
+    title_fa: 'System Administrator',
+    description_fa: 'Full access to the system configuration, users and access levels.',
   },
   {
     role: 'hq_operations_chief',
     level: 90,
-    title_fa: 'رئیس مهندسی بهره‌برداری ستاد',
+    title_fa: 'Head of Operations Engineering (HQ)',
     description_fa:
-      'دسترسی مشاهده به تمامی شرکت‌های تابعه، تجهیزات، وضعیت تولید و گزارش‌های تصمیم‌یار در سطح ستاد.',
+      'View access to all subsidiary companies, equipment, production status and HQ-level decision-support reports.',
   },
   {
     role: 'subsidiary_ops_manager',
     level: 70,
-    title_fa: 'مدیر بهره‌برداری شرکت تابعه',
-    description_fa: 'دسترسی مدیریتی به داده‌های شرکت تابعه متبوع.',
+    title_fa: 'Subsidiary Operations Manager',
+    description_fa: 'Management access to the data of the parent subsidiary company.',
   },
   {
     role: 'field_supervisor',
     level: 60,
-    title_fa: 'سرپرست عملیات میدان',
-    description_fa: 'نظارت بر چاه‌ها و تجهیزات میدان متبوع و تایید داده‌های ثبت‌شده دستی.',
+    title_fa: 'Field Operations Supervisor',
+    description_fa: 'Supervision of the wells and equipment of the parent field and approval of manually entered data.',
   },
   {
     role: 'data_engineer',
     level: 55,
-    title_fa: 'مهندس داده',
-    description_fa: 'دسترسی به یکپارچه‌سازی داده، مدل‌ها و پایپ‌لاین‌های تحلیلی.',
+    title_fa: 'Data Engineer',
+    description_fa: 'Access to data integration, models and analytics pipelines.',
   },
   {
     role: 'field_operator',
     level: 50,
-    title_fa: 'اپراتور میدان',
-    description_fa: 'دسترسی عملیاتی به اسکادا، هشدارها و کنترل تجهیزات میدان.',
+    title_fa: 'Field Operator',
+    description_fa: 'Operational access to SCADA, alerts and field equipment control.',
   },
   {
     role: 'data_entry_operator',
     level: 30,
-    title_fa: 'متصدی ثبت اطلاعات چاه (شرکت بهره‌برداری)',
+    title_fa: 'Well Data Entry Clerk (Operating Company)',
     description_fa:
-      'ثبت دستی اطلاعات روزانه چاه‌های شرکت تابعه متبوع تا زمان خرید و نصب سنسورهای میدانی.',
+      'Manual entry of the daily data of the parent subsidiary company\'s wells until field sensors are purchased and installed.',
   },
   {
     role: 'viewer',
     level: 10,
-    title_fa: 'بازدیدکننده',
-    description_fa: 'دسترسی فقط‌خواندنی به داشبوردهای عمومی.',
+    title_fa: 'Viewer',
+    description_fa: 'Read-only access to public dashboards.',
   },
 ]
 
 export const PERMISSION_LABEL_FA: Record<string, string> = {
-  view_dashboard: 'مشاهده داشبورد',
-  view_all_subsidiaries: 'مشاهده همه شرکت‌های تابعه',
-  manage_subsidiaries: 'مدیریت شرکت‌های تابعه',
-  manage_equipment: 'مدیریت تجهیزات',
-  view_equipment: 'مشاهده تجهیزات',
-  enter_manual_readings: 'ثبت دستی اطلاعات چاه',
-  view_manual_readings: 'مشاهده اطلاعات ثبت‌شده دستی',
-  view_vfm_decline: 'مشاهده دبی‌سنج مجازی و منحنی افت',
-  manage_vfm_decline: 'ثبت داده دبی‌سنج مجازی',
-  manage_production_targets: 'تعریف اهداف تولید',
-  view_production_status: 'مشاهده وضعیت تولید',
-  export_hq_reports: 'استخراج گزارش‌های تصمیم‌یار ستاد',
-  manage_access_levels: 'مدیریت سطوح دسترسی',
+  view_dashboard: 'View dashboard',
+  view_all_subsidiaries: 'View all subsidiary companies',
+  manage_subsidiaries: 'Manage subsidiary companies',
+  manage_equipment: 'Manage equipment',
+  view_equipment: 'View equipment',
+  enter_manual_readings: 'Manual well data entry',
+  view_manual_readings: 'View manually entered data',
+  view_vfm_decline: 'View virtual flow meter and decline curve',
+  manage_vfm_decline: 'Enter virtual flow meter data',
+  manage_production_targets: 'Define production targets',
+  view_production_status: 'View production status',
+  export_hq_reports: 'Export HQ decision-support reports',
+  manage_access_levels: 'Manage access levels',
 }
 
 export const ROLE_PERMISSIONS: Record<string, string[]> = {
@@ -368,40 +368,40 @@ export const ROLE_PERMISSIONS: Record<string, string[]> = {
 export const HQ_EXPECTED_REPORTS = [
   {
     id: 'subsidiary_production_status',
-    title_fa: 'وضعیت تولید هر شرکت تابعه نسبت به هدف تعریف‌شده',
+    title_fa: 'Production status of each subsidiary company versus the defined target',
     description_fa:
-      'دبی تولید فعلی هر یک از ۵ شرکت تابعه در برابر هدف تعریف‌شده و میزان جلو/عقب بودن.',
+      'Current production rate of each of the 5 subsidiary companies against the defined target and the amount ahead/behind.',
     category: 'production',
   },
   {
     id: 'reservoir_well_inventory',
-    title_fa: 'فهرست مخازن به تفکیک نوع سیال و تعداد چاه فعال',
-    description_fa: 'تعداد مخازن هر شرکت تابعه به تفکیک ماهیت سیال و تعداد چاه‌های فعال آن.',
+    title_fa: 'List of reservoirs by fluid type and number of active wells',
+    description_fa: 'Number of reservoirs of each subsidiary company by fluid nature and the number of its active wells.',
     category: 'asset_inventory',
   },
   {
     id: 'equipment_utilization',
-    title_fa: 'میزان بکارگیری تجهیزات (Rig، Coiled Tubing، تراک) به تفکیک شرکت تابعه',
-    description_fa: 'وضعیت تخصیص و بهره‌وری تجهیزات حفاری/تعمیر/حمل در هر شرکت تابعه.',
+    title_fa: 'Equipment utilization (Rig, Coiled Tubing, truck) by subsidiary company',
+    description_fa: 'Allocation and productivity status of drilling/workover/transport equipment in each subsidiary company.',
     category: 'equipment',
   },
   {
     id: 'vfm_decline_watch',
-    title_fa: 'رصد نرخ تغییر تولید با تلفیق دبی‌سنج مجازی و منحنی افت تولید',
+    title_fa: 'Tracking the production rate of change by combining the virtual flow meter and the decline curve',
     description_fa:
-      'مقایسه دبی لحظه‌ای دبی‌سنج مجازی (VFM) با منحنی افت تولید (Decline Curve) برای شناسایی افت غیرمنتظره.',
+      'Comparing the instantaneous rate of the virtual flow meter (VFM) with the production decline curve (Decline Curve) to identify unexpected decline.',
     category: 'production',
   },
   {
     id: 'manual_data_entry_coverage',
-    title_fa: 'پوشش ثبت دستی اطلاعات چاه‌ها (پیش از نصب سنسور)',
-    description_fa: 'درصد چاه‌هایی که داده روزانه آن‌ها به‌صورت دستی ثبت شده است.',
+    title_fa: 'Manual well data entry coverage (before sensor installation)',
+    description_fa: 'Percentage of wells whose daily data has been manually entered.',
     category: 'data_quality',
   },
   {
     id: 'access_level_matrix',
-    title_fa: 'ماتریس سطوح دسترسی سامانه',
-    description_fa: 'فهرست نقش‌ها و سطوح دسترسی تعریف‌شده در سامانه تا سطح ریاست مهندسی بهره‌برداری ستاد.',
+    title_fa: 'System access level matrix',
+    description_fa: 'List of roles and access levels defined in the system up to the level of Head of Operations Engineering at HQ.',
     category: 'governance',
   },
 ]

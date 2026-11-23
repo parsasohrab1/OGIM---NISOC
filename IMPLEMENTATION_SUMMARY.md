@@ -1,6 +1,6 @@
-# خلاصه پیاده‌سازی قابلیت‌های جدید OGIM
+# Summary of the Implementation of New OGIM Capabilities
 
-## ✅ قابلیت‌های پیاده‌سازی شده
+## ✅ Implemented capabilities
 
 ### 1. Data Validation & Reconciliation (DVR) Service
 **Backend**: `backend/dvr-service/main.py`
@@ -84,7 +84,7 @@
 - ✅ Alert acknowledgment
 - ✅ Alert resolution
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Backend Services
 1. `backend/dvr-service/main.py` - DVR Service
@@ -147,7 +147,7 @@
 - `GET /api/data-variables/sampling-rate/{rate_ms}` - Get variables by sampling rate
 - `GET /api/data-variables/{variable_name}/data` - Get variable data
 
-## 🎯 ویژگی‌های کلیدی
+## 🎯 Key features
 
 ### Data Variables (65+ Parameters)
 - **Pressure**: 9 variables (1 second sampling)
@@ -180,7 +180,7 @@
 - Cost forecasting
 - Maintenance recommendations
 
-## 🚀 راه‌اندازی
+## 🚀 Setup
 
 ### Backend Services
 ```bash
@@ -216,7 +216,7 @@ npm run dev
 8. **Maintenance** - Maintenance Intelligence ✨ NEW
 9. **SCADA/PLC** - SCADA Integration ✨ NEW
 
-## ✅ وضعیت پیاده‌سازی
+## ✅ Implementation status
 
 - ✅ Data Validation & Reconciliation (DVR)
 - ✅ Remote Operations
@@ -230,8 +230,8 @@ npm run dev
 
 ## 📝 Notes
 
-- تمام سرویس‌ها از طریق API Gateway در دسترس هستند
-- Authentication و Authorization برای تمام endpoints اعمال شده است
-- Real-time updates برای صفحات Frontend پیاده‌سازی شده است
-- Mock data برای نمایش در Frontend استفاده شده است (در production باید با API واقعی جایگزین شود)
+- All services are accessible through the API Gateway
+- Authentication and Authorization are applied to all endpoints
+- Real-time updates are implemented for the Frontend pages
+- Mock data is used for display in the Frontend (in production it must be replaced with the real API)
 

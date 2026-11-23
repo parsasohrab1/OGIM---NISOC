@@ -1,17 +1,17 @@
-# بهینه‌سازی لایه ذخیره‌سازی
+# Storage layer optimization
 
-## 📋 خلاصه
+## 📋 Summary
 
-این مستندات نحوه بهینه‌سازی ذخیره‌سازی برای حجم داده 10 گیگابایت در روز را توضیح می‌دهد.
+This documentation explains how to optimize storage for a data volume of 10 gigabytes per day.
 
-## 🎯 اهداف بهینه‌سازی
+## 🎯 Optimization goals
 
-1. **Multi-node TimescaleDB**: توزیع داده‌ها در چندین node
-2. **Compression Policy**: فشرده‌سازی داده‌های قدیمی‌تر از 90 روز
-3. **Data Partitioning**: بهینه‌سازی partitioning برای حجم بالا
-4. **Retention Policy**: مدیریت خودکار حذف داده‌های قدیمی
+1. **Multi-node TimescaleDB**: Distribute data across several nodes
+2. **Compression Policy**: Compress data older than 90 days
+3. **Data Partitioning**: Optimize partitioning for high volume
+4. **Retention Policy**: Automatic management of deleting old data
 
-## 🏗️ معماری
+## 🏗️ Architecture
 
 ### Multi-node Cluster
 
@@ -53,19 +53,19 @@
 └─────────────────────────────────────┘
 ```
 
-## ⚙️ پیکربندی
+## ⚙️ Configuration
 
 ### Compression Policy
 
 ```sql
--- فعال‌سازی compression
+-- Enable compression
 ALTER TABLE sensor_data SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'tag_id',
     timescaledb.compress_orderby = 'timestamp DESC'
 );
 
--- اضافه کردن compression policy (90 روز)
+-- Add a compression policy (90 days)
 SELECT add_compression_policy(
     'sensor_data',
     INTERVAL '90 days'
@@ -75,19 +75,19 @@ SELECT add_compression_policy(
 ### Chunk Configuration
 
 ```sql
--- تنظیم chunk interval به 1 روز برای 10GB/day
+-- Set the chunk interval to 1 day for 10GB/day
 SELECT set_chunk_time_interval('sensor_data', INTERVAL '1 day');
 ```
 
-**محاسبه:**
+**Calculation:**
 - 10GB/day = ~116MB/hour
-- Chunk size مناسب: 1-2GB
-- Chunk interval: 1 day (مناسب برای 10GB/day)
+- Suitable chunk size: 1-2GB
+- Chunk interval: 1 day (suitable for 10GB/day)
 
 ### Retention Policy
 
 ```sql
--- حذف خودکار chunks قدیمی‌تر از 1 سال
+-- Automatically drop chunks older than 1 year
 SELECT add_retention_policy('sensor_data', INTERVAL '1 year');
 ```
 
@@ -127,44 +127,44 @@ GET /api/storage-optimization/chunks/{table_name}?limit=100
 
 ## 📊 Frontend
 
-صفحه **Storage Optimization** در Navigation Bar برای:
-- مشاهده آمار ذخیره‌سازی
-- مدیریت Compression Policy
-- مشاهده وضعیت chunks
-- فشرده‌سازی دستی
+The **Storage Optimization** page in the Navigation Bar is for:
+- Viewing storage statistics
+- Managing the Compression Policy
+- Viewing chunk status
+- Manual compression
 
-## 🚀 راه‌اندازی
+## 🚀 Setup
 
-### 1. راه‌اندازی Multi-node Cluster
+### 1. Setting up the Multi-node Cluster
 
 ```bash
-# استفاده از Docker Compose
+# Using Docker Compose
 docker-compose -f docker-compose.multinode.yml up -d
 
-# یا استفاده از اسکریپت
+# Or using a script
 ./scripts/setup_timescale_cluster.sh
 ```
 
-### 2. تنظیم Compression Policy
+### 2. Setting the Compression Policy
 
 ```python
 from backend.shared.compression_manager import compression_manager
 
-# فعال‌سازی compression
+# Enable compression
 compression_manager.enable_compression('sensor_data', segmentby_column='tag_id')
 
-# اضافه کردن policy
+# Add a policy
 compression_manager.add_compression_policy('sensor_data', compress_after_days=90)
 ```
 
-### 3. راه‌اندازی Storage Optimization Service
+### 3. Setting up the Storage Optimization Service
 
 ```bash
 cd backend/storage-optimization-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8014 --reload
 ```
 
-## 📈 بهینه‌سازی‌های اعمال شده
+## 📈 Applied optimizations
 
 ### 1. Chunk Configuration
 - **Interval**: 1 day
@@ -173,17 +173,17 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8014 --reload
 
 ### 2. Compression
 - **Threshold**: 90 days
-- **Segment By**: tag_id (برای compression بهتر)
+- **Segment By**: tag_id (for better compression)
 - **Order By**: timestamp DESC
 - **Expected Ratio**: ~90% space savings
 
 ### 3. Indexes
-- `idx_sensor_data_tag_timestamp`: برای queryهای رایج
-- `idx_sensor_data_timestamp`: برای time-range queries
+- `idx_sensor_data_tag_timestamp`: For common queries
+- `idx_sensor_data_timestamp`: For time-range queries
 
 ### 4. Autovacuum
-- بهینه‌سازی برای high-volume writes
-- تنظیمات مناسب برای 10GB/day
+- Optimization for high-volume writes
+- Suitable settings for 10GB/day
 
 ## 📊 Monitoring
 
@@ -198,11 +198,11 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8014 --reload
 ### Queries
 
 ```sql
--- مشاهده وضعیت compression
+-- View the compression status
 SELECT * FROM timescaledb_information.hypertables
 WHERE hypertable_name = 'sensor_data';
 
--- مشاهده chunks
+-- View the chunks
 SELECT 
     chunk_name,
     range_start,
@@ -216,27 +216,27 @@ ORDER BY range_start DESC;
 
 ## ✅ Best Practices
 
-1. **Compression Threshold**: 90 روز برای تعادل بین query performance و storage
-2. **Chunk Interval**: 1 روز برای 10GB/day
-3. **Segment By**: tag_id برای compression بهتر
-4. **Monitoring**: بررسی منظم compression ratio
-5. **Retention**: حذف داده‌های قدیمی‌تر از 1 سال
+1. **Compression Threshold**: 90 days to balance query performance and storage
+2. **Chunk Interval**: 1 day for 10GB/day
+3. **Segment By**: tag_id for better compression
+4. **Monitoring**: Regularly check the compression ratio
+5. **Retention**: Delete data older than 1 year
 
 ## 🔍 Troubleshooting
 
 ### Compression not working
-- بررسی کنید که compression enabled است
-- بررسی کنید که policy اضافه شده است
-- بررسی logs برای خطاها
+- Check that compression is enabled
+- Check that the policy has been added
+- Check the logs for errors
 
 ### High storage usage
-- بررسی compression ratio
-- بررسی تعداد uncompressed chunks
-- اجرای manual compression
+- Check the compression ratio
+- Check the number of uncompressed chunks
+- Run manual compression
 
 ## 📝 Notes
 
-- Compression policy به صورت خودکار اجرا می‌شود
-- Query performance روی compressed data حفظ می‌شود
-- Multi-node cluster برای مقیاس‌پذیری بیشتر
+- The compression policy runs automatically
+- Query performance is preserved on compressed data
+- Multi-node cluster for further scalability
 

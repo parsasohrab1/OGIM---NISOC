@@ -2,7 +2,7 @@ name: ML Retraining
 
 on:
   schedule:
-    - cron: "0 3 * * 1"  # هر دوشنبه ساعت ۰۳:۰۰ UTC
+    - cron: "0 3 * * 1"  # every Monday at 03:00 UTC
   workflow_dispatch:
 
 jobs:

@@ -1,33 +1,33 @@
-# 🏗️ معماری سیستم OGIM
+# 🏗️ OGIM System Architecture
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری کلی](#overall-architecture)
-3. [لایه‌های سیستم](#system-layers)
-4. [میکروسرویس‌ها](#microservices)
-5. [جریان داده](#data-flow)
-6. [مدیریت داده](#data-management)
-7. [امنیت](#security)
-8. [مقیاس‌پذیری](#scalability)
-
----
-
-## <a name="overview"></a>🎯 نمای کلی
-
-OGIM یک سیستم نظارت و تحلیل هوشمند با معماری میکروسرویس است که به صورت بلادرنگ داده‌های میدان نفت و گاز را پردازش، تحلیل و نمایش می‌دهد.
-
-### ویژگی‌های کلیدی معماری:
-- ✅ **Microservices**: سرویس‌های مستقل و جداگانه
-- ✅ **Event-Driven**: مبتنی بر رویداد با Kafka
-- ✅ **Stream Processing**: پردازش جریانی با Apache Flink
-- ✅ **Cloud-Native**: آماده برای استقرار در Kubernetes
-- ✅ **Horizontally Scalable**: مقیاس‌پذیری افقی
-- ✅ **Resilient**: مقاوم در برابر خطا
+1. [Overview](#overview)
+2. [Overall architecture](#overall-architecture)
+3. [System layers](#system-layers)
+4. [Microservices](#microservices)
+5. [Data flow](#data-flow)
+6. [Data management](#data-management)
+7. [Security](#security)
+8. [Scalability](#scalability)
 
 ---
 
-## <a name="overall-architecture"></a>🏛️ معماری کلی
+## <a name="overview"></a>🎯 Overview
+
+OGIM is an intelligent monitoring and analytics system with a microservice architecture that processes, analyzes and displays oil and gas field data in real time.
+
+### Key architectural features:
+- ✅ **Microservices**: Independent, separate services
+- ✅ **Event-Driven**: Event-based with Kafka
+- ✅ **Stream Processing**: Stream processing with Apache Flink
+- ✅ **Cloud-Native**: Ready for deployment on Kubernetes
+- ✅ **Horizontally Scalable**: Horizontal scalability
+- ✅ **Resilient**: Fault tolerant
+
+---
+
+## <a name="overall-architecture"></a>🏛️ Overall architecture
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -142,79 +142,79 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 
 ---
 
-## <a name="system-layers"></a>📚 لایه‌های سیستم
+## <a name="system-layers"></a>📚 System layers
 
-### 1️⃣ Data Source Layer (لایه منابع داده)
+### 1️⃣ Data Source Layer
 
-**مسئولیت:** جمع‌آوری داده از منابع فیزیکی
+**Responsibility:** Collecting data from physical sources
 
-**اجزا:**
+**Components:**
 - SCADA Systems
 - PLC Controllers
 - Field Sensors
 - Edge Devices
 
-**پروتکل‌ها:**
+**Protocols:**
 - OPC UA
 - Modbus TCP
 - REST API
-- MQTT (آینده)
+- MQTT (future)
 
-### 2️⃣ Data Storage Layer (لایه ذخیره‌سازی)
+### 2️⃣ Data Storage Layer
 
-**مسئولیت:** ذخیره داده‌های مختلف
+**Responsibility:** Storing different kinds of data
 
-**اجزا:**
+**Components:**
 
-| Database | نوع | کاربرد |
+| Database | Type | Use |
 |----------|-----|--------|
-| PostgreSQL | Relational | داده‌های ساختاری (کاربران، تگ‌ها، هشدارها) |
-| TimescaleDB | Time-Series | داده‌های سری زمانی (سنسورها) |
-| Redis | Cache/KV | Cache، Session، Rate Limiting |
-| Kafka | Stream | Message Bus، Event Sourcing |
+| PostgreSQL | Relational | Structured data (users, tags, alerts) |
+| TimescaleDB | Time-Series | Time-series data (sensors) |
+| Redis | Cache/KV | Cache, Session, Rate Limiting |
+| Kafka | Stream | Message Bus, Event Sourcing |
 
-### 3️⃣ Stream Processing Layer (لایه پردازش جریانی)
+### 3️⃣ Stream Processing Layer
 
-**مسئولیت:** پردازش real-time داده‌ها
+**Responsibility:** Real-time processing of data
 
 **Apache Flink Jobs:**
-- **Data Cleansing**: پاکسازی و اعتبارسنجی
-- **Data Enrichment**: غنی‌سازی با متادیتا
-- **CEP (Complex Event Processing)**: تشخیص الگوهای پیچیده
-- **Anomaly Detection**: شناسایی ناهنجاری
-- **Aggregation**: محاسبات آماری
+- **Data Cleansing**: Cleaning and validation
+- **Data Enrichment**: Enrichment with metadata
+- **CEP (Complex Event Processing)**: Detecting complex patterns
+- **Anomaly Detection**: Identifying anomalies
+- **Aggregation**: Statistical calculations
 
-**ویژگی‌ها:**
+**Features:**
 - Stateful processing
 - Checkpointing
 - Exactly-once semantics
 - Window operations (Tumbling, Sliding, Session)
 
-### 4️⃣ Message Bus Layer (لایه صف پیام)
+### 4️⃣ Message Bus Layer
 
-**مسئولیت:** انتقال پیام بین سرویس‌ها
+**Responsibility:** Transferring messages between services
 
 **Apache Kafka:**
 
-| Topic | Producer | Consumer | توضیحات |
+| Topic | Producer | Consumer | Description |
 |-------|----------|----------|---------|
-| raw-sensor-data | Data Ingestion | Flink Jobs | داده خام سنسورها |
-| processed-data | Flink Jobs | ML Inference, Alert | داده پردازش شده |
-| alerts | Flink, Alert Service | Web Portal, Email | هشدارها |
-| commands | Command Service | SCADA Connector | فرمان‌های کنترلی |
-| audit-logs | All Services | Audit Service | لاگ‌های audit |
+| raw-sensor-data | Data Ingestion | Flink Jobs | Raw sensor data |
+| processed-data | Flink Jobs | ML Inference, Alert | Processed data |
+| alerts | Flink, Alert Service | Web Portal, Email | Alerts |
+| commands | Command Service | SCADA Connector | Control commands |
+| audit-logs | All Services | Audit Service | Audit logs |
 
-### 5️⃣ Microservices Layer (لایه میکروسرویس‌ها)
+### 5️⃣ Microservices Layer
 
-**مسئولیت:** منطق کسب‌وکار
+**Responsibility:** Business logic
 
-[جزئیات در بخش بعدی](#microservices)
+[Details in the next section](#microservices)
 
-### 6️⃣ API Gateway Layer (لایه دروازه API)
+### 6️⃣ API Gateway Layer
 
-**مسئولیت:** مدیریت ترافیک و امنیت
+**Responsibility:** Traffic and security management
 
-**ویژگی‌ها:**
+**Features:**
 - Routing
 - Load Balancing
 - Authentication/Authorization
@@ -222,25 +222,25 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Request/Response transformation
 - Logging & Monitoring
 
-### 7️⃣ Presentation Layer (لایه نمایش)
+### 7️⃣ Presentation Layer
 
-**مسئولیت:** رابط کاربری
+**Responsibility:** User interface
 
-**اجزا:**
+**Components:**
 - React Web Portal
-- Mobile App (آینده)
+- Mobile App (future)
 - Grafana Dashboards
-- Jupyter Notebooks (تحلیل)
+- Jupyter Notebooks (analysis)
 
 ---
 
-## <a name="microservices"></a>🔧 میکروسرویس‌ها
+## <a name="microservices"></a>🔧 Microservices
 
-### 1. Auth Service (سرویس احراز هویت)
+### 1. Auth Service
 
-**مسئولیت:** مدیریت کاربران و احراز هویت
+**Responsibility:** User management and authentication
 
-**قابلیت‌ها:**
+**Capabilities:**
 - User registration & login
 - JWT token generation & validation
 - Password hashing (bcrypt)
@@ -249,11 +249,11 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Audit logging
 
 **API Endpoints:**
-- `POST /token` - دریافت token
-- `GET /users/me` - اطلاعات کاربر
-- `POST /users` - ایجاد کاربر
-- `PUT /users/{id}` - ویرایش کاربر
-- `DELETE /users/{id}` - حذف کاربر
+- `POST /token` - Get a token
+- `GET /users/me` - User information
+- `POST /users` - Create a user
+- `PUT /users/{id}` - Edit a user
+- `DELETE /users/{id}` - Delete a user
 
 **Database Tables:**
 - users
@@ -261,11 +261,11 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - permissions
 - audit_logs
 
-### 2. Data Ingestion Service (سرویس دریافت داده)
+### 2. Data Ingestion Service
 
-**مسئولیت:** جمع‌آوری داده از منابع مختلف
+**Responsibility:** Collecting data from various sources
 
-**قابلیت‌ها:**
+**Capabilities:**
 - OPC UA client
 - Modbus TCP client
 - REST API endpoint
@@ -274,19 +274,19 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Connector management
 
 **API Endpoints:**
-- `POST /ingest` - دریافت داده (bulk)
-- `GET /connectors` - لیست connectorها
-- `POST /connectors` - ایجاد connector
-- `POST /opcua/start_polling` - شروع polling از OPC UA
+- `POST /ingest` - Receive data (bulk)
+- `GET /connectors` - List connectors
+- `POST /connectors` - Create a connector
+- `POST /opcua/start_polling` - Start polling from OPC UA
 
 **Kafka Topics:**
 - Producer: `raw-sensor-data`
 
-### 3. ML Inference Service (سرویس استنتاج ML)
+### 3. ML Inference Service
 
-**مسئولیت:** اعمال مدل‌های ML
+**Responsibility:** Applying ML models
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Model loading (MLflow)
 - Anomaly detection (Isolation Forest)
 - Failure prediction (Random Forest)
@@ -295,21 +295,21 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Feature engineering
 
 **API Endpoints:**
-- `POST /infer` - درخواست inference
-- `POST /train` - آموزش مدل جدید
-- `GET /models` - لیست مدل‌ها
-- `GET /models/{id}/metrics` - متریک‌های مدل
+- `POST /infer` - Inference request
+- `POST /train` - Train a new model
+- `GET /models` - List models
+- `GET /models/{id}/metrics` - Model metrics
 
 **ML Models:**
 - Isolation Forest (anomaly detection)
 - Random Forest (failure prediction)
-- ✅ LSTM (time series forecasting) - پیاده‌سازی شده
+- ✅ LSTM (time series forecasting) - implemented
 
-### 4. Alert Service (سرویس هشدار)
+### 4. Alert Service
 
-**مسئولیت:** مدیریت هشدارها
+**Responsibility:** Alert management
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Alert creation
 - Rule engine
 - Alert routing
@@ -319,22 +319,22 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Alert history
 
 **API Endpoints:**
-- `GET /alerts` - لیست هشدارها
-- `POST /alerts` - ایجاد هشدار
-- `POST /alerts/{id}/acknowledge` - تایید هشدار
-- `POST /alerts/{id}/resolve` - حل هشدار
-- `GET /rules` - قوانین هشدار
-- `POST /rules` - ایجاد قانون
+- `GET /alerts` - List alerts
+- `POST /alerts` - Create an alert
+- `POST /alerts/{id}/acknowledge` - Acknowledge an alert
+- `POST /alerts/{id}/resolve` - Resolve an alert
+- `GET /rules` - Alert rules
+- `POST /rules` - Create a rule
 
 **Kafka Topics:**
 - Consumer: `processed-data`, `alerts`
 - Producer: `alerts`
 
-### 5. Command & Control Service (سرویس فرمان و کنترل)
+### 5. Command & Control Service
 
-**مسئولیت:** ارسال فرمان به تجهیزات
+**Responsibility:** Sending commands to equipment
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Command queuing
 - 2FA validation
 - Approval workflow
@@ -343,11 +343,11 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Audit logging
 
 **API Endpoints:**
-- `POST /commands` - ارسال فرمان
-- `POST /commands/{id}/approve` - تایید فرمان
-- `POST /commands/{id}/execute` - اجرای فرمان
-- `POST /commands/{id}/rollback` - بازگشت فرمان
-- `GET /commands/history` - تاریخچه فرمان‌ها
+- `POST /commands` - Send a command
+- `POST /commands/{id}/approve` - Approve a command
+- `POST /commands/{id}/execute` - Execute a command
+- `POST /commands/{id}/rollback` - Roll back a command
+- `GET /commands/history` - Command history
 
 **Security:**
 - 2FA required for critical commands
@@ -355,11 +355,11 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Command approval workflow
 - Full audit trail
 
-### 6. Tag Catalog Service (سرویس کاتالوگ تگ)
+### 6. Tag Catalog Service
 
-**مسئولیت:** مدیریت متادیتای تگ‌ها
+**Responsibility:** Managing tag metadata
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Tag CRUD operations
 - Tag metadata management
 - Tag search & filter
@@ -367,28 +367,28 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 - Tag versioning
 
 **API Endpoints:**
-- `GET /tags` - لیست تگ‌ها
-- `GET /tags/{id}` - جزئیات تگ
-- `POST /tags` - ایجاد تگ
-- `PUT /tags/{id}` - ویرایش تگ
-- `DELETE /tags/{id}` - حذف تگ
+- `GET /tags` - List tags
+- `GET /tags/{id}` - Tag details
+- `POST /tags` - Create a tag
+- `PUT /tags/{id}` - Edit a tag
+- `DELETE /tags/{id}` - Delete a tag
 
-### 7. Reporting Service (سرویس گزارش‌دهی)
+### 7. Reporting Service
 
-**مسئولیت:** تولید گزارش‌ها
+**Responsibility:** Generating reports
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Report generation (PDF, Excel, CSV)
 - Scheduled reports
 - Custom queries
 - Data aggregation
 - Historical analysis
 
-### 8. Digital Twin Service (سرویس دوقلوی دیجیتال)
+### 8. Digital Twin Service
 
-**مسئولیت:** شبیه‌سازی و مدل‌سازی
+**Responsibility:** Simulation and modeling
 
-**قابلیت‌ها:**
+**Capabilities:**
 - Well modeling
 - Production optimization
 - What-if analysis
@@ -396,7 +396,7 @@ OGIM یک سیستم نظارت و تحلیل هوشمند با معماری م�
 
 ---
 
-## <a name="data-flow"></a>🔄 جریان داده
+## <a name="data-flow"></a>🔄 Data flow
 
 ### 1️⃣ Data Ingestion Flow
 
@@ -466,7 +466,7 @@ PLC/SCADA
 
 ---
 
-## <a name="data-management"></a>💾 مدیریت داده
+## <a name="data-management"></a>💾 Data management
 
 ### Data Retention Policy
 
@@ -495,7 +495,7 @@ TimescaleDB compression:
 
 ---
 
-## <a name="security"></a>🔐 امنیت
+## <a name="security"></a>🔐 Security
 
 ### Authentication & Authorization
 
@@ -527,7 +527,7 @@ TimescaleDB compression:
 
 ---
 
-## <a name="scalability"></a>📈 مقیاس‌پذیری
+## <a name="scalability"></a>📈 Scalability
 
 ### Horizontal Scaling
 
@@ -592,10 +592,10 @@ spec:
 | End-to-End Latency | < 1 sec | ~500ms | < 10ms |
 | Uptime | 99.9% | 99.95% | 99.9% |
 
-**نکته**: برای کنترل‌های بحرانی، Low-Latency Mode فعال می‌شود که تاخیر را به زیر 10ms می‌رساند. برای جزئیات بیشتر به [`docs/LATENCY_OPTIMIZATION.md`](LATENCY_OPTIMIZATION.md) مراجعه کنید.
+**Note**: For critical controls, Low-Latency Mode is enabled, which brings the latency below 10ms. For more details, see [`docs/LATENCY_OPTIMIZATION.md`](LATENCY_OPTIMIZATION.md).
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** نوامبر 2025
+**Version:** 1.0.0
+**Updated:** November 2025
 

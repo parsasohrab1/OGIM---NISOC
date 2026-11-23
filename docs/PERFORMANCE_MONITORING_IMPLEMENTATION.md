@@ -1,15 +1,15 @@
-# ⚡ راهنمای پیاده‌سازی Performance Monitoring
+# ⚡ Performance Monitoring Implementation Guide
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** شناسایی سریع‌تر bottlenecks عملکردی با APM و end-to-end tracking
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** Faster identification of performance bottlenecks with APM and end-to-end tracking
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
 3. [OpenTelemetry Setup](#opentelemetry)
 4. [Performance Dashboard](#dashboard)
 5. [End-to-end Latency Tracking](#latency-tracking)
@@ -20,13 +20,13 @@
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-این سند راهنمای کامل پیاده‌سازی سیستم Performance Monitoring است که شامل APM با OpenTelemetry، Performance Dashboard، End-to-end Latency Tracking، و Service Dependency Map می‌شود.
+This document is the complete implementation guide for the Performance Monitoring system, which includes APM with OpenTelemetry, a Performance Dashboard, End-to-end Latency Tracking, and a Service Dependency Map.
 
-### اهداف
+### Goals
 
-- ✅ شناسایی real-time bottlenecks
+- ✅ Real-time identification of bottlenecks
 - ✅ End-to-end latency tracking
 - ✅ Service dependency visualization
 - ✅ Automated performance alerts
@@ -34,7 +34,7 @@
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -1049,6 +1049,6 @@ def test_end_to_end_latency():
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

@@ -1,8 +1,8 @@
-# ویژگی‌های پیشرفته ML و Workflow
+# Advanced ML and Workflow Features
 
-این مستند راهنمای ویژگی‌های پیشرفته ML و Workflow سیستم OGIM است.
+This document is a guide to the advanced ML and Workflow features of the OGIM system.
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
 1. [Edge-to-Stream Architecture](#edge-to-stream)
 2. [Sensor Health Monitoring & Drift Detection](#sensor-health)
@@ -13,11 +13,11 @@
 
 ## <a name="edge-to-stream"></a>⚡ Edge-to-Stream Architecture
 
-### نمای کلی
+### Overview
 
-معماری یکپارچه پردازش لبه و جریان که انتقال داده از پروتکل‌های صنعتی (OPC UA/Modbus) به Apache Flink را با تأخیر زیر ثانیه فراهم می‌کند.
+A unified edge and stream processing architecture that provides data transfer from industrial protocols (OPC UA/Modbus) to Apache Flink with sub-second latency.
 
-### معماری
+### Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -50,17 +50,17 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-### ویژگی‌ها
+### Features
 
-- ✅ **Sub-second Latency**: تأخیر زیر 1 ثانیه از Edge به Flink
-- ✅ **Direct Protocol Integration**: اتصال مستقیم OPC UA/Modbus
-- ✅ **Low-Latency Kafka**: استفاده از Kafka Low-Latency Producer
-- ✅ **Automatic Batching**: بچینگ خودکار برای بهینه‌سازی
+- ✅ **Sub-second Latency**: Latency under 1 second from Edge to Flink
+- ✅ **Direct Protocol Integration**: Direct OPC UA/Modbus connection
+- ✅ **Low-Latency Kafka**: Uses the Kafka Low-Latency Producer
+- ✅ **Automatic Batching**: Automatic batching for optimization
 
-### استفاده
+### Usage
 
 ```python
-# از OPC UA
+# From OPC UA
 POST /data-ingestion/stream/opcua
 {
   "node_id": "ns=2;i=1",
@@ -68,7 +68,7 @@ POST /data-ingestion/stream/opcua
   "metadata": {"unit": "bar", "sensor_type": "pressure"}
 }
 
-# از Modbus
+# From Modbus
 POST /data-ingestion/stream/modbus
 {
   "device_id": 1,
@@ -77,11 +77,11 @@ POST /data-ingestion/stream/modbus
   "metadata": {"unit": "C", "sensor_type": "temperature"}
 }
 
-# دریافت آمار Latency
+# Get Latency statistics
 GET /data-ingestion/edge-stream/stats
 ```
 
-### تنظیمات
+### Settings
 
 ```bash
 EDGE_COMPUTING_ENABLED=true
@@ -92,25 +92,25 @@ KAFKA_LOW_LATENCY_MODE=true
 
 ## <a name="sensor-health"></a>🔍 Sensor Health Monitoring & Drift Detection
 
-### نمای کلی
+### Overview
 
-الگوریتم خودکار شناسایی انحراف سنسور (Sensor Drift) و اصلاح داده‌ها قبل از ورود به مدل‌های ML.
+An automatic algorithm for detecting sensor drift (Sensor Drift) and correcting the data before it enters the ML models.
 
-### الگوریتم Drift Detection
+### Drift Detection algorithm
 
 #### 1. Baseline Calculation
-- استفاده از median اولین 20% داده‌ها به عنوان baseline
-- ذخیره baseline برای هر سنسور
+- Uses the median of the first 20% of the data as the baseline
+- Stores the baseline for each sensor
 
 #### 2. Drift Detection
-- محاسبه deviation از baseline
-- استفاده از threshold (پیش‌فرض: 10%)
-- تشخیص drift با Z-score analysis
+- Calculates the deviation from the baseline
+- Uses a threshold (default: 10%)
+- Detects drift with Z-score analysis
 
 #### 3. Data Correction
-- اصلاح خودکار داده‌های دارای drift
-- استفاده از correction factor برای partial correction
-- حفظ traceability برای audit
+- Automatic correction of data with drift
+- Uses a correction factor for partial correction
+- Maintains traceability for audit
 
 ### Health Score
 
@@ -124,13 +124,13 @@ Health Score = 1.0 - (drift_penalty + range_penalty)
 # < 0.5: Failed
 ```
 
-### استفاده
+### Usage
 
 ```python
-# دریافت سلامت یک سنسور
+# Get the health of a sensor
 GET /data-ingestion/sensor-health/{sensor_id}
 
-# پاسخ
+# Response
 {
   "health_score": 0.85,
   "drift_detected": true,
@@ -139,16 +139,16 @@ GET /data-ingestion/sensor-health/{sensor_id}
   "last_check": "2025-12-15T10:30:00Z"
 }
 
-# دریافت سلامت همه سنسورها
+# Get the health of all sensors
 GET /data-ingestion/sensor-health
 ```
 
-### یکپارچه‌سازی خودکار
+### Automatic integration
 
-Sensor Health Monitoring به صورت خودکار در Data Ingestion Service یکپارچه شده است:
+Sensor Health Monitoring is automatically integrated into the Data Ingestion Service:
 
 ```python
-# در /ingest endpoint
+# In the /ingest endpoint
 health_status = sensor_health_monitor.assess_health(...)
 if health_status.correction_applied:
     final_value = health_status.corrected_value
@@ -158,11 +158,11 @@ if health_status.correction_applied:
 
 ## <a name="secure-workflow"></a>🔐 Secure Command Workflow
 
-### نمای کلی
+### Overview
 
-چرخه کنترل امن دو مرحله‌ای که ترکیب تاییدیه دو مرحله‌ای (2FA) با شبیه‌سازی همزاد دیجیتال (Digital Twin) قبل از اجرای فرمان را فراهم می‌کند.
+A secure two-step control loop that combines two-factor authentication (2FA) with Digital Twin simulation before executing a command.
 
-### مراحل Workflow
+### Workflow steps
 
 ```
 1. Request Command
@@ -180,7 +180,7 @@ if health_status.correction_applied:
 5. Execute Command
 ```
 
-### استفاده
+### Usage
 
 #### Stage 1: Request Command
 
@@ -193,7 +193,7 @@ POST /command-control/commands/secure
   "equipment_id": "PUMP-001"
 }
 
-# پاسخ
+# Response
 {
   "command_id": "CMD-SECURE-...",
   "stage": "requested",
@@ -213,7 +213,7 @@ POST /command-control/commands/secure
   "two_fa_code": "123456"  # 2FA code
 }
 
-# پاسخ
+# Response
 {
   "command_id": "CMD-SECURE-...",
   "stage": "digital_twin_simulation",
@@ -230,7 +230,7 @@ POST /command-control/commands/secure/{command_id}/approve
   "approval_notes": "Simulation results acceptable"
 }
 
-# پاسخ
+# Response
 {
   "command_id": "CMD-SECURE-...",
   "stage": "simulation_approved",
@@ -243,7 +243,7 @@ POST /command-control/commands/secure/{command_id}/approve
 ```python
 POST /command-control/commands/secure/{command_id}/execute
 
-# پاسخ
+# Response
 {
   "command_id": "CMD-SECURE-...",
   "stage": "executed",
@@ -251,12 +251,12 @@ POST /command-control/commands/secure/{command_id}/execute
 }
 ```
 
-### بررسی وضعیت
+### Checking the status
 
 ```python
 GET /command-control/commands/secure/{command_id}/status
 
-# پاسخ
+# Response
 {
   "command_id": "CMD-SECURE-...",
   "stage": "digital_twin_simulation",
@@ -273,78 +273,78 @@ GET /command-control/commands/secure/{command_id}/status
 
 ### Safety Checks
 
-Digital Twin Simulation شامل safety checks است:
+Digital Twin Simulation includes safety checks:
 
-- بررسی فشار پیش‌بینی شده
-- بررسی دما
-- بررسی محدوده‌های ایمن
-- رد خودکار در صورت شرایط ناایمن
+- Check of the predicted pressure
+- Check of the temperature
+- Check of the safe ranges
+- Automatic rejection in case of unsafe conditions
 
 ---
 
 ## <a name="rul-prediction"></a>⏱️ Remaining Useful Life (RUL) Prediction
 
-### نمای کلی
+### Overview
 
-مدل پیش‌بینی عمر باقی‌مانده (RUL) اختصاصی برای تجهیزات چاه‌های نفت با الگوریتم‌های Machine Learning بومی‌سازی شده.
+A Remaining Useful Life (RUL) prediction model dedicated to oil well equipment, with localized native Machine Learning algorithms.
 
-### تجهیزات پشتیبانی شده
+### Supported equipment
 
-- **Pumps**: پمپ‌ها
-- **Valves**: شیرها
-- **Compressors**: کمپرسورها
-- **Wellheads**: سر چاه‌ها
-- **Pipelines**: خطوط لوله
+- **Pumps**: Pumps
+- **Valves**: Valves
+- **Compressors**: Compressors
+- **Wellheads**: Wellheads
+- **Pipelines**: Pipelines
 
-### ویژگی‌های مدل
+### Model features
 
 #### 1. Random Forest
-- مناسب برای داده‌های tabular
-- مقاوم در برابر overfitting
-- تفسیرپذیری بالا
+- Suitable for tabular data
+- Robust against overfitting
+- High interpretability
 
 #### 2. Gradient Boosting
-- دقت بالا
-- مناسب برای روابط پیچیده
+- High accuracy
+- Suitable for complex relationships
 
 #### 3. Neural Network
-- مناسب برای داده‌های پیچیده
-- قابلیت یادگیری عمیق
+- Suitable for complex data
+- Deep learning capability
 
 ### Features
 
-#### Base Features (همه تجهیزات)
-- `temperature`: دما
-- `pressure`: فشار
-- `vibration`: ارتعاش
-- `flow_rate`: نرخ جریان
-- `operating_hours`: ساعات کارکرد
-- `maintenance_count`: تعداد تعمیرات
-- `failure_count`: تعداد خرابی‌ها
+#### Base Features (all equipment)
+- `temperature`: Temperature
+- `pressure`: Pressure
+- `vibration`: Vibration
+- `flow_rate`: Flow rate
+- `operating_hours`: Operating hours
+- `maintenance_count`: Number of maintenance events
+- `failure_count`: Number of failures
 
 #### Equipment-Specific Features
 
 **Pump:**
-- `pump_speed`: سرعت پمپ
-- `efficiency`: راندمان
-- `bearing_temperature`: دمای یاتاقان
+- `pump_speed`: Pump speed
+- `efficiency`: Efficiency
+- `bearing_temperature`: Bearing temperature
 
 **Valve:**
-- `valve_position`: موقعیت شیر
-- `actuator_pressure`: فشار عملگر
-- `leak_rate`: نرخ نشتی
+- `valve_position`: Valve position
+- `actuator_pressure`: Actuator pressure
+- `leak_rate`: Leak rate
 
 **Compressor:**
-- `compression_ratio`: نسبت تراکم
-- `discharge_temperature`: دمای تخلیه
-- `oil_level`: سطح روغن
+- `compression_ratio`: Compression ratio
+- `discharge_temperature`: Discharge temperature
+- `oil_level`: Oil level
 
 **Wellhead:**
-- `well_pressure`: فشار چاه
-- `production_rate`: نرخ تولید
-- `choke_position`: موقعیت choke
+- `well_pressure`: Well pressure
+- `production_rate`: Production rate
+- `choke_position`: Choke position
 
-### استفاده
+### Usage
 
 ```python
 POST /ml-inference/rul/predict
@@ -365,7 +365,7 @@ POST /ml-inference/rul/predict
   }
 }
 
-# پاسخ
+# Response
 {
   "equipment_id": "PUMP-001",
   "equipment_type": "pump",
@@ -381,7 +381,7 @@ POST /ml-inference/rul/predict
 
 ### Maintenance Recommendations
 
-بر اساس RUL پیش‌بینی شده:
+Based on the predicted RUL:
 
 | RUL Days | Urgency | Recommendation |
 |----------|---------|----------------|
@@ -407,12 +407,12 @@ POST /ml-inference/models/rul/train
 
 ---
 
-## 🔗 یکپارچه‌سازی
+## 🔗 Integration
 
 ### Edge-to-Stream + Sensor Health
 
 ```python
-# داده از OPC UA/Modbus → Edge-to-Stream → Sensor Health Check → Flink
+# Data from OPC UA/Modbus → Edge-to-Stream → Sensor Health Check → Flink
 stream_from_opcua(...) → assess_health(...) → Kafka → Flink
 ```
 
@@ -455,7 +455,7 @@ rul_maintenance_urgency_total{urgency="critical"}
 
 ---
 
-## 🔗 منابع بیشتر
+## 🔗 More resources
 
 - [OGIM Architecture](./ARCHITECTURE.md)
 - [Advanced Features](./ADVANCED_FEATURES.md)
@@ -463,6 +463,6 @@ rul_maintenance_urgency_total{urgency="critical"}
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

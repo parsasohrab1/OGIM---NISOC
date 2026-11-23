@@ -40,7 +40,7 @@ function seeded(n: number) {
   return x - Math.floor(x)
 }
 
-/** سری زمانی مصنوعی ۲۴ ساعته برای چاه انتخاب‌شده */
+/** Synthetic 24-hour time series for the selected well */
 function buildWellHistory(well: WellLiveState, hours = 24) {
   const idx = Math.max(0, MARUN_WELLS.findIndex((w) => w.id === well.id))
   const r = seeded(idx + 3)
@@ -133,16 +133,16 @@ export default function Wells() {
   const radarData = useMemo(() => {
     const maxOil = Math.max(...wells.map((w) => w.oilRate), 1)
     return [
-      { metric: 'نفت', value: Math.round((selected.oilRate / maxOil) * 100) },
-      { metric: 'سلامت', value: selected.healthScore },
-      { metric: 'فشار', value: Math.min(100, Math.round((selected.thp / 2000) * 100)) },
+      { metric: 'Oil', value: Math.round((selected.oilRate / maxOil) * 100) },
+      { metric: 'Health', value: selected.healthScore },
+      { metric: 'Pressure', value: Math.min(100, Math.round((selected.thp / 2000) * 100)) },
       {
-        metric: 'پایداری درصد آب تولیدی',
+        metric: 'Produced water cut stability',
         value: Math.max(0, Math.round(100 - selected.waterCut)),
       },
-      { metric: 'تجهیزات', value: Math.max(0, 100 - selected.equipmentRisk) },
+      { metric: 'Equipment', value: Math.max(0, 100 - selected.equipmentRisk) },
       {
-        metric: 'افت معکوس',
+        metric: 'Inverse decline',
         value: Math.max(0, Math.round(100 - selected.declinePct30d * 8)),
       },
     ]
@@ -150,9 +150,9 @@ export default function Wells() {
 
   const phases = useMemo(
     () => [
-      { name: 'نفت', value: selected.oilRate, fill: '#42a5f5' },
-      { name: 'آب', value: selected.waterRate, fill: '#26c6da' },
-      { name: 'گاز×۱۰', value: Math.round(selected.gasRate / 10), fill: '#ab47bc' },
+      { name: 'Oil', value: selected.oilRate, fill: '#42a5f5' },
+      { name: 'Water', value: selected.waterRate, fill: '#26c6da' },
+      { name: 'Gas×10', value: Math.round(selected.gasRate / 10), fill: '#ab47bc' },
     ],
     [selected]
   )
@@ -167,40 +167,40 @@ export default function Wells() {
       <header className="wells-hero">
         <div>
           <p className="wells-client">{FIELD.clientFa}</p>
-          <h2>چاه‌های {FIELD.nameFa}</h2>
+          <h2>Wells of {FIELD.nameFa}</h2>
           <p className="wells-meta">
-            نمایش نموداری {FIELD.wellCount} حلقه · {FIELD.oilTypeFa} درجه سنگینی {FIELD.apiGravity}° · آنلاین {totals.online}/
+            Chart view of {FIELD.wellCount} wells · {FIELD.oilTypeFa}, API gravity {FIELD.apiGravity}° · online {totals.online}/
             {FIELD.wellCount}
           </p>
         </div>
         <div className="wells-view-tabs">
           <button type="button" className={view === 'field' ? 'active' : ''} onClick={() => setView('field')}>
-            نمای میدان
+            Field view
           </button>
           <button type="button" className={view === 'detail' ? 'active' : ''} onClick={() => setView('detail')}>
-            جزئیات چاه
+            Well details
           </button>
         </div>
       </header>
 
       <div className="wells-kpi-strip">
         <div className="wkpi">
-          <span>دبی نفت میدان</span>
+          <span>Field oil rate</span>
           <strong>{totals.oil.toLocaleString()}</strong>
           <small>bbl/d</small>
         </div>
         <div className="wkpi">
-          <span>میانگین درصد آب تولیدی</span>
+          <span>Average produced water cut</span>
           <strong>{totals.avgWc.toFixed(1)}%</strong>
         </div>
         <div className="wkpi">
-          <span>سالم / هشدار / مشکل</span>
+          <span>Healthy / warning / problem</span>
           <strong>
             {totals.healthy} · {totals.warning} · {totals.critical}
           </strong>
         </div>
         <div className="wkpi">
-          <span>چاه انتخاب‌شده</span>
+          <span>Selected well</span>
           <strong>{selected.id}</strong>
           <small style={{ color: STATUS_COLOR[selected.status] }}>{STATUS_LABEL_FA[selected.status]}</small>
         </div>
@@ -210,7 +210,7 @@ export default function Wells() {
         <>
           <section className="wells-charts-grid">
             <div className="wpanel chart">
-              <h3>مقایسه دبی نفت چاه‌ها</h3>
+              <h3>Oil rate comparison of wells</h3>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart
                   data={compareOil}
@@ -224,25 +224,25 @@ export default function Wells() {
                   <YAxis stroke="#888" />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
                   <Legend />
-                  <Bar dataKey="oil" name="نفت (bbl/d)" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="oil" name="Oil (bbl/d)" radius={[4, 4, 0, 0]}>
                     {compareOil.map((d) => (
                       <Cell key={d.id} fill={STATUS_COLOR[d.status as WellHealthStatus]} />
                     ))}
                   </Bar>
-                  <Bar dataKey="vfm" name="دبی‌سنج مجازی" fill="#5c6bc0" radius={[4, 4, 0, 0]} opacity={0.55} />
+                  <Bar dataKey="vfm" name="Virtual flow meter" fill="#5c6bc0" radius={[4, 4, 0, 0]} opacity={0.55} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
             <div className="wpanel chart">
-              <h3>درصد آب تولیدی به‌ازای هر چاه</h3>
+              <h3>Produced water cut per well</h3>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={compareWc}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                   <XAxis dataKey="well" stroke="#888" tick={{ fontSize: 11 }} />
                   <YAxis stroke="#888" domain={[0, 100]} />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
-                  <Bar dataKey="waterCut" name="درصد آب تولیدی" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="waterCut" name="Produced water cut" radius={[4, 4, 0, 0]}>
                     {compareWc.map((d, i) => (
                       <Cell
                         key={i}
@@ -255,7 +255,7 @@ export default function Wells() {
             </div>
 
             <div className="wpanel chart">
-              <h3>سلامت و ریسک تجهیزات</h3>
+              <h3>Equipment health and risk</h3>
               <ResponsiveContainer width="100%" height={280}>
                 <AreaChart data={compareHealth}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -263,14 +263,14 @@ export default function Wells() {
                   <YAxis stroke="#888" domain={[0, 100]} />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
                   <Legend />
-                  <Area type="monotone" dataKey="health" name="سلامت" stroke="#66bb6a" fill="#2e7d32" fillOpacity={0.35} />
-                  <Area type="monotone" dataKey="risk" name="ریسک تجهیزات" stroke="#ef5350" fill="#c62828" fillOpacity={0.25} />
+                  <Area type="monotone" dataKey="health" name="Health" stroke="#66bb6a" fill="#2e7d32" fillOpacity={0.35} />
+                  <Area type="monotone" dataKey="risk" name="Equipment risk" stroke="#ef5350" fill="#c62828" fillOpacity={0.25} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
 
             <div className="wpanel chart pie">
-              <h3>توزیع وضعیت چاه‌ها</h3>
+              <h3>Well status distribution</h3>
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
@@ -295,7 +295,7 @@ export default function Wells() {
           </section>
 
           <section className="wells-cards">
-            <h3 className="section-title">کارت‌های زنده چاه‌ها</h3>
+            <h3 className="section-title">Live well cards</h3>
             <div className="wells-card-grid">
               {wells.map((w) => (
                 <button
@@ -317,19 +317,19 @@ export default function Wells() {
                     </div>
                     <div className="wvc-metrics">
                       <div>
-                        <small>نفت</small>
+                        <small>Oil</small>
                         <b>{w.oilRate}</b>
                       </div>
                       <div>
-                        <small>درصد آب</small>
+                        <small>Water cut</small>
                         <b>{w.waterCut}%</b>
                       </div>
                       <div>
-                        <small>فشار سرچاهی</small>
+                        <small>Wellhead pressure</small>
                         <b>{w.thp}</b>
                       </div>
                       <div>
-                        <small>افت ۳۰د</small>
+                        <small>30d decline</small>
                         <b>{w.declinePct30d}%</b>
                       </div>
                     </div>
@@ -339,7 +339,7 @@ export default function Wells() {
                   </div>
                   <div className="wvc-foot">
                     <span style={{ color: STATUS_COLOR[w.status] }}>{STATUS_LABEL_FA[w.status]}</span>
-                    <span>پمپ درون‌چاهی {w.pumpOnline ? 'آنلاین' : 'آفلاین'}</span>
+                    <span>Electric submersible pump {w.pumpOnline ? 'online' : 'offline'}</span>
                   </div>
                 </button>
               ))}
@@ -373,23 +373,23 @@ export default function Wells() {
                 </span>
               </h3>
               <p>
-                دبی‌سنج مجازی {selected.vfmOilRate} bbl/d · ریسک تجهیزات {selected.equipmentRisk}% · آخرین دیده شدن{' '}
-                {selected.lastSeenMin} دقیقه پیش
+                Virtual flow meter {selected.vfmOilRate} bbl/d · equipment risk {selected.equipmentRisk}% · last seen{' '}
+                {selected.lastSeenMin} minutes ago
               </p>
             </div>
             <div className="detail-stats">
-              <DetailStat label="نفت" value={`${selected.oilRate}`} unit="bbl/d" />
-              <DetailStat label="گاز" value={`${selected.gasRate}`} unit="Mscf/d" />
-              <DetailStat label="آب" value={`${selected.waterRate}`} unit="bbl/d" />
-              <DetailStat label="درصد آب تولیدی" value={`${selected.waterCut}`} unit="%" />
-              <DetailStat label="فشار سرچاهی" value={`${selected.thp}`} unit="psi" />
-              <DetailStat label="دمای سرچاهی" value={`${selected.tht}`} unit="°C" />
+              <DetailStat label="Oil" value={`${selected.oilRate}`} unit="bbl/d" />
+              <DetailStat label="Gas" value={`${selected.gasRate}`} unit="Mscf/d" />
+              <DetailStat label="Water" value={`${selected.waterRate}`} unit="bbl/d" />
+              <DetailStat label="Produced water cut" value={`${selected.waterCut}`} unit="%" />
+              <DetailStat label="Wellhead pressure" value={`${selected.thp}`} unit="psi" />
+              <DetailStat label="Wellhead temperature" value={`${selected.tht}`} unit="°C" />
             </div>
           </div>
 
           <div className="detail-charts">
             <div className="wpanel chart">
-              <h3>روند ۲۴ ساعته — نفت / آب / گاز</h3>
+              <h3>24-hour trend — oil / water / gas</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <AreaChart data={history}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -397,15 +397,15 @@ export default function Wells() {
                   <YAxis stroke="#888" />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
                   <Legend />
-                  <Area type="monotone" dataKey="oil" name="نفت" stroke="#42a5f5" fill="#1565c0" fillOpacity={0.35} />
-                  <Area type="monotone" dataKey="water" name="آب" stroke="#26c6da" fill="#00838f" fillOpacity={0.25} />
-                  <Line type="monotone" dataKey="gas" name="گاز" stroke="#ce93d8" strokeWidth={2} dot={false} />
+                  <Area type="monotone" dataKey="oil" name="Oil" stroke="#42a5f5" fill="#1565c0" fillOpacity={0.35} />
+                  <Area type="monotone" dataKey="water" name="Water" stroke="#26c6da" fill="#00838f" fillOpacity={0.25} />
+                  <Line type="monotone" dataKey="gas" name="Gas" stroke="#ce93d8" strokeWidth={2} dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
 
             <div className="wpanel chart">
-              <h3>فشار و دمای سرچاهی</h3>
+              <h3>Wellhead pressure and temperature</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <LineChart data={history}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -414,14 +414,14 @@ export default function Wells() {
                   <YAxis yAxisId="r" orientation="left" stroke="#888" hide />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
                   <Legend />
-                  <Line yAxisId="l" type="monotone" dataKey="thp" name="فشار سرچاهی (psi)" stroke="#ffa726" strokeWidth={2} dot={false} />
-                  <Line yAxisId="l" type="monotone" dataKey="tht" name="دمای سرچاهی (°C)" stroke="#66bb6a" strokeWidth={2} dot={false} />
+                  <Line yAxisId="l" type="monotone" dataKey="thp" name="Wellhead pressure (psi)" stroke="#ffa726" strokeWidth={2} dot={false} />
+                  <Line yAxisId="l" type="monotone" dataKey="tht" name="Wellhead temperature (°C)" stroke="#66bb6a" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
             <div className="wpanel chart">
-              <h3>پروفایل عملکرد چاه</h3>
+              <h3>Well performance profile</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <RadarChart data={radarData}>
                   <PolarGrid stroke="#444" />
@@ -434,7 +434,7 @@ export default function Wells() {
             </div>
 
             <div className="wpanel chart">
-              <h3>ترکیب فازهای تولیدی</h3>
+              <h3>Produced phase composition</h3>
               <ResponsiveContainer width="100%" height={260}>
                 <PieChart>
                   <Pie data={phases} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
@@ -449,14 +449,14 @@ export default function Wells() {
             </div>
 
             <div className="wpanel chart wide">
-              <h3>روند درصد آب تولیدی (۲۴ ساعت)</h3>
+              <h3>Produced water cut trend (24 hours)</h3>
               <ResponsiveContainer width="100%" height={220}>
                 <AreaChart data={history}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" />
                   <XAxis dataKey="t" stroke="#888" tick={{ fontSize: 10 }} />
                   <YAxis stroke="#888" domain={[0, 100]} unit="%" />
                   <Tooltip contentStyle={TOOLTIP_STYLE} />
-                  <Area type="monotone" dataKey="waterCut" name="درصد آب تولیدی %" stroke="#ab47bc" fill="#6a1b9a" fillOpacity={0.35} />
+                  <Area type="monotone" dataKey="waterCut" name="Produced water cut %" stroke="#ab47bc" fill="#6a1b9a" fillOpacity={0.35} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

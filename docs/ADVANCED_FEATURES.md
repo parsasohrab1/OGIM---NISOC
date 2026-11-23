@@ -1,31 +1,31 @@
-# ویژگی‌های پیشرفته OGIM
+# OGIM Advanced Features
 
-این مستند راهنمای ویژگی‌های پیشرفته سیستم OGIM است که برای محیط‌های صنعتی و دورافتاده طراحی شده‌اند.
+This document is a guide to the advanced features of the OGIM system, designed for industrial and remote environments.
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
 1. [Edge Computing Layer](#edge-computing)
-2. [امنیت صنعتی (Industrial Security)](#industrial-security)
+2. [Industrial Security](#industrial-security)
 3. [Digital Twin 3D BIM](#digital-twin-3d)
-4. [اتصال 5G و Satellite](#connectivity)
-5. [یکپارچگی ERP](#erp-integration)
+4. [5G and Satellite Connectivity](#connectivity)
+5. [ERP Integration](#erp-integration)
 
 ---
 
 ## <a name="edge-computing"></a>🌐 Edge Computing Layer
 
-### نمای کلی
+### Overview
 
-Edge Computing Layer امکان پردازش و تحلیل داده‌ها را در محل (on-site) فراهم می‌کند، بدون نیاز به ارسال تمام داده‌ها به مرکز داده.
+The Edge Computing Layer makes it possible to process and analyze data on-site, without needing to send all the data to the data center.
 
-### مزایا
+### Benefits
 
-- ✅ **کاهش Latency**: پردازش فوری در محل
-- ✅ **کاهش Bandwidth**: ارسال فقط نتایج تحلیل
-- ✅ **Offline Operation**: کار در شرایط قطع ارتباط
-- ✅ **Privacy**: داده‌های حساس در محل باقی می‌مانند
+- ✅ **Reduced Latency**: Immediate on-site processing
+- ✅ **Reduced Bandwidth**: Only the analysis results are sent
+- ✅ **Offline Operation**: Works when the connection is lost
+- ✅ **Privacy**: Sensitive data stays on-site
 
-### معماری
+### Architecture
 
 ```
 ┌─────────────────────────────────────┐
@@ -55,10 +55,10 @@ Edge Computing Layer امکان پردازش و تحلیل داده‌ها را 
 └─────────────────────────────────────┘
 ```
 
-### استفاده
+### Usage
 
 ```python
-# ارسال داده برای تحلیل در Edge
+# Send data for analysis at the Edge
 POST /edge-computing/analyze
 {
   "sensor_data": [...],
@@ -66,7 +66,7 @@ POST /edge-computing/analyze
   "well_name": "WELL-001"
 }
 
-# پاسخ
+# Response
 {
   "analysis_id": "EDGE-...",
   "results": {...},
@@ -75,7 +75,7 @@ POST /edge-computing/analyze
 }
 ```
 
-### تنظیمات
+### Settings
 
 ```bash
 EDGE_COMPUTING_ENABLED=true
@@ -84,28 +84,28 @@ EDGE_SERVICE_URL=http://edge-computing-service:8009
 
 ---
 
-## <a name="industrial-security"></a>🔒 امنیت صنعتی
+## <a name="industrial-security"></a>🔒 Industrial Security
 
-### نمای کلی
+### Overview
 
-لایه امنیت صنعتی محافظت در برابر حملات خاص صنعتی را فراهم می‌کند:
+The industrial security layer provides protection against industry-specific attacks:
 
-- **Layer 1 (Physical)**: محافظت در سطح فیزیکی
-- **Layer 2 (Data Link)**: محافظت در برابر ARP poisoning و MAC spoofing
-- **Protocol Security**: محافظت در برابر حملات Modbus و OPC-UA
+- **Layer 1 (Physical)**: Protection at the physical level
+- **Layer 2 (Data Link)**: Protection against ARP poisoning and MAC spoofing
+- **Protocol Security**: Protection against Modbus and OPC-UA attacks
 
-### ویژگی‌های امنیتی
+### Security features
 
 #### 1. Modbus Security
 
 ```python
 from industrial_security import industrial_firewall, ModbusSecurityValidator
 
-# ثبت دستگاه مجاز
+# Register an authorized device
 validator = ModbusSecurityValidator()
 validator.register_device(device_id=1, device_key="secret_key")
 
-# اعتبارسنجی packet
+# Packet validation
 is_valid, error = validator.validate_modbus_packet(
     transaction_id=1,
     protocol_id=0,
@@ -124,7 +124,7 @@ from industrial_security import Layer2Security
 layer2 = Layer2Security()
 layer2.register_mac_ip_binding("00:11:22:33:44:55", "10.0.0.1")
 
-# اعتبارسنجی ARP
+# ARP validation
 is_valid, error = layer2.validate_arp_packet(
     source_mac="00:11:22:33:44:55",
     source_ip="10.0.0.1",
@@ -138,7 +138,7 @@ is_valid, error = layer2.validate_arp_packet(
 ```python
 from industrial_security import industrial_firewall
 
-# اعتبارسنجی packet صنعتی
+# Industrial packet validation
 is_valid, error = industrial_firewall.validate_industrial_packet(
     protocol="modbus",
     source_ip="10.0.0.1",
@@ -146,13 +146,13 @@ is_valid, error = industrial_firewall.validate_industrial_packet(
     packet_data=b"..."
 )
 
-# Block کردن دستگاه
+# Block a device
 industrial_firewall.block_device("10.0.0.100", "ip")
 ```
 
-### محافظت در برابر حملات
+### Protection against attacks
 
-| نوع حمله | محافظت |
+| Attack type | Protection |
 |---------|--------|
 | Packet Injection | ✅ Transaction ID validation |
 | Replay Attack | ✅ Command history tracking |
@@ -161,7 +161,7 @@ industrial_firewall.block_device("10.0.0.100", "ip")
 | Rate Limiting | ✅ Command rate limiting |
 | Unauthorized Writes | ✅ Address range validation |
 
-### تنظیمات
+### Settings
 
 ```bash
 INDUSTRIAL_SECURITY_ENABLED=true
@@ -174,25 +174,25 @@ LAYER2_SECURITY_ENABLED=true
 
 ## <a name="digital-twin-3d"></a>🎨 Digital Twin 3D BIM
 
-### نمای کلی
+### Overview
 
-Digital Twin 3D BIM مدل‌های سه‌بعدی تعاملی از تجهیزات را با وضعیت لحظه‌ای نمایش می‌دهد.
+Digital Twin 3D BIM displays interactive 3D models of the equipment with their real-time status.
 
-### ویژگی‌ها
+### Features
 
-- ✅ **3D Models**: مدل‌های سه‌بعدی تجهیزات
-- ✅ **Real-time State**: وضعیت لحظه‌ای از سنسورها
-- ✅ **Color Coding**: رنگ‌بندی بر اساس وضعیت
-- ✅ **Animation**: انیمیشن برای هشدارها
-- ✅ **Interactive**: قابلیت تعامل با مدل
+- ✅ **3D Models**: 3D models of the equipment
+- ✅ **Real-time State**: Real-time status from the sensors
+- ✅ **Color Coding**: Color coding by status
+- ✅ **Animation**: Animation for alerts
+- ✅ **Interactive**: Ability to interact with the model
 
 ### API
 
 ```python
-# دریافت صحنه 3D کامل
+# Get the complete 3D scene
 GET /digital-twin/bim3d/scene/{well_name}
 
-# پاسخ
+# Response
 {
   "scene_id": "scene-WELL-001",
   "well_name": "WELL-001",
@@ -217,21 +217,21 @@ GET /digital-twin/bim3d/scene/{well_name}
   ]
 }
 
-# دریافت وضعیت یک مدل خاص
+# Get the state of a specific model
 GET /digital-twin/bim3d/model/{model_id}/state
 ```
 
-### یکپارچه‌سازی Frontend
+### Frontend integration
 
 ```typescript
-// استفاده از Three.js یا Babylon.js برای رندرینگ 3D
+// Use Three.js or Babylon.js for 3D rendering
 import * as THREE from 'three';
 
-// بارگذاری مدل 3D
+// Load the 3D model
 const scene = await fetch('/api/digital-twin/bim3d/scene/WELL-001');
 const { models, states } = await scene.json();
 
-// ایجاد مدل 3D
+// Create the 3D model
 models.forEach(model => {
   const geometry = new THREE.BoxGeometry(...);
   const material = new THREE.MeshBasicMaterial({ 
@@ -244,27 +244,27 @@ models.forEach(model => {
 
 ---
 
-## <a name="connectivity"></a>📡 اتصال 5G و Satellite
+## <a name="connectivity"></a>📡 5G and Satellite Connectivity
 
-### نمای کلی
+### Overview
 
-Connectivity Manager مدیریت چندگانه اتصال را با failover خودکار فراهم می‌کند.
+The Connectivity Manager provides multi-connection management with automatic failover.
 
-### انواع اتصال
+### Connection types
 
-| نوع | Latency | Bandwidth | Cost | Use Case |
+| Type | Latency | Bandwidth | Cost | Use Case |
 |-----|---------|-----------|------|----------|
 | Ethernet | < 1ms | High | Low | Local network |
 | 5G | 5-20ms | Very High | Medium | Remote fields |
 | 4G | 20-50ms | High | Medium | Backup |
 | Satellite | 500-700ms | Medium | High | Very remote |
 
-### استفاده
+### Usage
 
 ```python
 from connectivity_manager import connectivity_manager, ConnectionType
 
-# ثبت اتصال 5G
+# Register a 5G connection
 connectivity_manager.register_connection(
     connection_id="5g-primary",
     connection_type=ConnectionType.CELLULAR_5G,
@@ -275,7 +275,7 @@ connectivity_manager.register_connection(
     }
 )
 
-# ثبت اتصال Satellite
+# Register a Satellite connection
 connectivity_manager.register_connection(
     connection_id="satellite-backup",
     connection_type=ConnectionType.SATELLITE,
@@ -286,10 +286,10 @@ connectivity_manager.register_connection(
     }
 )
 
-# انتخاب بهترین اتصال
+# Select the best connection
 best_connection = await connectivity_manager.select_best_connection()
 
-# شروع monitoring
+# Start monitoring
 await connectivity_manager.start_monitoring()
 ```
 
@@ -303,7 +303,7 @@ Priority Order:
 4. Satellite (last resort)
 ```
 
-### تنظیمات
+### Settings
 
 ```bash
 CONNECTIVITY_MANAGER_ENABLED=true
@@ -312,22 +312,22 @@ CONNECTION_PRIORITY=ethernet,5g,4g,satellite
 
 ---
 
-## <a name="erp-integration"></a>🔗 یکپارچگی ERP
+## <a name="erp-integration"></a>🔗 ERP Integration
 
-### نمای کلی
+### Overview
 
-ERP Integration Service امکان اتصال به سیستم‌های مدیریت منابع سازمانی (SAP, Oracle, Maximo) را فراهم می‌کند.
+The ERP Integration Service makes it possible to connect to enterprise resource planning systems (SAP, Oracle, Maximo).
 
-### ویژگی‌ها
+### Features
 
-- ✅ **Work Order Creation**: ایجاد خودکار Work Order از Alert
-- ✅ **Status Tracking**: ردیابی وضعیت Work Order
-- ✅ **Multi-ERP Support**: پشتیبانی از چندین سیستم ERP
-- ✅ **Auto-Integration**: یکپارچگی خودکار با Alert Service
+- ✅ **Work Order Creation**: Automatic Work Order creation from an Alert
+- ✅ **Status Tracking**: Work Order status tracking
+- ✅ **Multi-ERP Support**: Support for multiple ERP systems
+- ✅ **Auto-Integration**: Automatic integration with the Alert Service
 
-### استفاده
+### Usage
 
-#### 1. اتصال به SAP
+#### 1. Connecting to SAP
 
 ```python
 POST /erp-integration/erp/connect
@@ -341,7 +341,7 @@ POST /erp-integration/erp/connect
 }
 ```
 
-#### 2. ایجاد Work Order دستی
+#### 2. Creating a manual Work Order
 
 ```python
 POST /erp-integration/work-orders
@@ -355,22 +355,22 @@ POST /erp-integration/work-orders
 }
 ```
 
-#### 3. ایجاد خودکار از Alert
+#### 3. Automatic creation from an Alert
 
 ```python
-# فعال‌سازی auto-create
+# Enable auto-create
 ERP_AUTO_CREATE_WORK_ORDERS=true
 
-# هنگام ایجاد Alert بحرانی، Work Order به صورت خودکار ایجاد می‌شود
+# When a critical Alert is created, a Work Order is created automatically
 POST /alert-service/alerts
 {
   "severity": "critical",
   ...
 }
-# → Work Order در SAP ایجاد می‌شود
+# → The Work Order is created in SAP
 ```
 
-### جریان کار
+### Workflow
 
 ```
 Alert Created (Critical)
@@ -391,7 +391,7 @@ Linked to Alert
 Status Tracking
 ```
 
-### تنظیمات
+### Settings
 
 ```bash
 ERP_INTEGRATION_ENABLED=true
@@ -402,43 +402,43 @@ ERP_AUTO_CREATE_WORK_ORDERS=true
 
 ---
 
-## 🔧 یکپارچه‌سازی با سیستم موجود
+## 🔧 Integration with the existing system
 
 ### Edge Computing + Data Ingestion
 
 ```python
-# در data-ingestion-service
+# In data-ingestion-service
 if settings.EDGE_COMPUTING_ENABLED:
-    # ارسال به Edge برای پردازش اولیه
+    # Send to the Edge for initial processing
     edge_result = await edge_service.analyze(sensor_data)
-    # فقط نتایج مهم به Cloud ارسال می‌شوند
+    # Only the important results are sent to the Cloud
 ```
 
 ### Industrial Security + Modbus
 
 ```python
-# در data-ingestion-service
+# In data-ingestion-service
 modbus_client = ModbusTCPClient(host, port)
-# تمام packetها به صورت خودکار validate می‌شوند
+# All packets are validated automatically
 ```
 
 ### Digital Twin 3D + Real-time Data
 
 ```python
-# Digital Twin به صورت خودکار از TimescaleDB داده می‌خواند
-# و وضعیت لحظه‌ای را در مدل 3D نمایش می‌دهد
+# The Digital Twin reads data from TimescaleDB automatically
+# and displays the real-time status in the 3D model
 ```
 
 ### ERP + Alert Service
 
 ```python
-# Alert Service به صورت خودکار Work Order ایجاد می‌کند
-# برای Alertهای بحرانی
+# The Alert Service creates a Work Order automatically
+# for critical Alerts
 ```
 
 ---
 
-## 📊 Monitoring و Metrics
+## 📊 Monitoring and Metrics
 
 ### Edge Computing Metrics
 
@@ -474,7 +474,7 @@ erp_integration_errors_total
 
 ---
 
-## 🔗 منابع بیشتر
+## 🔗 More resources
 
 - [OGIM Architecture](./ARCHITECTURE.md)
 - [Edge Computing Best Practices](https://www.edgecomputing.org/)
@@ -483,6 +483,6 @@ erp_integration_errors_total
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

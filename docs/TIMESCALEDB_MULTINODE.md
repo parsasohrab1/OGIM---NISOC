@@ -1,42 +1,42 @@
 # TimescaleDB Multi-node Cluster
 
-این مستند راهنمای پیاده‌سازی و مدیریت TimescaleDB Multi-node Cluster برای مدیریت حجم عظیم داده‌های سنسوری (۱۰ گیگابایت در روز) است.
+This document is a guide to implementing and managing a TimescaleDB Multi-node Cluster for handling the huge volume of sensor data (10 gigabytes per day).
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری Cluster](#architecture)
-3. [نصب و راه‌اندازی](#installation)
-4. [پیکربندی](#configuration)
-5. [مدیریت Cluster](#management)
-6. [بهینه‌سازی برای حجم بالا](#optimization)
-7. [نظارت و Monitoring](#monitoring)
+1. [Overview](#overview)
+2. [Cluster architecture](#architecture)
+3. [Installation and setup](#installation)
+4. [Configuration](#configuration)
+5. [Cluster management](#management)
+6. [Optimization for high volume](#optimization)
+7. [Monitoring](#monitoring)
 8. [Troubleshooting](#troubleshooting)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-TimescaleDB Multi-node Cluster امکان توزیع داده‌ها و بار پردازش را در چندین node فراهم می‌کند:
+The TimescaleDB Multi-node Cluster makes it possible to distribute data and processing load across several nodes:
 
-- ✅ **Access Nodes**: Nodeهای coordinator که queryها را دریافت و توزیع می‌کنند
-- ✅ **Data Nodes**: Nodeهای ذخیره‌سازی که داده‌ها را نگهداری می‌کنند
-- ✅ **Distributed Hypertables**: توزیع خودکار داده‌ها در data nodes
-- ✅ **Load Balancing**: توزیع بار بین access nodes
-- ✅ **High Availability**: قابلیت افزونگی و failover
+- ✅ **Access Nodes**: Coordinator nodes that receive and distribute queries
+- ✅ **Data Nodes**: Storage nodes that hold the data
+- ✅ **Distributed Hypertables**: Automatic distribution of data across data nodes
+- ✅ **Load Balancing**: Load distribution between access nodes
+- ✅ **High Availability**: Redundancy and failover capability
 
-### مزایای Multi-node
+### Benefits of Multi-node
 
-| ویژگی | Single-node | Multi-node |
+| Feature | Single-node | Multi-node |
 |-------|-------------|------------|
-| ظرفیت ذخیره‌سازی | محدود | نامحدود (افزودن node) |
-| Throughput | محدود | مقیاس‌پذیر |
-| Query Performance | محدود | موازی‌سازی |
-| High Availability | ندارد | دارد |
+| Storage capacity | Limited | Unlimited (add nodes) |
+| Throughput | Limited | Scalable |
+| Query Performance | Limited | Parallelized |
+| High Availability | No | Yes |
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری Cluster
+## <a name="architecture"></a>🏗️ Cluster architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -72,62 +72,62 @@ TimescaleDB Multi-node Cluster امکان توزیع داده‌ها و بار �
 └─────────┘ └─────────┘ └─────────┘
 ```
 
-### اجزای Cluster
+### Cluster components
 
 1. **Access Node (Coordinator)**
-   - دریافت queryها از application
-   - توزیع queryها به data nodes
-   - جمع‌آوری نتایج
-   - مدیریت metadata
+   - Receives queries from the application
+   - Distributes queries to the data nodes
+   - Collects the results
+   - Manages metadata
 
 2. **Data Nodes**
-   - ذخیره‌سازی داده‌ها
-   - پردازش queryهای محلی
-   - Replication (اختیاری)
+   - Stores the data
+   - Processes local queries
+   - Replication (optional)
 
 3. **Distributed Hypertable**
-   - توزیع خودکار داده‌ها
-   - Partitioning بر اساس time و space
-   - مدیریت chunks
+   - Automatic data distribution
+   - Partitioning by time and space
+   - Managing chunks
 
 ---
 
-## <a name="installation"></a>🚀 نصب و راه‌اندازی
+## <a name="installation"></a>🚀 Installation and setup
 
-### روش 1: Docker Compose (Development)
+### Method 1: Docker Compose (Development)
 
 ```bash
-# راه‌اندازی cluster
+# Start the cluster
 docker-compose -f docker-compose.multinode.yml up -d
 
-# تنظیم cluster
+# Configure the cluster
 export TIMESCALE_ACCESS_NODE=timescaledb-access:5432
 export TIMESCALE_DATA_NODES=timescaledb-data1:5432,timescaledb-data2:5432,timescaledb-data3:5432
 ./scripts/setup_timescale_cluster.sh
 ```
 
-### روش 2: Kubernetes (Production)
+### Method 2: Kubernetes (Production)
 
 ```bash
-# اعمال manifests
+# Apply the manifests
 kubectl apply -f infrastructure/kubernetes/timescaledb-multinode.yaml
 
-# بررسی وضعیت
+# Check the status
 kubectl get pods -l app=timescaledb
 kubectl get svc -l app=timescaledb
 
-# تنظیم cluster (بعد از آماده شدن pods)
+# Configure the cluster (after the pods are ready)
 kubectl exec -it timescaledb-access-0 -- psql -U ogim_user -d ogim_tsdb
 ```
 
 ---
 
-## <a name="configuration"></a>⚙️ پیکربندی
+## <a name="configuration"></a>⚙️ Configuration
 
 ### Environment Variables
 
 ```bash
-# فعال‌سازی Multi-node
+# Enable Multi-node
 TIMESCALE_MULTI_NODE_ENABLED=true
 
 # Access Nodes (comma-separated)
@@ -145,7 +145,7 @@ TIMESCALE_CHUNK_TIME_INTERVAL=1 day
 TIMESCALE_NUMBER_PARTITIONS=4
 ```
 
-### تنظیمات PostgreSQL (برای حجم بالا)
+### PostgreSQL settings (for high volume)
 
 ```conf
 # postgresql.conf
@@ -161,7 +161,7 @@ work_mem = 10MB
 min_wal_size = 1GB
 max_wal_size = 4GB
 
-# برای high-volume writes
+# For high-volume writes
 synchronous_commit = off
 commit_delay = 10000
 commit_siblings = 5
@@ -169,37 +169,37 @@ commit_siblings = 5
 
 ---
 
-## <a name="management"></a>🔧 مدیریت Cluster
+## <a name="management"></a>🔧 Cluster management
 
-### استفاده از Management Script
+### Using the Management Script
 
 ```bash
-# لیست data nodes
+# List data nodes
 python scripts/manage_timescale_cluster.py list
 
-# افزودن data node
+# Add a data node
 python scripts/manage_timescale_cluster.py add-node timescaledb-data4:5432
 
-# حذف data node
+# Remove a data node
 python scripts/manage_timescale_cluster.py remove-node data4
 
-# ایجاد distributed hypertable
+# Create a distributed hypertable
 python scripts/manage_timescale_cluster.py create-hypertable sensor_data --time-column timestamp --partition-column tag_id
 
-# نمایش وضعیت cluster
+# Show the cluster status
 python scripts/manage_timescale_cluster.py status
 
-# بهینه‌سازی برای حجم بالا
+# Optimize for high volume
 python scripts/manage_timescale_cluster.py optimize
 ```
 
-### دستورات SQL مستقیم
+### Direct SQL commands
 
 ```sql
--- لیست data nodes
+-- List data nodes
 SELECT * FROM timescaledb_information.data_nodes;
 
--- افزودن data node
+-- Add a data node
 SELECT add_data_node(
     'data4',
     host => 'timescaledb-data4',
@@ -209,7 +209,7 @@ SELECT add_data_node(
     password => 'ogim_password'
 );
 
--- ایجاد distributed hypertable
+-- Create a distributed hypertable
 SELECT create_distributed_hypertable(
     'sensor_data',
     'timestamp',
@@ -218,54 +218,54 @@ SELECT create_distributed_hypertable(
     chunk_time_interval => INTERVAL '1 day'
 );
 
--- نمایش وضعیت hypertable
+-- Show the hypertable status
 SELECT * FROM timescaledb_information.hypertables WHERE is_distributed = true;
 ```
 
 ---
 
-## <a name="optimization"></a>⚡ بهینه‌سازی برای حجم بالا (10GB/day)
+## <a name="optimization"></a>⚡ Optimization for high volume (10GB/day)
 
 ### 1. Chunk Configuration
 
 ```sql
--- تنظیم chunk interval به 1 روز
+-- Set the chunk interval to 1 day
 SELECT set_chunk_time_interval('sensor_data', INTERVAL '1 day');
 ```
 
-**محاسبه:**
+**Calculation:**
 - 10GB/day = ~116MB/hour
-- Chunk size مناسب: 1-2GB
-- Chunk interval: 1 day (مناسب برای 10GB/day)
+- Suitable chunk size: 1-2GB
+- Chunk interval: 1 day (suitable for 10GB/day)
 
 ### 2. Compression
 
 ```sql
--- فعال‌سازی compression
+-- Enable compression
 ALTER TABLE sensor_data SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'tag_id'
 );
 
--- Policy برای compression (compress chunks قدیمی‌تر از 7 روز)
+-- Compression policy (compress chunks older than 7 days)
 SELECT add_compression_policy('sensor_data', INTERVAL '7 days');
 ```
 
 ### 3. Retention Policy
 
 ```sql
--- حذف خودکار chunks قدیمی‌تر از 1 سال
+-- Automatically drop chunks older than 1 year
 SELECT add_retention_policy('sensor_data', INTERVAL '1 year');
 ```
 
 ### 4. Indexes
 
 ```sql
--- Index برای queryهای رایج
+-- Index for common queries
 CREATE INDEX idx_sensor_data_tag_timestamp 
 ON sensor_data (tag_id, timestamp DESC);
 
--- Index برای time-range queries
+-- Index for time-range queries
 CREATE INDEX idx_sensor_data_timestamp 
 ON sensor_data (timestamp DESC);
 ```
@@ -273,7 +273,7 @@ ON sensor_data (timestamp DESC);
 ### 5. Autovacuum Optimization
 
 ```sql
--- بهینه‌سازی autovacuum برای high-volume writes
+-- Optimize autovacuum for high-volume writes
 ALTER TABLE sensor_data SET (
     autovacuum_vacuum_scale_factor = 0.1,
     autovacuum_analyze_scale_factor = 0.05
@@ -283,25 +283,25 @@ ALTER TABLE sensor_data SET (
 ### 6. Connection Pooling
 
 ```python
-# در database.py
+# In database.py
 timescale_engine = create_engine(
     connection_url,
-    pool_size=20,        # افزایش pool size
-    max_overflow=40,    # افزایش overflow
+    pool_size=20,        # increase the pool size
+    max_overflow=40,    # increase the overflow
     pool_recycle=3600   # Recycle connections
 )
 ```
 
 ---
 
-## <a name="monitoring"></a>📊 نظارت و Monitoring
+## <a name="monitoring"></a>📊 Monitoring
 
-### متریک‌های کلیدی
+### Key metrics
 
 #### 1. Cluster Health
 
 ```sql
--- وضعیت data nodes
+-- Data node status
 SELECT 
     node_name,
     host,
@@ -310,7 +310,7 @@ SELECT
     node_created
 FROM timescaledb_information.data_nodes;
 
--- تعداد chunks در هر data node
+-- Number of chunks on each data node
 SELECT 
     node_name,
     COUNT(*) as chunk_count
@@ -322,7 +322,7 @@ GROUP BY node_name;
 #### 2. Storage Usage
 
 ```sql
--- حجم داده در هر data node
+-- Data volume on each data node
 SELECT 
     node_name,
     pg_size_pretty(SUM(chunk_size)) as total_size
@@ -360,68 +360,68 @@ timescaledb_data_nodes_total
 
 ## <a name="troubleshooting"></a>🔍 Troubleshooting
 
-### مشکل: Data node اضافه نمی‌شود
+### Problem: A data node cannot be added
 
-**راه‌حل:**
-1. بررسی اتصال network بین access node و data node
-2. بررسی credentials
-3. بررسی firewall rules
-4. بررسی logs: `kubectl logs timescaledb-access-0`
+**Solution:**
+1. Check the network connection between the access node and the data node
+2. Check the credentials
+3. Check the firewall rules
+4. Check the logs: `kubectl logs timescaledb-access-0`
 
-### مشکل: Queryها کند هستند
+### Problem: Queries are slow
 
-**راه‌حل:**
-1. بررسی indexes
-2. بررسی query plan: `EXPLAIN ANALYZE`
-3. بررسی توزیع داده‌ها در data nodes
-4. تنظیم `work_mem` و `shared_buffers`
+**Solution:**
+1. Check the indexes
+2. Check the query plan: `EXPLAIN ANALYZE`
+3. Check the data distribution across the data nodes
+4. Tune `work_mem` and `shared_buffers`
 
-### مشکل: داده‌ها توزیع نشده‌اند
+### Problem: Data is not distributed
 
-**راه‌حل:**
-1. بررسی اینکه hypertable distributed است:
+**Solution:**
+1. Check that the hypertable is distributed:
    ```sql
    SELECT is_distributed FROM timescaledb_information.hypertables 
    WHERE hypertable_name = 'sensor_data';
    ```
-2. بررسی data nodes:
+2. Check the data nodes:
    ```sql
    SELECT * FROM timescaledb_information.data_nodes;
    ```
-3. Re-attach data nodes اگر لازم باشد
+3. Re-attach the data nodes if necessary
 
 ---
 
-## 📈 ظرفیت و مقیاس‌پذیری
+## 📈 Capacity and scalability
 
-### محاسبه ظرفیت
+### Capacity calculation
 
-برای **10GB/day**:
+For **10GB/day**:
 
 - **Daily**: 10GB
 - **Monthly**: ~300GB
 - **Yearly**: ~3.6TB
 
-### توصیه‌های Storage
+### Storage recommendations
 
 - **Data Node 1**: 500GB (6 months)
 - **Data Node 2**: 500GB (6 months)
 - **Data Node 3**: 500GB (6 months)
-- **Total**: 1.5TB (18 months با compression)
+- **Total**: 1.5TB (18 months with compression)
 
-### افزودن Data Node
+### Adding a Data Node
 
 ```bash
-# افزودن data node جدید
+# Add a new data node
 python scripts/manage_timescale_cluster.py add-node timescaledb-data4:5432
 
-# Attach به hypertable
+# Attach to the hypertable
 SELECT attach_data_node('data4', 'sensor_data');
 ```
 
 ---
 
-## 🔗 منابع بیشتر
+## 🔗 More resources
 
 - [TimescaleDB Multi-node Documentation](https://docs.timescale.com/use-timescale/latest/multinode-timescaledb/)
 - [TimescaleDB Best Practices](https://docs.timescale.com/use-timescale/latest/best-practices/)
@@ -429,6 +429,6 @@ SELECT attach_data_node('data4', 'sensor_data');
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

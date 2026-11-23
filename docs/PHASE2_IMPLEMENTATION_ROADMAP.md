@@ -1,81 +1,81 @@
-# 🚀 فاز 2: راهنمای پیاده‌سازی - پیشنهادات مهم
+# 🚀 Phase 2: Implementation Guide - Important Recommendations
 
-**تاریخ:** دسامبر 2025  
-**مدت زمان:** 6 ماه  
-**اولویت:** Important  
-**وضعیت:** Planning
+**Date:** December 2025
+**Duration:** 6 months
+**Priority:** Important
+**Status:** Planning
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [Timeline و Milestones](#timeline)
+1. [Overview](#overview)
+2. [Timeline and Milestones](#timeline)
 3. [6. Mobile Application](#mobile-app)
 4. [7. Advanced Analytics & BI](#analytics-bi)
 5. [8. Workflow Automation](#workflow)
 6. [9. Enhanced Digital Twin](#digital-twin)
 7. [10. Advanced Security Features](#security)
-8. [Dependencies و Risks](#dependencies)
+8. [Dependencies and Risks](#dependencies)
 9. [Testing Strategy](#testing)
 10. [Deployment Plan](#deployment)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-فاز 2 شامل 5 پیشنهاد مهم است که باید در 6 ماه آینده پیاده‌سازی شوند. این پیشنهادات قابلیت‌های پیشرفته‌ای را اضافه می‌کنند که adoption و user experience را بهبود می‌بخشند.
+Phase 2 includes 5 important recommendations that must be implemented over the next 6 months. These recommendations add advanced capabilities that improve adoption and user experience.
 
-### اهداف کلی فاز 2
+### Overall Phase 2 goals
 
-- ✅ دسترسی mobile به سیستم از هر مکان
-- ✅ بهبود decision-making با analytics پیشرفته
-- ✅ کاهش manual work با workflow automation
-- ✅ بهبود visualization با digital twin پیشرفته
-- ✅ افزایش امنیت با zero trust architecture
+- ✅ Mobile access to the system from anywhere
+- ✅ Improved decision-making with advanced analytics
+- ✅ Reduced manual work with workflow automation
+- ✅ Improved visualization with an advanced digital twin
+- ✅ Increased security with zero trust architecture
 
 ---
 
-## <a name="timeline"></a>📅 Timeline و Milestones
+## <a name="timeline"></a>📅 Timeline and Milestones
 
-### ماه 4-5: Mobile App + Analytics
+### Months 4-5: Mobile App + Analytics
 
-**هفته 13-16: Mobile Application**
-- ✅ انتخاب تکنولوژی (React Native/Flutter)
-- ✅ طراحی UI/UX برای mobile
-- ✅ پیاده‌سازی core features
+**Weeks 13-16: Mobile Application**
+- ✅ Choose the technology (React Native/Flutter)
+- ✅ Design the UI/UX for mobile
+- ✅ Implement core features
 - ✅ Push notifications
 - ✅ Offline mode
 
-**هفته 17-20: Advanced Analytics & BI**
+**Weeks 17-20: Advanced Analytics & BI**
 - ✅ BI Integration (Tableau, Power BI)
 - ✅ Custom Report Builder
 - ✅ Ad-hoc Query Interface
 - ✅ Report Sharing
 
-### ماه 6-7: Workflow + Digital Twin
+### Months 6-7: Workflow + Digital Twin
 
-**هفته 21-24: Workflow Automation**
+**Weeks 21-24: Workflow Automation**
 - ✅ Apache Airflow Setup
 - ✅ Visual Workflow Builder
 - ✅ Workflow Templates
 - ✅ Event-driven Workflows
 
-**هفته 25-28: Enhanced Digital Twin**
+**Weeks 25-28: Enhanced Digital Twin**
 - ✅ 3D Visualization Improvements
 - ✅ AR Integration
 - ✅ Physics-based Simulation
 - ✅ What-if Analysis
 
-### ماه 8-9: Security + Integration
+### Months 8-9: Security + Integration
 
-**هفته 29-32: Advanced Security**
+**Weeks 29-32: Advanced Security**
 - ✅ Zero Trust Architecture
 - ✅ SIEM Integration
 - ✅ Advanced Threat Detection
 - ✅ Security Audit Automation
 
-**هفته 33-36: Integration و Testing**
+**Weeks 33-36: Integration and Testing**
 - ✅ Integration testing
 - ✅ Security testing
 - ✅ User acceptance testing
@@ -86,23 +86,23 @@
 
 ## <a name="mobile-app"></a>6️⃣ Mobile Application
 
-### هدف
-دسترسی mobile به سیستم با قابلیت‌های offline و push notifications
+### Goal
+Mobile access to the system with offline capabilities and push notifications
 
-### انتخاب تکنولوژی
+### Technology selection
 
-**React Native** (پیشنهاد شده)
-- ✅ Code sharing با React web app
+**React Native** (recommended)
+- ✅ Code sharing with the React web app
 - ✅ Native performance
 - ✅ Large community
 - ✅ Cross-platform (iOS + Android)
 
-**Flutter** (جایگزین)
+**Flutter** (alternative)
 - ✅ Excellent performance
 - ✅ Beautiful UI
 - ✅ Single codebase
 
-### معماری
+### Architecture
 
 ```
 Mobile App (React Native)
@@ -113,7 +113,7 @@ Mobile App (React Native)
     └─── Offline Sync
 ```
 
-### پیاده‌سازی
+### Implementation
 
 ```typescript
 // mobile/src/services/api.ts
@@ -276,20 +276,20 @@ export function EquipmentQRScanner({ onScan }: { onScan: (equipmentId: string) =
 
 ### Milestones
 
-- [ ] هفته 13: انتخاب تکنولوژی و setup project
-- [ ] هفته 14: طراحی UI/UX و core screens
-- [ ] هفته 15: پیاده‌سازی API integration و offline mode
-- [ ] هفته 16: Push notifications و QR scanning
-- [ ] هفته 16: Testing و optimization
+- [ ] Week 13: Choose the technology and set up the project
+- [ ] Week 14: Design the UI/UX and core screens
+- [ ] Week 15: Implement API integration and offline mode
+- [ ] Week 16: Push notifications and QR scanning
+- [ ] Week 16: Testing and optimization
 
 ---
 
 ## <a name="analytics-bi"></a>7️⃣ Advanced Analytics & BI
 
-### هدف
-بهبود decision-making با analytics پیشرفته و BI integration
+### Goal
+Improve decision-making with advanced analytics and BI integration
 
-### معماری
+### Architecture
 
 ```
 BI Tools (Tableau, Power BI)
@@ -299,7 +299,7 @@ BI Tools (Tableau, Power BI)
     └─── Custom Report Builder
 ```
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/reporting-service/bi_integration.py
@@ -486,19 +486,19 @@ export function ReportBuilderPage() {
 
 ### Milestones
 
-- [ ] هفته 17: BI Integration API (Tableau, Power BI)
-- [ ] هفته 18: Custom Report Builder UI
-- [ ] هفته 19: Ad-hoc Query Interface
-- [ ] هفته 20: Report Sharing و Collaboration
+- [ ] Week 17: BI Integration API (Tableau, Power BI)
+- [ ] Week 18: Custom Report Builder UI
+- [ ] Week 19: Ad-hoc Query Interface
+- [ ] Week 20: Report Sharing and Collaboration
 
 ---
 
 ## <a name="workflow"></a>8️⃣ Workflow Automation
 
-### هدف
-کاهش manual work با workflow automation
+### Goal
+Reduce manual work with workflow automation
 
-### معماری
+### Architecture
 
 ```
 Apache Airflow
@@ -509,7 +509,7 @@ Apache Airflow
     └─── Template Library
 ```
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # infrastructure/airflow/dags/maintenance_scheduler.py
@@ -645,19 +645,19 @@ export function Workflows() {
 
 ### Milestones
 
-- [ ] هفته 21: Apache Airflow Setup
-- [ ] هفته 22: Visual Workflow Builder
-- [ ] هفته 23: Workflow Templates Library
-- [ ] هفته 24: Event-driven Workflows
+- [ ] Week 21: Apache Airflow Setup
+- [ ] Week 22: Visual Workflow Builder
+- [ ] Week 23: Workflow Templates Library
+- [ ] Week 24: Event-driven Workflows
 
 ---
 
 ## <a name="digital-twin"></a>9️⃣ Enhanced Digital Twin
 
-### هدف
-بهبود visualization با 3D پیشرفته و AR integration
+### Goal
+Improve visualization with advanced 3D and AR integration
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/digital-twin-service/physics_engine.py
@@ -734,19 +734,19 @@ export function AREquipmentViewer({ equipmentId }: { equipmentId: string }) {
 
 ### Milestones
 
-- [ ] هفته 25: 3D Visualization Improvements
-- [ ] هفته 26: AR Integration
-- [ ] هفته 27: Physics-based Simulation
-- [ ] هفته 28: What-if Analysis
+- [ ] Week 25: 3D Visualization Improvements
+- [ ] Week 26: AR Integration
+- [ ] Week 27: Physics-based Simulation
+- [ ] Week 28: What-if Analysis
 
 ---
 
 ## <a name="security"></a>🔟 Advanced Security Features
 
-### هدف
-افزایش امنیت با Zero Trust Architecture
+### Goal
+Increase security with Zero Trust Architecture
 
-### پیاده‌سازی
+### Implementation
 
 ```python
 # backend/shared/zero_trust.py
@@ -849,32 +849,32 @@ class SIEMIntegration:
 
 ### Milestones
 
-- [ ] هفته 29: Zero Trust Architecture Design
-- [ ] هفته 30: Zero Trust Implementation
-- [ ] هفته 31: SIEM Integration
-- [ ] هفته 32: Advanced Threat Detection
+- [ ] Week 29: Zero Trust Architecture Design
+- [ ] Week 30: Zero Trust Implementation
+- [ ] Week 31: SIEM Integration
+- [ ] Week 32: Advanced Threat Detection
 
 ---
 
-## <a name="dependencies"></a>🔗 Dependencies و Risks
+## <a name="dependencies"></a>🔗 Dependencies and Risks
 
 ### Dependencies
 
 1. **Infrastructure:**
-   - Apache Airflow برای workflow automation
-   - Firebase/APNS برای push notifications
+   - Apache Airflow for workflow automation
+   - Firebase/APNS for push notifications
    - Tableau/Power BI APIs
    - AR frameworks (ARKit/ARCore)
 
 2. **Libraries:**
-   - React Native یا Flutter
+   - React Native or Flutter
    - Airflow Python SDK
    - BI tool SDKs
 
 ### Risks
 
-1. **Mobile Development:** Learning curve برای تیم
-   - **Mitigation:** Training و external consultant
+1. **Mobile Development:** Learning curve for the team
+   - **Mitigation:** Training and an external consultant
 
 2. **BI Integration:** API limitations
    - **Mitigation:** Start with simple integrations
@@ -887,9 +887,9 @@ class SIEMIntegration:
 ## <a name="testing"></a>🧪 Testing Strategy
 
 ### Mobile App Testing
-- Unit tests با Jest
+- Unit tests with Jest
 - Integration tests
-- E2E tests با Detox/Appium
+- E2E tests with Detox/Appium
 - Device testing (iOS + Android)
 
 ### BI Integration Testing
@@ -912,13 +912,13 @@ class SIEMIntegration:
 ## <a name="deployment"></a>🚀 Deployment Plan
 
 ### Phase 1: Mobile App Beta
-- Beta testing با limited users
+- Beta testing with limited users
 - Collect feedback
 - Iterate
 
 ### Phase 2: Gradual Rollout
-- 25% users برای 2 هفته
-- 50% users برای 2 هفته
+- 25% of users for 2 weeks
+- 50% of users for 2 weeks
 - 100% users
 
 ### Phase 3: Full Deployment
@@ -940,6 +940,6 @@ class SIEMIntegration:
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

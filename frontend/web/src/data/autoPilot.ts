@@ -1,4 +1,4 @@
-/** اپراتور هوشمند — کنترل خودکار متغیرهای دستی و بازیابی افت تولید */
+/** Smart operator — automatic control of manual variables and recovery of production decline */
 
 export type ControllableKey =
   | 'choke'
@@ -14,19 +14,19 @@ export type ControllableVar = {
   unit: string
   min: number
   max: number
-  /** نقطه بهینه عملیاتی — انحراف از آن باعث افت می‌شود */
+  /** Operating optimum — deviation from it causes decline */
   optimal: number
   step: number
-  /** وزن اثر روی دبی نفت (بالاتر = حساس‌تر) */
+  /** Weight of the effect on oil rate (higher = more sensitive) */
   oilWeight: number
-  /** وزن اثر روی Water Cut */
+  /** Weight of the effect on Water Cut */
   wcWeight: number
 }
 
 export const CONTROLLABLE_VARS: ControllableVar[] = [
   {
     key: 'choke',
-    nameFa: 'بازشدگی شیر کنترل جریان',
+    nameFa: 'Choke valve opening',
     nameEn: 'Choke Opening',
     unit: '%',
     min: 10,
@@ -38,7 +38,7 @@ export const CONTROLLABLE_VARS: ControllableVar[] = [
   },
   {
     key: 'esp_speed',
-    nameFa: 'سرعت پمپ درون‌چاهی الکتریکی',
+    nameFa: 'Electric submersible pump speed',
     nameEn: 'ESP Speed',
     unit: '%',
     min: 40,
@@ -50,7 +50,7 @@ export const CONTROLLABLE_VARS: ControllableVar[] = [
   },
   {
     key: 'gas_lift',
-    nameFa: 'نرخ گاز لیفت',
+    nameFa: 'Gas lift rate',
     nameEn: 'Gas Lift Rate',
     unit: '%',
     min: 0,
@@ -62,7 +62,7 @@ export const CONTROLLABLE_VARS: ControllableVar[] = [
   },
   {
     key: 'separator_p',
-    nameFa: 'ست‌پوینت فشار جداکننده',
+    nameFa: 'Separator pressure setpoint',
     nameEn: 'Separator Pressure SP',
     unit: 'psi',
     min: 80,
@@ -74,7 +74,7 @@ export const CONTROLLABLE_VARS: ControllableVar[] = [
   },
   {
     key: 'water_injection',
-    nameFa: 'نرخ تزریق آب',
+    nameFa: 'Water injection rate',
     nameEn: 'Water Injection',
     unit: '%',
     min: 0,
@@ -96,13 +96,13 @@ export function defaultControls(): ControlState {
 }
 
 export type ProductionImpact = {
-  /** ضریب دبی نفت نسبت به پایه (≈1 در حالت بهینه) */
+  /** Oil rate multiplier relative to the base (≈1 at the optimum) */
   oilFactor: number
-  /** تغییر Water Cut بر حسب درصد مطلق */
+  /** Water Cut change in absolute percent */
   wcDelta: number
-  /** افت نسبی تولید نسبت به پایه (0–1) */
+  /** Relative production decline versus the base (0–1) */
   declineFraction: number
-  /** شدت انحراف از بهینه (0–1) */
+  /** Magnitude of deviation from the optimum (0–1) */
   deviationScore: number
   perVar: Array<{
     key: ControllableKey
@@ -118,7 +118,7 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n))
 }
 
-/** اثر تنظیمات دستی روی تولید — انحراف از بهینه = افت */
+/** Effect of manual settings on production — deviation from the optimum = decline */
 export function computeProductionImpact(controls: ControlState): ProductionImpact {
   let penaltySum = 0
   let weightSum = 0
@@ -133,7 +133,7 @@ export function computeProductionImpact(controls: ControlState): ProductionImpac
     const oilPenalty = absDev * absDev * v.oilWeight
     penaltySum += oilPenalty
     weightSum += v.oilWeight
-    // choke زیاد یا تزریق زیاد → WC بالا؛ ESP خیلی بالا هم کمی WC
+    // high choke or high injection → high WC; very high ESP also slightly raises WC
     wcDelta += normDev * v.wcWeight * 8
     deviationAcc += absDev
     return {
@@ -147,7 +147,7 @@ export function computeProductionImpact(controls: ControlState): ProductionImpac
   })
 
   const avgPenalty = weightSum > 0 ? penaltySum / weightSum : 0
-  // oilFactor بین ~0.45 تا 1.05
+  // oilFactor between ~0.45 and 1.05
   const oilFactor = clamp(1.02 - avgPenalty * 1.35, 0.45, 1.05)
   const declineFraction = clamp(1 - oilFactor, 0, 1)
 
@@ -177,8 +177,8 @@ export type AutoPilotStepResult = {
 }
 
 /**
- * یک گام اپراتور هوشمند: متغیرهای منحرف‌شده را به‌سمت بهینه برمی‌گرداند
- * تا افت ناشی از تنظیم دستی جبران شود.
+ * One smart operator step: returns the deviated variables toward the optimum
+ * to compensate for the decline caused by manual settings.
  */
 export function autoPilotStep(
   controls: ControlState,
@@ -194,7 +194,7 @@ export function autoPilotStep(
     return { controls: next, actions, recovered: true, status: 'stable' }
   }
 
-  // اولویت با متغیرهایی که بیشترین جریمه نفت را دارند
+  // Priority goes to the variables with the largest oil penalty
   const ranked = [...impact.perVar].sort((a, b) => b.oilPenalty - a.oilPenalty)
 
   for (const row of ranked) {
@@ -219,8 +219,8 @@ export function autoPilotStep(
       to: moved,
       reason:
         impact.declineFraction >= declineThreshold
-          ? `جبران افت تولید ${(impact.declineFraction * 100).toFixed(1)}٪ — بازگشت به‌سمت بهینه`
-          : 'هم‌ترازی با نقطه بهینه عملیاتی',
+          ? `Compensating ${(impact.declineFraction * 100).toFixed(1)}% production decline — returning toward the optimum`
+          : 'Aligned with the optimal operating point',
     })
   }
 

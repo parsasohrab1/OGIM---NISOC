@@ -1,6 +1,6 @@
 """
 Mutual TLS (mTLS) Manager for Inter-Service Communication
-مدیریت mTLS برای ارتباطات بین میکروسرویس‌ها
+Managing mTLS for communication between microservices
 """
 
 import os

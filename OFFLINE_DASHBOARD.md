@@ -1,46 +1,46 @@
-# داشبورد زنده بدون اینترنت
+# Live Dashboard Without Internet
 
-اجرای کامل و زنده رابط میدان مارون **بدون اینترنت** و **بدون سرویس‌های بک‌اند**.
+Run the Maroun field interface fully and live **without internet** and **without backend services**.
 
-## پیش‌نیاز (یک‌بار، با اینترنت)
+## Prerequisite (once, with internet)
 
 ```powershell
 cd frontend\web
 npm install
 ```
 
-پس از نصب `node_modules` دیگر به اینترنت نیاز نیست.
+After installing `node_modules`, internet is no longer needed.
 
-## اجرا
+## Running
 
-از ریشه پروژه:
+From the project root:
 
 ```powershell
 .\start_offline_dashboard.ps1
 ```
 
-یا:
+Or:
 
 ```powershell
 cd frontend\web
 npm run dev:offline
 ```
 
-سپس باز کنید: [http://127.0.0.1:3000](http://127.0.0.1:3000)
+Then open: [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
-## چه چیزی زنده است؟
+## What is live?
 
-| بخش | منبع داده |
+| Section | Data source |
 |-----|-----------|
-| داشبورد / چاه‌ها / اسکادا | شبیه‌سازی محلی `marunField` (به‌روزرسانی دوره‌ای) |
-| جریان زنده | `localRealtimeStream` هر ۴ ثانیه |
-| هشدارها + پیامک | `marunAlerts` + صف محلی مرورگر |
-| عمر مفید تجهیزات | `marunRul` |
-| اپراتور هوشمند | منطق محلی در داشبورد |
+| Dashboard / wells / SCADA | Local `marunField` simulation (periodic updates) |
+| Live stream | `localRealtimeStream` every 4 seconds |
+| Alerts + SMS | `marunAlerts` + local browser queue |
+| Equipment remaining useful life | `marunRul` |
+| Smart operator | Local logic in the dashboard |
 
-نشان «زنده آفلاین» در نوار بالا نمایش داده می‌شود.
+An "Offline live" badge is shown in the top bar.
 
-## ساخت نسخه قابل حمل (اختیاری)
+## Building a portable version (optional)
 
 ```powershell
 cd frontend\web
@@ -48,9 +48,9 @@ npm run build:offline
 npm run preview:offline
 ```
 
-پس از یک‌بار باز کردن در مرورگر، Service Worker دارایی‌های استاتیک را کش می‌کند.
+After opening it once in the browser, the Service Worker caches the static assets.
 
-## نکته
+## Note
 
-- حالت آفلاین با `VITE_OFFLINE_LIVE=true` (فایل `.env.offline`) فعال است.
-- اگر بک‌اند محلی در دسترس باشد ولی اینترنت قطع باشد، پس از چند ثانیه به‌صورت خودکار به شبیه‌سازی محلی سوییچ می‌شود.
+- Offline mode is enabled with `VITE_OFFLINE_LIVE=true` (the `.env.offline` file).
+- If a local backend is reachable but the internet is down, it automatically switches to the local simulation after a few seconds.

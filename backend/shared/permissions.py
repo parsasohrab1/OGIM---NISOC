@@ -2,7 +2,7 @@
 Role hierarchy, permission matrix, and HQ decision-support report catalog.
 
 This defines access levels up to and including the HQ Head of Production
-Engineering (رئیس مهندسی بهره‌برداری ستاد) role, used by operations-service
+Engineering (Head of Operations Engineering, HQ) role, used by operations-service
 (and any other service) to gate reads/writes and to describe, to the
 frontend, which reports each role is expected to receive.
 """
@@ -28,64 +28,64 @@ ROLE_DEFINITIONS: List[Dict] = [
     {
         "role": ROLE_SYSTEM_ADMIN,
         "level": 100,
-        "title_fa": "مدیر سیستم",
+        "title_fa": "System Administrator",
         "title_en": "System Administrator",
-        "description_fa": "دسترسی کامل به پیکربندی سامانه، کاربران و سطوح دسترسی.",
+        "description_fa": "Full access to the system configuration, users and access levels.",
     },
     {
         "role": ROLE_HQ_OPERATIONS_CHIEF,
         "level": 90,
-        "title_fa": "رئیس مهندسی بهره‌برداری ستاد",
+        "title_fa": "Head of Operations Engineering (HQ)",
         "title_en": "Head of Production Engineering (HQ)",
         "description_fa": (
-            "دسترسی مشاهده به تمامی شرکت‌های تابعه، تجهیزات، وضعیت تولید و "
-            "گزارش‌های تصمیم‌یار در سطح ستاد؛ بدون دسترسی به مدیریت کاربران سامانه."
+            "View access to all subsidiary companies, equipment, production status and "
+            "HQ-level decision-support reports; no access to system user management."
         ),
     },
     {
         "role": ROLE_SUBSIDIARY_OPS_MANAGER,
         "level": 70,
-        "title_fa": "مدیر بهره‌برداری شرکت تابعه",
+        "title_fa": "Subsidiary Operations Manager",
         "title_en": "Subsidiary Operations Manager",
-        "description_fa": "دسترسی مدیریتی به داده‌های شرکت تابعه متبوع (تجهیزات، اهداف تولید، گزارش‌ها).",
+        "description_fa": "Management access to the data of the parent subsidiary company (equipment, production targets, reports).",
     },
     {
         "role": ROLE_FIELD_SUPERVISOR,
         "level": 60,
-        "title_fa": "سرپرست عملیات میدان",
+        "title_fa": "Field Operations Supervisor",
         "title_en": "Field Operations Supervisor",
-        "description_fa": "نظارت بر چاه‌ها و تجهیزات میدان متبوع و تایید داده‌های ثبت‌شده دستی.",
+        "description_fa": "Supervision of the wells and equipment of the parent field and approval of manually entered data.",
     },
     {
         "role": ROLE_DATA_ENGINEER,
         "level": 55,
-        "title_fa": "مهندس داده",
+        "title_fa": "Data Engineer",
         "title_en": "Data Engineer",
-        "description_fa": "دسترسی به یکپارچه‌سازی داده، مدل‌ها و پایپ‌لاین‌های تحلیلی.",
+        "description_fa": "Access to data integration, models and analytics pipelines.",
     },
     {
         "role": ROLE_FIELD_OPERATOR,
         "level": 50,
-        "title_fa": "اپراتور میدان",
+        "title_fa": "Field Operator",
         "title_en": "Field Operator",
-        "description_fa": "دسترسی عملیاتی به اسکادا، هشدارها و کنترل تجهیزات میدان.",
+        "description_fa": "Operational access to SCADA, alerts and field equipment control.",
     },
     {
         "role": ROLE_DATA_ENTRY_OPERATOR,
         "level": 30,
-        "title_fa": "متصدی ثبت اطلاعات چاه (شرکت بهره‌برداری)",
+        "title_fa": "Well Data Entry Clerk (Operating Company)",
         "title_en": "Well Data Entry Operator (Operating Company)",
         "description_fa": (
-            "ثبت دستی اطلاعات روزانه چاه‌های شرکت تابعه متبوع (فشار تولید، دبی تولید، "
-            "درصد آب، و سایر پارامترها) تا زمان خرید و نصب سنسورهای میدانی."
+            "Manual entry of the daily data of the parent subsidiary company's wells (production pressure, production rate, "
+            "water cut, and other parameters) until field sensors are purchased and installed."
         ),
     },
     {
         "role": ROLE_VIEWER,
         "level": 10,
-        "title_fa": "بازدیدکننده",
+        "title_fa": "Viewer",
         "title_en": "Viewer",
-        "description_fa": "دسترسی فقط‌خواندنی به داشبوردهای عمومی.",
+        "description_fa": "Read-only access to public dashboards.",
     },
 ]
 
@@ -203,38 +203,38 @@ def role_has_wide_visibility(role: str) -> bool:
 HQ_EXPECTED_REPORTS: List[Dict] = [
     {
         "id": "subsidiary_production_status",
-        "title_fa": "وضعیت تولید هر شرکت تابعه نسبت به هدف تعریف‌شده",
-        "description_fa": "دبی تولید فعلی هر یک از ۵ شرکت تابعه در برابر هدف تعریف‌شده و میزان جلو/عقب بودن.",
+        "title_fa": "Production status of each subsidiary company versus the defined target",
+        "description_fa": "Current production rate of each of the 5 subsidiary companies against the defined target and the amount ahead/behind.",
         "category": "production",
     },
     {
         "id": "reservoir_well_inventory",
-        "title_fa": "فهرست مخازن به تفکیک نوع سیال و تعداد چاه فعال",
-        "description_fa": "تعداد مخازن هر شرکت تابعه به تفکیک ماهیت سیال و تعداد چاه‌های فعال آن.",
+        "title_fa": "List of reservoirs by fluid type and number of active wells",
+        "description_fa": "Number of reservoirs of each subsidiary company by fluid nature and the number of its active wells.",
         "category": "asset_inventory",
     },
     {
         "id": "equipment_utilization",
-        "title_fa": "میزان بکارگیری تجهیزات (Rig، Coiled Tubing، تراک) به تفکیک شرکت تابعه",
-        "description_fa": "وضعیت تخصیص و بهره‌وری تجهیزات حفاری/تعمیر/حمل در هر شرکت تابعه.",
+        "title_fa": "Equipment utilization (Rig, Coiled Tubing, truck) by subsidiary company",
+        "description_fa": "Allocation and productivity status of drilling/workover/transport equipment in each subsidiary company.",
         "category": "equipment",
     },
     {
         "id": "vfm_decline_watch",
-        "title_fa": "رصد نرخ تغییر تولید با تلفیق دبی‌سنج مجازی و منحنی افت تولید",
-        "description_fa": "مقایسه دبی لحظه‌ای دبی‌سنج مجازی (VFM) با منحنی افت تولید (Decline Curve) برای شناسایی افت غیرمنتظره.",
+        "title_fa": "Tracking the production rate of change by combining the virtual flow meter and the decline curve",
+        "description_fa": "Comparing the instantaneous rate of the virtual flow meter (VFM) with the production decline curve (Decline Curve) to identify unexpected decline.",
         "category": "production",
     },
     {
         "id": "manual_data_entry_coverage",
-        "title_fa": "پوشش ثبت دستی اطلاعات چاه‌ها (پیش از نصب سنسور)",
-        "description_fa": "درصد چاه‌هایی که داده روزانه آن‌ها به‌صورت دستی توسط شرکت بهره‌برداری ثبت شده است.",
+        "title_fa": "Manual well data entry coverage (before sensor installation)",
+        "description_fa": "Percentage of wells whose daily data has been manually entered by the operating company.",
         "category": "data_quality",
     },
     {
         "id": "access_level_matrix",
-        "title_fa": "ماتریس سطوح دسترسی سامانه",
-        "description_fa": "فهرست نقش‌ها و سطوح دسترسی تعریف‌شده در سامانه تا سطح ریاست مهندسی بهره‌برداری ستاد.",
+        "title_fa": "System access level matrix",
+        "description_fa": "List of roles and access levels defined in the system up to the level of Head of Operations Engineering at HQ.",
         "category": "governance",
     },
 ]

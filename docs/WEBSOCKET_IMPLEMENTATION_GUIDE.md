@@ -1,17 +1,17 @@
-# 🔌 راهنمای پیاده‌سازی WebSocket - Real-Time Streaming
+# 🔌 WebSocket Implementation Guide - Real-Time Streaming
 
-**تاریخ:** دسامبر 2025  
-**نسخه:** 1.0.0  
-**هدف:** کاهش latency از 1-10 ثانیه به < 100ms
+**Date:** December 2025
+**Version:** 1.0.0
+**Goal:** Reduce latency from 1-10 seconds to < 100ms
 
 ---
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
-3. [پیاده‌سازی Backend](#backend)
-4. [پیاده‌سازی Frontend](#frontend)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
+3. [Backend implementation](#backend)
+4. [Frontend implementation](#frontend)
 5. [Testing Strategy](#testing)
 6. [Optimization Techniques](#optimization)
 7. [Troubleshooting](#troubleshooting)
@@ -19,23 +19,23 @@
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-این سند راهنمای کامل پیاده‌سازی WebSocket برای Real-Time Data Streaming است که latency را از 1-10 ثانیه به زیر 100ms کاهش می‌دهد.
+This document is the complete guide to implementing WebSocket for Real-Time Data Streaming, which reduces latency from 1-10 seconds to under 100ms.
 
-### اهداف
+### Goals
 
 - ✅ Latency < 100ms (P95)
 - ✅ Support 1000+ concurrent connections
-- ✅ Auto-reconnection با exponential backoff
-- ✅ Message queuing برای offline clients
-- ✅ Authentication و authorization
+- ✅ Auto-reconnection with exponential backoff
+- ✅ Message queuing for offline clients
+- ✅ Authentication and authorization
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
-### معماری کلی
+### Overall architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -81,7 +81,7 @@ Sensor Data → Kafka → WebSocket Manager → WebSocket → Frontend
 
 ---
 
-## <a name="backend"></a>🔧 پیاده‌سازی Backend
+## <a name="backend"></a>🔧 Backend implementation
 
 ### 1. WebSocket Manager
 
@@ -449,7 +449,7 @@ websocket_latency = Histogram(
 
 ---
 
-## <a name="frontend"></a>💻 پیاده‌سازی Frontend
+## <a name="frontend"></a>💻 Frontend implementation
 
 ### 1. WebSocket Hook
 
@@ -625,7 +625,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
 }
 ```
 
-### 2. استفاده در Component
+### 2. Usage in a Component
 
 ```typescript
 // frontend/web/src/pages/Dashboard.tsx
@@ -848,13 +848,13 @@ class WebSocketPool:
 
 ## <a name="troubleshooting"></a>🔧 Troubleshooting
 
-### مشکلات رایج
+### Common problems
 
 #### 1. Connection Timeout
 
-**مشکل:** WebSocket connection timeout می‌شود
+**Problem:** The WebSocket connection times out
 
-**راه‌حل:**
+**Solution:**
 ```python
 # Increase timeout
 websocket.timeout = 60  # 60 seconds
@@ -868,9 +868,9 @@ async def keepalive():
 
 #### 2. High Memory Usage
 
-**مشکل:** Memory usage بالا با تعداد زیاد connections
+**Problem:** High memory usage with a large number of connections
 
-**راه‌حل:**
+**Solution:**
 ```python
 # Limit message queue size
 MAX_QUEUE_SIZE = 1000
@@ -882,9 +882,9 @@ if len(self.message_queue[client_id]) > MAX_QUEUE_SIZE:
 
 #### 3. Message Loss
 
-**مشکل:** Messages گم می‌شوند
+**Problem:** Messages are lost
 
-**راه‌حل:**
+**Solution:**
 ```python
 # Add message acknowledgment
 async def send_with_ack(self, message: dict, websocket: WebSocket):
@@ -933,6 +933,6 @@ Results:
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

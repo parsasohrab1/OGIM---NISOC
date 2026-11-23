@@ -10,7 +10,7 @@ type Handlers = {
   onTransportChange?: (transport: LiveTransport) => void
 }
 
-/** جریان زنده محلی از داده‌های میدان مارون — بدون شبکه */
+/** Local live stream of Maroun field data — no network */
 export function startLocalRealtimeStream(handlers: Handlers): () => void {
   let closed = false
 

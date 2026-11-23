@@ -1,43 +1,43 @@
-# 📋 Compliance & Reporting - راهنمای پیاده‌سازی
+# 📋 Compliance & Reporting - Implementation Guide
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
 3. [Automated Compliance Reporting](#automated-reporting)
 4. [Regulatory Compliance Dashboard](#compliance-dashboard)
 5. [Audit Trail Improvements](#audit-trail)
 6. [Compliance Alerts](#compliance-alerts)
 7. [Compliance Templates](#compliance-templates)
-8. [پیاده‌سازی](#implementation)
+8. [Implementation](#implementation)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-سیستم Compliance & Reporting یک پلتفرم جامع برای مدیریت، نظارت و گزارش‌دهی compliance با استانداردهای صنعتی و مقررات است.
+The Compliance & Reporting system is a comprehensive platform for managing, monitoring and reporting compliance with industry standards and regulations.
 
-### استانداردهای پشتیبانی شده
+### Supported standards
 
-- ✅ **NORSOK**: استانداردهای نروژی برای صنعت نفت و گاز
-- ✅ **ISO 14224**: داده‌های قابلیت اطمینان پتروشیمی
-- ✅ **ISA-95**: یکپارچگی سیستم‌های کنترل و سازمانی
-- ✅ **ISO 27001**: مدیریت امنیت اطلاعات
-- ✅ **GDPR**: حفاظت از داده‌های شخصی
-- ✅ **OSHA**: ایمنی و بهداشت شغلی
-- ✅ **API Standards**: استانداردهای انجمن نفت آمریکا
+- ✅ **NORSOK**: Norwegian standards for the oil and gas industry
+- ✅ **ISO 14224**: Petrochemical reliability data
+- ✅ **ISA-95**: Integration of control and enterprise systems
+- ✅ **ISO 27001**: Information security management
+- ✅ **GDPR**: Protection of personal data
+- ✅ **OSHA**: Occupational safety and health
+- ✅ **API Standards**: American Petroleum Institute standards
 
-### ویژگی‌های کلیدی
+### Key features
 
-- ✅ **Automated Compliance Reporting**: گزارش‌دهی خودکار
-- ✅ **Regulatory Compliance Dashboard**: داشبورد compliance
-- ✅ **Audit Trail Improvements**: بهبود audit trail
-- ✅ **Compliance Alerts**: هشدارهای compliance
-- ✅ **Compliance Templates**: قالب‌های compliance
+- ✅ **Automated Compliance Reporting**: Automatic reporting
+- ✅ **Regulatory Compliance Dashboard**: Compliance dashboard
+- ✅ **Audit Trail Improvements**: Audit trail improvements
+- ✅ **Compliance Alerts**: Compliance alerts
+- ✅ **Compliance Templates**: Compliance templates
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -700,9 +700,9 @@ doc_template = {
 
 ---
 
-## <a name="implementation"></a>🚀 پیاده‌سازی
+## <a name="implementation"></a>🚀 Implementation
 
-### ساختار فایل‌ها
+### File structure
 
 ```
 backend/
@@ -799,23 +799,23 @@ export function Compliance() {
 
 ---
 
-## 📊 معیارهای موفقیت
+## 📊 Success criteria
 
-### معیارهای فنی
-- ✅ پشتیبانی از 7+ استاندارد compliance
-- ✅ زمان تولید گزارش < 5 دقیقه
-- ✅ Audit trail query time < 1 ثانیه
+### Technical criteria
+- ✅ Support for 7+ compliance standards
+- ✅ Report generation time < 5 minutes
+- ✅ Audit trail query time < 1 second
 - ✅ Test coverage > 90%
 
-### معیارهای کسب‌وکار
-- ✅ کاهش 60% در زمان تولید گزارش‌های compliance
-- ✅ افزایش 40% در compliance score
-- ✅ کاهش 50% در violations
-- ✅ بهبود 100% در audit trail completeness
+### Business criteria
+- ✅ 60% reduction in compliance report generation time
+- ✅ 40% increase in compliance score
+- ✅ 50% reduction in violations
+- ✅ 100% improvement in audit trail completeness
 
 ---
 
-## 🔗 منابع مرتبط
+## 🔗 Related resources
 
 - [OGIM Architecture](./ARCHITECTURE.md)
 - [Security Checklist](./SECURITY_CHECKLIST.md)
@@ -823,6 +823,6 @@ export function Compliance() {
 
 ---
 
-**نسخه:** 1.0.0  
-**تاریخ:** دسامبر 2025
+**Version:** 1.0.0
+**Date:** December 2025
 

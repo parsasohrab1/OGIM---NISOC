@@ -1,39 +1,39 @@
-# پایداری در شرایط قطع شبکه (Offline Resilience)
+# Offline Resilience
 
-این مستند راهنمای پیاده‌سازی قابلیت Data Buffering در لایه Ingestion برای زمانی که ارتباط دکل با مرکز داده قطع می‌شود.
+This document is a guide to implementing Data Buffering in the Ingestion layer for when the rig's connection to the data center is lost.
 
-## 📋 فهرست مطالب
+## 📋 Table of Contents
 
-1. [نمای کلی](#overview)
-2. [معماری](#architecture)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
 3. [Offline Buffer Manager](#buffer-manager)
 4. [Connection Monitor](#connection-monitor)
 5. [Retry Mechanism](#retry-mechanism)
-6. [تنظیمات](#configuration)
-7. [نظارت و متریک‌ها](#monitoring)
-8. [مثال‌های استفاده](#examples)
+6. [Configuration](#configuration)
+7. [Monitoring and metrics](#monitoring)
+8. [Usage examples](#examples)
 
 ---
 
-## <a name="overview"></a>🎯 نمای کلی
+## <a name="overview"></a>🎯 Overview
 
-سیستم OGIM قابلیت **Offline Resilience** را برای حفظ داده‌ها در شرایط قطع شبکه فراهم می‌کند:
+The OGIM system provides **Offline Resilience** to preserve data when the network is down:
 
-- ✅ **Data Buffering**: ذخیره‌سازی موقت داده‌ها در SQLite هنگام قطع ارتباط
-- ✅ **Connection Monitoring**: تشخیص خودکار وضعیت online/offline
-- ✅ **Automatic Retry**: ارسال مجدد خودکار داده‌ها پس از برقراری ارتباط
-- ✅ **Capacity Management**: مدیریت ظرفیت buffer و cleanup خودکار
-- ✅ **Metrics & Monitoring**: متریک‌های کامل برای نظارت
+- ✅ **Data Buffering**: Temporary storage of data in SQLite when the connection is lost
+- ✅ **Connection Monitoring**: Automatic online/offline status detection
+- ✅ **Automatic Retry**: Automatic resending of data after the connection is restored
+- ✅ **Capacity Management**: Buffer capacity management and automatic cleanup
+- ✅ **Metrics & Monitoring**: Complete metrics for monitoring
 
-### سناریوهای استفاده
+### Usage scenarios
 
-- **قطع ارتباط موقت**: داده‌ها در buffer ذخیره و پس از برقراری ارتباط ارسال می‌شوند
-- **قطع ارتباط طولانی**: با مدیریت ظرفیت، قدیمی‌ترین داده‌ها حذف می‌شوند
-- **خطا در ارسال**: در صورت خطا در Kafka، داده‌ها به buffer منتقل می‌شوند
+- **Temporary disconnection**: Data is stored in the buffer and sent after the connection is restored
+- **Long disconnection**: With capacity management, the oldest data is deleted
+- **Send error**: If there is an error in Kafka, data is moved to the buffer
 
 ---
 
-## <a name="architecture"></a>🏗️ معماری
+## <a name="architecture"></a>🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -76,13 +76,13 @@
 
 ## <a name="buffer-manager"></a>💾 Offline Buffer Manager
 
-### ویژگی‌ها
+### Features
 
-- **SQLite Storage**: ذخیره‌سازی پایدار در SQLite
-- **Thread-Safe**: پشتیبانی از multi-threading
-- **Capacity Management**: محدودیت تعداد رکورد و حجم
-- **Automatic Cleanup**: پاکسازی خودکار رکوردهای قدیمی
-- **Retry Tracking**: ردیابی تعداد تلاش‌های مجدد
+- **SQLite Storage**: Persistent storage in SQLite
+- **Thread-Safe**: Multi-threading support
+- **Capacity Management**: Limit on the number of records and size
+- **Automatic Cleanup**: Automatic cleanup of old records
+- **Retry Tracking**: Tracking the number of retries
 
 ### API
 
@@ -122,12 +122,12 @@ stats = buffer.get_buffer_stats()
 
 ## <a name="connection-monitor"></a>📡 Connection Monitor
 
-### ویژگی‌ها
+### Features
 
-- **Multi-Target Monitoring**: نظارت بر چندین host/URL
-- **Automatic Detection**: تشخیص خودکار تغییر وضعیت
-- **Callback Support**: اطلاع‌رسانی هنگام تغییر وضعیت
-- **Configurable Intervals**: تنظیم فاصله بررسی
+- **Multi-Target Monitoring**: Monitoring multiple hosts/URLs
+- **Automatic Detection**: Automatic detection of status changes
+- **Callback Support**: Notification on status change
+- **Configurable Intervals**: Configurable check interval
 
 ### API
 
@@ -159,25 +159,25 @@ status = monitor.get_status()
 
 ## <a name="retry-mechanism"></a>🔄 Retry Mechanism
 
-### ویژگی‌ها
+### Features
 
-- **Automatic Retry**: تلاش مجدد خودکار هنگام برقراری ارتباط
-- **Background Task**: اجرا در background بدون blocking
-- **Retry Limits**: محدودیت تعداد تلاش‌ها
-- **Exponential Backoff**: تاخیر تصاعدی بین تلاش‌ها
+- **Automatic Retry**: Automatic retry when the connection is restored
+- **Background Task**: Runs in the background without blocking
+- **Retry Limits**: Limit on the number of attempts
+- **Exponential Backoff**: Exponential delay between attempts
 
-### جریان کار
+### Workflow
 
-1. **Offline Detection**: Connection Monitor وضعیت offline را تشخیص می‌دهد
-2. **Buffering**: داده‌ها در SQLite ذخیره می‌شوند
-3. **Online Detection**: Connection Monitor وضعیت online را تشخیص می‌دهد
-4. **Retry Trigger**: Retry task به صورت خودکار فعال می‌شود
-5. **Send Records**: رکوردهای buffered به Kafka ارسال می‌شوند
-6. **Cleanup**: رکوردهای موفق از buffer حذف می‌شوند
+1. **Offline Detection**: The Connection Monitor detects the offline status
+2. **Buffering**: Data is stored in SQLite
+3. **Online Detection**: The Connection Monitor detects the online status
+4. **Retry Trigger**: The retry task is activated automatically
+5. **Send Records**: Buffered records are sent to Kafka
+6. **Cleanup**: Successful records are removed from the buffer
 
 ---
 
-## <a name="configuration"></a>⚙️ تنظیمات
+## <a name="configuration"></a>⚙️ Configuration
 
 ### Environment Variables
 
@@ -204,9 +204,9 @@ RETRY_BACKOFF_FACTOR=2.0
 RETRY_INITIAL_DELAY=1                 # Initial delay (seconds)
 ```
 
-### تنظیمات پیشنهادی
+### Recommended settings
 
-#### برای محیط Production
+#### For the Production environment
 
 ```yaml
 OFFLINE_BUFFER_ENABLED: true
@@ -222,7 +222,7 @@ CONNECTION_CHECK_HOSTS: "kafka:9092,timescaledb:5432"
 RETRY_MAX_ATTEMPTS: 20
 ```
 
-#### برای محیط Development
+#### For the Development environment
 
 ```yaml
 OFFLINE_BUFFER_ENABLED: true
@@ -237,7 +237,7 @@ CONNECTION_CHECK_TIMEOUT: 5
 
 ---
 
-## <a name="monitoring"></a>📊 نظارت و متریک‌ها
+## <a name="monitoring"></a>📊 Monitoring and metrics
 
 ### Prometheus Metrics
 
@@ -307,7 +307,7 @@ Response:
 
 ### Grafana Dashboard
 
-پنل‌های پیشنهادی:
+Recommended panels:
 
 1. **Buffer Status**
    - Total buffered records
@@ -330,7 +330,7 @@ Response:
    - Records successfully retried
    - Records failed after max retries
 
-### هشدارها
+### Alerts
 
 ```yaml
 # Prometheus Alert Rules
@@ -357,14 +357,14 @@ Response:
 
 ---
 
-## <a name="examples"></a>📝 مثال‌های استفاده
+## <a name="examples"></a>📝 Usage examples
 
-### مثال 1: استفاده خودکار
+### Example 1: Automatic usage
 
-سیستم به صورت خودکار داده‌ها را buffer می‌کند:
+The system buffers data automatically:
 
 ```python
-# درخواست ingest عادی
+# A normal ingest request
 POST /ingest
 {
   "source": "sensor_001",
@@ -377,17 +377,17 @@ POST /ingest
   ]
 }
 
-# اگر سیستم offline باشد، داده به صورت خودکار buffer می‌شود
-# و پس از برقراری ارتباط، به صورت خودکار ارسال می‌شود
+# If the system is offline, the data is buffered automatically
+# and sent automatically after the connection is restored
 ```
 
-### مثال 2: بررسی وضعیت Buffer
+### Example 2: Checking the Buffer status
 
 ```bash
-# بررسی آمار buffer
+# Check the buffer statistics
 curl http://localhost:8002/buffer/stats
 
-# پاسخ:
+# Response:
 {
   "total_records": 1234,
   "by_source": {"sensor_001": 800},
@@ -395,26 +395,26 @@ curl http://localhost:8002/buffer/stats
 }
 ```
 
-### مثال 3: Retry دستی
+### Example 3: Manual Retry
 
 ```bash
-# فعال‌سازی retry دستی
+# Enable manual retry
 curl -X POST http://localhost:8002/buffer/retry
 
-# پاسخ:
+# Response:
 {
   "message": "Retry triggered",
   "buffered_records": 1234
 }
 ```
 
-### مثال 4: پاکسازی Buffer
+### Example 4: Cleaning the Buffer
 
 ```bash
-# پاکسازی تمام رکوردهای buffer
+# Clear all buffer records
 curl -X DELETE http://localhost:8002/buffer/clear
 
-# پاکسازی رکوردهای یک source خاص
+# Clear the records of a specific source
 curl -X DELETE "http://localhost:8002/buffer/clear?source=sensor_001"
 ```
 
@@ -422,49 +422,49 @@ curl -X DELETE "http://localhost:8002/buffer/clear?source=sensor_001"
 
 ## 🔧 Troubleshooting
 
-### مشکل: Buffer پر شده است
+### Problem: The buffer is full
 
-**راه‌حل:**
-1. بررسی آمار buffer: `GET /buffer/stats`
-2. افزایش `OFFLINE_BUFFER_MAX_SIZE` یا `OFFLINE_BUFFER_MAX_SIZE_MB`
-3. پاکسازی رکوردهای قدیمی: `DELETE /buffer/clear`
-4. بررسی اینکه retry task در حال اجرا است
+**Solution:**
+1. Check the buffer statistics: `GET /buffer/stats`
+2. Increase `OFFLINE_BUFFER_MAX_SIZE` or `OFFLINE_BUFFER_MAX_SIZE_MB`
+3. Clean old records: `DELETE /buffer/clear`
+4. Check that the retry task is running
 
-### مشکل: داده‌ها retry نمی‌شوند
+### Problem: Data is not retried
 
-**راه‌حل:**
-1. بررسی وضعیت connection: `GET /health`
-2. بررسی اینکه `connection_monitor.is_online = True`
-3. فعال‌سازی retry دستی: `POST /buffer/retry`
-4. بررسی لاگ‌ها برای خطاها
+**Solution:**
+1. Check the connection status: `GET /health`
+2. Check that `connection_monitor.is_online = True`
+3. Enable manual retry: `POST /buffer/retry`
+4. Check the logs for errors
 
-### مشکل: Connection Monitor وضعیت را اشتباه تشخیص می‌دهد
+### Problem: The Connection Monitor detects the status incorrectly
 
-**راه‌حل:**
-1. بررسی تنظیمات `CONNECTION_CHECK_HOSTS` و `CONNECTION_CHECK_URLS`
-2. افزایش `CONNECTION_CHECK_TIMEOUT`
-3. اضافه کردن hosts/URLs بیشتر برای بررسی
+**Solution:**
+1. Check the `CONNECTION_CHECK_HOSTS` and `CONNECTION_CHECK_URLS` settings
+2. Increase `CONNECTION_CHECK_TIMEOUT`
+3. Add more hosts/URLs to check
 
 ---
 
-## ⚠️ ملاحظات
+## ⚠️ Considerations
 
 ### Trade-offs
 
-- **Storage**: Buffer نیاز به فضای دیسک دارد
-- **Latency**: Retry ممکن است کمی تاخیر ایجاد کند
-- **Data Loss**: در صورت پر شدن buffer، داده‌های قدیمی حذف می‌شوند
+- **Storage**: The buffer needs disk space
+- **Latency**: Retry may introduce a slight delay
+- **Data Loss**: If the buffer fills up, old data is deleted
 
 ### Best Practices
 
-1. **Monitor Buffer Usage**: به طور مداوم استفاده از buffer را نظارت کنید
-2. **Set Appropriate Limits**: محدودیت‌های مناسب برای محیط خود تنظیم کنید
-3. **Regular Cleanup**: پاکسازی منظم رکوردهای قدیمی
-4. **Test Offline Scenarios**: سناریوهای offline را تست کنید
+1. **Monitor Buffer Usage**: Continuously monitor buffer usage
+2. **Set Appropriate Limits**: Set limits appropriate for your environment
+3. **Regular Cleanup**: Regularly clean old records
+4. **Test Offline Scenarios**: Test offline scenarios
 
 ---
 
-## 🔗 منابع بیشتر
+## 🔗 More resources
 
 - [OGIM Architecture](./ARCHITECTURE.md)
 - [OGIM Observability](./OBSERVABILITY.md)
@@ -472,6 +472,6 @@ curl -X DELETE "http://localhost:8002/buffer/clear?source=sensor_001"
 
 ---
 
-**نسخه:** 1.0.0  
-**به‌روزرسانی:** دسامبر 2025
+**Version:** 1.0.0
+**Updated:** December 2025
 

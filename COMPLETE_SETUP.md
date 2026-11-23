@@ -1,23 +1,23 @@
-# راه‌اندازی کامل داشبورد OGIM
+# Complete OGIM Dashboard Setup
 
-## 📍 آدرس پروژه
+## 📍 Project address
 
 ### Repository
 - **GitHub**: https://github.com/parsasohrab1/OGIM---Oil-Gas-Intelligent-Monitoring.git
-- **مسیر محلی**: `C:\Users\asus\Documents\companies\ithub\AI\products\clones\OGIM`
+- **Local path**: `C:\Users\asus\Documents\companies\ithub\AI\products\clones\OGIM`
 
 ---
 
-## 🚀 راه‌اندازی سریع
+## 🚀 Quick Start
 
-### روش 1: استفاده از اسکریپت (توصیه می‌شود)
+### Method 1: Using the script (recommended)
 
 ```powershell
-# راه‌اندازی خودکار تمام سرویس‌ها
+# Automatic startup of all services
 .\start_dashboard.ps1
 ```
 
-### روش 2: راه‌اندازی دستی
+### Method 2: Manual startup
 
 #### Backend (Docker)
 ```powershell
@@ -33,7 +33,7 @@ npm run dev
 
 ---
 
-## 🌐 آدرس‌های دسترسی
+## 🌐 Access addresses
 
 ### Frontend Dashboard
 - **Development**: http://localhost:3000
@@ -41,7 +41,7 @@ npm run dev
 
 ### Backend Services
 
-| سرویس | پورت | آدرس | Health Check |
+| Service | Port | Address | Health Check |
 |-------|------|------|--------------|
 | **API Gateway** | 8000 | http://localhost:8000 | http://localhost:8000/health |
 | Auth Service | 8001 | http://localhost:8001 | http://localhost:8001/health |
@@ -67,15 +67,15 @@ npm run dev
 
 ---
 
-## ⚙️ راه‌اندازی دستی Backend
+## ⚙️ Manual Backend setup
 
-### پیش‌نیازها
+### Prerequisites
 - Python 3.9+
-- PostgreSQL 15+ با TimescaleDB
+- PostgreSQL 15+ with TimescaleDB
 - Redis
 - Apache Kafka
 
-### راه‌اندازی هر سرویس (در ترمینال جداگانه)
+### Starting each service (in a separate terminal)
 
 ```powershell
 # Terminal 1: API Gateway
@@ -114,44 +114,44 @@ python -m uvicorn main:app --port 8007 --reload
 cd backend/digital-twin-service
 python -m uvicorn main:app --port 8008 --reload
 
-# Terminal 10: Edge Computing (اختیاری)
+# Terminal 10: Edge Computing (optional)
 cd backend/edge-computing-service
 python -m uvicorn main:app --port 8009 --reload
 
-# Terminal 11: ERP Integration (اختیاری)
+# Terminal 11: ERP Integration (optional)
 cd backend/erp-integration-service
 python -m uvicorn main:app --port 8010 --reload
 ```
 
 ---
 
-## 🎨 راه‌اندازی دستی Frontend
+## 🎨 Manual Frontend setup
 
-### 1. نصب Dependencies
+### 1. Installing Dependencies
 
 ```powershell
 cd frontend/web
 npm install
 ```
 
-### 2. تنظیم Environment Variables
+### 2. Set Environment Variables
 
-ایجاد فایل `.env` در `frontend/web/`:
+Create the `.env` file in `frontend/web/`:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-### 3. راه‌اندازی Development Server
+### 3. Starting the Development Server
 
 ```powershell
 npm run dev
 ```
 
-Frontend در آدرس زیر در دسترس خواهد بود:
+The Frontend will be available at the following address:
 - **Development**: http://localhost:3000
 
-### 4. Build برای Production
+### 4. Build for Production
 
 ```powershell
 npm run build
@@ -160,9 +160,9 @@ npm run preview
 
 ---
 
-## 🔐 ورود به سیستم
+## 🔐 Logging in
 
-### کاربران پیش‌فرض
+### Default users
 
 | Username | Password | Role |
 |----------|----------|------|
@@ -173,9 +173,9 @@ npm run preview
 
 ---
 
-## 📝 تنظیمات Environment Variables
+## 📝 Environment Variables settings
 
-ایجاد فایل `.env` در ریشه پروژه:
+Create the `.env` file in the project root:
 
 ```bash
 # Database
@@ -209,21 +209,21 @@ ERP_INTEGRATION_SERVICE_URL=http://localhost:8010
 
 ---
 
-## ✅ تست و بررسی
+## ✅ Testing and verification
 
-### بررسی سلامت سرویس‌ها
+### Checking service health
 
 ```powershell
 # API Gateway
 Invoke-WebRequest -Uri "http://localhost:8000/health" -UseBasicParsing
 
-# سایر سرویس‌ها
+# Other services
 Invoke-WebRequest -Uri "http://localhost:8001/health" -UseBasicParsing
 Invoke-WebRequest -Uri "http://localhost:8002/health" -UseBasicParsing
 # ...
 ```
 
-### تست احراز هویت
+### Testing authentication
 
 ```powershell
 $body = @{
@@ -239,38 +239,38 @@ Invoke-WebRequest -Uri "http://localhost:8000/api/auth/login" `
 
 ---
 
-## 📚 مستندات
+## 📚 Documentation
 
-- **SETUP_GUIDE.md**: راهنمای کامل راه‌اندازی
-- **QUICK_START.md**: راهنمای سریع
-- **SERVICE_URLS.md**: لیست کامل آدرس‌ها و Endpointها
-- **docs/ARCHITECTURE.md**: معماری سیستم
-- **docs/INSTALLATION.md**: راهنمای نصب
-
----
-
-## 🔧 مشکلات رایج
-
-### مشکل: Docker در حال اجرا نیست
-**راه‌حل**: Docker Desktop را راه‌اندازی کنید یا از راه‌اندازی دستی استفاده کنید.
-
-### مشکل: Frontend به Backend متصل نمی‌شود
-**راه‌حل**: 
-1. بررسی کنید که API Gateway در حال اجرا است
-2. بررسی `VITE_API_BASE_URL` در `.env`
-3. بررسی CORS settings
-
-### مشکل: خطای Database Connection
-**راه‌حل**:
-1. بررسی کنید که PostgreSQL در حال اجرا است
-2. بررسی `DATABASE_URL` در `.env`
-3. بررسی credentials
+- **SETUP_GUIDE.md**: Complete setup guide
+- **QUICK_START.md**: Quick guide
+- **SERVICE_URLS.md**: Complete list of addresses and Endpoints
+- **docs/ARCHITECTURE.md**: System architecture
+- **docs/INSTALLATION.md**: Installation guide
 
 ---
 
-## 🎯 دستورات سریع
+## 🔧 Common problems
 
-### راه‌اندازی کامل
+### Problem: Docker is not running
+**Solution**: Start Docker Desktop or use manual startup.
+
+### Problem: The Frontend does not connect to the Backend
+**Solution**:
+1. Check that the API Gateway is running
+2. Check `VITE_API_BASE_URL` in `.env`
+3. Check the CORS settings
+
+### Problem: Database Connection error
+**Solution**:
+1. Check that PostgreSQL is running
+2. Check `DATABASE_URL` in `.env`
+3. Check the credentials
+
+---
+
+## 🎯 Quick commands
+
+### Complete startup
 ```powershell
 # Backend
 docker-compose -f docker-compose.dev.yml up -d
@@ -279,16 +279,16 @@ docker-compose -f docker-compose.dev.yml up -d
 cd frontend/web; npm install; npm run dev
 ```
 
-### توقف سرویس‌ها
+### Stopping the services
 ```powershell
 # Docker
 docker-compose -f docker-compose.dev.yml down
 
-# دستی: Ctrl+C در هر ترمینال
+# Manual: Ctrl+C in each terminal
 ```
 
 ---
 
-**نسخه**: 1.0.0  
-**تاریخ**: دسامبر 2025
+**Version**: 1.0.0
+**Date**: December 2025
 

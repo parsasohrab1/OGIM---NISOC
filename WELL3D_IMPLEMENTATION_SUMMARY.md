@@ -1,51 +1,51 @@
-# ✅ رابط کاربری سه‌بعدی (3D Visualization) - خلاصه پیاده‌سازی
+# ✅ 3D User Interface (3D Visualization) - Implementation Summary
 
-## 📊 خلاصه
+## 📊 Summary
 
-رابط کاربری سه‌بعدی برای نمایش چاه و تجهیزات درون‌چاهی با موفقیت پیاده‌سازی شد.
+The 3D user interface for displaying the well and downhole equipment was implemented successfully.
 
-## 🎨 ویژگی‌های پیاده‌سازی شده
+## 🎨 Implemented features
 
-### 1. نمایش سه‌بعدی چاه
-- ✅ **Wellbore Visualization**: نمایش لوله چاه به صورت استوانه‌ای سه‌بعدی
-- ✅ **Depth Segments**: تقسیم چاه به 20 بخش بر اساس عمق
-- ✅ **Status Colors**: رنگ‌بندی بر اساس وضعیت (Normal/Warning/Critical)
-- ✅ **Depth Labels**: برچسب‌های عمق در کنار چاه
+### 1. 3D well display
+- ✅ **Wellbore Visualization**: Displays the well pipe as a 3D cylinder
+- ✅ **Depth Segments**: Divides the well into 20 segments by depth
+- ✅ **Status Colors**: Color coding by status (Normal/Warning/Critical)
+- ✅ **Depth Labels**: Depth labels next to the well
 
-### 2. سنسورها و نقاط اندازه‌گیری
-- ✅ **Sensor Points**: نمایش نقاط سنسور در عمق‌های مختلف
-- ✅ **Interactive Tooltips**: نمایش اطلاعات سنسور با hover
-- ✅ **Real-time Data**: به‌روزرسانی خودکار هر 5 ثانیه
-- ✅ **Status Indicators**: نمایش وضعیت با رنگ و انیمیشن
+### 2. Sensors and measurement points
+- ✅ **Sensor Points**: Displays sensor points at different depths
+- ✅ **Interactive Tooltips**: Shows sensor information on hover
+- ✅ **Real-time Data**: Automatic update every 5 seconds
+- ✅ **Status Indicators**: Shows status with color and animation
 
-### 3. داده‌های سطحی (Surface Data)
-- ✅ **Wellhead Pressure**: فشار در سطح چاه
-- ✅ **Wellhead Temperature**: دما در سطح چاه
-- ✅ **Flow Rate**: نرخ جریان
-- ✅ **Real-time Panel**: پنل نمایش داده‌های سطحی
+### 3. Surface Data
+- ✅ **Wellhead Pressure**: Pressure at the wellhead
+- ✅ **Wellhead Temperature**: Temperature at the wellhead
+- ✅ **Flow Rate**: Flow rate
+- ✅ **Real-time Panel**: Surface data display panel
 
-### 4. کنترل‌های تعاملی
-- ✅ **Orbit Controls**: چرخش، زوم و جابجایی دوربین
-- ✅ **Well Selection**: انتخاب چاه از dropdown
-- ✅ **Auto Rotate**: امکان چرخش خودکار
-- ✅ **Responsive Design**: طراحی واکنش‌گرا
+### 4. Interactive controls
+- ✅ **Orbit Controls**: Camera rotate, zoom and pan
+- ✅ **Well Selection**: Select a well from the dropdown
+- ✅ **Auto Rotate**: Automatic rotation option
+- ✅ **Responsive Design**: Responsive design
 
-## 📁 فایل‌های ایجاد شده
+## 📁 Files created
 
 ### Frontend
-- `frontend/web/src/pages/Well3D.tsx` - کامپوننت اصلی 3D Visualization
-- `frontend/web/src/pages/Well3D.css` - استایل‌های صفحه
-- `frontend/web/src/api/services.ts` - به‌روزرسانی شده (well3DAPI)
-- `frontend/web/src/App.tsx` - به‌روزرسانی شده (Route جدید)
-- `frontend/web/src/components/Layout.tsx` - به‌روزرسانی شده (تب جدید)
-- `frontend/web/package.json` - به‌روزرسانی شده (کتابخانه‌های Three.js)
+- `frontend/web/src/pages/Well3D.tsx` - Main 3D Visualization component
+- `frontend/web/src/pages/Well3D.css` - Page styles
+- `frontend/web/src/api/services.ts` - Updated (well3DAPI)
+- `frontend/web/src/App.tsx` - Updated (new Route)
+- `frontend/web/src/components/Layout.tsx` - Updated (new tab)
+- `frontend/web/package.json` - Updated (Three.js libraries)
 
 ### Backend
-- `backend/digital-twin-service/main.py` - به‌روزرسانی شده (endpoints جدید)
+- `backend/digital-twin-service/main.py` - Updated (new endpoints)
 
 ## 🔌 API Endpoints
 
-### دریافت داده‌های چاه برای 3D
+### Getting well data for 3D
 ```
 GET /api/digital-twin/well/{well_name}/3d
 ```
@@ -73,7 +73,7 @@ GET /api/digital-twin/well/{well_name}/3d
 }
 ```
 
-### دریافت لیست چاه‌ها
+### Getting the list of wells
 ```
 GET /api/digital-twin/wells
 ```
@@ -85,113 +85,113 @@ GET /api/digital-twin/wells
 }
 ```
 
-## 🎯 کامپوننت‌های Three.js
+## 🎯 Three.js components
 
 ### Wellbore Component
-- استوانه اصلی چاه
-- بخش‌های رنگی بر اساس وضعیت
-- Material با metalness و roughness
+- Main well cylinder
+- Colored segments by status
+- Material with metalness and roughness
 
 ### SensorPoint Component
-- کره‌های چرخان برای سنسورها
-- Tooltip با اطلاعات کامل
-- رنگ‌بندی بر اساس status
+- Rotating spheres for the sensors
+- Tooltip with full information
+- Color coding by status
 
 ### DepthLabels Component
-- برچسب‌های عمق در کنار چاه
-- فاصله‌گذاری منظم
+- Depth labels next to the well
+- Regular spacing
 
 ### WellScene Component
-- صحنه اصلی سه‌بعدی
-- نورپردازی (Ambient, Directional, Point)
+- Main 3D scene
+- Lighting (Ambient, Directional, Point)
 - Ground plane
 - Wellhead equipment
 - Environment preset
 
-## 🎨 طراحی بصری
+## 🎨 Visual design
 
-### رنگ‌بندی وضعیت
-- **Normal**: سبز (#00ff00)
-- **Warning**: نارنجی (#ffaa00)
-- **Critical**: قرمز (#ff0000)
+### Status color coding
+- **Normal**: Green (#00ff00)
+- **Warning**: Orange (#ffaa00)
+- **Critical**: Red (#ff0000)
 
-### افکت‌های بصری
-- Emissive materials برای سنسورها
+### Visual effects
+- Emissive materials for the sensors
 - Shadow casting
 - Environment mapping
 - Gradient background
 
-## 📊 داده‌های نمایش داده شده
+## 📊 Displayed data
 
-### در عمق‌های مختلف:
-- **Pressure**: فشار (psi)
-- **Temperature**: دما (°C)
-- **Flow Rate**: نرخ جریان (bbl/day)
-- **Status**: وضعیت (normal/warning/critical)
+### At different depths:
+- **Pressure**: Pressure (psi)
+- **Temperature**: Temperature (°C)
+- **Flow Rate**: Flow rate (bbl/day)
+- **Status**: Status (normal/warning/critical)
 
-### در سطح:
-- **Wellhead Pressure**: فشار سطح چاه
-- **Wellhead Temperature**: دمای سطح چاه
-- **Flow Rate**: نرخ جریان کل
+### At the surface:
+- **Wellhead Pressure**: Wellhead pressure
+- **Wellhead Temperature**: Wellhead temperature
+- **Flow Rate**: Total flow rate
 
-## 🚀 استفاده
+## 🚀 Usage
 
-### نصب کتابخانه‌ها
+### Installing the libraries
 ```bash
 cd frontend/web
 npm install @react-three/fiber @react-three/drei three
 ```
 
-### دسترسی به صفحه
+### Accessing the page
 ```
 http://localhost:5173/well3d
 ```
 
-### انتخاب چاه
-- از dropdown در بالای صفحه چاه را انتخاب کنید
-- داده‌ها به صورت خودکار به‌روزرسانی می‌شوند
+### Selecting a well
+- Select the well from the dropdown at the top of the page
+- The data is updated automatically
 
-### کنترل دوربین
-- **چرخش**: کلیک و drag
-- **زوم**: اسکرول ماوس
-- **جابجایی**: Shift + drag
+### Camera controls
+- **Rotate**: Click and drag
+- **Zoom**: Mouse scroll
+- **Pan**: Shift + drag
 
-## 🔄 به‌روزرسانی خودکار
+## 🔄 Automatic update
 
-- داده‌ها هر 5 ثانیه به‌روزرسانی می‌شوند
-- استفاده از React Query برای caching و refetching
-- Fallback به mock data در صورت خطای API
+- The data is updated every 5 seconds
+- Uses React Query for caching and refetching
+- Falls back to mock data on an API error
 
 ## 📱 Responsive Design
 
-- طراحی واکنش‌گرا برای موبایل و تبلت
-- کنترل‌های قابل تنظیم
-- Tooltip‌های بهینه شده
+- Responsive design for mobile and tablet
+- Configurable controls
+- Optimized tooltips
 
-## ✅ وضعیت
+## ✅ Status
 
-- ✅ کامپوننت 3D Visualization پیاده‌سازی شد
-- ✅ API endpoints اضافه شدند
-- ✅ تب جدید به Layout اضافه شد
-- ✅ Route جدید به App.tsx اضافه شد
-- ✅ کتابخانه‌های Three.js اضافه شدند
-- ✅ کنترل‌های تعاملی پیاده‌سازی شدند
+- ✅ 3D Visualization component implemented
+- ✅ API endpoints added
+- ✅ New tab added to the Layout
+- ✅ New Route added to App.tsx
+- ✅ Three.js libraries added
+- ✅ Interactive controls implemented
 - ✅ Real-time data integration
 - ✅ Mock data fallback
 - ✅ Responsive design
 
-## 📝 نکات
+## 📝 Notes
 
-- در صورت عدم دسترسی به API، از mock data استفاده می‌شود
-- داده‌ها بر اساس عمق به 20 بخش تقسیم می‌شوند
-- وضعیت هر بخش بر اساس مقادیر فشار و دما تعیین می‌شود
-- می‌توانید با کلیک روی سنسورها اطلاعات دقیق را مشاهده کنید
+- If the API is not accessible, mock data is used
+- The data is divided into 20 segments by depth
+- The status of each segment is determined by the pressure and temperature values
+- You can click the sensors to see detailed information
 
-## 🎯 بهبودهای آینده
+## 🎯 Future improvements
 
-- اضافه کردن انیمیشن برای جریان سیال
-- نمایش تجهیزات درون‌چاهی (Pump, Valves, etc.)
-- مقایسه چند چاه در یک صحنه
-- Export به تصویر یا ویدیو
+- Add animation for fluid flow
+- Display downhole equipment (Pump, Valves, etc.)
+- Compare several wells in one scene
+- Export to image or video
 - VR/AR support
 

@@ -1,32 +1,32 @@
-# Tracing با OpenTelemetry
+# Tracing with OpenTelemetry
 
-این راهنما نحوه‌ی فعال‌سازی و مشاهده‌ی Traceهای end-to-end بین سرویس‌های OGIM را توضیح می‌دهد.
+This guide explains how to enable and view end-to-end Traces between the OGIM services.
 
-## وابستگی‌ها
+## Dependencies
 
-در هر سرویس پکیج‌های زیر نصب شده‌اند:
+The following packages are installed in each service:
 
 - `opentelemetry-sdk`
 - `opentelemetry-exporter-otlp`
 - `opentelemetry-instrumentation-fastapi`
-- `opentelemetry-instrumentation-httpx` (برای API Gateway)
+- `opentelemetry-instrumentation-httpx` (for the API Gateway)
 - `opentelemetry-instrumentation-requests`
 
-ماژول مشترک `backend/shared/tracing.py` تابع `setup_tracing` را فراهم می‌کند که در تمام سرویس‌ها فراخوانی شده است.
+The shared module `backend/shared/tracing.py` provides the `setup_tracing` function, which is called in all services.
 
-## تنظیمات محیطی
+## Environment settings
 
-برای ارسال spanها به OTLP (Jaeger، Tempo یا Collector)، متغیرهای زیر را تنظیم کنید:
+To send spans to OTLP (Jaeger, Tempo or Collector), set the following variables:
 
 ```bash
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-# اختیاری: مشاهده همزمان در لاگ‌ها
+# Optional: simultaneous viewing in the logs
 export OTEL_TRACING_CONSOLE=true
 ```
 
-اگر `OTEL_TRACING_CONSOLE=true` باشد، علاوه بر ارسال به endpoint، spanها در stdout نیز چاپ می‌شوند.
+If `OTEL_TRACING_CONSOLE=true`, in addition to being sent to the endpoint, spans are also printed to stdout.
 
-## اجرای APM با OpenTelemetry Collector + Tempo + Grafana
+## Running APM with OpenTelemetry Collector + Tempo + Grafana
 
 ```yaml
 services:
@@ -40,39 +40,39 @@ services:
       - "3001:3000"
 ```
 
-فایل‌های آماده در پروژه:
+Ready-made files in the project:
 
 - `infrastructure/otel/otel-collector-config.yaml`
 - `infrastructure/tempo/tempo.yaml`
 - `infrastructure/grafana/provisioning/datasources/datasources.yaml`
 - `infrastructure/grafana/provisioning/dashboards/json/ogim-apm-overview.json`
 
-سرویس‌های OGIM با متغیر `OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317` اجرا می‌شوند.  
-برای مشاهده traceها:
+The OGIM services run with the variable `OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317`.
+To view the traces:
 
-1. استک را بالا بیاورید (`infrastructure/docker/docker-compose.yml`)
-2. Grafana را باز کنید: `http://localhost:3001`
-3. در Explore، datasource `Tempo` را انتخاب کنید
-4. `service.name=api-gateway` یا سایر سرویس‌ها را جستجو کنید
+1. Bring up the stack (`infrastructure/docker/docker-compose.yml`)
+2. Open Grafana: `http://localhost:3001`
+3. In Explore, select the `Tempo` datasource
+4. Search for `service.name=api-gateway` or the other services
 
-## جریان end-to-end
+## End-to-end flow
 
-1. **API Gateway**: با `setup_tracing(... instrument_httpx=True)` درخواست‌های ورودی را trace و هنگام فراخوانی سرویس‌های پایین‌دستی context را از طریق HTTPX منتقل می‌کند.
-2. **سرویس‌های داخلی**: `setup_tracing(app, "<service>")` برای هر سرویس اجرا شده است؛ context در header `traceparent` دریافت می‌شود و span جدید ایجاد می‌کند.
-3. **سرویس‌های دارای خروجی HTTP یا DB**: instrumentation درخواست‌های خروجی (مثل کتابخانه `requests`) را trace می‌کند.
+1. **API Gateway**: With `setup_tracing(... instrument_httpx=True)` it traces incoming requests and propagates the context through HTTPX when calling downstream services.
+2. **Internal services**: `setup_tracing(app, "<service>")` runs for each service; the context is received in the `traceparent` header and a new span is created.
+3. **Services with HTTP or DB output**: Instrumentation traces outgoing requests (such as the `requests` library).
 
-## نکات عملیاتی
+## Operational notes
 
-- نام سرویس، نسخه و environment به عنوان attribute در span قرار می‌گیرد (`service.name`, `deployment.environment`).
-- برای افزودن metadata بیشتر (مثلاً شناسه فرمان)، از `trace.get_current_span().set_attribute(...)` در کد استفاده کنید.
-- در صورت نیاز به propagation سفارشی (مثلاً Kafka)، باید پیام‌ها را با header `traceparent` ارسال کنید.
+- The service name, version and environment are placed as attributes on the span (`service.name`, `deployment.environment`).
+- To add more metadata (e.g. the command ID), use `trace.get_current_span().set_attribute(...)` in code.
+- If custom propagation is needed (e.g. Kafka), you must send the messages with the `traceparent` header.
 
-## تست سریع
+## Quick test
 
-1. اجرای Collector + Tempo + Grafana طبق compose.
-2. اجرای سرویس‌ها با متغیر endpoint.
-3. ارسال درخواست نمونه به API Gateway (`/api/alert/alerts`).
-4. در Grafana Tempo trace را بررسی کنید؛ باید حداقل دو span (gateway + سرویس داخلی) دیده شود.
+1. Run the Collector + Tempo + Grafana per the compose file.
+2. Run the services with the endpoint variable.
+3. Send a sample request to the API Gateway (`/api/alert/alerts`).
+4. Check the trace in Grafana Tempo; at least two spans (gateway + internal service) should be visible.
 
-با این تنظیم، تیم می‌تواند latency مسیر کامل هر درخواست را مشاهده و bottleneck‌ها را شناسایی کند.*** End Patch
+With this setup, the team can see the latency of the full path of each request and identify bottlenecks.*** End Patch
 
