@@ -284,7 +284,7 @@ export const ROLE_CATALOG = [
     level: 30,
     title_fa: 'Well Data Entry Clerk (Operating Company)',
     description_fa:
-      'Manual entry of the daily data of the parent subsidiary company\'s wells until field sensors are purchased and installed.',
+      'Manual entry of the daily data of the parent subsidiary company\'s wells.',
   },
   {
     role: 'viewer',
@@ -394,7 +394,7 @@ export const HQ_EXPECTED_REPORTS = [
   },
   {
     id: 'manual_data_entry_coverage',
-    title_fa: 'Manual well data entry coverage (before sensor installation)',
+    title_fa: 'Manual well data entry coverage',
     description_fa: 'Percentage of wells whose daily data has been manually entered.',
     category: 'data_quality',
   },

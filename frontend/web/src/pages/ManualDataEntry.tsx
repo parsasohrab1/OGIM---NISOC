@@ -83,9 +83,7 @@ export default function ManualDataEntry() {
       </p>
 
       <div className="ops-banner">
-        Because there are no physical sensors installed on the wells, data such as production pressure, production rate, water-to-oil cut
-        and other PLC-related parameters are entered manually by the operating company's personnel until the sensors are purchased and installed.
-        Sensor-based pages and widgets are postponed to "Phase 2" — after the purchase and installation of the equipment.
+        Production pressure, production rate, water cut, gas rate, and choke size are entered manually by the operating company's personnel.
       </div>
 
       {!canEnter && (

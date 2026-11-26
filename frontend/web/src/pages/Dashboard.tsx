@@ -20,14 +20,12 @@ import {
   FIELD,
   MARUN_WELLS,
   MAP_ROWS,
-  SENSOR_VARIABLES,
   STATUS_COLOR,
   STATUS_LABEL_FA,
   getMarunLiveState,
   fieldTotals,
   waterCutForecast,
   declineForecast,
-  type WellLiveState,
   type WellHealthStatus,
 } from '../data/marunField'
 import {
@@ -399,71 +397,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        <div className="deh-panel deh-sensors">
-          <div className="deh-sensors-head">
-            <h4>Well and facility sensors — status with indicator lights</h4>
-            <div className="sensor-light-legend">
-              <span><i className="sensor-light green" /> Green · healthy</span>
-              <span><i className="sensor-light yellow" /> Yellow · warning</span>
-              <span><i className="sensor-light red" /> Red · problem</span>
-            </div>
-          </div>
-
-          <div className="sensor-lights-grid">
-            {SENSOR_VARIABLES.map((v) => {
-              const reading = getSensorReading(v.key, selected)
-              return (
-                <div key={v.key} className={`sensor-light-card ${reading.status}`}>
-                  <span className={`sensor-light ${reading.status}`} title={statusLabelFa(reading.status)} />
-                  <div>
-                    <strong>{v.nameFa}</strong>
-                    <small>
-                      {reading.display} {v.unit !== '—' ? v.unit : ''}
-                    </small>
-                  </div>
-                  <em>{statusLabelFa(reading.status)}</em>
-                </div>
-              )
-            })}
-          </div>
-
-          <div className="deh-sensor-table-wrap">
-            <table className="deh-sensor-table">
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Variable</th>
-                  <th>Category</th>
-                  <th>Unit</th>
-                  <th>Current value ({selected.id})</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SENSOR_VARIABLES.map((v) => {
-                  const reading = getSensorReading(v.key, selected)
-                  return (
-                    <tr key={v.key} className={`sensor-row-${reading.status}`}>
-                      <td>
-                        <span className={`sensor-light ${reading.status}`} title={statusLabelFa(reading.status)} />
-                      </td>
-                      <td>{v.nameFa}</td>
-                      <td>{categoryFa(v.category)}</td>
-                      <td>{v.unit}</td>
-                      <td>
-                        {reading.display}
-                        <small className={`sensor-status-text ${reading.status}`}>
-                          {' '}
-                          {statusLabelFa(reading.status)}
-                        </small>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </section>
 
       <section className="deh-layer">
@@ -642,130 +575,7 @@ function Stat({
   )
 }
 
-function categoryFa(cat: string) {
-  if (cat === 'wellhead') return 'Wellhead'
-  if (cat === 'production') return 'Production'
-  if (cat === 'equipment') return 'Equipment'
-  return 'Facilities'
-}
-
-type SensorLight = 'green' | 'yellow' | 'red'
-
-function statusLabelFa(s: SensorLight) {
-  if (s === 'green') return 'Healthy'
-  if (s === 'yellow') return 'Warning'
-  return 'Problem'
-}
-
-function getSensorReading(key: string, w: WellLiveState): { display: string; status: SensorLight; value: number | null } {
-  if (w.status === 'offline') {
-    return { display: '—', status: 'red', value: null }
-  }
-
-  const numeric: Record<string, number | null> = {
-    thp: w.thp,
-    tht: w.tht,
-    chp: Math.round(w.thp * 0.72),
-    oil_rate: w.oilRate,
-    gas_rate: w.gasRate,
-    water_rate: w.waterRate,
-    water_cut: w.waterCut,
-    gor: Math.round((w.gasRate * 1000) / Math.max(1, w.oilRate)),
-    esp_current: w.pumpOnline ? Math.round((28 + w.equipmentRisk * 0.15) * 10) / 10 : null,
-    esp_vibration: w.pumpOnline ? Math.round((1.2 + w.equipmentRisk * 0.04) * 100) / 100 : null,
-    esp_temp: w.pumpOnline ? Math.round(62 + w.equipmentRisk * 0.2) : null,
-    manifold_p: Math.round(w.thp * 0.88),
-    separator_p: Math.round(180 + w.waterCut),
-    separator_l: Math.round(45 + w.waterCut * 0.25),
-    pipeline_p: Math.round(w.thp * 0.65),
-  }
-
-  const value = numeric[key] ?? null
-  if (value === null) {
-    return { display: '—', status: 'red', value: null }
-  }
-
-  let status: SensorLight = 'green'
-
-  switch (key) {
-    case 'thp':
-      if (value < 600 || value > 2200) status = 'red'
-      else if (value < 800 || value > 1800) status = 'yellow'
-      break
-    case 'tht':
-      if (value < 35 || value > 95) status = 'red'
-      else if (value < 45 || value > 85) status = 'yellow'
-      break
-    case 'chp':
-      if (value > w.thp * 0.95 || value < 200) status = 'red'
-      else if (value > w.thp * 0.85) status = 'yellow'
-      break
-    case 'oil_rate':
-      if (value < 150) status = 'red'
-      else if (value < 300 || w.declinePct30d > 6) status = 'yellow'
-      break
-    case 'gas_rate':
-      if (value < 50) status = 'red'
-      else if (value < 120) status = 'yellow'
-      break
-    case 'water_rate':
-      if (value > 800) status = 'red'
-      else if (value > 450) status = 'yellow'
-      break
-    case 'water_cut':
-      if (value >= 65) status = 'red'
-      else if (value >= 45) status = 'yellow'
-      break
-    case 'gor':
-      if (value > 2500 || value < 200) status = 'red'
-      else if (value > 1800 || value < 400) status = 'yellow'
-      break
-    case 'esp_current':
-      if (value > 55 || value < 15) status = 'red'
-      else if (value > 45 || w.equipmentRisk >= 55) status = 'yellow'
-      break
-    case 'esp_vibration':
-      if (value >= 5) status = 'red'
-      else if (value >= 3) status = 'yellow'
-      break
-    case 'esp_temp':
-      if (value >= 95) status = 'red'
-      else if (value >= 80) status = 'yellow'
-      break
-    case 'manifold_p':
-      if (value < 500 || value > 2000) status = 'red'
-      else if (value < 700 || value > 1700) status = 'yellow'
-      break
-    case 'separator_p':
-      if (value < 100 || value > 320) status = 'red'
-      else if (value < 140 || value > 260) status = 'yellow'
-      break
-    case 'separator_l':
-      if (value < 20 || value > 90) status = 'red'
-      else if (value < 30 || value > 80) status = 'yellow'
-      break
-    case 'pipeline_p':
-      if (value < 400 || value > 1600) status = 'red'
-      else if (value < 550 || value > 1400) status = 'yellow'
-      break
-    default:
-      status = w.status === 'critical' ? 'red' : w.status === 'warning' ? 'yellow' : 'green'
-  }
-
-  // Well-level escalation: critical well cannot show all green on equipment sensors
-  if (w.status === 'critical' && (key.startsWith('esp_') || key === 'water_cut')) {
-    status = status === 'green' ? 'yellow' : status
-  }
-
-  const display =
-    Number.isInteger(value) || Math.abs(value - Math.round(value)) < 0.001
-      ? String(Math.round(value))
-      : String(value)
-
-  return { display, status, value }
-}
-
-function buildPrioritizedAlerts(wells: WellLiveState[], openCount: number | string) {
+function buildPrioritizedAlerts(wells: ReturnType<typeof getMarunLiveState>, openCount: number | string) {
   const critical = wells.filter((w) => w.status === 'critical')
   const highWc = wells.filter((w) => w.waterCut > 55)
   const items = [

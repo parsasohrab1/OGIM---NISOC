@@ -590,9 +590,6 @@ export default function Alerts() {
                       <div className="rca-box">
                         <strong>Root cause analysis (RCA)</strong>
                         <p>Dominant rule: {rca.dominant_rule || rca.primary_rule || '—'}</p>
-                        <p>
-                          Dominant sensor: {rca.dominant_sensor || rca.primary_sensor || '—'}
-                        </p>
                         {rca.confidence !== undefined && (
                           <p>Confidence: {(rca.confidence * 100).toFixed(0)}%</p>
                         )}

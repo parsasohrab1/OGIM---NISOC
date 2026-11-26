@@ -26,20 +26,6 @@ export const authAPI = {
 
 // Data Ingestion API
 export const dataIngestionAPI = {
-  getSensorData: async (params?: { limit?: number; well_name?: string }) => {
-    try {
-      const response = await apiClient.get('/api/data-ingestion/sensor-data', { params })
-      return response.data
-    } catch (error: any) {
-      // Handle network errors gracefully
-      if (error.code === 'ERR_NETWORK' || error.code === 'ERR_EMPTY_RESPONSE' || error.message?.includes('Failed to fetch')) {
-        // Service is not available, return empty result
-        return { records: [] }
-      }
-      throw error
-    }
-  },
-  
   getConnectors: async () => {
     const response = await apiClient.get('/api/data-ingestion/connectors')
     return response.data

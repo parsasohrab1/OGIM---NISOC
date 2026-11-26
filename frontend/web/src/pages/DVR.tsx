@@ -101,7 +101,7 @@ export default function DVR() {
           <p className="deh-dvr-client">{FIELD.clientFa}</p>
           <h2>Data validation and reconciliation — {FIELD.nameFa}</h2>
           <p className="deh-dvr-meta">
-            Sensor quality control of 24 wells · consistency with the virtual flow meter · mass balance of sour light-to-medium crude production, API gravity{' '}
+            Quality of manually entered well data · consistency with the virtual flow meter · mass balance of sour light-to-medium crude production, API gravity{' '}
             {FIELD.apiGravity}°
           </p>
         </div>
@@ -113,8 +113,8 @@ export default function DVR() {
           <strong>{summary.avgQuality}%</strong>
         </div>
         <div className="deh-dvr-kpi">
-          <span>Monitored sensors</span>
-          <strong>{summary.sensors}</strong>
+          <span>Checked readings</span>
+          <strong>{summary.readings}</strong>
           <small>{summary.wells} wells</small>
         </div>
         <div className="deh-dvr-kpi warn">
@@ -134,7 +134,7 @@ export default function DVR() {
 
       <div className="dvr-grid">
         <div className="dvr-card deh-dvr-card span-2">
-          <h3>Data quality per well (sensor average)</h3>
+          <h3>Data quality per well (average of entered readings)</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -149,7 +149,7 @@ export default function DVR() {
 
         <div className="dvr-card deh-dvr-card span-2">
           <div className="deh-dvr-toolbar">
-            <h3>Maroun sensor quality table</h3>
+            <h3>Maroun reading quality table</h3>
             <select value={wellFilter} onChange={(e) => setWellFilter(e.target.value)}>
               <option value="ALL">All 24 wells</option>
               {MARUN_WELLS.map((w) => (
@@ -163,7 +163,7 @@ export default function DVR() {
             <table>
               <thead>
                 <tr>
-                  <th>Sensor</th>
+                  <th>Reading</th>
                   <th>Well</th>
                   <th>Variable</th>
                   <th>Quality</th>
@@ -182,7 +182,7 @@ export default function DVR() {
                     className={selectedSensor === score.sensor_id ? 'selected-row' : ''}
                     onClick={() => setSelectedSensor(score.sensor_id)}
                   >
-                    <td>{score.sensor_id}</td>
+                    <td>{score.variable_fa || '—'}</td>
                     <td>{score.well_id}</td>
                     <td>{score.variable_fa || '—'}</td>
                     <td
@@ -216,11 +216,11 @@ export default function DVR() {
           <select
             value={selectedSensor}
             onChange={(e) => setSelectedSensor(e.target.value)}
-            className="sensor-select"
+            className="reading-select"
           >
             {filtered.map((s) => (
               <option key={s.sensor_id} value={s.sensor_id}>
-                {s.sensor_id} — {s.variable_fa}
+                {s.well_id} — {s.variable_fa}
               </option>
             ))}
           </select>
@@ -257,7 +257,7 @@ export default function DVR() {
         <div className="dvr-card deh-dvr-card">
           <h3>Outlier detection</h3>
           {outliers.length === 0 ? (
-            <p className="deh-dvr-muted">No significant outlier has been recorded for this sensor.</p>
+            <p className="deh-dvr-muted">No significant outlier has been recorded for this reading.</p>
           ) : (
             <div className="outliers-list">
               {outliers.slice(0, 8).map((o, i) => (

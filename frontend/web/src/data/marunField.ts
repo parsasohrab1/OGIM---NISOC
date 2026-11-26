@@ -52,7 +52,7 @@ export const STATUS_COLOR: Record<WellHealthStatus, string> = {
   offline: '#616161',
 }
 
-/** Variables measured by the well and facility sensors */
+/** Well and facility variables recorded from manual entry */
 export const SENSOR_VARIABLES = [
   { key: 'thp', nameFa: 'Wellhead pressure', unit: 'psi', category: 'wellhead' },
   { key: 'tht', nameFa: 'Wellhead temperature', unit: '°C', category: 'wellhead' },
