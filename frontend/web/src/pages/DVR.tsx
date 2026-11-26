@@ -182,7 +182,7 @@ export default function DVR() {
                     className={selectedSensor === score.sensor_id ? 'selected-row' : ''}
                     onClick={() => setSelectedSensor(score.sensor_id)}
                   >
-                    <td>{score.variable_fa || '—'}</td>
+                    <td>{score.sensor_id}</td>
                     <td>{score.well_id}</td>
                     <td>{score.variable_fa || '—'}</td>
                     <td
