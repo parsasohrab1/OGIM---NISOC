@@ -98,7 +98,11 @@ def sms_provider_status() -> Dict[str, Any]:
             and settings.TWILIO_AUTH_TOKEN
             and settings.TWILIO_FROM_NUMBER
         )
-        detail = "Twilio ready" if ready else "Twilio credentials incomplete — falls back to mock"
+        detail = (
+            "Twilio ready"
+            if ready
+            else "Twilio credentials incomplete — falls back to mock"
+        )
     return {
         "enabled": bool(settings.SMS_ENABLED),
         "provider": provider,
