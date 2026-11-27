@@ -6,7 +6,6 @@ export type RealtimeSnapshotPayload = {
   type: 'snapshot'
   timestamp: string
   data: {
-    sensor_records: Array<any>
     alerts: {
       count?: number
       alerts?: Array<any>

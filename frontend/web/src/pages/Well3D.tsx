@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Text, Html, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { useQuery, useMutation } from '@tanstack/react-query'
@@ -101,13 +101,6 @@ function valveStatusFa(s: string) {
   if (s === 'open') return 'Open'
   if (s === 'closed') return 'Closed'
   if (s === 'maintenance') return 'Under maintenance'
-  return s
-}
-
-function depthStatusFa(s: string) {
-  if (s === 'normal') return 'Normal'
-  if (s === 'warning') return 'Warning'
-  if (s === 'critical') return 'Critical'
   return s
 }
 
@@ -278,7 +271,7 @@ function WellheadEquipment({ equipment, wellName }: { equipment?: WellheadEquipm
 
         {hovered === 'christmasTree' && (
           <Html distanceFactor={10}>
-            <div className="sensor-tooltip" dir="rtl">
+            <div className="asset-tooltip" dir="rtl">
               <h4>Christmas tree — {wellName}</h4>
               <p>Master valve: {valveStatusFa(defaultEquipment.masterValve.status)} ({defaultEquipment.masterValve.position}%)</p>
               <p>Wing valve: {valveStatusFa(defaultEquipment.wingValve.status)} ({defaultEquipment.wingValve.position}%)</p>
@@ -363,7 +356,7 @@ function BOP({ bopData }: { bopData?: BOPData }) {
 
       {hovered && (
         <Html distanceFactor={10}>
-          <div className="sensor-tooltip" dir="rtl">
+          <div className="asset-tooltip" dir="rtl">
             <h4>Blowout preventer</h4>
             <p>Type: {defaultBOP.type}</p>
             <p>Pressure rating: {defaultBOP.pressureRating.toLocaleString()} psi</p>
@@ -465,7 +458,7 @@ function Casing({ casing }: { casing: CasingData }) {
 
       {hovered && (
         <Html distanceFactor={10}>
-          <div className="sensor-tooltip" dir="rtl">
+          <div className="asset-tooltip" dir="rtl">
             <h4>Annulus: {casingTypeFa(casing.type)}</h4>
             <p>Depth: 0 – {casing.depth.toFixed(1)} m</p>
             <p>Outer diameter: {casing.outerDiameter}" ({casing.outerDiameter * 25.4}mm)</p>
@@ -543,66 +536,6 @@ function Wellbore({ depth, data, casings }: { depth: number; data: DepthData[]; 
           </mesh>
         )
       })}
-    </group>
-  )
-}
-
-// Sensor point component - displaying the sensor points
-function SensorPoint({
-  position,
-  depth,
-  data,
-  label
-}: {
-  position: [number, number, number]
-  depth: number
-  data: DepthData
-  label: string
-}) {
-  const [hovered, setHovered] = useState(false)
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01
-    }
-  })
-
-  const getColor = () => {
-    switch (data.status) {
-      case 'critical': return '#ff0000'
-      case 'warning': return '#ffaa00'
-      default: return '#00ff00'
-    }
-  }
-
-  return (
-    <group position={position}>
-      <mesh
-        ref={meshRef}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.5 : 1}
-      >
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshStandardMaterial
-          color={getColor()}
-          emissive={getColor()}
-          emissiveIntensity={0.5}
-        />
-      </mesh>
-      {hovered && (
-        <Html distanceFactor={10}>
-          <div className="sensor-tooltip" dir="rtl">
-            <h4>{label}</h4>
-            <p>Depth: {depth.toFixed(1)} m</p>
-            <p>Pressure: {data.pressure.toFixed(2)} psi</p>
-            <p>Temperature: {data.temperature.toFixed(1)} °C</p>
-            <p>Rate: {data.flowRate.toFixed(2)} bbl/day</p>
-            <p>Status: {depthStatusFa(data.status)}</p>
-          </div>
-        </Html>
-      )}
     </group>
   )
 }
@@ -711,22 +644,6 @@ function MultipleWellsScene({ wellsData, wells }: { wellsData: Record<string, We
 function WellScene({ data, autoRotate = false }: { data: Well3DData; autoRotate?: boolean }) {
   const controlsRef = useRef<any>(null)
 
-  // Calculate sensor positions at different depths
-  const sensorPositions = data.depthData.map((segment, index) => {
-    const depth = (index / data.depthData.length) * data.totalDepth
-    const angle = (index / data.depthData.length) * Math.PI * 2
-    const radius = 0.5
-    return {
-      position: [
-        Math.cos(angle) * radius,
-        -depth,
-        Math.sin(angle) * radius
-      ] as [number, number, number],
-      depth,
-      data: segment
-    }
-  })
-
   return (
     <>
       <PerspectiveCamera makeDefault position={[5, 2, 5]} fov={50} />
@@ -760,17 +677,6 @@ function WellScene({ data, autoRotate = false }: { data: Well3DData; autoRotate?
 
       {/* Depth labels */}
       <DepthLabels depth={data.totalDepth} segments={10} />
-
-      {/* Sensor points */}
-      {sensorPositions.map((sensor, index) => (
-        <SensorPoint
-          key={index}
-          position={sensor.position}
-          depth={sensor.depth}
-          data={sensor.data}
-          label={`Sensor ${index + 1}`}
-        />
-      ))}
 
       {/* Wellhead Equipment */}
       <WellheadEquipment equipment={data.wellheadEquipment} wellName={data.wellName} />

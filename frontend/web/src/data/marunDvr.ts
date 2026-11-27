@@ -1,6 +1,6 @@
 /**
  * DVR (Data Validation & Reconciliation) datasets for the Maroun field
- * Targeted: wellhead/production/equipment sensor data quality, outliers, mass balance
+ * Targeted: quality of manually entered well readings, outliers, mass balance
  */
 import { MARUN_WELLS, FIELD, getMarunLiveState, SENSOR_VARIABLES } from './marunField'
 
@@ -59,7 +59,7 @@ export type DvrReconciliationRow = {
   status: 'balanced' | 'minor' | 'material'
 }
 
-/** Sensor key: MN-01.thp */
+/** Reading key: MN-01.thp */
 export function dvrSensorId(wellId: string, varKey: string) {
   return `${wellId}.${varKey}`
 }
@@ -80,7 +80,7 @@ const PRIMARY_VARS = [
   'esp_vibration',
 ] as const
 
-/** Data quality for the key sensors of all 24 wells */
+/** Data quality for the key manual readings of all 24 wells */
 export function buildMarunDvrQuality(tick = Date.now()): DvrQualityScore[] {
   const now = new Date(tick).toISOString()
   const live = getMarunLiveState(tick)
@@ -341,14 +341,14 @@ export function buildMarunReconciliation(tick = Date.now()): {
 
 export function dvrFieldSummary(scores: DvrQualityScore[]) {
   if (!scores.length) {
-    return { avgQuality: 0, below70: 0, below90: 0, sensors: 0, wells: 0 }
+    return { avgQuality: 0, below70: 0, below90: 0, readings: 0, wells: 0 }
   }
   const avg = scores.reduce((s, x) => s + x.quality_score, 0) / scores.length
   return {
     avgQuality: Math.round(avg * 1000) / 10,
     below70: scores.filter((s) => s.quality_score < 0.7).length,
     below90: scores.filter((s) => s.quality_score < 0.9).length,
-    sensors: scores.length,
+    readings: scores.length,
     wells: new Set(scores.map((s) => s.well_id)).size,
   }
 }

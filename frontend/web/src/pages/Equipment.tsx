@@ -166,7 +166,7 @@ export default function Equipment() {
                     <td>{EQUIPMENT_STATUS_LABEL_FA[e.status] || e.status}</td>
                     <td>
                       <span className={`ops-badge ${e.phase === 2 ? 'phase2' : 'phase1'}`}>
-                        {e.phase === 2 ? 'Phase 2 (sensor)' : 'Phase 1 (manual)'}
+                        {e.phase === 2 ? 'Phase 2 (virtual flow meter)' : 'Phase 1 (manual)'}
                       </span>
                     </td>
                   </tr>

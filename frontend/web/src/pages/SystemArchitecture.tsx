@@ -3,7 +3,7 @@ import { FIELD } from '../data/marunField'
 import './SystemArchitecture.css'
 
 type SectionId =
-  | 'sensors'
+  | 'readings'
   | 'loggers'
   | 'interfaces'
   | 'protocols'
@@ -21,9 +21,9 @@ type Item = { name: string; nameEn?: string; detail: string; tag?: string }
 
 const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: Item[] }> = [
   {
-    id: 'sensors',
-    title: 'Sensors and measured variables',
-    titleEn: 'Sensors & Measured Variables',
+    id: 'readings',
+    title: 'Manually recorded variables',
+    titleEn: 'Manually Recorded Variables',
     items: [
       { name: 'Wellhead pressure', nameEn: 'Wellhead Pressure', detail: 'Wellhead pressure — psi' },
       { name: 'Wellhead temperature', nameEn: 'Wellhead Temperature', detail: 'Wellhead temperature — °C' },
@@ -49,7 +49,6 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
       { name: 'Connection monitor', nameEn: 'Connection Monitor', detail: 'Edge ↔ cloud link health monitoring' },
       { name: 'DuckDB time-series storage', nameEn: 'DuckDB TS Storage', detail: 'Fast time-series buffer at the edge' },
       { name: 'Data validation and reconciliation', nameEn: 'Data Validation & Reconciliation', detail: 'Validation, outliers, mass/energy reconciliation, quality score — :8011' },
-      { name: 'Sensor health', nameEn: 'Sensor Health', detail: 'Status of each sensor on the ingestion path' },
       { name: 'Time-series compression', nameEn: 'Compression Manager', detail: 'Compression and retention of Timescale data' },
     ],
   },
@@ -63,8 +62,6 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
       { name: 'Real-time server-sent events', nameEn: 'Server-Sent Events', detail: 'Alternative live stream path' },
       { name: 'Open industrial communication protocol client', nameEn: 'OPC-UA Client', detail: 'SCADA and logic controller read/write' },
       { name: 'Modbus protocol client', nameEn: 'Modbus TCP', detail: 'Logic controller registers' },
-      { name: 'Lightweight wireless messaging client', nameEn: 'MQTT Client', detail: 'Wireless sensors — disabled by default' },
-      { name: 'Low-power sensor network client', nameEn: 'LoRaWAN', detail: 'Low-power sensor uplink — disabled by default' },
       { name: 'Enterprise resource planning connection', nameEn: 'ERP', detail: 'Maintenance work order (simulated)' },
       { name: 'Key performance indicator gateway', nameEn: 'Executive KPIs', detail: 'Executive indicators and feature usage rate' },
       { name: 'Field mobile application', nameEn: 'Mobile App', detail: 'Field client' },
@@ -80,8 +77,6 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
       { name: 'Server-sent events', detail: 'Server-sent event stream' },
       { name: 'Open industrial communication protocol', detail: 'SCADA / logic controller industrial automation' },
       { name: 'Modbus protocol', detail: 'Register communication with the logic controller' },
-      { name: 'Lightweight wireless messaging', detail: 'Wireless sensor messaging' },
-      { name: 'Low-power sensor network', detail: 'Field low-power sensor network' },
       { name: 'Kafka message queue', detail: 'Field event bus' },
       { name: 'Open tracing protocol', detail: 'Sending traces to the tracing collector' },
       { name: 'Security token', detail: 'Gateway authentication' },
@@ -160,7 +155,7 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
     titleEn: 'Kafka & Streaming',
     items: [
       { name: 'Kafka and queue coordinator', detail: 'Field event bus in the local deployment' },
-      { name: 'Raw sensor data topic', detail: 'Raw sensor data' },
+      { name: 'Well reading topic', detail: 'Manually entered well readings' },
       { name: 'Processed data topic', detail: 'Processed data' },
       { name: 'Alerts topic', detail: 'Alert event' },
       { name: 'Control commands topic', detail: 'Control commands' },
@@ -175,7 +170,7 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
     titleEn: 'Databases & Storage',
     items: [
       { name: 'Relational database', detail: 'User, tag, alarm, command, report' },
-      { name: 'Time-series database', detail: 'Sensor time tables, compression, retention' },
+      { name: 'Time-series database', detail: 'Well reading time tables, compression, retention' },
       { name: 'Multi-node time-series cluster', detail: 'Time-series scalability' },
       { name: 'Redis', detail: 'Cache and rate limiting' },
       { name: 'Edge and offline storage', detail: 'Edge and offline buffer' },
@@ -190,7 +185,7 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
     items: [
       { name: 'API gateway', detail: 'Proxy, WebSocket / server-sent events, key performance indicator, security' },
       { name: 'Authentication service', detail: 'Security token, user, two-factor authentication' },
-      { name: 'Data ingestion service', detail: 'Sensor ingestion and industrial protocols' },
+      { name: 'Data ingestion service', detail: 'Manual well readings and operational data' },
       { name: 'Machine learning inference service', detail: 'Anomaly, failure, forecast, remaining useful life' },
       { name: 'Alert service', detail: 'Rules, root cause analysis, notification' },
       { name: 'Reporting service', detail: 'Reports, business intelligence, lineage, workflow' },
@@ -239,7 +234,7 @@ const SECTIONS: Array<{ id: SectionId; title: string; titleEn: string; items: It
 ]
 
 export default function SystemArchitecture() {
-  const [active, setActive] = useState<SectionId>('sensors')
+  const [active, setActive] = useState<SectionId>('readings')
   const section = SECTIONS.find((s) => s.id === active) || SECTIONS[0]
 
   return (
@@ -249,7 +244,7 @@ export default function SystemArchitecture() {
           <p className="sys-client">{FIELD.clientFa}</p>
           <h2>System — architecture and components of oil and gas field smartification</h2>
           <p className="sys-meta">
-            {FIELD.nameFa} · list of sensors, loggers, interfaces, protocols, artificial intelligence, dashboard inputs/outputs,
+            {FIELD.nameFa} · manually recorded variables, loggers, interfaces, protocols, artificial intelligence, dashboard inputs/outputs,
             Grafana, Prometheus, Kafka and the whole software stack
           </p>
         </div>

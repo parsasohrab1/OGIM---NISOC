@@ -10,7 +10,7 @@ import {
   type WellLiveState,
 } from './marunField'
 
-export type ProtocolKind = 'OPC-UA' | 'Modbus-TCP' | 'MQTT-Bridge'
+export type ProtocolKind = 'OPC-UA' | 'Modbus-TCP'
 export type ConnStatus = 'online' | 'degraded' | 'offline'
 export type TagQuality = 'good' | 'uncertain' | 'bad'
 
@@ -185,34 +185,19 @@ export function getScadaConnections(tick = Date.now()): ScadaConnection[] {
       purpose: 'Choke valve setpoint, gas lift and process interlock',
       asset: 'Process Control',
     },
-    {
-      id: 'MQTT-EDGE',
-      nameFa: 'Wireless edge bridge',
-      nameEn: 'Edge MQTT Bridge',
-      protocol: 'MQTT-Bridge',
-      role: 'Edge Gateway',
-      host: '10.40.40.8',
-      port: 1883,
-      scanMs: 5000,
-      purpose: 'Auxiliary wireless sensors and synchronization with the Kafka message queue',
-      asset: 'Edge / Soft sensors',
-    },
   ]
 
   return base.map((c, i) => {
     const r = seeded(i + 1 + t)
     let status: ConnStatus = 'online'
     if (c.id.includes('PAD-D') && offlineWells > 0) status = 'degraded'
-    if (c.protocol === 'MQTT-Bridge' && r > 0.82) status = 'degraded'
     if (r > 0.97) status = 'offline'
     const tagsCount =
       c.protocol === 'OPC-UA' && c.role === 'Wellhead RTU'
         ? 28
         : c.protocol === 'OPC-UA'
           ? 36
-          : c.protocol === 'Modbus-TCP'
-            ? 48
-            : 12
+          : 48
     return { ...c, status, tagsCount }
   })
 }
@@ -532,7 +517,7 @@ export function getDataPipeline(tick = Date.now()): PipelineHop[] {
   return [
     { from: 'Remote terminal unit / logic controller', to: 'Open industrial communication protocol / Modbus', rateHz: 2.4, status: degraded ? 'lag' : 'ok' },
     { from: 'Industrial protocol', to: 'Data ingestion', rateHz: 1.8, status: 'ok' },
-    { from: 'Data ingestion', to: 'Kafka message queue (raw sensor data)', rateHz: 1.8, status: 'ok' },
+    { from: 'Data ingestion', to: 'Kafka message queue (manual well readings)', rateHz: 1.8, status: 'ok' },
     { from: 'Kafka', to: 'Time-series database + dashboard', rateHz: 1.5, status: degraded > 2 ? 'lag' : 'ok' },
     { from: 'Writable logic controller', to: 'Command and control', rateHz: 0.2, status: 'ok' },
   ]
@@ -581,7 +566,6 @@ export function tagHistory(tagId: string, baseValue: number, points = 24) {
 export const PROTOCOL_LABEL_FA: Record<ProtocolKind, string> = {
   'OPC-UA': 'Open industrial communication protocol',
   'Modbus-TCP': 'Modbus',
-  'MQTT-Bridge': 'Wireless messaging bridge',
 }
 
 export type ScadaAlarm = {

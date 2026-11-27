@@ -5,13 +5,11 @@ import { reportingAPI } from '../api/services'
 import { getApiBaseUrl } from '../api/config'
 import './ReportBuilder.css'
 
-const DIMENSIONS = ['well_name', 'sensor_type', 'sensor_id']
+const DIMENSIONS = ['well_name']
 const MEASURES = ['count', 'avg_value', 'min_value', 'max_value', 'sum_value']
 
 const DIM_LABEL_FA: Record<string, string> = {
   well_name: 'Well name',
-  sensor_type: 'Sensor type',
-  sensor_id: 'Sensor ID',
 }
 
 const MEASURE_LABEL_FA: Record<string, string> = {
@@ -25,7 +23,7 @@ const MEASURE_LABEL_FA: Record<string, string> = {
 export default function ReportBuilder() {
   const [name, setName] = useState('Production analysis')
   const [wellName, setWellName] = useState('')
-  const [selectedDims, setSelectedDims] = useState<string[]>(['well_name', 'sensor_type'])
+  const [selectedDims, setSelectedDims] = useState<string[]>(['well_name'])
   const [selectedMeasures, setSelectedMeasures] = useState<string[]>(['count', 'avg_value'])
   const [result, setResult] = useState<any>(null)
 
@@ -75,7 +73,7 @@ export default function ReportBuilder() {
   }
 
   const chartData = (result?.rows || []).slice(0, 12).map((row: any) => ({
-    label: row.well_name || row.sensor_type || row.sensor_id || '—',
+    label: row.well_name || '—',
     value: row.avg_value ?? row.count ?? 0,
   }))
 

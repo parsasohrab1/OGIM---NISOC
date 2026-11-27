@@ -68,7 +68,7 @@ export type ArAnchor = {
 export type ArBimComponent = {
   componentId: string
   nameFa: string
-  type: 'pump' | 'valve' | 'sensor' | 'pipeline' | 'tree' | 'separator'
+  type: 'pump' | 'valve' | 'model' | 'pipeline' | 'tree' | 'separator'
   locationFa: string
   wellId: string
   status: 'normal' | 'warning' | 'critical'
@@ -124,7 +124,7 @@ export function buildMarunArSessions(devices: ArDevice[], tick = Date.now()): Ar
         `Christmas tree ${d.wellId}`,
         `Electric submersible pump ${d.wellId}`,
         `Master valve ${d.wellId}`,
-        `Wellhead pressure sensor ${d.wellId}`,
+        `Wellhead pressure reading ${d.wellId}`,
         `Flow manifold`,
       ].slice(0, 3 + Math.floor(r * 2))
       return {
@@ -240,19 +240,9 @@ export function buildMarunArBim(wellId: string, tick = Date.now()): ArBimCompone
       arHintFa: 'Show the valve open percentage as a virtual gauge on the component',
     },
     {
-      componentId: `${wellId}-THP`,
-      nameFa: 'Wellhead pressure sensor',
-      type: 'sensor',
-      locationFa: 'Tubing Head',
-      wellId,
-      status: 'normal',
-      realTimeData: { pressure: lw.thp, temperature: lw.tht },
-      arHintFa: 'Display the 15-minute pressure trend as an augmented-reality sparkline',
-    },
-    {
       componentId: `${wellId}-VFM`,
       nameFa: 'Virtual flow meter with visual overlay',
-      type: 'sensor',
+      type: 'model',
       locationFa: 'Software model',
       wellId,
       status: Math.abs(lw.oilRate - lw.vfmOilRate) / Math.max(1, lw.oilRate) > 0.08 ? 'warning' : 'normal',
